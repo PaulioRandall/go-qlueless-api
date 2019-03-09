@@ -1,0 +1,20 @@
+[
+  {
+    "title": "Low priority",
+    "description": "Low priority work items.",
+    "tag_id": "low",
+    "additional": "colour: #0000FF"
+  },
+  {
+    "title": "Mid priority",
+    "description": "Mid priority work items.",
+    "tag_id": "mid",
+    "additional": "colour: #00FF00"
+  },
+  {
+    "title": "high priority",
+    "description": "High priority work items.",
+    "tag_id": "high",
+    "additional": "colour: #FF0000"
+  }
+]

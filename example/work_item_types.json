@@ -1,0 +1,12 @@
+[
+  {
+    "title": "Order",
+    "description": "An order to be processed that will be split up into one or many batches. Each order will typically be done by one person who will do the breaking up into batches whilst working through the order, at the start or as and when needed.",
+    "work_item_type_id": "order"
+  },
+  {
+    "title": "Batch",
+    "description": "A batch is a single unit of work. In a production line then the batch will be the processing of N number of items. In software it will be a single VCS commit-push to the shared repository.",
+    "work_item_type_id": "batch"
+  }
+]

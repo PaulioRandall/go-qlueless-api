@@ -1,0 +1,27 @@
+[
+  {
+    "title": "Name the saga",
+    "description": "Think of a name for the saga",
+    "work_item_id": 2,
+    "parent_work_item_id": 1,
+    "tag_id": "mid",
+    "status_id": "potential"
+  },
+  {
+    "title": "Outline the first chapter",
+    "description": "Outline the first chapter",
+    "work_item_id": 3,
+    "parent_work_item_id": 1,
+    "tag_id": "mid",
+    "status_id": "delivered",
+    "additional": "archive_note:Done but not a compelling start"
+  },
+  {
+    "title": "Outline the second chapter",
+    "description": "Outline the second chapter",
+    "work_item_id": 4,
+    "parent_work_item_id": 1,
+    "tag_id": "mid",
+    "status_id": "in_progress"
+  }
+]
