@@ -1,5 +1,6 @@
 #!/bin/bash
-@Echo off
 
-cd "${GOPATH}/src/qlueless-assembly-line/cmd"
-go build qlueless-assembly-line-api.go
+app=qlueless-assembly-line-api
+
+cd "${GOPATH}/src/${app}/cmd"
+go build -o "${GOPATH}/bin/${app}" "./${app}.go"
