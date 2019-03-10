@@ -22,18 +22,27 @@ type StatusEntry struct {
 	Additional  string `json:"additional,omitempty"`
 }
 
+type WorkItemTypeEntry struct {
+	Title             string `json:"title"`
+	Description       string `json:"description"`
+	Work_item_type_id string `json:"work_item_type_id"`
+	Additional        string `json:"additional,omitempty"`
+}
+
 type DictionaryResponse struct {
-	Tags     []TagEntry    `json:"tags"`
-	Statuses []StatusEntry `json:"statuses"`
+	Tags            []TagEntry          `json:"tags"`
+	Statuses        []StatusEntry       `json:"statuses"`
+	Work_item_types []WorkItemTypeEntry `json:"work_item_types"`
 }
 
 func DictionaryHandler(w http.ResponseWriter, r *http.Request) {
 	response := DictionaryResponse{
-		Tags:     createTags(),
-		Statuses: createStatuses(),
+		Tags:            createTags(),
+		Statuses:        createStatuses(),
+		Work_item_types: createWorkItemTypes(),
 	}
 
-	shr.AppendStdHeaders(w)
+	shr.AppendJSONHeaders(w)
 	json.NewEncoder(w).Encode(response)
 	log.Println(r.Host)
 }
@@ -87,6 +96,21 @@ func createStatuses() []StatusEntry {
 			Title:       "Delivered",
 			Description: "Work items that have been completed and are generating value (being used, available to customers, etc).",
 			Status_id:   "delivered",
+		},
+	}
+}
+
+func createWorkItemTypes() []WorkItemTypeEntry {
+	return []WorkItemTypeEntry{
+		WorkItemTypeEntry{
+			Title:             "Order",
+			Description:       "An order to be processed that will be split up into one or many batches. Each order will typically be done by one person who will do the breaking up into batches whilst working through the order, at the start or as and when needed.",
+			Work_item_type_id: "order",
+		},
+		WorkItemTypeEntry{
+			Title:             "Batch",
+			Description:       "A batch is a single unit of work. In a production line then the batch will be the processing of N number of items. In software it will be a single VCS commit-push to the shared repository.",
+			Work_item_type_id: "batch",
 		},
 	}
 }
