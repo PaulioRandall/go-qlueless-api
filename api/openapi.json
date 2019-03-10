@@ -1,123 +1,130 @@
 {
-  "openapi": "3.0.2",
-  "info": {
-    "title": "Qlueless Assembly Line API",
-    "version": "0.0.1"
-  },
-  "paths": {
-    "/dictionaries": {
-      "get": {
-        "description": "Returns all service dictionaires.",
-        "responses": {
-          "default": {
-            "description": "Mapped list of dictionaries.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/dictionaries"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/orders": {
-    },
-    "/batches": {
-    }
-  },
-  "components": {
-    "schemas": {
-      "dictionaries": {
-        "type": "object",
-        "properties": {
-          "tags": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/dictionary_tag"
-            }
-          },
-          "statuses": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/dictionary_status"
-            }
-          },
-          "work_item_types": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/dictionary_work_item_type"
-            }
-          }
-        }
-      },
-      "dictionary_tag": {
-        "type": "object",
-        "properties": {
-          "title": {
-            "$ref": "#/components/schemas/title"
-          },
-          "description": {
-            "$ref": "#/components/schemas/description"
-          },
-          "tag_id": {
-            "type": "string",
-            "description": "Unique identifier of the tag."
-          },
-          "additional": {
-            "$ref": "#/components/schemas/additional"
-          }
-        }
-      },
-      "dictionary_status": {
-        "type": "object",
-        "properties": {
-          "title": {
-            "$ref": "#/components/schemas/title"
-          },
-          "description": {
-            "$ref": "#/components/schemas/description"
-          },
-          "status_id": {
-            "type": "string",
-            "description": "Unique identifier of the status."
-          },
-          "additional": {
-            "$ref": "#/components/schemas/additional"
-          }
-        }
-      },
-      "dictionary_work_item_type": {
-        "type": "object",
-        "properties": {
-          "title": {
-            "$ref": "#/components/schemas/title"
-          },
-          "description": {
-            "$ref": "#/components/schemas/description"
-          },
-          "work_item_type_id": {
-            "type": "string",
-            "description": "Unique identifier of the work item type."
-          },
-          "additional": {
-            "$ref": "#/components/schemas/additional"
-          }
-        }
-      },
-      "title": {
-        "type": "string",
-        "description": "Presentable and human readable title of the entity instance."
-      },
-      "description": {
-        "type": "string",
-        "description": "Presentable and human readable description of the entity instance."
-      },
-      "additional": {
-        "type": "string",
-        "description": "Semicolon ';' separated list of additional attributes managed by clients. Each property is a key value pair using a colon ':' as the delimiter, i.e. 'key: value'."
-      }
-    }
-  }
+	"openapi": "3.0.2",
+	"info": {
+		"title": "Qlueless Assembly Line API",
+		"version": "0.0.1"
+	},
+	"paths": {
+		"/dictionaries": {
+			"get": {
+				"description": "Returns all service dictionaires.",
+				"responses": {
+					"default": {
+						"description": "Mapped list of dictionaries.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/dictionary_reply"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/orders": {},
+		"/batches": {}
+	},
+	"components": {
+		"schemas": {
+			"dictionary_reply": {
+				"type": "object",
+				"properties": {
+					"message": {
+						"type": "string",
+						"description": "Human readable summary of the response in a form presentable to end users."
+					},
+					"data": {
+						"type": "object",
+						"properties": {
+							"tags": {
+								"type": "array",
+								"items": {
+									"$ref": "#/components/schemas/dictionary_tag"
+								}
+							},
+							"statuses": {
+								"type": "array",
+								"items": {
+									"$ref": "#/components/schemas/dictionary_status"
+								}
+							},
+							"work_item_types": {
+								"type": "array",
+								"items": {
+									"$ref": "#/components/schemas/dictionary_work_item_type"
+								}
+							}
+						}
+					}
+				}
+			},
+			"dictionary_tag": {
+				"type": "object",
+				"properties": {
+					"title": {
+						"$ref": "#/components/schemas/title"
+					},
+					"description": {
+						"$ref": "#/components/schemas/description"
+					},
+					"tag_id": {
+						"type": "string",
+						"description": "Unique identifier of the tag."
+					},
+					"additional": {
+						"$ref": "#/components/schemas/additional"
+					}
+				}
+			},
+			"dictionary_status": {
+				"type": "object",
+				"properties": {
+					"title": {
+						"$ref": "#/components/schemas/title"
+					},
+					"description": {
+						"$ref": "#/components/schemas/description"
+					},
+					"status_id": {
+						"type": "string",
+						"description": "Unique identifier of the status."
+					},
+					"additional": {
+						"$ref": "#/components/schemas/additional"
+					}
+				}
+			},
+			"dictionary_work_item_type": {
+				"type": "object",
+				"properties": {
+					"title": {
+						"$ref": "#/components/schemas/title"
+					},
+					"description": {
+						"$ref": "#/components/schemas/description"
+					},
+					"work_item_type_id": {
+						"type": "string",
+						"description": "Unique identifier of the work item type."
+					},
+					"additional": {
+						"$ref": "#/components/schemas/additional"
+					}
+				}
+			},
+			"title": {
+				"type": "string",
+				"description": "Presentable and human readable title of the entity instance."
+			},
+			"description": {
+				"type": "string",
+				"description": "Presentable and human readable description of the entity instance."
+			},
+			"additional": {
+				"type": "string",
+				"description": "Semicolon ';' separated list of additional attributes managed by clients. Each property is a key value pair using a colon ':' as the delimiter, i.e. 'key: value'."
+			}
+		}
+	}
 }

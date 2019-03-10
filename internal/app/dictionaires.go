@@ -29,17 +29,20 @@ type WorkItemTypeEntry struct {
 	Additional        string `json:"additional,omitempty"`
 }
 
-type DictionaryResponse struct {
+type DictionaryData struct {
 	Tags            []TagEntry          `json:"tags"`
 	Statuses        []StatusEntry       `json:"statuses"`
 	Work_item_types []WorkItemTypeEntry `json:"work_item_types"`
 }
 
 func DictionaryHandler(w http.ResponseWriter, r *http.Request) {
-	response := DictionaryResponse{
-		Tags:            createTags(),
-		Statuses:        createStatuses(),
-		Work_item_types: createWorkItemTypes(),
+	response := shr.Reply{
+		Message: "All service dictionaries and their entries",
+		Data: DictionaryData{
+			Tags:            createTags(),
+			Statuses:        createStatuses(),
+			Work_item_types: createWorkItemTypes(),
+		},
 	}
 
 	shr.AppendJSONHeaders(w)
@@ -73,29 +76,35 @@ func createTags() []TagEntry {
 func createStatuses() []StatusEntry {
 	return []StatusEntry{
 		StatusEntry{
-			Title:       "Potential",
-			Description: "Potential work items that may or may not be worked on, i.e. a decision has yet to be made whether the item should exist or maybe when it should be done hasn't been decided.",
-			Status_id:   "potential",
+			Title: "Potential",
+			Description: "Potential work items that may or may not be worked on," +
+				" i.e. a decision has yet to be made whether the item should exist" +
+				" or maybe when it should be done hasn't been decided.",
+			Status_id: "potential",
 		},
 		StatusEntry{
-			Title:       "Queued",
-			Description: "Work items that have been started but are not currently being worked on, they are waiting in a queue at a workstation.",
-			Status_id:   "queued",
+			Title: "Queued",
+			Description: "Work items that have been started but are not currently" +
+				" being worked on, they are waiting in a queue at a workstation.",
+			Status_id: "queued",
 		},
 		StatusEntry{
-			Title:       "In Progress",
-			Description: "Work items that have been started and are currently being worked on.",
-			Status_id:   "in_progress",
+			Title: "In Progress",
+			Description: "Work items that have been started and are currently being" +
+				" worked on.",
+			Status_id: "in_progress",
 		},
 		StatusEntry{
-			Title:       "Dispatched",
-			Description: "Work items that have been completed but are NOT yet generating value (being used, available to customers, etc).",
-			Status_id:   "dispatched",
+			Title: "Dispatched",
+			Description: "Work items that have been completed but are NOT yet" +
+				" generating value (being used, available to customers, etc).",
+			Status_id: "dispatched",
 		},
 		StatusEntry{
-			Title:       "Delivered",
-			Description: "Work items that have been completed and are generating value (being used, available to customers, etc).",
-			Status_id:   "delivered",
+			Title: "Delivered",
+			Description: "Work items that have been completed and are generating" +
+				" value (being used, available to customers, etc).",
+			Status_id: "delivered",
 		},
 	}
 }
@@ -103,13 +112,19 @@ func createStatuses() []StatusEntry {
 func createWorkItemTypes() []WorkItemTypeEntry {
 	return []WorkItemTypeEntry{
 		WorkItemTypeEntry{
-			Title:             "Order",
-			Description:       "An order to be processed that will be split up into one or many batches. Each order will typically be done by one person who will do the breaking up into batches whilst working through the order, at the start or as and when needed.",
+			Title: "Order",
+			Description: "An order to be processed that will be split up into" +
+				" one or many batches. Each order will typically be done by one" +
+				" person who will do the breaking up into batches whilst working" +
+				" through the order, at the start or as and when needed.",
 			Work_item_type_id: "order",
 		},
 		WorkItemTypeEntry{
-			Title:             "Batch",
-			Description:       "A batch is a single unit of work. In a production line then the batch will be the processing of N number of items. In software it will be a single VCS commit-push to the shared repository.",
+			Title: "Batch",
+			Description: "A batch is a single unit of work. In a production line" +
+				" then the batch will be the processing of N number of items. In" +
+				" software it will be a single VCS commit-push to the shared" +
+				" repository.",
 			Work_item_type_id: "batch",
 		},
 	}
