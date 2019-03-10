@@ -2,7 +2,7 @@
 
 app=qlueless-assembly-line-api
 
-cd "${GOPATH}/src/${app}/scripts"
+cd "${GOPATH}/src/github.com/PaulioRandall/${app}/scripts"
 ./build.sh
 
 cd "${GOPATH}/bin"

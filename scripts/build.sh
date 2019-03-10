@@ -2,5 +2,5 @@
 
 app=qlueless-assembly-line-api
 
-cd "${GOPATH}/src/${app}/cmd"
+cd "${GOPATH}/src/github.com/PaulioRandall/${app}/cmd"
 go build -o "${GOPATH}/bin/${app}" "./${app}.go"
