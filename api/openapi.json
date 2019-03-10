@@ -6,10 +6,64 @@
   },
   "paths": {
     "/dictionaries": {
+      "get": {
+        "description": "Returns all service dictionaires.",
+        "responses": {
+          "default": {
+            "description": "Mapped list of dictionaries.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/dictionaries"
+                }
+              }
+            }
+          }
+        }
+      }
     },
     "/orders": {
     },
     "/batches": {
+    }
+  },
+  "components": {
+    "schemas": {
+      "dictionaries": {
+        "type": "object",
+        "properties": {
+          "tags": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/dictionary_tag"
+            }
+          }
+        }
+      },
+      "dictionary_tag": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Presentable and human readable title of the tag."
+          },
+          "description": {
+            "type": "string",
+            "description": "Presentable and human readable description of the tag."
+          },
+          "tag_id": {
+            "type": "string",
+            "description": "Unique identifier of the tag."
+          },
+          "additional": {
+            "$ref": "#/components/schemas/additional"
+          }
+        }
+      },
+      "additional": {
+        "type": "string",
+        "description": "Semicolon ';' separated list of additional attributes managed by clients. Each property is a key value pair using a colon ':' as the delimiter, i.e. 'key: value'."
+      }
     }
   }
 }
