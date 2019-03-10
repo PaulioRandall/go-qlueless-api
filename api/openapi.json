@@ -37,6 +37,12 @@
             "items": {
               "$ref": "#/components/schemas/dictionary_tag"
             }
+          },
+          "statuses": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/dictionary_status"
+            }
           }
         }
       },
@@ -44,12 +50,10 @@
         "type": "object",
         "properties": {
           "title": {
-            "type": "string",
-            "description": "Presentable and human readable title of the tag."
+            "$ref": "#/components/schemas/title"
           },
           "description": {
-            "type": "string",
-            "description": "Presentable and human readable description of the tag."
+            "$ref": "#/components/schemas/description"
           },
           "tag_id": {
             "type": "string",
@@ -59,6 +63,32 @@
             "$ref": "#/components/schemas/additional"
           }
         }
+      },
+      "dictionary_status": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "$ref": "#/components/schemas/title"
+          },
+          "description": {
+            "$ref": "#/components/schemas/description"
+          },
+          "status_id": {
+            "type": "string",
+            "description": "Unique identifier of the status."
+          },
+          "additional": {
+            "$ref": "#/components/schemas/additional"
+          }
+        }
+      },
+      "title": {
+        "type": "string",
+        "description": "Presentable and human readable title of the entity instance."
+      },
+      "description": {
+        "type": "string",
+        "description": "Presentable and human readable description of the entity instance."
       },
       "additional": {
         "type": "string",
