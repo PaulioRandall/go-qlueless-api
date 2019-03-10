@@ -12,7 +12,7 @@
     "additional": "colour: #00FF00"
   },
   {
-    "title": "high priority",
+    "title": "High priority",
     "description": "High priority work items.",
     "tag_id": "high",
     "additional": "colour: #FF0000"
