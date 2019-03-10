@@ -1,4 +1,4 @@
-//usr/bin/go run $0 $@ ; exit
+///bin/true; exec /usr/bin/env go run "$0" "$@"
 package main
 
 import (
