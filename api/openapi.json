@@ -43,6 +43,12 @@
             "items": {
               "$ref": "#/components/schemas/dictionary_status"
             }
+          },
+          "work_item_types": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/dictionary_work_item_type"
+            }
           }
         }
       },
@@ -76,6 +82,24 @@
           "status_id": {
             "type": "string",
             "description": "Unique identifier of the status."
+          },
+          "additional": {
+            "$ref": "#/components/schemas/additional"
+          }
+        }
+      },
+      "dictionary_work_item_type": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "$ref": "#/components/schemas/title"
+          },
+          "description": {
+            "$ref": "#/components/schemas/description"
+          },
+          "work_item_type_id": {
+            "type": "string",
+            "description": "Unique identifier of the work item type."
           },
           "additional": {
             "$ref": "#/components/schemas/additional"
