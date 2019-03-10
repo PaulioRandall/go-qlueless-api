@@ -10,5 +10,6 @@ import (
 
 func main() {
 	http.HandleFunc("/dictionaries", res.DictionaryHandler)
+	http.HandleFunc("/orders", res.OrderHandler)
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }

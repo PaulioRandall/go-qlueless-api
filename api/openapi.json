@@ -14,7 +14,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/dictionary_reply"
+									"$ref": "#/components/schemas/dictionaries_reply"
 								}
 							}
 						}
@@ -22,12 +22,28 @@
 				}
 			}
 		},
-		"/orders": {},
+		"/orders": {
+			"get": {
+				"description": "Returns all orders.",
+				"responses": {
+					"default": {
+						"description": "List of orders.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/orders_reply"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
 		"/batches": {}
 	},
 	"components": {
 		"schemas": {
-			"dictionary_reply": {
+			"dictionaries_reply": {
 				"type": "object",
 				"properties": {
 					"message": {
@@ -69,8 +85,7 @@
 						"$ref": "#/components/schemas/description"
 					},
 					"tag_id": {
-						"type": "string",
-						"description": "Unique identifier of the tag."
+						"$ref": "#/components/schemas/tag_id"
 					},
 					"additional": {
 						"$ref": "#/components/schemas/additional"
@@ -87,8 +102,7 @@
 						"$ref": "#/components/schemas/description"
 					},
 					"status_id": {
-						"type": "string",
-						"description": "Unique identifier of the status."
+						"$ref": "#/components/schemas/status_id"
 					},
 					"additional": {
 						"$ref": "#/components/schemas/additional"
@@ -113,6 +127,45 @@
 					}
 				}
 			},
+			"orders_reply": {
+				"type": "object",
+				"properties": {
+					"message": {
+						"type": "string",
+						"description": "Human readable summary of the response in a form presentable to end users."
+					},
+					"data": {
+						"type": "array",
+						"items": {
+							"$ref": "#/components/schemas/order"
+						}
+					}
+				}
+			},
+			"order": {
+				"type": "object",
+				"properties": {
+					"title": {
+						"$ref": "#/components/schemas/title"
+					},
+					"description": {
+						"$ref": "#/components/schemas/description"
+					},
+					"work_item_id": {
+						"type": "string",
+						"description": "Unique identifier of the work item."
+					},
+					"tag_id": {
+						"$ref": "#/components/schemas/tag_id"
+					},
+					"status_id": {
+						"$ref": "#/components/schemas/status_id"
+					},
+					"additional": {
+						"$ref": "#/components/schemas/additional"
+					}
+				}
+			},
 			"title": {
 				"type": "string",
 				"description": "Presentable and human readable title of the entity instance."
@@ -120,6 +173,14 @@
 			"description": {
 				"type": "string",
 				"description": "Presentable and human readable description of the entity instance."
+			},
+			"tag_id": {
+				"type": "string",
+				"description": "Unique identifier of a tag."
+			},
+			"status_id": {
+				"type": "string",
+				"description": "Unique identifier of a status."
 			},
 			"additional": {
 				"type": "string",
