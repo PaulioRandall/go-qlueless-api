@@ -1,0 +1,17 @@
+"/orders": {
+  "get": {
+    "description": "Returns all orders.",
+    "responses": {
+      "default": {
+        "description": "List of orders.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/orders_reply"
+            }
+          }
+        }
+      }
+    }
+  }
+}

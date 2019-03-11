@@ -1,0 +1,17 @@
+"/dictionaries": {
+  "get": {
+    "description": "Returns all service dictionaires.",
+    "responses": {
+      "default": {
+        "description": "Mapped list of dictionaries.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/dictionaries_reply"
+            }
+          }
+        }
+      }
+    }
+  }
+}

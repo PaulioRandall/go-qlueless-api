@@ -1,0 +1,17 @@
+"/batches": {
+  "get": {
+    "description": "Returns all batches.",
+    "responses": {
+      "default": {
+        "description": "List of batches.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/batches_reply"
+            }
+          }
+        }
+      }
+    }
+  }
+}

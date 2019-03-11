@@ -1,0 +1,6 @@
+#!/bin/bash
+
+app=qlueless-assembly-line-api
+
+cd "${GOPATH}/src/github.com/PaulioRandall/${app}/api"
+./openapi-builder.go

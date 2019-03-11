@@ -5,57 +5,9 @@
 		"version": "0.0.1"
 	},
 	"paths": {
-		"/dictionaries": {
-		  "get": {
-		    "description": "Returns all service dictionaires.",
-		    "responses": {
-		      "default": {
-		        "description": "Mapped list of dictionaries.",
-		        "content": {
-		          "application/json": {
-		            "schema": {
-		              "$ref": "#/components/schemas/dictionaries_reply"
-		            }
-		          }
-		        }
-		      }
-		    }
-		  }
-		},
-		"/orders": {
-		  "get": {
-		    "description": "Returns all orders.",
-		    "responses": {
-		      "default": {
-		        "description": "List of orders.",
-		        "content": {
-		          "application/json": {
-		            "schema": {
-		              "$ref": "#/components/schemas/orders_reply"
-		            }
-		          }
-		        }
-		      }
-		    }
-		  }
-		},
-		"/batches": {
-		  "get": {
-		    "description": "Returns all batches.",
-		    "responses": {
-		      "default": {
-		        "description": "List of batches.",
-		        "content": {
-		          "application/json": {
-		            "schema": {
-		              "$ref": "#/components/schemas/batches_reply"
-		            }
-		          }
-		        }
-		      }
-		    }
-		  }
-		}
+    {{- "\n"}}{{ .FromFile "/dictionaires/paths.json" 2}},
+    {{- "\n"}}{{ .FromFile "/orders/paths.json" 2}},
+    {{- "\n"}}{{ .FromFile "/batches/paths.json" 2}}
   },
 	"components": {
 		"schemas": {
