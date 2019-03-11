@@ -2,5 +2,5 @@
 
 app=qlueless-assembly-line-api
 
-cd "${GOPATH}/src/github.com/PaulioRandall/${app}/api"
-./openapi-builder.go
+cd "${GOPATH}/src/github.com/PaulioRandall/${app}/api/openapi"
+./generator.go

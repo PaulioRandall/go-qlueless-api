@@ -26,9 +26,10 @@ func (o OpenAPI) FromFile(filename string, indent int) string {
 
 	s := string(bytes)
 	lines := strings.Split(s, "\n")
+	prefix := strings.Repeat("\t", indent)
 
 	for i, l := range lines {
-		lines[i] = strings.Repeat("\t", indent) + l
+		lines[i] = prefix + l
 	}
 
 	r := strings.Join(lines, "\n")
@@ -39,15 +40,16 @@ func main() {
 	var err error
 
 	o := OpenAPI{
-		Template:  "./openapi-template.json",
-		Resources: "./openapi-resources",
+		Template:  "./template.json",
+		Resources: "./resources",
 	}
+
 	t, err := template.ParseFiles(o.Template)
 	check(err)
 
 	f, err := os.Create("./openapi.json")
 	check(err)
-	defer f.Close()
 
+	defer f.Close()
 	t.Execute(f, o)
 }
