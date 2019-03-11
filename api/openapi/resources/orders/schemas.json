@@ -1,0 +1,37 @@
+"orders_reply": {
+  "type": "object",
+  "properties": {
+    "message": {
+      "$ref": "#/components/schemas/message"
+    },
+    "data": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/order_entry"
+      }
+    }
+  }
+},
+"order_entry": {
+  "type": "object",
+  "properties": {
+    "title": {
+      "$ref": "#/components/schemas/title"
+    },
+    "description": {
+      "$ref": "#/components/schemas/description"
+    },
+    "work_item_id": {
+      "$ref": "#/components/schemas/work_item_id"
+    },
+    "tag_id": {
+      "$ref": "#/components/schemas/tag_id"
+    },
+    "status_id": {
+      "$ref": "#/components/schemas/status_id"
+    },
+    "additional": {
+      "$ref": "#/components/schemas/additional"
+    }
+  }
+}

@@ -1,0 +1,41 @@
+"batches_reply": {
+  "type": "object",
+  "properties": {
+    "message": {
+      "$ref": "#/components/schemas/message"
+    },
+    "data": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/batch_entry"
+      }
+    }
+  }
+},
+"batch_entry": {
+  "type": "object",
+  "properties": {
+    "title": {
+      "$ref": "#/components/schemas/title"
+    },
+    "description": {
+      "$ref": "#/components/schemas/description"
+    },
+    "work_item_id": {
+      "$ref": "#/components/schemas/work_item_id"
+    },
+    "parent_work_item_id": {
+      "type": "string",
+      "description": "Unique identifier of the work items parent."
+    },
+    "tag_id": {
+      "$ref": "#/components/schemas/tag_id"
+    },
+    "status_id": {
+      "$ref": "#/components/schemas/status_id"
+    },
+    "additional": {
+      "$ref": "#/components/schemas/additional"
+    }
+  }
+}
