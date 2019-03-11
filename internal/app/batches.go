@@ -1,3 +1,4 @@
+// Package internal/app contains non-reusable internal application code
 package app
 
 import (
@@ -8,6 +9,8 @@ import (
 	shr "github.com/PaulioRandall/qlueless-assembly-line-api/internal/pkg"
 )
 
+// BatchHandler implements the Go web server Handler interface to return a full
+// list of all batches held by the system
 func BatchHandler(w http.ResponseWriter, r *http.Request) {
 	response := shr.Reply{
 		Message: "Found dummy batches",
@@ -19,6 +22,7 @@ func BatchHandler(w http.ResponseWriter, r *http.Request) {
 	log.Println(r.Host)
 }
 
+// createDummyBatches returns an array of dummy batches
 func createDummyBatches() []shr.WorkItem {
 	return []shr.WorkItem{
 		shr.WorkItem{

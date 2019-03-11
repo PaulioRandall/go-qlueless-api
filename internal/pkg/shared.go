@@ -1,12 +1,15 @@
+// Package internal/pkg contains reusable internal application code
 package pkg
 
 import "net/http"
 
+// A Reply represents the top level JSON returned by all endpoints
 type Reply struct {
 	Message string      `json:"message"`
 	Data    interface{} `json:"data"`
 }
 
+// A WorkItem represents and is a genralisation of orders and batches
 type WorkItem struct {
 	Title               string `json:"title"`
 	Description         string `json:"description"`
@@ -17,6 +20,8 @@ type WorkItem struct {
 	Additional          string `json:"additional,omitempty"`
 }
 
+// AppendJSONHeaders appends the response headers for JSON requests to
+// ResponseWriters
 func AppendJSONHeaders(w http.ResponseWriter) {
 	w.Header().Set("Content-Type", "application/json")
 }

@@ -1,3 +1,4 @@
+// Package internal/app contains non-reusable internal application code
 package app
 
 import (
@@ -8,6 +9,7 @@ import (
 	shr "github.com/PaulioRandall/qlueless-assembly-line-api/internal/pkg"
 )
 
+// A TagEntry represents a single tag dictionary entry
 type TagEntry struct {
 	Title       string `json:"title"`
 	Description string `json:"description"`
@@ -15,6 +17,7 @@ type TagEntry struct {
 	Additional  string `json:"additional,omitempty"`
 }
 
+// A StatusEntry represents a single status dictionary entry
 type StatusEntry struct {
 	Title       string `json:"title"`
 	Description string `json:"description"`
@@ -22,6 +25,7 @@ type StatusEntry struct {
 	Additional  string `json:"additional,omitempty"`
 }
 
+// A WorkItemTypeEntry represents a single work item type dictionary entry
 type WorkItemTypeEntry struct {
 	Title             string `json:"title"`
 	Description       string `json:"description"`
@@ -29,12 +33,15 @@ type WorkItemTypeEntry struct {
 	Additional        string `json:"additional,omitempty"`
 }
 
+// A DictionaryData holds all dictionaries for the service
 type DictionaryData struct {
 	Tags            []TagEntry          `json:"tags"`
 	Statuses        []StatusEntry       `json:"statuses"`
 	Work_item_types []WorkItemTypeEntry `json:"work_item_types"`
 }
 
+// DictionaryHandler implements the Go web server Handler interface to return a
+// full map of all dictionaries held by the system
 func DictionaryHandler(w http.ResponseWriter, r *http.Request) {
 	response := shr.Reply{
 		Message: "All service dictionaries and their entries",
@@ -50,6 +57,7 @@ func DictionaryHandler(w http.ResponseWriter, r *http.Request) {
 	log.Println(r.Host)
 }
 
+// createTags returns a hardcoded array of all tag dictionary entries
 func createTags() []TagEntry {
 	return []TagEntry{
 		TagEntry{
@@ -73,6 +81,7 @@ func createTags() []TagEntry {
 	}
 }
 
+// createStatuses returns a hardcoded array of all status dictionary entries
 func createStatuses() []StatusEntry {
 	return []StatusEntry{
 		StatusEntry{
@@ -109,6 +118,8 @@ func createStatuses() []StatusEntry {
 	}
 }
 
+// createWorkItemTypes returns a hardcoded array of all work item type
+// dictionary entries
 func createWorkItemTypes() []WorkItemTypeEntry {
 	return []WorkItemTypeEntry{
 		WorkItemTypeEntry{

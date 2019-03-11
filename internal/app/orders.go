@@ -1,3 +1,4 @@
+// Package internal/app contains non-reusable internal application code
 package app
 
 import (
@@ -8,10 +9,12 @@ import (
 	shr "github.com/PaulioRandall/qlueless-assembly-line-api/internal/pkg"
 )
 
+// OrderHandler implements the Go web server Handler interface to return a full
+// list of all orders held by the system
 func OrderHandler(w http.ResponseWriter, r *http.Request) {
 	response := shr.Reply{
 		Message: "Found dummy orders",
-		Data:    createDummyOrder(),
+		Data:    createDummyOrders(),
 	}
 
 	shr.AppendJSONHeaders(w)
@@ -19,7 +22,8 @@ func OrderHandler(w http.ResponseWriter, r *http.Request) {
 	log.Println(r.Host)
 }
 
-func createDummyOrder() []shr.WorkItem {
+// createDummyOrders returns an array of dummy orders
+func createDummyOrders() []shr.WorkItem {
 	return []shr.WorkItem{
 		shr.WorkItem{
 			Title:        "Outline the saga",
