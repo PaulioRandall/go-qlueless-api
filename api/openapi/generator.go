@@ -1,4 +1,6 @@
 ///bin/true; exec /usr/bin/env go run "$0" "$@"
+
+// Generates an openapi.json file from a template and fragment files
 package main
 
 import (
@@ -8,17 +10,21 @@ import (
 	"text/template"
 )
 
+// The OpenAPI struct represents a single template substitution activity
 type OpenAPI struct {
-	Template  string
-	Resources string
+	Template  string // Path to a template
+	Resources string // Path to the root folder of injectable resource
 }
 
+// Check is a shorthand function for panic if err is not nil
 func check(err error) {
 	if err != nil {
 		panic(err)
 	}
 }
 
+// FromFile takes a filename that is relative to the OpenAPI instance and
+// returns its content with each indented with the supplied number of tabs
 func (o OpenAPI) FromFile(filename string, indent int) string {
 	path := o.Resources + filename
 	bytes, err := ioutil.ReadFile(path)
@@ -36,6 +42,7 @@ func (o OpenAPI) FromFile(filename string, indent int) string {
 	return r
 }
 
+// Main is the entry point for the OpenAPI specification generator
 func main() {
 	var err error
 
