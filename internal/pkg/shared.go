@@ -20,8 +20,16 @@ type WorkItem struct {
 	Additional          string `json:"additional,omitempty"`
 }
 
+// Check is a shorthand function for panic if err is not nil
+func Check(err error) {
+	if err != nil {
+		panic(err)
+	}
+}
+
 // AppendJSONHeaders appends the response headers for JSON requests to
 // ResponseWriters
-func AppendJSONHeaders(w http.ResponseWriter) {
-	w.Header().Set("Content-Type", "application/json")
+func AppendJSONHeaders(w *http.ResponseWriter) {
+	(*w).Header().Set("Content-Type", "application/json")
+	(*w).Header().Set("Access-Control-Allow-Origin", "*")
 }

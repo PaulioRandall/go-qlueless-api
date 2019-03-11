@@ -43,6 +43,8 @@ type DictionaryData struct {
 // DictionaryHandler implements the Go web server Handler interface to return a
 // full map of all dictionaries held by the system
 func DictionaryHandler(w http.ResponseWriter, r *http.Request) {
+	log.Println(r.Host)
+
 	response := shr.Reply{
 		Message: "All service dictionaries and their entries",
 		Data: DictionaryData{
@@ -52,9 +54,8 @@ func DictionaryHandler(w http.ResponseWriter, r *http.Request) {
 		},
 	}
 
-	shr.AppendJSONHeaders(w)
+	shr.AppendJSONHeaders(&w)
 	json.NewEncoder(w).Encode(response)
-	log.Println(r.Host)
 }
 
 // createTags returns a hardcoded array of all tag dictionary entries

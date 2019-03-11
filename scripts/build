@@ -1,6 +1,8 @@
 #!/bin/bash
 
 app=qlueless-assembly-line-api
+root=${GOPATH}/src/github.com/PaulioRandall/${app}
 
-cd "${GOPATH}/src/github.com/PaulioRandall/${app}/cmd"
-go build -o "${GOPATH}/bin/${app}" "./${app}.go"
+cd "${root}/scripts"
+./build-openapi
+./build-app

@@ -12,14 +12,15 @@ import (
 // BatchHandler implements the Go web server Handler interface to return a full
 // list of all batches held by the system
 func BatchHandler(w http.ResponseWriter, r *http.Request) {
+	log.Println(r.Host)
+
 	response := shr.Reply{
 		Message: "Found dummy batches",
 		Data:    createDummyBatches(),
 	}
 
-	shr.AppendJSONHeaders(w)
+	shr.AppendJSONHeaders(&w)
 	json.NewEncoder(w).Encode(response)
-	log.Println(r.Host)
 }
 
 // createDummyBatches returns an array of dummy batches

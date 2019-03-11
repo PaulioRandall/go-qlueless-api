@@ -1,0 +1,4 @@
+#!/bin/bash
+
+# TODO: Is platform independent enough?
+xdg-open "http://petstore.swagger.io/?url=http://localhost:8080/openapi" &

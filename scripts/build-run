@@ -3,5 +3,8 @@
 app=qlueless-assembly-line-api
 root=${GOPATH}/src/github.com/PaulioRandall/${app}
 
-cd "${root}/api/openapi"
-./generator.go
+cd "${root}/scripts"
+./build
+
+cd "${GOPATH}/bin"
+./qlueless-assembly-line-api

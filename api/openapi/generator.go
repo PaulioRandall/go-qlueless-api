@@ -5,6 +5,7 @@ package main
 
 import (
 	"io/ioutil"
+	"log"
 	"os"
 	"strings"
 	"text/template"
@@ -24,7 +25,7 @@ func check(err error) {
 }
 
 // FromFile takes a filename that is relative to the OpenAPI instance and
-// returns its content with each indented with the supplied number of tabs
+// returns its content with each line indented with the specified number of tabs
 func (o OpenAPI) FromFile(filename string, indent int) string {
 	path := o.Resources + filename
 	bytes, err := ioutil.ReadFile(path)
@@ -44,6 +45,8 @@ func (o OpenAPI) FromFile(filename string, indent int) string {
 
 // Main is the entry point for the OpenAPI specification generator
 func main() {
+	log.Println("[Qlueless Assembly Line API]: Building OpenAPI specification")
+
 	var err error
 
 	o := OpenAPI{

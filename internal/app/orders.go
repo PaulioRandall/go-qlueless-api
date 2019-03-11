@@ -12,14 +12,15 @@ import (
 // OrderHandler implements the Go web server Handler interface to return a full
 // list of all orders held by the system
 func OrderHandler(w http.ResponseWriter, r *http.Request) {
+	log.Println(r.Host)
+
 	response := shr.Reply{
 		Message: "Found dummy orders",
 		Data:    createDummyOrders(),
 	}
 
-	shr.AppendJSONHeaders(w)
+	shr.AppendJSONHeaders(&w)
 	json.NewEncoder(w).Encode(response)
-	log.Println(r.Host)
 }
 
 // createDummyOrders returns an array of dummy orders
