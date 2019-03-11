@@ -25,3 +25,4 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Created `/orders` endpoint which returns a dummy order
 - Created `/batches` endpoint which returns a list of dummy batches
 - Added `title`, `description`, `work_item_id`, `parent_work_item_id`, `tag_id`, `status_id`, and `additional` properties to both `/orders#data` and `/batches#data`
+- Added `/openapi` endpoint which returns the OpenAPI specification of the API
