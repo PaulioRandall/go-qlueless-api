@@ -16,7 +16,7 @@ I apologise, it's a poor play on words attempting to combine:
 
 ### Prerequisites
 
-- Go compiler & tools
+- Go: [https://golang.org/dl/]
 
 ### Installing (Linux/Bash)
 

@@ -5,16 +5,16 @@
 		"version": "0.0.1"
 	},
 	"paths": {
-    {{- "\n"}}{{ .FromFile "/dictionaires/paths.json" 2}},
-    {{- "\n"}}{{ .FromFile "/orders/paths.json" 2}},
-    {{- "\n"}}{{ .FromFile "/batches/paths.json" 2}}
+    {{- "\n"}}{{ .Inject "/dictionaires/paths.json" 2}},
+    {{- "\n"}}{{ .Inject "/orders/paths.json" 2}},
+    {{- "\n"}}{{ .Inject "/batches/paths.json" 2}}
   },
 	"components": {
 		"schemas": {
-      {{- "\n"}}{{ .FromFile "/dictionaires/schemas.json" 3}},
-      {{- "\n"}}{{ .FromFile "/orders/schemas.json" 3}},
-			{{- "\n"}}{{ .FromFile "/batches/schemas.json" 3}},
-			{{- "\n"}}{{ .FromFile "/shared/schemas.json" 3}}
+      {{- "\n"}}{{ .Inject "/dictionaires/schemas.json" 3}},
+      {{- "\n"}}{{ .Inject "/orders/schemas.json" 3}},
+			{{- "\n"}}{{ .Inject "/batches/schemas.json" 3}},
+			{{- "\n"}}{{ .Inject "/shared/schemas.json" 3}}
 		}
 	}
 }

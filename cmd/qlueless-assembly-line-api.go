@@ -1,4 +1,4 @@
-///bin/true; exec /usr/bin/env go run "$0" "$@"
+//usr/bin/env go run "$0" "$@"; exit "$?"
 
 // Web server exposing access to a manufacturing themed TODO list database
 package main

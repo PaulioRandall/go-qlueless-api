@@ -1,6 +1,6 @@
-///bin/true; exec /usr/bin/env go run "$0" "$@"
+//usr/bin/env go run "$0" "$@"; exit "$?"
 
-// Generates an openapi.json file from a template and fragment files
+// Generates an openapi.json file from a template and injectable files
 package main
 
 import (
@@ -24,9 +24,9 @@ func check(err error) {
 	}
 }
 
-// FromFile takes a filename that is relative to the OpenAPI instance and
+// Inject takes a filename that is relative to the OpenAPI instance and
 // returns its content with each line indented with the specified number of tabs
-func (o OpenAPI) FromFile(filename string, indent int) string {
+func (o OpenAPI) Inject(filename string, indent int) string {
 	path := o.Resources + filename
 	bytes, err := ioutil.ReadFile(path)
 	check(err)
@@ -45,7 +45,7 @@ func (o OpenAPI) FromFile(filename string, indent int) string {
 
 // Main is the entry point for the OpenAPI specification generator
 func main() {
-	log.Println("[Qlueless Assembly Line API]: Building OpenAPI specification")
+	log.Println("[Qlueless Assembly Line API]: Compiling OpenAPI specification")
 
 	var err error
 
