@@ -9,10 +9,9 @@ import (
 	shr "github.com/PaulioRandall/qlueless-assembly-line-api/internal/pkg"
 )
 
-// BatchHandler implements the Go web server Handler interface to return a full
-// list of all batches held by the system
+// BatchHandler handles requests for all batches currently within the service
 func BatchHandler(w http.ResponseWriter, r *http.Request) {
-	log.Println(r.Host)
+	log.Println(r.URL.Path)
 
 	response := shr.Reply{
 		Message: "Found dummy batches",

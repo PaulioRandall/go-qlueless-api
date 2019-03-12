@@ -1,0 +1,64 @@
+{
+	"message": "All service dictionaries and their entries",
+	"data": {
+		"tags": [
+			{
+				"title": "Low priority",
+				"description": "Low priority work items.",
+				"tag_id": "low",
+				"additional": "colour: #0000FF"
+			},
+			{
+				"title": "Mid priority",
+				"description": "Mid priority work items.",
+				"tag_id": "mid",
+				"additional": "colour: #00FF00"
+			},
+			{
+				"title": "High priority",
+				"description": "High priority work items.",
+				"tag_id": "high",
+				"additional": "colour: #FF0000"
+			}
+		],
+		"statuses": [
+			{
+				"title": "Potential",
+				"description": "Potential work items that may or may not be worked on, i.e. a decision has yet to be made whether the item should exist or maybe when it should be done hasn't been decided.",
+				"status_id": "potential"
+			},
+			{
+				"title": "Queued",
+				"description": "Work items that have been started but are not currently being worked on, they are waiting in a queue at a workstation.",
+				"status_id": "queued"
+			},
+			{
+				"title": "In Progress",
+				"description": "Work items that have been started and are currently being worked on.",
+				"status_id": "in_progress"
+			},
+			{
+				"title": "Dispatched",
+				"description": "Work items that have been completed but are NOT yet generating value (being used, available to customers, etc).",
+				"status_id": "dispatched"
+			},
+			{
+				"title": "Delivered",
+				"description": "Work items that have been completed and are generating value (being used, available to customers, etc).",
+				"status_id": "delivered"
+			}
+		],
+		"work_item_types": [
+			{
+				"title": "Order",
+				"description": "An order to be processed that will be split up into one or many batches. Each order will typically be done by one person who will do the breaking up into batches whilst working through the order, at the start or as and when needed.",
+				"work_item_type_id": "order"
+			},
+			{
+				"title": "Batch",
+				"description": "A batch is a single unit of work. In a production line then the batch will be the processing of N number of items. In software it will be a single VCS commit-push to the shared repository.",
+				"work_item_type_id": "batch"
+			}
+		]
+	}
+}

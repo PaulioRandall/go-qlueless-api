@@ -7,27 +7,33 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"sync"
 
 	shr "github.com/PaulioRandall/qlueless-assembly-line-api/internal/pkg"
 )
 
-// OpenAPIHandler handles requests for the services OpenAPI specification
-func OpenAPIHandler(w http.ResponseWriter, r *http.Request) {
+var data map[string]interface{}
+var once sync.Once
+
+// DictionaryHandler handles requests for the service dictionaries
+func DictionaryHandler(w http.ResponseWriter, r *http.Request) {
 	log.Println(r.URL.Path)
 
-	var err error
+	once.Do(loadJson)
 
+	shr.AppendJSONHeaders(&w)
+	json.NewEncoder(w).Encode(data)
+}
+
+// loadJson loads the dictionary response from a file
+func loadJson() {
 	go_path := os.Getenv("GOPATH")
 	path := go_path +
 		"/src/github.com/PaulioRandall/qlueless-assembly-line-api" +
-		"/api/openapi/openapi.json"
+		"/web/dictionaries.json"
 	bytes, err := ioutil.ReadFile(path)
 	shr.Check(err)
 
-	var spec map[string]interface{}
-	err = json.Unmarshal(bytes, &spec)
+	err = json.Unmarshal(bytes, &data)
 	shr.Check(err)
-
-	shr.AppendJSONHeaders(&w)
-	json.NewEncoder(w).Encode(spec)
 }

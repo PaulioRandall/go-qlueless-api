@@ -9,10 +9,9 @@ import (
 	shr "github.com/PaulioRandall/qlueless-assembly-line-api/internal/pkg"
 )
 
-// OrderHandler implements the Go web server Handler interface to return a full
-// list of all orders held by the system
+// OrderHandler handles requests for all orders currently within the service
 func OrderHandler(w http.ResponseWriter, r *http.Request) {
-	log.Println(r.Host)
+	log.Println(r.URL.Path)
 
 	response := shr.Reply{
 		Message: "Found dummy orders",
