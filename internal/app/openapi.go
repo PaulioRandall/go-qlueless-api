@@ -21,19 +21,31 @@ func OpenAPIHandler(w http.ResponseWriter, r *http.Request) {
 
 	once_spec.Do(loadSpec)
 
+	if spec == nil {
+		shr.Http_500(&w)
+		return
+	}
+
 	shr.AppendJSONHeaders(&w)
 	json.NewEncoder(w).Encode(spec)
 }
 
 // loadJson loads the dictionary response from a file
 func loadSpec() {
+
 	go_path := os.Getenv("GOPATH")
 	path := go_path +
 		"/src/github.com/PaulioRandall/qlueless-assembly-line-api" +
 		"/api/openapi/openapi.json"
+
 	bytes, err := ioutil.ReadFile(path)
-	shr.Check(err)
+	if shr.Log_if_err(err) {
+		spec = nil
+		return
+	}
 
 	err = json.Unmarshal(bytes, &spec)
-	shr.Check(err)
+	if shr.Log_if_err(err) {
+		spec = nil
+	}
 }

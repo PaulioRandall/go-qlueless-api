@@ -1,12 +1,16 @@
 // Package internal/pkg contains reusable internal application code
 package pkg
 
-import "net/http"
+import (
+	"encoding/json"
+	"log"
+	"net/http"
+)
 
 // A Reply represents the top level JSON returned by all endpoints
 type Reply struct {
 	Message string      `json:"message"`
-	Data    interface{} `json:"data"`
+	Data    interface{} `json:"data,omitempty"`
 }
 
 // A WorkItem represents and is a genralisation of orders and batches
@@ -25,6 +29,29 @@ func Check(err error) {
 	if err != nil {
 		panic(err)
 	}
+}
+
+// Log_if_err checks if the input err is NOT nil returning true if it is.
+// When true the error is logged so all the calling handler needs to do is
+// clean up then invoke Http_500(*http.ResponseWriter) before returning
+func Log_if_err(err error) bool {
+	if err != nil {
+		log.Fatal(err)
+		return true
+	}
+
+	return false
+}
+
+// Http_500 sets up the response with generic 500 error details. This method
+// should be used when ever a 500 error needs to be returned
+func Http_500(w *http.ResponseWriter) {
+	r := Reply{
+		Message: "Internal server error",
+	}
+
+	json.NewEncoder(*w).Encode(r)
+	AppendJSONHeaders(w)
 }
 
 // AppendJSONHeaders appends the response headers for JSON requests to
