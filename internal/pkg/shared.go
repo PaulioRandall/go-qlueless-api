@@ -59,8 +59,8 @@ func Http_500(w *http.ResponseWriter) {
 		Message: "Internal server error",
 	}
 
-	json.NewEncoder(*w).Encode(r)
 	AppendJSONHeaders(w)
+	json.NewEncoder(*w).Encode(r)
 }
 
 // Http_4xx sets up the response as a 4xx error

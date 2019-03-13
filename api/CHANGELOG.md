@@ -21,8 +21,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Added `work_item_types` array property to `/dictionaries`; it contains all entries within the work item type dictionary
 - Added `title`, `description`, `work_item_type_id`, and `additional` properties to each work item type dictionary entry
 - Created `/orders` which returns all orders
-- Created `/orders/{id}` which returns a specific order by ID
+- Created `/orders/{order_id}` which returns a specific order by ID
 - Created `/batches` which returns all batches
+- Created `/batches/{batch_id}` which returns a specific batch by ID
 - Added `title`, `description`, `work_item_id`, `parent_work_item_id`, `tag_id`, `status_id`, and `additional` properties to both `/orders` and `/batches`
 - Added `/openapi` which returns the OpenAPI specification of the API
 - Added the `wrap` query parameter to all endpoints except `/openapi` that will wrap the response data so meta information can be obtained for each request

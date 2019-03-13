@@ -25,6 +25,7 @@ func Single_order_handler(w http.ResponseWriter, r *http.Request) {
 	for _, o := range orders {
 		if o.Work_item_id == id {
 			order = &o
+			break
 		}
 	}
 

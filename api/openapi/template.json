@@ -11,7 +11,8 @@
   },
 	"components": {
     "parameters": {
-      {{- "\n"}}{{ .Inject "/orders/parameters.json" 3}}
+      {{- "\n"}}{{ .Inject "/orders/parameters.json" 3}},
+      {{- "\n"}}{{ .Inject "/batches/parameters.json" 3}}
     },
 		"schemas": {
       {{- "\n"}}{{ .Inject "/dictionaires/schemas.json" 3}},

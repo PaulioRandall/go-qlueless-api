@@ -55,7 +55,7 @@
 		},
 		"/orders/{order_id}": {
 		  "get": {
-		    "description": "Returns all orders.",
+		    "description": "Returns a single orders.",
 		    "parameters": [
 		      {
 		        "$ref": "#/components/parameters/order_id"
@@ -63,7 +63,7 @@
 		    ],
 		    "responses": {
 		      "default": {
-		        "description": "List of orders.",
+		        "description": "Single order",
 		        "content": {
 		          "application/json": {
 		            "schema": {
@@ -105,6 +105,35 @@
 		      }
 		    }
 		  }
+		},
+		"/batches/{batch_id}": {
+		  "get": {
+		    "description": "Returns a single batch.",
+		    "parameters": [
+		      {
+		        "$ref": "#/components/parameters/batch_id"
+		      }
+		    ],
+		    "responses": {
+		      "default": {
+		        "description": "Single batch.",
+		        "content": {
+		          "application/json": {
+		            "schema": {
+		              "oneOf": [
+		                {
+		                  "$ref": "#/components/schemas/batch_wrapped"
+		                },
+		                {
+		                  "$ref": "#/components/schemas/batch_entry"
+		                }
+		              ]
+		            }
+		          }
+		        }
+		      }
+		    }
+		  }
 		}
   },
 	"components": {
@@ -113,6 +142,15 @@
 			  "name": "order_id",
 			  "in": "path",
 			  "description": "Unique identifier of an order",
+			  "required": true,
+			  "schema": {
+			    "type": "string"
+			  }
+			},
+			"batch_id": {
+			  "name": "batch_id",
+			  "in": "path",
+			  "description": "Unique identifier of a batch",
 			  "required": true,
 			  "schema": {
 			    "type": "string"
@@ -272,6 +310,17 @@
 			  "type": "array",
 			  "items": {
 			    "$ref": "#/components/schemas/batch_entry"
+			  }
+			},
+			"batch_wrapped": {
+			  "type": "object",
+			  "properties": {
+			    "message": {
+			      "$ref": "#/components/schemas/message"
+			    },
+			    "data": {
+			      "$ref": "#/components/schemas/batch_entry"
+			    }
 			  }
 			},
 			"batch_entry": {

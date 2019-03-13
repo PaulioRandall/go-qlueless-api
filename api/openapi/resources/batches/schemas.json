@@ -15,6 +15,17 @@
     "$ref": "#/components/schemas/batch_entry"
   }
 },
+"batch_wrapped": {
+  "type": "object",
+  "properties": {
+    "message": {
+      "$ref": "#/components/schemas/message"
+    },
+    "data": {
+      "$ref": "#/components/schemas/batch_entry"
+    }
+  }
+},
 "batch_entry": {
   "type": "object",
   "properties": {

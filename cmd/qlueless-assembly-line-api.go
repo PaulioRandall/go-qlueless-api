@@ -26,6 +26,7 @@ func main() {
 	gorilla.HandleFunc("/orders", ord.All_orders_handler)
 	gorilla.HandleFunc("/orders/{order_id}", ord.Single_order_handler)
 	gorilla.HandleFunc("/batches", bat.All_batches_handler)
+	gorilla.HandleFunc("/batches/{batch_id}", bat.Single_batch_handler)
 
 	http.Handle("/", gorilla)
 

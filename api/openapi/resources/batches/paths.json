@@ -21,4 +21,33 @@
       }
     }
   }
+},
+"/batches/{batch_id}": {
+  "get": {
+    "description": "Returns a single batch.",
+    "parameters": [
+      {
+        "$ref": "#/components/parameters/batch_id"
+      }
+    ],
+    "responses": {
+      "default": {
+        "description": "Single batch.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/batch_wrapped"
+                },
+                {
+                  "$ref": "#/components/schemas/batch_entry"
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
 }

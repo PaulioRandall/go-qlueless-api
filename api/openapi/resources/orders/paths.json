@@ -24,7 +24,7 @@
 },
 "/orders/{order_id}": {
   "get": {
-    "description": "Returns all orders.",
+    "description": "Returns a single orders.",
     "parameters": [
       {
         "$ref": "#/components/parameters/order_id"
@@ -32,7 +32,7 @@
     ],
     "responses": {
       "default": {
-        "description": "List of orders.",
+        "description": "Single order",
         "content": {
           "application/json": {
             "schema": {
