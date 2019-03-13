@@ -13,13 +13,13 @@ import (
 )
 
 var data map[string]interface{}
-var once sync.Once
+var once_dict sync.Once
 
 // DictionaryHandler handles requests for the service dictionaries
 func DictionaryHandler(w http.ResponseWriter, r *http.Request) {
 	log.Println(r.URL.Path)
 
-	once.Do(loadJson)
+	once_dict.Do(loadJson)
 
 	shr.AppendJSONHeaders(&w)
 	json.NewEncoder(w).Encode(data)
