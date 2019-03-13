@@ -20,7 +20,7 @@ func createDummyOrders() {
 		shr.WorkItem{
 			Title:        "Outline the saga",
 			Description:  "Create a rough outline of the new saga.",
-			Work_item_id: 1,
+			Work_item_id: "1",
 			Tag_id:       "mid",
 			Status_id:    "in_progress",
 		},

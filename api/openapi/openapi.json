@@ -53,6 +53,35 @@
 		    }
 		  }
 		},
+		"/orders/{order_id}": {
+		  "get": {
+		    "description": "Returns all orders.",
+		    "parameters": [
+		      {
+		        "$ref": "#/components/parameters/order_id"
+		      }
+		    ],
+		    "responses": {
+		      "default": {
+		        "description": "List of orders.",
+		        "content": {
+		          "application/json": {
+		            "schema": {
+		              "oneOf": [
+		                {
+		                  "$ref": "#/components/schemas/order_wrapped"
+		                },
+		                {
+		                  "$ref": "#/components/schemas/order_entry"
+		                }
+		              ]
+		            }
+		          }
+		        }
+		      }
+		    }
+		  }
+		},
 		"/batches": {
 		  "get": {
 		    "description": "Returns all batches.",
@@ -79,6 +108,17 @@
 		}
   },
 	"components": {
+    "parameters": {
+			"order_id": {
+			  "name": "order_id",
+			  "in": "path",
+			  "description": "Unique identifier of an order",
+			  "required": true,
+			  "schema": {
+			    "type": "string"
+			  }
+			}
+    },
 		"schemas": {
 			"dictionaries_wrapped": {
 			  "type": "object",
@@ -181,6 +221,17 @@
 			  "type": "array",
 			  "items": {
 			    "$ref": "#/components/schemas/order_entry"
+			  }
+			},
+			"order_wrapped": {
+			  "type": "object",
+			  "properties": {
+			    "message": {
+			      "$ref": "#/components/schemas/message"
+			    },
+			    "data": {
+			      "$ref": "#/components/schemas/order_entry"
+			    }
 			  }
 			},
 			"order_entry": {

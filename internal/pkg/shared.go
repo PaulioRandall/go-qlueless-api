@@ -17,8 +17,8 @@ type Reply struct {
 type WorkItem struct {
 	Title               string `json:"title"`
 	Description         string `json:"description"`
-	Work_item_id        int    `json:"work_item_id"`
-	Parent_work_item_id int    `json:"parent_work_item_id,omitempty"`
+	Work_item_id        string `json:"work_item_id"`
+	Parent_work_item_id string `json:"parent_work_item_id,omitempty"`
 	Tag_id              string `json:"tag_id"`
 	Status_id           string `json:"status_id"`
 	Additional          string `json:"additional,omitempty"`
@@ -63,6 +63,21 @@ func Http_500(w *http.ResponseWriter) {
 	AppendJSONHeaders(w)
 }
 
+// Http_4xx sets up the response as a 4xx error
+func Http_4xx(w *http.ResponseWriter, status int, message string) {
+	if status < 400 && status > 499 {
+		panic("Status code must be between 400 and 499")
+	}
+
+	r := Reply{
+		Message: message,
+	}
+
+	(*w).WriteHeader(status)
+	json.NewEncoder(*w).Encode(r)
+	AppendJSONHeaders(w)
+}
+
 // WrapData returns true if the client has specified that the response data
 // should be wrapped so meta information about the response can be included
 func WrapData(r *http.Request) bool {
@@ -83,6 +98,7 @@ func AppendJSONHeaders(w *http.ResponseWriter) {
 // WriteJsonReply writes either the reply or the reply data using the
 // ResponseWriter and appends the required JSON headers
 func WriteJsonReply(reply Reply, w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusOK)
 	AppendJSONHeaders(&w)
 
 	if WrapData(r) {

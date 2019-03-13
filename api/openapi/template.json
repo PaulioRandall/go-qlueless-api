@@ -10,6 +10,9 @@
     {{- "\n"}}{{ .Inject "/batches/paths.json" 2}}
   },
 	"components": {
+    "parameters": {
+      {{- "\n"}}{{ .Inject "/orders/parameters.json" 3}}
+    },
 		"schemas": {
       {{- "\n"}}{{ .Inject "/dictionaires/schemas.json" 3}},
       {{- "\n"}}{{ .Inject "/orders/schemas.json" 3}},

@@ -15,6 +15,17 @@
     "$ref": "#/components/schemas/order_entry"
   }
 },
+"order_wrapped": {
+  "type": "object",
+  "properties": {
+    "message": {
+      "$ref": "#/components/schemas/message"
+    },
+    "data": {
+      "$ref": "#/components/schemas/order_entry"
+    }
+  }
+},
 "order_entry": {
   "type": "object",
   "properties": {

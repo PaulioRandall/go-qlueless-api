@@ -21,4 +21,33 @@
       }
     }
   }
+},
+"/orders/{order_id}": {
+  "get": {
+    "description": "Returns all orders.",
+    "parameters": [
+      {
+        "$ref": "#/components/parameters/order_id"
+      }
+    ],
+    "responses": {
+      "default": {
+        "description": "List of orders.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/order_wrapped"
+                },
+                {
+                  "$ref": "#/components/schemas/order_entry"
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
 }
