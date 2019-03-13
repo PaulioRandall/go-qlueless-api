@@ -4,7 +4,6 @@ package app
 import (
 	"encoding/json"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"os"
 	"sync"
@@ -12,22 +11,23 @@ import (
 	shr "github.com/PaulioRandall/qlueless-assembly-line-api/internal/pkg"
 )
 
-var data map[string]interface{}
+var reply shr.Reply = shr.Reply{
+	Message: "All service dictionaries and their entries",
+}
 var once_dict sync.Once
 
 // DictionaryHandler handles requests for the service dictionaries
 func DictionaryHandler(w http.ResponseWriter, r *http.Request) {
-	log.Println(r.URL.Path)
+	shr.Log_request(r)
 
 	once_dict.Do(loadJson)
 
-	if data == nil {
+	if reply.Data == nil {
 		shr.Http_500(&w)
 		return
 	}
 
-	shr.AppendJSONHeaders(&w)
-	json.NewEncoder(w).Encode(data)
+	shr.WriteJsonReply(reply, w, r)
 }
 
 // loadJson loads the dictionary response from a file
@@ -40,12 +40,12 @@ func loadJson() {
 
 	bytes, err := ioutil.ReadFile(path)
 	if shr.Log_if_err(err) {
-		data = nil
+		reply.Data = nil
 		return
 	}
 
-	err = json.Unmarshal(bytes, &data)
+	err = json.Unmarshal(bytes, &reply.Data)
 	if shr.Log_if_err(err) {
-		data = nil
+		reply.Data = nil
 	}
 }

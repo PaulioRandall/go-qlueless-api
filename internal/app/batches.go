@@ -2,8 +2,6 @@
 package app
 
 import (
-	"encoding/json"
-	"log"
 	"net/http"
 
 	shr "github.com/PaulioRandall/qlueless-assembly-line-api/internal/pkg"
@@ -11,15 +9,14 @@ import (
 
 // BatchHandler handles requests for all batches currently within the service
 func BatchHandler(w http.ResponseWriter, r *http.Request) {
-	log.Println(r.URL.Path)
+	shr.Log_request(r)
 
-	response := shr.Reply{
+	reply := shr.Reply{
 		Message: "Found dummy batches",
 		Data:    createDummyBatches(),
 	}
 
-	shr.AppendJSONHeaders(&w)
-	json.NewEncoder(w).Encode(response)
+	shr.WriteJsonReply(reply, w, r)
 }
 
 // createDummyBatches returns an array of dummy batches

@@ -24,6 +24,15 @@ type WorkItem struct {
 	Additional          string `json:"additional,omitempty"`
 }
 
+// Log_request logs the details of a request such as the URL
+func Log_request(r *http.Request) {
+	if r.URL.RawQuery == "" {
+		log.Println(r.URL.Path)
+	} else {
+		log.Println(r.URL.Path + "?" + r.URL.RawQuery)
+	}
+}
+
 // Check is a shorthand function for panic if err is not nil
 func Check(err error) {
 	if err != nil {
@@ -54,9 +63,31 @@ func Http_500(w *http.ResponseWriter) {
 	AppendJSONHeaders(w)
 }
 
+// WrapData returns true if the client has specified that the response data
+// should be wrapped so meta information about the response can be included
+func WrapData(r *http.Request) bool {
+	wrap := r.URL.Query()["wrap"]
+	if wrap != nil {
+		return true
+	}
+	return false
+}
+
 // AppendJSONHeaders appends the response headers for JSON requests to
 // ResponseWriters
 func AppendJSONHeaders(w *http.ResponseWriter) {
 	(*w).Header().Set("Content-Type", "application/json")
 	(*w).Header().Set("Access-Control-Allow-Origin", "*")
+}
+
+// WriteJsonReply writes either the reply or the reply data using the
+// ResponseWriter and appends the required JSON headers
+func WriteJsonReply(reply Reply, w http.ResponseWriter, r *http.Request) {
+	AppendJSONHeaders(&w)
+
+	if WrapData(r) {
+		json.NewEncoder(w).Encode(reply)
+	} else {
+		json.NewEncoder(w).Encode(reply.Data)
+	}
 }

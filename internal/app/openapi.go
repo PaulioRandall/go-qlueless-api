@@ -4,7 +4,6 @@ package app
 import (
 	"encoding/json"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"os"
 	"sync"
@@ -17,7 +16,7 @@ var once_spec sync.Once
 
 // OpenAPIHandler handles requests for the services OpenAPI specification
 func OpenAPIHandler(w http.ResponseWriter, r *http.Request) {
-	log.Println(r.URL.Path)
+	shr.Log_request(r)
 
 	once_spec.Do(loadSpec)
 

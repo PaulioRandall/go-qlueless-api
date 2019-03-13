@@ -2,8 +2,6 @@
 package app
 
 import (
-	"encoding/json"
-	"log"
 	"net/http"
 
 	shr "github.com/PaulioRandall/qlueless-assembly-line-api/internal/pkg"
@@ -11,15 +9,14 @@ import (
 
 // OrderHandler handles requests for all orders currently within the service
 func OrderHandler(w http.ResponseWriter, r *http.Request) {
-	log.Println(r.URL.Path)
+	shr.Log_request(r)
 
-	response := shr.Reply{
+	reply := shr.Reply{
 		Message: "Found dummy orders",
 		Data:    createDummyOrders(),
 	}
 
-	shr.AppendJSONHeaders(&w)
-	json.NewEncoder(w).Encode(response)
+	shr.WriteJsonReply(reply, w, r)
 }
 
 // createDummyOrders returns an array of dummy orders
