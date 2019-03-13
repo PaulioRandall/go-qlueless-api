@@ -3,17 +3,19 @@ package app
 
 import (
 	"net/http"
+	"sync"
 
 	shr "github.com/PaulioRandall/qlueless-assembly-line-api/internal/pkg"
 )
 
 var orders []shr.WorkItem
+var order_loader sync.Once
 
 // OrderHandler handles requests for all orders currently within the service
 func OrderHandler(w http.ResponseWriter, r *http.Request) {
 	shr.Log_request(r)
 
-	shr.Loader.Do(loadOrders)
+	order_loader.Do(loadOrders)
 	if orders == nil {
 		shr.Http_500(&w)
 		return

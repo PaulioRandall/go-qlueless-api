@@ -6,17 +6,19 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+	"sync"
 
 	shr "github.com/PaulioRandall/qlueless-assembly-line-api/internal/pkg"
 )
 
 var spec map[string]interface{}
+var spec_loader sync.Once
 
 // OpenAPIHandler handles requests for the services OpenAPI specification
 func OpenAPIHandler(w http.ResponseWriter, r *http.Request) {
 	shr.Log_request(r)
 
-	shr.Loader.Do(loadSpec)
+	spec_loader.Do(loadSpec)
 
 	if spec == nil {
 		shr.Http_500(&w)

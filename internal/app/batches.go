@@ -3,17 +3,19 @@ package app
 
 import (
 	"net/http"
+	"sync"
 
 	shr "github.com/PaulioRandall/qlueless-assembly-line-api/internal/pkg"
 )
 
 var batches []shr.WorkItem
+var batch_loader sync.Once
 
 // BatchHandler handles requests for all batches currently within the service
 func BatchHandler(w http.ResponseWriter, r *http.Request) {
 	shr.Log_request(r)
 
-	shr.Loader.Do(loadBatches)
+	batch_loader.Do(loadBatches)
 	if batches == nil {
 		shr.Http_500(&w)
 		return
