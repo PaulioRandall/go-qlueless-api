@@ -1,8 +1,6 @@
-// Package internal/app contains non-reusable internal application code
-package app
+package batches
 
 import (
-	"net/http"
 	"sync"
 
 	shr "github.com/PaulioRandall/qlueless-assembly-line-api/internal/pkg"
@@ -11,26 +9,14 @@ import (
 var batches []shr.WorkItem
 var batch_loader sync.Once
 
-// BatchHandler handles requests for all batches currently within the service
-func BatchHandler(w http.ResponseWriter, r *http.Request) {
-	shr.Log_request(r)
-
-	batch_loader.Do(loadBatches)
-	if batches == nil {
-		shr.Http_500(&w)
-		return
-	}
-
-	reply := shr.Reply{
-		Message: "Found all batches",
-		Data:    batches,
-	}
-
-	shr.WriteJsonReply(reply, w, r)
+// Load_batches loads all batches into the batches array
+func Load_batches() []shr.WorkItem {
+	batch_loader.Do(createDummyBatches)
+	return batches
 }
 
-// loadBatches loads all batches into the batches array
-func loadBatches() {
+// createDummyBatches creates some dummy batches
+func createDummyBatches() {
 	batches = []shr.WorkItem{
 		shr.WorkItem{
 			Title:               "Name the saga",

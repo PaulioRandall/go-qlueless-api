@@ -1,5 +1,5 @@
 // Package internal/app contains non-reusable internal application code
-package app
+package openapi
 
 import (
 	"encoding/json"
@@ -11,41 +11,40 @@ import (
 	shr "github.com/PaulioRandall/qlueless-assembly-line-api/internal/pkg"
 )
 
-var reply shr.Reply = shr.Reply{
-	Message: "All service dictionaries and their entries",
-}
-var dict_loader sync.Once
+var spec map[string]interface{}
+var spec_loader sync.Once
 
-// DictionaryHandler handles requests for the service dictionaries
-func DictionaryHandler(w http.ResponseWriter, r *http.Request) {
+// OpenAPI_handler handles requests for the services OpenAPI specification
+func OpenAPI_handler(w http.ResponseWriter, r *http.Request) {
 	shr.Log_request(r)
 
-	dict_loader.Do(loadJson)
+	spec_loader.Do(loadSpec)
 
-	if reply.Data == nil {
+	if spec == nil {
 		shr.Http_500(&w)
 		return
 	}
 
-	shr.WriteJsonReply(reply, w, r)
+	shr.AppendJSONHeaders(&w)
+	json.NewEncoder(w).Encode(spec)
 }
 
 // loadJson loads the dictionary response from a file
-func loadJson() {
+func loadSpec() {
 
 	go_path := os.Getenv("GOPATH")
 	path := go_path +
 		"/src/github.com/PaulioRandall/qlueless-assembly-line-api" +
-		"/web/dictionaries.json"
+		"/api/openapi/openapi.json"
 
 	bytes, err := ioutil.ReadFile(path)
 	if shr.Log_if_err(err) {
-		reply.Data = nil
+		spec = nil
 		return
 	}
 
-	err = json.Unmarshal(bytes, &reply.Data)
+	err = json.Unmarshal(bytes, &spec)
 	if shr.Log_if_err(err) {
-		reply.Data = nil
+		spec = nil
 	}
 }
