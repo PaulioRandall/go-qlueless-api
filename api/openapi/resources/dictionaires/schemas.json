@@ -1,35 +1,38 @@
-"dictionaries_reply": {
+"dictionaries_wrapped": {
   "type": "object",
   "properties": {
     "message": {
       "$ref": "#/components/schemas/message"
     },
     "data": {
-      "type": "object",
-      "properties": {
-        "tags": {
-          "type": "array",
-          "items": {
-            "$ref": "#/components/schemas/tag_entry"
-          }
-        },
-        "statuses": {
-          "type": "array",
-          "items": {
-            "$ref": "#/components/schemas/status_entry"
-          }
-        },
-        "work_item_types": {
-          "type": "array",
-          "items": {
-            "$ref": "#/components/schemas/work_item_type_entry"
-          }
-        }
+      "$ref": "#/components/schemas/dictionaries_object"
+    }
+  }
+},
+"dictionaries_object": {
+  "type": "object",
+  "properties": {
+    "tags": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/tag_dictionary_entry"
+      }
+    },
+    "statuses": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/status_dictionary_entry"
+      }
+    },
+    "work_item_types": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/work_item_type_dictionary_entry"
       }
     }
   }
 },
-"tag_entry": {
+"tag_dictionary_entry": {
   "type": "object",
   "properties": {
     "title": {
@@ -46,7 +49,7 @@
     }
   }
 },
-"status_entry": {
+"status_dictionary_entry": {
   "type": "object",
   "properties": {
     "title": {
@@ -63,7 +66,7 @@
     }
   }
 },
-"work_item_type_entry": {
+"work_item_type_dictionary_entry": {
   "type": "object",
   "properties": {
     "title": {

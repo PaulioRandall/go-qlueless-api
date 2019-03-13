@@ -7,7 +7,14 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/dictionaries_reply"
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/dictionaries_wrapped"
+                },
+                {
+                  "$ref": "#/components/schemas/dictionaries_object"
+                }
+              ]
             }
           }
         }

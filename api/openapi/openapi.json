@@ -14,7 +14,14 @@
 		        "content": {
 		          "application/json": {
 		            "schema": {
-		              "$ref": "#/components/schemas/dictionaries_reply"
+		              "oneOf": [
+		                {
+		                  "$ref": "#/components/schemas/dictionaries_wrapped"
+		                },
+		                {
+		                  "$ref": "#/components/schemas/dictionaries_object"
+		                }
+		              ]
 		            }
 		          }
 		        }
@@ -31,7 +38,14 @@
 		        "content": {
 		          "application/json": {
 		            "schema": {
-		              "$ref": "#/components/schemas/orders_reply"
+		              "oneOf": [
+		                {
+		                  "$ref": "#/components/schemas/orders_wrapped"
+		                },
+		                {
+		                  "$ref": "#/components/schemas/orders_array"
+		                }
+		              ]
 		            }
 		          }
 		        }
@@ -48,7 +62,14 @@
 		        "content": {
 		          "application/json": {
 		            "schema": {
-		              "$ref": "#/components/schemas/batches_reply"
+		              "oneOf": [
+		                {
+		                  "$ref": "#/components/schemas/batches_wrapped"
+		                },
+		                {
+		                  "$ref": "#/components/schemas/batches_array"
+		                }
+		              ]
 		            }
 		          }
 		        }
@@ -59,38 +80,41 @@
   },
 	"components": {
 		"schemas": {
-			"dictionaries_reply": {
+			"dictionaries_wrapped": {
 			  "type": "object",
 			  "properties": {
 			    "message": {
 			      "$ref": "#/components/schemas/message"
 			    },
 			    "data": {
-			      "type": "object",
-			      "properties": {
-			        "tags": {
-			          "type": "array",
-			          "items": {
-			            "$ref": "#/components/schemas/tag_entry"
-			          }
-			        },
-			        "statuses": {
-			          "type": "array",
-			          "items": {
-			            "$ref": "#/components/schemas/status_entry"
-			          }
-			        },
-			        "work_item_types": {
-			          "type": "array",
-			          "items": {
-			            "$ref": "#/components/schemas/work_item_type_entry"
-			          }
-			        }
+			      "$ref": "#/components/schemas/dictionaries_object"
+			    }
+			  }
+			},
+			"dictionaries_object": {
+			  "type": "object",
+			  "properties": {
+			    "tags": {
+			      "type": "array",
+			      "items": {
+			        "$ref": "#/components/schemas/tag_dictionary_entry"
+			      }
+			    },
+			    "statuses": {
+			      "type": "array",
+			      "items": {
+			        "$ref": "#/components/schemas/status_dictionary_entry"
+			      }
+			    },
+			    "work_item_types": {
+			      "type": "array",
+			      "items": {
+			        "$ref": "#/components/schemas/work_item_type_dictionary_entry"
 			      }
 			    }
 			  }
 			},
-			"tag_entry": {
+			"tag_dictionary_entry": {
 			  "type": "object",
 			  "properties": {
 			    "title": {
@@ -107,7 +131,7 @@
 			    }
 			  }
 			},
-			"status_entry": {
+			"status_dictionary_entry": {
 			  "type": "object",
 			  "properties": {
 			    "title": {
@@ -124,7 +148,7 @@
 			    }
 			  }
 			},
-			"work_item_type_entry": {
+			"work_item_type_dictionary_entry": {
 			  "type": "object",
 			  "properties": {
 			    "title": {
@@ -142,18 +166,21 @@
 			    }
 			  }
 			},
-			"orders_reply": {
+			"orders_wrapped": {
 			  "type": "object",
 			  "properties": {
 			    "message": {
 			      "$ref": "#/components/schemas/message"
 			    },
 			    "data": {
-			      "type": "array",
-			      "items": {
-			        "$ref": "#/components/schemas/order_entry"
-			      }
+			      "$ref": "#/components/schemas/orders_array"
 			    }
+			  }
+			},
+			"orders_array": {
+			  "type": "array",
+			  "items": {
+			    "$ref": "#/components/schemas/order_entry"
 			  }
 			},
 			"order_entry": {
@@ -179,18 +206,21 @@
 			    }
 			  }
 			},
-			"batches_reply": {
+			"batches_wrapped": {
 			  "type": "object",
 			  "properties": {
 			    "message": {
 			      "$ref": "#/components/schemas/message"
 			    },
 			    "data": {
-			      "type": "array",
-			      "items": {
-			        "$ref": "#/components/schemas/batch_entry"
-			      }
+			      "$ref": "#/components/schemas/batches_array"
 			    }
+			  }
+			},
+			"batches_array": {
+			  "type": "array",
+			  "items": {
+			    "$ref": "#/components/schemas/batch_entry"
 			  }
 			},
 			"batch_entry": {

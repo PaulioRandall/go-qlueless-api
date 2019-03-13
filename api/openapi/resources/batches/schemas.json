@@ -1,15 +1,18 @@
-"batches_reply": {
+"batches_wrapped": {
   "type": "object",
   "properties": {
     "message": {
       "$ref": "#/components/schemas/message"
     },
     "data": {
-      "type": "array",
-      "items": {
-        "$ref": "#/components/schemas/batch_entry"
-      }
+      "$ref": "#/components/schemas/batches_array"
     }
+  }
+},
+"batches_array": {
+  "type": "array",
+  "items": {
+    "$ref": "#/components/schemas/batch_entry"
   }
 },
 "batch_entry": {

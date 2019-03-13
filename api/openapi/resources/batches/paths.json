@@ -7,7 +7,14 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/batches_reply"
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/batches_wrapped"
+                },
+                {
+                  "$ref": "#/components/schemas/batches_array"
+                }
+              ]
             }
           }
         }

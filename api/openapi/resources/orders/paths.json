@@ -7,7 +7,14 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/orders_reply"
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/orders_wrapped"
+                },
+                {
+                  "$ref": "#/components/schemas/orders_array"
+                }
+              ]
             }
           }
         }
