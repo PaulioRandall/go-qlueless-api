@@ -7,21 +7,29 @@ import (
 	shr "github.com/PaulioRandall/qlueless-assembly-line-api/internal/pkg"
 )
 
+var batches []shr.WorkItem
+
 // BatchHandler handles requests for all batches currently within the service
 func BatchHandler(w http.ResponseWriter, r *http.Request) {
 	shr.Log_request(r)
 
+	shr.Loader.Do(loadBatches)
+	if batches == nil {
+		shr.Http_500(&w)
+		return
+	}
+
 	reply := shr.Reply{
-		Message: "Found dummy batches",
-		Data:    createDummyBatches(),
+		Message: "Found all batches",
+		Data:    batches,
 	}
 
 	shr.WriteJsonReply(reply, w, r)
 }
 
-// createDummyBatches returns an array of dummy batches
-func createDummyBatches() []shr.WorkItem {
-	return []shr.WorkItem{
+// loadBatches loads all batches into the batches array
+func loadBatches() {
+	batches = []shr.WorkItem{
 		shr.WorkItem{
 			Title:               "Name the saga",
 			Description:         "Think of a name for the saga.",

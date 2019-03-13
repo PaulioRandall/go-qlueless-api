@@ -5,7 +5,10 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"sync"
 )
+
+var Loader sync.Once
 
 // A Reply represents the top level JSON returned by all endpoints
 type Reply struct {

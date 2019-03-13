@@ -7,21 +7,29 @@ import (
 	shr "github.com/PaulioRandall/qlueless-assembly-line-api/internal/pkg"
 )
 
+var orders []shr.WorkItem
+
 // OrderHandler handles requests for all orders currently within the service
 func OrderHandler(w http.ResponseWriter, r *http.Request) {
 	shr.Log_request(r)
 
+	shr.Loader.Do(loadOrders)
+	if orders == nil {
+		shr.Http_500(&w)
+		return
+	}
+
 	reply := shr.Reply{
-		Message: "Found dummy orders",
-		Data:    createDummyOrders(),
+		Message: "Found all orders",
+		Data:    orders,
 	}
 
 	shr.WriteJsonReply(reply, w, r)
 }
 
-// createDummyOrders returns an array of dummy orders
-func createDummyOrders() []shr.WorkItem {
-	return []shr.WorkItem{
+// loadOrders loads all orders into the orders array
+func loadOrders() {
+	orders = []shr.WorkItem{
 		shr.WorkItem{
 			Title:        "Outline the saga",
 			Description:  "Create a rough outline of the new saga.",
