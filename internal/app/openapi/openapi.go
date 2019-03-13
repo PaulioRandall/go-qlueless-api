@@ -1,4 +1,3 @@
-// Package internal/app contains non-reusable internal application code
 package openapi
 
 import (
