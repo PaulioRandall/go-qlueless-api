@@ -8,10 +8,10 @@ import (
 )
 
 // All_dictionaries_handler handles requests for the service dictionaries
-func All_dictionaries_handler(w http.ResponseWriter, r *http.Request) {
-	shr.Log_request(r)
+func AllDictsHandler(w http.ResponseWriter, r *http.Request) {
+	shr.LogRequest(r)
 
-	reply := Load_dictionaries_reply()
+	reply := LoadDictsReply()
 	if reply == nil {
 		shr.Http_500(&w)
 		return

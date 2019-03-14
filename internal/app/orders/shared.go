@@ -7,11 +7,11 @@ import (
 )
 
 var orders []shr.WorkItem
-var order_loader sync.Once
+var orderLoader sync.Once
 
-// loadOrders loads all orders into the orders array
-func Load_orders() []shr.WorkItem {
-	order_loader.Do(createDummyOrders)
+// LoadOrders loads all orders into the orders array
+func LoadOrders() []shr.WorkItem {
+	orderLoader.Do(createDummyOrders)
 	return orders
 }
 

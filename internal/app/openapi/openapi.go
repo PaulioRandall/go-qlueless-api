@@ -11,13 +11,13 @@ import (
 )
 
 var spec map[string]interface{}
-var spec_loader sync.Once
+var specLoader sync.Once
 
-// OpenAPI_handler handles requests for the services OpenAPI specification
-func OpenAPI_handler(w http.ResponseWriter, r *http.Request) {
-	shr.Log_request(r)
+// OpenAPIHandler handles requests for the services OpenAPI specification
+func OpenAPIHandler(w http.ResponseWriter, r *http.Request) {
+	shr.LogRequest(r)
 
-	spec_loader.Do(loadSpec)
+	specLoader.Do(loadSpec)
 
 	if spec == nil {
 		shr.Http_500(&w)
@@ -37,13 +37,13 @@ func loadSpec() {
 		"/api/openapi/openapi.json"
 
 	bytes, err := ioutil.ReadFile(path)
-	if shr.Log_if_err(err) {
+	if shr.LogIfErr(err) {
 		spec = nil
 		return
 	}
 
 	err = json.Unmarshal(bytes, &spec)
-	if shr.Log_if_err(err) {
+	if shr.LogIfErr(err) {
 		spec = nil
 	}
 }

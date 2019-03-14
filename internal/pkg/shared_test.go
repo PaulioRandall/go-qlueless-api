@@ -7,16 +7,16 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestLog_if_err___1(t *testing.T) {
-	act := Log_if_err(nil)
+func TestLogIfErr___1(t *testing.T) {
+	act := LogIfErr(nil)
 	assert.False(t, act)
 	// Output:
 	//
 }
 
-func TestLog_if_err___2(t *testing.T) {
+func TestLogIfErr___2(t *testing.T) {
 	var err error = errors.New("Computer says no!")
-	act := Log_if_err(err)
+	act := LogIfErr(err)
 	assert.True(t, act)
 	// Output:
 	// Computer says no!

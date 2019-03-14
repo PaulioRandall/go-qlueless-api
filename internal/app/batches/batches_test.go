@@ -8,13 +8,13 @@ import (
 )
 
 // When invoked, should not return nil
-func TestLoad_batches___1(t *testing.T) {
-	assert.NotNil(t, Load_batches())
+func TestLoadBatches___1(t *testing.T) {
+	assert.NotNil(t, LoadBatches())
 }
 
 // When invoked, should return array of valid batches
-func TestLoad_batches___2(t *testing.T) {
-	var act []shr.WorkItem = Load_batches()
+func TestLoadBatches___2(t *testing.T) {
+	var act []shr.WorkItem = LoadBatches()
 	for _, b := range act {
 		shr.CheckBatch(t, b)
 	}

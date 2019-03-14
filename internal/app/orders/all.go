@@ -6,12 +6,12 @@ import (
 	shr "github.com/PaulioRandall/qlueless-assembly-line-api/internal/pkg"
 )
 
-// All_orders_handler handles requests for all orders currently within the
+// AllOrdersHandler handles requests for all orders currently within the
 // service
-func All_orders_handler(w http.ResponseWriter, r *http.Request) {
-	shr.Log_request(r)
+func AllOrdersHandler(w http.ResponseWriter, r *http.Request) {
+	shr.LogRequest(r)
 
-	orders := Load_orders()
+	orders := LoadOrders()
 	if orders == nil {
 		shr.Http_500(&w)
 		return

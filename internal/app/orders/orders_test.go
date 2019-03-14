@@ -8,13 +8,13 @@ import (
 )
 
 // When invoked, should not return nil
-func TestLoad_orders___1(t *testing.T) {
-	assert.NotNil(t, Load_orders())
+func TestLoadOrders___1(t *testing.T) {
+	assert.NotNil(t, LoadOrders())
 }
 
 // When invoked, should return array of valid orders
-func TestLoad_orders___2(t *testing.T) {
-	var act []shr.WorkItem = Load_orders()
+func TestLoadOrders___2(t *testing.T) {
+	var act []shr.WorkItem = LoadOrders()
 	for _, o := range act {
 		shr.CheckOrder(t, o)
 	}

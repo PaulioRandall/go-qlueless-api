@@ -9,12 +9,12 @@ import (
 	shr "github.com/PaulioRandall/qlueless-assembly-line-api/internal/pkg"
 )
 
-// Single_order_handler handles requests for a specific orders currently
+// SingleOrderHandler handles requests for a specific orders currently
 // within the service
-func Single_order_handler(w http.ResponseWriter, r *http.Request) {
-	shr.Log_request(r)
+func SingleOrderHandler(w http.ResponseWriter, r *http.Request) {
+	shr.LogRequest(r)
 
-	orders := Load_orders()
+	orders := LoadOrders()
 	if orders == nil {
 		shr.Http_500(&w)
 		return

@@ -12,11 +12,11 @@ import (
 var reply shr.Reply = shr.Reply{
 	Message: "All service dictionaries and their entries",
 }
-var dict_loader sync.Once
+var dictLoader sync.Once
 
-// Load_dictionaries_reply loads dictionaries and creates a Reply
-func Load_dictionaries_reply() *shr.Reply {
-	dict_loader.Do(loadJson)
+// LoadDictsReply loads dictionaries and creates a Reply
+func LoadDictsReply() *shr.Reply {
+	dictLoader.Do(loadJson)
 	if reply.Data == nil {
 		return nil
 	}
@@ -32,13 +32,13 @@ func loadJson() {
 		"/web/dictionaries.json"
 
 	bytes, err := ioutil.ReadFile(path)
-	if shr.Log_if_err(err) {
+	if shr.LogIfErr(err) {
 		reply.Data = nil
 		return
 	}
 
 	err = json.Unmarshal(bytes, &reply.Data)
-	if shr.Log_if_err(err) {
+	if shr.LogIfErr(err) {
 		reply.Data = nil
 	}
 }

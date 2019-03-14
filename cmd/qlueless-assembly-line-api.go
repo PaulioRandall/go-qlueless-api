@@ -21,8 +21,8 @@ var reply shr.Reply = shr.Reply{
 }
 
 // Not_found_handler handles requests for which no handler could be found
-func Not_found_handler(w http.ResponseWriter, r *http.Request) {
-	shr.Log_request(r)
+func QluelessNotFoundHandler(w http.ResponseWriter, r *http.Request) {
+	shr.LogRequest(r)
 	shr.AppendJSONHeaders(&w)
 	json.NewEncoder(w).Encode(reply)
 }
@@ -33,13 +33,13 @@ func main() {
 
 	gorilla := mux.NewRouter()
 
-	gorilla.HandleFunc("/openapi", oai.OpenAPI_handler)
-	gorilla.HandleFunc("/dictionaries", dict.All_dictionaries_handler)
-	gorilla.HandleFunc("/orders", ord.All_orders_handler)
-	gorilla.HandleFunc("/orders/{order_id}", ord.Single_order_handler)
-	gorilla.HandleFunc("/batches", bat.All_batches_handler)
-	gorilla.HandleFunc("/batches/{batch_id}", bat.Single_batch_handler)
-	gorilla.NotFoundHandler = http.HandlerFunc(Not_found_handler)
+	gorilla.HandleFunc("/openapi", oai.OpenAPIHandler)
+	gorilla.HandleFunc("/dictionaries", dict.AllDictsHandler)
+	gorilla.HandleFunc("/orders", ord.AllOrdersHandler)
+	gorilla.HandleFunc("/orders/{order_id}", ord.SingleOrderHandler)
+	gorilla.HandleFunc("/batches", bat.AllBatchesHandler)
+	gorilla.HandleFunc("/batches/{batch_id}", bat.SingleBatchHandler)
+	gorilla.NotFoundHandler = http.HandlerFunc(QluelessNotFoundHandler)
 
 	http.Handle("/", gorilla)
 

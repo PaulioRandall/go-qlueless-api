@@ -7,11 +7,12 @@ import (
 )
 
 var batches []shr.WorkItem
-var batch_loader sync.Once
+var batchLoader sync.Once
 
-// Load_batches loads all batches into the batches array
-func Load_batches() []shr.WorkItem {
-	batch_loader.Do(createDummyBatches)
+// LoadBatches loads all batches into the batches array and then returns the
+// array
+func LoadBatches() []shr.WorkItem {
+	batchLoader.Do(createDummyBatches)
 	return batches
 }
 

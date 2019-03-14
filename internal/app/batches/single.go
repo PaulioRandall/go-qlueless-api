@@ -9,12 +9,12 @@ import (
 	shr "github.com/PaulioRandall/qlueless-assembly-line-api/internal/pkg"
 )
 
-// Single_batch_handler handles requests for a specific batches currently
+// SingleBatchHandler handles requests for a specific batches currently
 // within the service
-func Single_batch_handler(w http.ResponseWriter, r *http.Request) {
-	shr.Log_request(r)
+func SingleBatchHandler(w http.ResponseWriter, r *http.Request) {
+	shr.LogRequest(r)
 
-	batches := Load_batches()
+	batches := LoadBatches()
 	if batches == nil {
 		shr.Http_500(&w)
 		return

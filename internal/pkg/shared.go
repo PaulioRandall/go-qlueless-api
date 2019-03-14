@@ -25,7 +25,7 @@ type WorkItem struct {
 }
 
 // Log_request logs the details of a request such as the URL
-func Log_request(r *http.Request) {
+func LogRequest(r *http.Request) {
 	if r.URL.RawQuery == "" {
 		log.Println(r.URL.Path)
 	} else {
@@ -43,7 +43,7 @@ func Check(err error) {
 // Log_if_err checks if the input err is NOT nil returning true if it is.
 // When true the error is logged so all the calling handler needs to do is
 // clean up then invoke Http_500(*http.ResponseWriter) before returning
-func Log_if_err(err error) bool {
+func LogIfErr(err error) bool {
 	if err != nil {
 		log.Println(err)
 		return true
