@@ -17,7 +17,8 @@ I apologise, it's a poor play on words attempting to combine:
 ### Prerequisites
 
 - Go: [https://golang.org/dl/]
-- https://github.com/gorilla/mux `got get -u github.com/gorilla/mux`
+- https://github.com/gorilla/mux `go get -u github.com/gorilla/mux`
+- https://github.com/stretchr/testify `go get -u github.com/stretchr/testify`
 
 ### Installing (Linux/Bash)
 
