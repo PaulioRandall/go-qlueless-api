@@ -45,7 +45,7 @@ func Check(err error) {
 // clean up then invoke Http_500(*http.ResponseWriter) before returning
 func Log_if_err(err error) bool {
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 		return true
 	}
 
