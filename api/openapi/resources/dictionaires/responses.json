@@ -5,10 +5,10 @@
       "schema": {
         "oneOf": [
           {
-            "$ref": "#/components/schemas/dictionaries_wrapped"
+            "$ref": "#/components/x-hidden/dictionaries_wrapped"
           },
           {
-            "$ref": "#/components/schemas/dictionaries_object"
+            "$ref": "#/components/x-hidden/dictionaries_object"
           }
         ]
       }

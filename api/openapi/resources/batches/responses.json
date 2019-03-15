@@ -5,10 +5,10 @@
       "schema": {
         "oneOf": [
           {
-            "$ref": "#/components/schemas/batches_wrapped"
+            "$ref": "#/components/x-hidden/batches_wrapped"
           },
           {
-            "$ref": "#/components/schemas/batches_array"
+            "$ref": "#/components/x-hidden/batches_array"
           }
         ]
       }
@@ -22,10 +22,10 @@
       "schema": {
         "oneOf": [
           {
-            "$ref": "#/components/schemas/batch_wrapped"
+            "$ref": "#/components/x-hidden/batch_wrapped"
           },
           {
-            "$ref": "#/components/schemas/batch_entry"
+            "$ref": "#/components/schemas/batch"
           }
         ]
       }

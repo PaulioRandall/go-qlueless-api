@@ -110,10 +110,10 @@
 			      "schema": {
 			        "oneOf": [
 			          {
-			            "$ref": "#/components/schemas/dictionaries_wrapped"
+			            "$ref": "#/components/x-hidden/dictionaries_wrapped"
 			          },
 			          {
-			            "$ref": "#/components/schemas/dictionaries_object"
+			            "$ref": "#/components/x-hidden/dictionaries_object"
 			          }
 			        ]
 			      }
@@ -127,10 +127,10 @@
 			      "schema": {
 			        "oneOf": [
 			          {
-			            "$ref": "#/components/schemas/orders_wrapped"
+			            "$ref": "#/components/x-hidden/orders_wrapped"
 			          },
 			          {
-			            "$ref": "#/components/schemas/orders_array"
+			            "$ref": "#/components/x-hidden/orders_array"
 			          }
 			        ]
 			      }
@@ -144,10 +144,10 @@
 			      "schema": {
 			        "oneOf": [
 			          {
-			            "$ref": "#/components/schemas/order_wrapped"
+			            "$ref": "#/components/x-hidden/order_wrapped"
 			          },
 			          {
-			            "$ref": "#/components/schemas/order_entry"
+			            "$ref": "#/components/schemas/order"
 			          }
 			        ]
 			      }
@@ -161,10 +161,10 @@
 			      "schema": {
 			        "oneOf": [
 			          {
-			            "$ref": "#/components/schemas/batches_wrapped"
+			            "$ref": "#/components/x-hidden/batches_wrapped"
 			          },
 			          {
-			            "$ref": "#/components/schemas/batches_array"
+			            "$ref": "#/components/x-hidden/batches_array"
 			          }
 			        ]
 			      }
@@ -178,10 +178,10 @@
 			      "schema": {
 			        "oneOf": [
 			          {
-			            "$ref": "#/components/schemas/batch_wrapped"
+			            "$ref": "#/components/x-hidden/batch_wrapped"
 			          },
 			          {
-			            "$ref": "#/components/schemas/batch_entry"
+			            "$ref": "#/components/schemas/batch"
 			          }
 			        ]
 			      }
@@ -200,14 +200,144 @@
 			}
     },
 		"schemas": {
+			"tag": {
+			  "type": "object",
+			  "properties": {
+			    "title": {
+			      "$ref": "#/components/x-hidden/title"
+			    },
+			    "description": {
+			      "$ref": "#/components/x-hidden/description"
+			    },
+			    "tag_id": {
+			      "$ref": "#/components/x-hidden/tag_id"
+			    },
+			    "additional": {
+			      "$ref": "#/components/x-hidden/additional"
+			    }
+			  }
+			},
+			"status": {
+			  "type": "object",
+			  "properties": {
+			    "title": {
+			      "$ref": "#/components/x-hidden/title"
+			    },
+			    "description": {
+			      "$ref": "#/components/x-hidden/description"
+			    },
+			    "status_id": {
+			      "$ref": "#/components/x-hidden/status_id"
+			    },
+			    "additional": {
+			      "$ref": "#/components/x-hidden/additional"
+			    }
+			  }
+			},
+			"work_item_type": {
+			  "type": "object",
+			  "properties": {
+			    "title": {
+			      "$ref": "#/components/x-hidden/title"
+			    },
+			    "description": {
+			      "$ref": "#/components/x-hidden/description"
+			    },
+			    "work_item_type_id": {
+			      "$ref": "#/components/x-hidden/work_item_type_id"
+			    },
+			    "additional": {
+			      "$ref": "#/components/x-hidden/additional"
+			    }
+			  }
+			},
+			"order": {
+			  "type": "object",
+			  "properties": {
+			    "title": {
+			      "$ref": "#/components/x-hidden/title"
+			    },
+			    "description": {
+			      "$ref": "#/components/x-hidden/description"
+			    },
+			    "work_item_id": {
+			      "$ref": "#/components/x-hidden/work_item_id"
+			    },
+			    "tag_id": {
+			      "$ref": "#/components/x-hidden/tag_id"
+			    },
+			    "status_id": {
+			      "$ref": "#/components/x-hidden/status_id"
+			    },
+			    "additional": {
+			      "$ref": "#/components/x-hidden/additional"
+			    }
+			  }
+			},
+			"batch": {
+			  "type": "object",
+			  "properties": {
+			    "title": {
+			      "$ref": "#/components/x-hidden/title"
+			    },
+			    "description": {
+			      "$ref": "#/components/x-hidden/description"
+			    },
+			    "work_item_id": {
+			      "$ref": "#/components/x-hidden/work_item_id"
+			    },
+			    "parent_work_item_id": {
+			      "$ref": "#/components/x-hidden/parent_work_item_id"
+			    },
+			    "tag_id": {
+			      "$ref": "#/components/x-hidden/tag_id"
+			    },
+			    "status_id": {
+			      "$ref": "#/components/x-hidden/status_id"
+			    },
+			    "additional": {
+			      "$ref": "#/components/x-hidden/additional"
+			    }
+			  }
+			},
+			"error": {
+			  "type": "object",
+			  "properties": {
+			    "message": {
+			      "$ref": "#/components/x-hidden/message"
+			    },
+			    "self": {
+			      "$ref": "#/components/x-hidden/self"
+			    }
+			  }
+			},
+			"wrapped_response": {
+			  "type": "object",
+			  "properties": {
+			    "message": {
+			      "$ref": "#/components/x-hidden/message"
+			    },
+			    "self": {
+			      "$ref": "#/components/x-hidden/self"
+			    },
+			    "data": {
+			      "description": "The wrapped response data; should be identical to the response returned by the same request without the `wrap` parameter"
+			    }
+			  }
+			}
+    },
+    "x-hidden": {
 			"dictionaries_wrapped": {
 			  "type": "object",
 			  "properties": {
 			    "message": {
-			      "$ref": "#/components/schemas/message"
+			      "$ref": "#/components/x-hidden/message"
+			    },
+			    "self": {
+			      "$ref": "#/components/x-hidden/self"
 			    },
 			    "data": {
-			      "$ref": "#/components/schemas/dictionaries_object"
+			      "$ref": "#/components/x-hidden/dictionaries_object"
 			    }
 			  }
 			},
@@ -217,72 +347,20 @@
 			    "tags": {
 			      "type": "array",
 			      "items": {
-			        "$ref": "#/components/schemas/tag_dictionary_entry"
+			        "$ref": "#/components/schemas/tag"
 			      }
 			    },
 			    "statuses": {
 			      "type": "array",
 			      "items": {
-			        "$ref": "#/components/schemas/status_dictionary_entry"
+			        "$ref": "#/components/schemas/status"
 			      }
 			    },
 			    "work_item_types": {
 			      "type": "array",
 			      "items": {
-			        "$ref": "#/components/schemas/work_item_type_dictionary_entry"
+			        "$ref": "#/components/schemas/work_item_type"
 			      }
-			    }
-			  }
-			},
-			"tag_dictionary_entry": {
-			  "type": "object",
-			  "properties": {
-			    "title": {
-			      "$ref": "#/components/schemas/title"
-			    },
-			    "description": {
-			      "$ref": "#/components/schemas/description"
-			    },
-			    "tag_id": {
-			      "$ref": "#/components/schemas/tag_id"
-			    },
-			    "additional": {
-			      "$ref": "#/components/schemas/additional"
-			    }
-			  }
-			},
-			"status_dictionary_entry": {
-			  "type": "object",
-			  "properties": {
-			    "title": {
-			      "$ref": "#/components/schemas/title"
-			    },
-			    "description": {
-			      "$ref": "#/components/schemas/description"
-			    },
-			    "status_id": {
-			      "$ref": "#/components/schemas/status_id"
-			    },
-			    "additional": {
-			      "$ref": "#/components/schemas/additional"
-			    }
-			  }
-			},
-			"work_item_type_dictionary_entry": {
-			  "type": "object",
-			  "properties": {
-			    "title": {
-			      "$ref": "#/components/schemas/title"
-			    },
-			    "description": {
-			      "$ref": "#/components/schemas/description"
-			    },
-			    "work_item_type_id": {
-			      "type": "string",
-			      "description": "Unique identifier of the work item type."
-			    },
-			    "additional": {
-			      "$ref": "#/components/schemas/additional"
 			    }
 			  }
 			},
@@ -290,50 +368,33 @@
 			  "type": "object",
 			  "properties": {
 			    "message": {
-			      "$ref": "#/components/schemas/message"
+			      "$ref": "#/components/x-hidden/message"
+			    },
+			    "self": {
+			      "$ref": "#/components/x-hidden/self"
 			    },
 			    "data": {
-			      "$ref": "#/components/schemas/orders_array"
+			      "$ref": "#/components/x-hidden/orders_array"
 			    }
 			  }
 			},
 			"orders_array": {
 			  "type": "array",
 			  "items": {
-			    "$ref": "#/components/schemas/order_entry"
+			    "$ref": "#/components/schemas/order"
 			  }
 			},
 			"order_wrapped": {
 			  "type": "object",
 			  "properties": {
 			    "message": {
-			      "$ref": "#/components/schemas/message"
+			      "$ref": "#/components/x-hidden/message"
+			    },
+			    "self": {
+			      "$ref": "#/components/x-hidden/self"
 			    },
 			    "data": {
-			      "$ref": "#/components/schemas/order_entry"
-			    }
-			  }
-			},
-			"order_entry": {
-			  "type": "object",
-			  "properties": {
-			    "title": {
-			      "$ref": "#/components/schemas/title"
-			    },
-			    "description": {
-			      "$ref": "#/components/schemas/description"
-			    },
-			    "work_item_id": {
-			      "$ref": "#/components/schemas/work_item_id"
-			    },
-			    "tag_id": {
-			      "$ref": "#/components/schemas/tag_id"
-			    },
-			    "status_id": {
-			      "$ref": "#/components/schemas/status_id"
-			    },
-			    "additional": {
-			      "$ref": "#/components/schemas/additional"
+			      "$ref": "#/components/schemas/order"
 			    }
 			  }
 			},
@@ -341,54 +402,33 @@
 			  "type": "object",
 			  "properties": {
 			    "message": {
-			      "$ref": "#/components/schemas/message"
+			      "$ref": "#/components/x-hidden/message"
+			    },
+			    "self": {
+			      "$ref": "#/components/x-hidden/self"
 			    },
 			    "data": {
-			      "$ref": "#/components/schemas/batches_array"
+			      "$ref": "#/components/x-hidden/batches_array"
 			    }
 			  }
 			},
 			"batches_array": {
 			  "type": "array",
 			  "items": {
-			    "$ref": "#/components/schemas/batch_entry"
+			    "$ref": "#/components/schemas/batch"
 			  }
 			},
 			"batch_wrapped": {
 			  "type": "object",
 			  "properties": {
 			    "message": {
-			      "$ref": "#/components/schemas/message"
+			      "$ref": "#/components/x-hidden/message"
+			    },
+			    "self": {
+			      "$ref": "#/components/x-hidden/self"
 			    },
 			    "data": {
-			      "$ref": "#/components/schemas/batch_entry"
-			    }
-			  }
-			},
-			"batch_entry": {
-			  "type": "object",
-			  "properties": {
-			    "title": {
-			      "$ref": "#/components/schemas/title"
-			    },
-			    "description": {
-			      "$ref": "#/components/schemas/description"
-			    },
-			    "work_item_id": {
-			      "$ref": "#/components/schemas/work_item_id"
-			    },
-			    "parent_work_item_id": {
-			      "type": "string",
-			      "description": "Unique identifier of the work items parent."
-			    },
-			    "tag_id": {
-			      "$ref": "#/components/schemas/tag_id"
-			    },
-			    "status_id": {
-			      "$ref": "#/components/schemas/status_id"
-			    },
-			    "additional": {
-			      "$ref": "#/components/schemas/additional"
+			      "$ref": "#/components/schemas/batch"
 			    }
 			  }
 			},
@@ -412,6 +452,10 @@
 			  "type": "string",
 			  "description": "Unique identifier of the work item."
 			},
+			"parent_work_item_id": {
+			  "type": "string",
+			  "description": "Unique identifier of the work items parent."
+			},
 			"tag_id": {
 			  "type": "string",
 			  "description": "Unique identifier of a tag."
@@ -420,21 +464,14 @@
 			  "type": "string",
 			  "description": "Unique identifier of a status."
 			},
+			"work_item_type_id": {
+			  "type": "string",
+			  "description": "Unique identifier of the work item type."
+			},
 			"additional": {
 			  "type": "string",
 			  "description": "Semicolon ';' separated list of additional attributes managed by clients. Each property is a key value pair using a colon ':' as the delimiter, i.e. 'key: value'."
-			},
-			"error": {
-			  "type": "object",
-			  "properties": {
-			    "message": {
-			      "$ref": "#/components/schemas/message"
-			    },
-			    "self": {
-			      "$ref": "#/components/schemas/self"
-			    }
-			  }
 			}
-		}
+    }
 	}
 }

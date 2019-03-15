@@ -1,0 +1,40 @@
+"message": {
+  "type": "string",
+  "description": "Human readable summary of the response in a form presentable to end users."
+},
+"self": {
+  "type": "string",
+  "description": "Full path of the URL that made the request."
+},
+"title": {
+  "type": "string",
+  "description": "Presentable and human readable title of the entity instance."
+},
+"description": {
+  "type": "string",
+  "description": "Presentable and human readable description of the entity instance."
+},
+"work_item_id": {
+  "type": "string",
+  "description": "Unique identifier of the work item."
+},
+"parent_work_item_id": {
+  "type": "string",
+  "description": "Unique identifier of the work items parent."
+},
+"tag_id": {
+  "type": "string",
+  "description": "Unique identifier of a tag."
+},
+"status_id": {
+  "type": "string",
+  "description": "Unique identifier of a status."
+},
+"work_item_type_id": {
+  "type": "string",
+  "description": "Unique identifier of the work item type."
+},
+"additional": {
+  "type": "string",
+  "description": "Semicolon ';' separated list of additional attributes managed by clients. Each property is a key value pair using a colon ':' as the delimiter, i.e. 'key: value'."
+}

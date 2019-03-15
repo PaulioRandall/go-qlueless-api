@@ -1,0 +1,37 @@
+"dictionaries_wrapped": {
+  "type": "object",
+  "properties": {
+    "message": {
+      "$ref": "#/components/x-hidden/message"
+    },
+    "self": {
+      "$ref": "#/components/x-hidden/self"
+    },
+    "data": {
+      "$ref": "#/components/x-hidden/dictionaries_object"
+    }
+  }
+},
+"dictionaries_object": {
+  "type": "object",
+  "properties": {
+    "tags": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/tag"
+      }
+    },
+    "statuses": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/status"
+      }
+    },
+    "work_item_types": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/work_item_type"
+      }
+    }
+  }
+}

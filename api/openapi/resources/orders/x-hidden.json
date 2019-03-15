@@ -1,15 +1,4 @@
-"error": {
-  "type": "object",
-  "properties": {
-    "message": {
-      "$ref": "#/components/x-hidden/message"
-    },
-    "self": {
-      "$ref": "#/components/x-hidden/self"
-    }
-  }
-},
-"wrapped_response": {
+"orders_wrapped": {
   "type": "object",
   "properties": {
     "message": {
@@ -19,7 +8,27 @@
       "$ref": "#/components/x-hidden/self"
     },
     "data": {
-      "description": "The wrapped response data; should be identical to the response returned by the same request without the `wrap` parameter"
+      "$ref": "#/components/x-hidden/orders_array"
+    }
+  }
+},
+"orders_array": {
+  "type": "array",
+  "items": {
+    "$ref": "#/components/schemas/order"
+  }
+},
+"order_wrapped": {
+  "type": "object",
+  "properties": {
+    "message": {
+      "$ref": "#/components/x-hidden/message"
+    },
+    "self": {
+      "$ref": "#/components/x-hidden/self"
+    },
+    "data": {
+      "$ref": "#/components/schemas/order"
     }
   }
 }

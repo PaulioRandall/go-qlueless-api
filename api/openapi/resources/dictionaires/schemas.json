@@ -1,86 +1,51 @@
-"dictionaries_wrapped": {
-  "type": "object",
-  "properties": {
-    "message": {
-      "$ref": "#/components/schemas/message"
-    },
-    "data": {
-      "$ref": "#/components/schemas/dictionaries_object"
-    }
-  }
-},
-"dictionaries_object": {
-  "type": "object",
-  "properties": {
-    "tags": {
-      "type": "array",
-      "items": {
-        "$ref": "#/components/schemas/tag_dictionary_entry"
-      }
-    },
-    "statuses": {
-      "type": "array",
-      "items": {
-        "$ref": "#/components/schemas/status_dictionary_entry"
-      }
-    },
-    "work_item_types": {
-      "type": "array",
-      "items": {
-        "$ref": "#/components/schemas/work_item_type_dictionary_entry"
-      }
-    }
-  }
-},
-"tag_dictionary_entry": {
+"tag": {
   "type": "object",
   "properties": {
     "title": {
-      "$ref": "#/components/schemas/title"
+      "$ref": "#/components/x-hidden/title"
     },
     "description": {
-      "$ref": "#/components/schemas/description"
+      "$ref": "#/components/x-hidden/description"
     },
     "tag_id": {
-      "$ref": "#/components/schemas/tag_id"
+      "$ref": "#/components/x-hidden/tag_id"
     },
     "additional": {
-      "$ref": "#/components/schemas/additional"
+      "$ref": "#/components/x-hidden/additional"
     }
   }
 },
-"status_dictionary_entry": {
+"status": {
   "type": "object",
   "properties": {
     "title": {
-      "$ref": "#/components/schemas/title"
+      "$ref": "#/components/x-hidden/title"
     },
     "description": {
-      "$ref": "#/components/schemas/description"
+      "$ref": "#/components/x-hidden/description"
     },
     "status_id": {
-      "$ref": "#/components/schemas/status_id"
+      "$ref": "#/components/x-hidden/status_id"
     },
     "additional": {
-      "$ref": "#/components/schemas/additional"
+      "$ref": "#/components/x-hidden/additional"
     }
   }
 },
-"work_item_type_dictionary_entry": {
+"work_item_type": {
   "type": "object",
   "properties": {
     "title": {
-      "$ref": "#/components/schemas/title"
+      "$ref": "#/components/x-hidden/title"
     },
     "description": {
-      "$ref": "#/components/schemas/description"
+      "$ref": "#/components/x-hidden/description"
     },
     "work_item_type_id": {
-      "type": "string",
-      "description": "Unique identifier of the work item type."
+      "$ref": "#/components/x-hidden/work_item_type_id"
     },
     "additional": {
-      "$ref": "#/components/schemas/additional"
+      "$ref": "#/components/x-hidden/additional"
     }
   }
 }
