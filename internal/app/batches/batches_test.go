@@ -3,7 +3,7 @@ package batches
 import (
 	"testing"
 
-	shr "github.com/PaulioRandall/qlueless-assembly-line-api/internal/pkg"
+	shr "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg"
 	"github.com/stretchr/testify/assert"
 )
 

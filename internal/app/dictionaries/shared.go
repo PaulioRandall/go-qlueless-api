@@ -6,7 +6,7 @@ import (
 	"os"
 	"sync"
 
-	shr "github.com/PaulioRandall/qlueless-assembly-line-api/internal/pkg"
+	shr "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg"
 )
 
 var reply shr.Reply = shr.Reply{
@@ -28,7 +28,7 @@ func loadJson() {
 
 	go_path := os.Getenv("GOPATH")
 	path := go_path +
-		"/src/github.com/PaulioRandall/qlueless-assembly-line-api" +
+		"/src/github.com/PaulioRandall/go-qlueless-assembly-api" +
 		"/web/dictionaries.json"
 
 	bytes, err := ioutil.ReadFile(path)

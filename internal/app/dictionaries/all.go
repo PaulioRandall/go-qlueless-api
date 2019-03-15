@@ -4,7 +4,7 @@ package dictionaries
 import (
 	"net/http"
 
-	shr "github.com/PaulioRandall/qlueless-assembly-line-api/internal/pkg"
+	shr "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg"
 )
 
 // All_dictionaries_handler handles requests for the service dictionaries

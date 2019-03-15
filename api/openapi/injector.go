@@ -45,7 +45,7 @@ func (o OpenAPI) Inject(filename string, indent int) string {
 
 // Main is the entry point for the OpenAPI specification generator
 func main() {
-	log.Println("[Qlueless Assembly Line API]: Compiling OpenAPI specification")
+	log.Println("[Injector]: Compiling OpenAPI specification")
 
 	var err error
 

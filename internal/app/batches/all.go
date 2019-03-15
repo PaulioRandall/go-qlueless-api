@@ -3,7 +3,7 @@ package batches
 import (
 	"net/http"
 
-	shr "github.com/PaulioRandall/qlueless-assembly-line-api/internal/pkg"
+	shr "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg"
 )
 
 // AllBatchesHandler handles requests for all batches currently within the

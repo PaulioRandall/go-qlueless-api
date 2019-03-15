@@ -1,7 +1,7 @@
 #!/bin/bash
 
-app=qlueless-assembly-line-api
-root=${GOPATH}/src/github.com/PaulioRandall/${app}
+exe=go-qlueless-assembly-api
+root=${GOPATH}/src/github.com/PaulioRandall/${exe}
 
 cd "${root}"
 go test -v ./...

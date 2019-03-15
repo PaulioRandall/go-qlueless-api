@@ -6,7 +6,7 @@ import (
 
 	"github.com/gorilla/mux"
 
-	shr "github.com/PaulioRandall/qlueless-assembly-line-api/internal/pkg"
+	shr "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg"
 )
 
 // SingleBatchHandler handles requests for a specific batches currently
