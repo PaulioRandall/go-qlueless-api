@@ -29,3 +29,4 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Added the `wrap` query parameter to all endpoints except `/openapi` that will wrap the response data so meta information can be obtained for each request
 - Added `message` text property to the top level of all `wrap`ped JSON responses to provide a summary for each response
 - Added `data` object property to the top level of all `wrap`ped JSON responses to hold the actual response data
+- Added `self` string property to the top level of all `wrap`ped JSON responses to hold the relative URL of the request

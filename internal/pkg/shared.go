@@ -10,6 +10,7 @@ import (
 // A Reply represents the top level JSON returned by all endpoints
 type Reply struct {
 	Message string      `json:"message"`
+	Self    string      `json:"self,omitempty"`
 	Data    interface{} `json:"data,omitempty"`
 }
 
@@ -102,6 +103,7 @@ func WriteJsonReply(reply Reply, w http.ResponseWriter, r *http.Request) {
 	AppendJSONHeaders(&w)
 
 	if WrapData(r) {
+		reply.Self = r.URL.String()
 		json.NewEncoder(w).Encode(reply)
 	} else {
 		json.NewEncoder(w).Encode(reply.Data)

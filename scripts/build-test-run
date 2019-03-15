@@ -5,6 +5,7 @@ root=${GOPATH}/src/github.com/PaulioRandall/${app}
 
 cd "${root}/scripts"
 ./build
+./test-all
 
 cd "${GOPATH}/bin"
 ./qlueless-assembly-line-api
