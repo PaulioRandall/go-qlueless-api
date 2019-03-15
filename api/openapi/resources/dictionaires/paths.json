@@ -1,6 +1,11 @@
 "/dictionaries": {
   "get": {
     "description": "Returns all service dictionaires.",
+    "parameters": [
+      {
+        "$ref": "#/components/parameters/wrap"
+      }
+    ],
     "responses": {
       "200": {
         "$ref": "#/components/responses/dicts_200"

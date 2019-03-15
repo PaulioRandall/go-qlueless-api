@@ -1,0 +1,9 @@
+"wrap": {
+  "name": "wrap",
+  "in": "query",
+  "description": "Present if responses should be wrapped and meta information be included within the response.",
+  "required": false,
+  "schema": {
+    "type": "string"
+  }
+}
