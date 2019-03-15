@@ -38,3 +38,30 @@ func CheckBatch(t *testing.T, b WorkItem) {
 	CheckNotBlank(t, b.Parent_work_item_id, "WorkItem.Parent_work_item_id")
 	CheckIsNumber(t, b.Parent_work_item_id, "WorkItem.Parent_work_item_id")
 }
+
+func CheckTag(t *testing.T, e map[string]interface{}) {
+	assert.NotNil(t, e["title"])
+	CheckNotBlank(t, e["title"].(string), "Dicts.Tag.Title")
+	assert.NotNil(t, e["description"])
+	CheckNotBlank(t, e["description"].(string), "Dicts.Tag.Description")
+	assert.NotNil(t, e["tag_id"])
+	CheckNotBlank(t, e["tag_id"].(string), "Dicts.Tag.Tag_id")
+}
+
+func CheckStatus(t *testing.T, e map[string]interface{}) {
+	assert.NotNil(t, e["title"])
+	CheckNotBlank(t, e["title"].(string), "Dicts.Status.Title")
+	assert.NotNil(t, e["description"])
+	CheckNotBlank(t, e["description"].(string), "Dicts.Tag.Description")
+	assert.NotNil(t, e["status_id"])
+	CheckNotBlank(t, e["status_id"].(string), "Dicts.Tag.Status_id")
+}
+
+func CheckWorkItemType(t *testing.T, e map[string]interface{}) {
+	assert.NotNil(t, e["title"])
+	CheckNotBlank(t, e["title"].(string), "Dicts.WorkItemType.Title")
+	assert.NotNil(t, e["description"])
+	CheckNotBlank(t, e["description"].(string), "Dicts.WorkItemType.Description")
+	assert.NotNil(t, e["work_item_type_id"])
+	CheckNotBlank(t, e["work_item_type_id"].(string), "Dicts.WorkItemType.Work_item_type_id")
+}
