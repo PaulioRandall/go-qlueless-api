@@ -21,17 +21,12 @@ func SingleBatchHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	id := mux.Vars(r)["batch_id"]
-	var batch *shr.WorkItem = shr.FindWorkItem(batches, id)
+	var b *shr.WorkItem = shr.FindWorkItem(batches, id)
 
-	if batch == nil {
+	if b == nil {
 		shr.Http_4xx(w, 404, fmt.Sprintf("Batch %v not found", id))
 		return
 	}
 
-	reply := shr.Reply{
-		Message: fmt.Sprintf("Found batch %v", id),
-		Data:    batch,
-	}
-
-	shr.WriteJsonReply(reply, w, r)
+	shr.WriteJsonReply(fmt.Sprintf("Found batch %v", id), b, w, r)
 }

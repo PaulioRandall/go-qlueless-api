@@ -21,17 +21,12 @@ func SingleOrderHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	id := mux.Vars(r)["order_id"]
-	var order *shr.WorkItem = shr.FindWorkItem(orders, id)
+	var o *shr.WorkItem = shr.FindWorkItem(orders, id)
 
-	if order == nil {
+	if o == nil {
 		shr.Http_4xx(w, 404, fmt.Sprintf("Order %v not found", id))
 		return
 	}
 
-	reply := shr.Reply{
-		Message: fmt.Sprintf("Found order %v", id),
-		Data:    order,
-	}
-
-	shr.WriteJsonReply(reply, w, r)
+	shr.WriteJsonReply(fmt.Sprintf("Found order %v", id), o, w, r)
 }

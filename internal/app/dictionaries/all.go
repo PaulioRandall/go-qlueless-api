@@ -11,11 +11,11 @@ import (
 func AllDictsHandler(w http.ResponseWriter, r *http.Request) {
 	shr.LogRequest(r)
 
-	reply := LoadDictsReply()
-	if reply == nil {
+	dicts := LoadDicts()
+	if dicts == nil {
 		shr.Http_500(w)
 		return
 	}
 
-	shr.WriteJsonReply(*reply, w, r)
+	shr.WriteJsonReply("All service dictionaries", dicts, w, r)
 }

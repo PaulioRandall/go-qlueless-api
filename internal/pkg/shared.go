@@ -3,13 +3,16 @@ package pkg
 
 import (
 	"encoding/json"
+	"errors"
 	"log"
 	"net/http"
+	"strings"
 )
 
 // A Reply represents the top level JSON returned by all endpoints
+// OUTDATED
 type Reply struct {
-	Message string      `json:"message"`
+	Message string      `json:"message,omitempty"`
 	Self    string      `json:"self,omitempty"`
 	Data    interface{} `json:"data,omitempty"`
 }
@@ -25,7 +28,16 @@ type WorkItem struct {
 	Additional          string `json:"additional,omitempty"`
 }
 
-// Log_request logs the details of a request such as the URL
+// IsBlank returns true if the string is empty or only contains whitespace
+func IsBlank(s string) bool {
+	v := strings.TrimSpace(s)
+	if v == "" {
+		return true
+	}
+	return false
+}
+
+// LogRequest logs the details of a request such as the URL
 func LogRequest(r *http.Request) {
 	if r.URL.RawQuery == "" {
 		log.Println(r.URL.Path)
@@ -80,11 +92,48 @@ func Http_4xx(w http.ResponseWriter, status int, message string) {
 	json.NewEncoder(w).Encode(r)
 }
 
-// WrapData returns true if the client has specified that the response data
-// should be wrapped so meta information about the response can be included
-func WrapData(r *http.Request) bool {
-	wrap := r.URL.Query()["wrap"]
-	if wrap != nil {
+// wrapData returns a nil if the client has not requested a wrapped response.
+// If they have, a list of the requested meta information properties will be
+// returned
+func wrapData(r *http.Request) ([]string, error) {
+	v := r.URL.Query()["wrap_with"]
+	if v != nil {
+		if len(v) > 1 {
+			return nil, errors.New("Multiple 'wrap_with' query parameters not allowed")
+		}
+		return wrapWith(v[0])
+	}
+	return nil, nil
+}
+
+// wrapWith splits a dot `.` delimitered string of meta information properties
+// and validates each one
+func wrapWith(p string) ([]string, error) {
+	v := strings.Split(p, ".")
+	if len(v) == 0 {
+		return nil, errors.New("At least one value within 'wrap_with' must be provided")
+	}
+	for _, p := range v {
+		if IsBlank(p) {
+			return nil, errors.New("Blank values within 'wrap_with' are not allowed")
+		}
+		if !isWrapperProp(p) {
+			return nil, errors.New("Invalid value within 'wrap_with': " + p)
+		}
+	}
+	return v, nil
+}
+
+// isWrapperProp returns true if the input string is a meta information property
+// name
+func isWrapperProp(p string) bool {
+	p = strings.ToLower(p)
+	switch p {
+	case "message":
+		fallthrough
+	case "self":
+		fallthrough
+	case "data":
 		return true
 	}
 	return false
@@ -101,16 +150,34 @@ func AppendJSONHeaders(w http.ResponseWriter) {
 
 // WriteJsonReply writes either the reply or the reply data using the
 // ResponseWriter and appends the required JSON headers
-func WriteJsonReply(reply Reply, w http.ResponseWriter, r *http.Request) {
+func WriteJsonReply(message string, data interface{}, w http.ResponseWriter, r *http.Request) {
+	v, err := wrapData(r)
+	if err != nil {
+		Http_4xx(w, 400, err.Error())
+		return
+	}
+
 	AppendJSONHeaders(w)
 	w.WriteHeader(http.StatusOK)
 
-	if WrapData(r) {
-		reply.Self = r.URL.String()
-		json.NewEncoder(w).Encode(reply)
-	} else {
-		json.NewEncoder(w).Encode(reply.Data)
+	if v == nil {
+		json.NewEncoder(w).Encode(data)
+		return
 	}
+
+	reply := Reply{}
+	for _, p := range v {
+		switch p {
+		case "message":
+			reply.Message = message
+		case "self":
+			reply.Self = r.URL.String()
+		case "data":
+			reply.Data = data
+		}
+	}
+
+	json.NewEncoder(w).Encode(reply)
 }
 
 // FindWorkItem finds the WorkItem with the specified work_item_id else returns

@@ -17,10 +17,5 @@ func AllBatchesHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	reply := shr.Reply{
-		Message: "Found all batches",
-		Data:    batches,
-	}
-
-	shr.WriteJsonReply(reply, w, r)
+	shr.WriteJsonReply("Found all batches", batches, w, r)
 }
