@@ -2,22 +2,11 @@
   "get": {
     "description": "Returns all service dictionaires.",
     "responses": {
+      "200": {
+        "$ref": "#/components/responses/dicts_200"
+      },
       "default": {
-        "description": "Mapped list of dictionaries.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "oneOf": [
-                {
-                  "$ref": "#/components/schemas/dictionaries_wrapped"
-                },
-                {
-                  "$ref": "#/components/schemas/dictionaries_object"
-                }
-              ]
-            }
-          }
-        }
+        "$ref": "#/components/responses/error"
       }
     }
   }

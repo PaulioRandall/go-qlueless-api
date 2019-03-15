@@ -1,0 +1,17 @@
+"dicts_200": {
+  "description": "Mapped list of dictionaries.",
+  "content": {
+    "application/json": {
+      "schema": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/dictionaries_wrapped"
+          },
+          {
+            "$ref": "#/components/schemas/dictionaries_object"
+          }
+        ]
+      }
+    }
+  }
+}

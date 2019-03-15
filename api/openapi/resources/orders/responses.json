@@ -1,0 +1,34 @@
+"orders_200": {
+  "description": "List of orders.",
+  "content": {
+    "application/json": {
+      "schema": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/orders_wrapped"
+          },
+          {
+            "$ref": "#/components/schemas/orders_array"
+          }
+        ]
+      }
+    }
+  }
+},
+"order_200": {
+  "description": "Single order",
+  "content": {
+    "application/json": {
+      "schema": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/order_wrapped"
+          },
+          {
+            "$ref": "#/components/schemas/order_entry"
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,10 @@
+"error": {
+  "description": "Client or service error.",
+  "content": {
+    "application/json": {
+      "schema": {
+        "$ref": "#/components/schemas/error"
+      }
+    }
+  }
+}

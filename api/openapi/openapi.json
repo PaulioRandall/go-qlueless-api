@@ -9,22 +9,11 @@
 		  "get": {
 		    "description": "Returns all service dictionaires.",
 		    "responses": {
+		      "200": {
+		        "$ref": "#/components/responses/dicts_200"
+		      },
 		      "default": {
-		        "description": "Mapped list of dictionaries.",
-		        "content": {
-		          "application/json": {
-		            "schema": {
-		              "oneOf": [
-		                {
-		                  "$ref": "#/components/schemas/dictionaries_wrapped"
-		                },
-		                {
-		                  "$ref": "#/components/schemas/dictionaries_object"
-		                }
-		              ]
-		            }
-		          }
-		        }
+		        "$ref": "#/components/responses/error"
 		      }
 		    }
 		  }
@@ -33,22 +22,11 @@
 		  "get": {
 		    "description": "Returns all orders.",
 		    "responses": {
+		      "200": {
+		        "$ref": "#/components/responses/orders_200"
+		      },
 		      "default": {
-		        "description": "List of orders.",
-		        "content": {
-		          "application/json": {
-		            "schema": {
-		              "oneOf": [
-		                {
-		                  "$ref": "#/components/schemas/orders_wrapped"
-		                },
-		                {
-		                  "$ref": "#/components/schemas/orders_array"
-		                }
-		              ]
-		            }
-		          }
-		        }
+		        "$ref": "#/components/responses/error"
 		      }
 		    }
 		  }
@@ -62,22 +40,11 @@
 		      }
 		    ],
 		    "responses": {
+		      "200": {
+		        "$ref": "#/components/responses/order_200"
+		      },
 		      "default": {
-		        "description": "Single order",
-		        "content": {
-		          "application/json": {
-		            "schema": {
-		              "oneOf": [
-		                {
-		                  "$ref": "#/components/schemas/order_wrapped"
-		                },
-		                {
-		                  "$ref": "#/components/schemas/order_entry"
-		                }
-		              ]
-		            }
-		          }
-		        }
+		        "$ref": "#/components/responses/error"
 		      }
 		    }
 		  }
@@ -86,22 +53,11 @@
 		  "get": {
 		    "description": "Returns all batches.",
 		    "responses": {
+		      "200": {
+		        "$ref": "#/components/responses/batches_200"
+		      },
 		      "default": {
-		        "description": "List of batches.",
-		        "content": {
-		          "application/json": {
-		            "schema": {
-		              "oneOf": [
-		                {
-		                  "$ref": "#/components/schemas/batches_wrapped"
-		                },
-		                {
-		                  "$ref": "#/components/schemas/batches_array"
-		                }
-		              ]
-		            }
-		          }
-		        }
+		        "$ref": "#/components/responses/error"
 		      }
 		    }
 		  }
@@ -115,22 +71,11 @@
 		      }
 		    ],
 		    "responses": {
+		      "200": {
+		        "$ref": "#/components/responses/batch_200"
+		      },
 		      "default": {
-		        "description": "Single batch.",
-		        "content": {
-		          "application/json": {
-		            "schema": {
-		              "oneOf": [
-		                {
-		                  "$ref": "#/components/schemas/batch_wrapped"
-		                },
-		                {
-		                  "$ref": "#/components/schemas/batch_entry"
-		                }
-		              ]
-		            }
-		          }
-		        }
+		        "$ref": "#/components/responses/error"
 		      }
 		    }
 		  }
@@ -154,6 +99,103 @@
 			  "required": true,
 			  "schema": {
 			    "type": "string"
+			  }
+			}
+    },
+    "responses": {
+			"dicts_200": {
+			  "description": "Mapped list of dictionaries.",
+			  "content": {
+			    "application/json": {
+			      "schema": {
+			        "oneOf": [
+			          {
+			            "$ref": "#/components/schemas/dictionaries_wrapped"
+			          },
+			          {
+			            "$ref": "#/components/schemas/dictionaries_object"
+			          }
+			        ]
+			      }
+			    }
+			  }
+			},
+			"orders_200": {
+			  "description": "List of orders.",
+			  "content": {
+			    "application/json": {
+			      "schema": {
+			        "oneOf": [
+			          {
+			            "$ref": "#/components/schemas/orders_wrapped"
+			          },
+			          {
+			            "$ref": "#/components/schemas/orders_array"
+			          }
+			        ]
+			      }
+			    }
+			  }
+			},
+			"order_200": {
+			  "description": "Single order",
+			  "content": {
+			    "application/json": {
+			      "schema": {
+			        "oneOf": [
+			          {
+			            "$ref": "#/components/schemas/order_wrapped"
+			          },
+			          {
+			            "$ref": "#/components/schemas/order_entry"
+			          }
+			        ]
+			      }
+			    }
+			  }
+			},
+			"batches_200": {
+			  "description": "List of batches.",
+			  "content": {
+			    "application/json": {
+			      "schema": {
+			        "oneOf": [
+			          {
+			            "$ref": "#/components/schemas/batches_wrapped"
+			          },
+			          {
+			            "$ref": "#/components/schemas/batches_array"
+			          }
+			        ]
+			      }
+			    }
+			  }
+			},
+			"batch_200": {
+			  "description": "Single batch.",
+			  "content": {
+			    "application/json": {
+			      "schema": {
+			        "oneOf": [
+			          {
+			            "$ref": "#/components/schemas/batch_wrapped"
+			          },
+			          {
+			            "$ref": "#/components/schemas/batch_entry"
+			          }
+			        ]
+			      }
+			    }
+			  }
+			},
+			"error": {
+			  "description": "Client or service error.",
+			  "content": {
+			    "application/json": {
+			      "schema": {
+			        "$ref": "#/components/schemas/error"
+			      }
+			    }
 			  }
 			}
     },
@@ -354,6 +396,10 @@
 			  "type": "string",
 			  "description": "Human readable summary of the response in a form presentable to end users."
 			},
+			"self": {
+			  "type": "string",
+			  "description": "Full path of the URL that made the request."
+			},
 			"title": {
 			  "type": "string",
 			  "description": "Presentable and human readable title of the entity instance."
@@ -377,6 +423,17 @@
 			"additional": {
 			  "type": "string",
 			  "description": "Semicolon ';' separated list of additional attributes managed by clients. Each property is a key value pair using a colon ':' as the delimiter, i.e. 'key: value'."
+			},
+			"error": {
+			  "type": "object",
+			  "properties": {
+			    "message": {
+			      "$ref": "#/components/schemas/message"
+			    },
+			    "self": {
+			      "$ref": "#/components/schemas/self"
+			    }
+			  }
 			}
 		}
 	}

@@ -14,6 +14,12 @@
       {{- "\n"}}{{ .Inject "/orders/parameters.json" 3}},
       {{- "\n"}}{{ .Inject "/batches/parameters.json" 3}}
     },
+    "responses": {
+      {{- "\n"}}{{ .Inject "/dictionaires/responses.json" 3}},
+      {{- "\n"}}{{ .Inject "/orders/responses.json" 3}},
+      {{- "\n"}}{{ .Inject "/batches/responses.json" 3}},
+      {{- "\n"}}{{ .Inject "/shared/responses.json" 3}}
+    },
 		"schemas": {
       {{- "\n"}}{{ .Inject "/dictionaires/schemas.json" 3}},
       {{- "\n"}}{{ .Inject "/orders/schemas.json" 3}},

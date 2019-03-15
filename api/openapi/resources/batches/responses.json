@@ -1,0 +1,34 @@
+"batches_200": {
+  "description": "List of batches.",
+  "content": {
+    "application/json": {
+      "schema": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/batches_wrapped"
+          },
+          {
+            "$ref": "#/components/schemas/batches_array"
+          }
+        ]
+      }
+    }
+  }
+},
+"batch_200": {
+  "description": "Single batch.",
+  "content": {
+    "application/json": {
+      "schema": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/batch_wrapped"
+          },
+          {
+            "$ref": "#/components/schemas/batch_entry"
+          }
+        ]
+      }
+    }
+  }
+}

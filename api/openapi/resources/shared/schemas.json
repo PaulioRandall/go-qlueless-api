@@ -2,6 +2,10 @@
   "type": "string",
   "description": "Human readable summary of the response in a form presentable to end users."
 },
+"self": {
+  "type": "string",
+  "description": "Full path of the URL that made the request."
+},
 "title": {
   "type": "string",
   "description": "Presentable and human readable title of the entity instance."
@@ -25,4 +29,15 @@
 "additional": {
   "type": "string",
   "description": "Semicolon ';' separated list of additional attributes managed by clients. Each property is a key value pair using a colon ':' as the delimiter, i.e. 'key: value'."
+},
+"error": {
+  "type": "object",
+  "properties": {
+    "message": {
+      "$ref": "#/components/schemas/message"
+    },
+    "self": {
+      "$ref": "#/components/schemas/self"
+    }
+  }
 }

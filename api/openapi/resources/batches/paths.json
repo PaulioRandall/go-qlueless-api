@@ -2,22 +2,11 @@
   "get": {
     "description": "Returns all batches.",
     "responses": {
+      "200": {
+        "$ref": "#/components/responses/batches_200"
+      },
       "default": {
-        "description": "List of batches.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "oneOf": [
-                {
-                  "$ref": "#/components/schemas/batches_wrapped"
-                },
-                {
-                  "$ref": "#/components/schemas/batches_array"
-                }
-              ]
-            }
-          }
-        }
+        "$ref": "#/components/responses/error"
       }
     }
   }
@@ -31,22 +20,11 @@
       }
     ],
     "responses": {
+      "200": {
+        "$ref": "#/components/responses/batch_200"
+      },
       "default": {
-        "description": "Single batch.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "oneOf": [
-                {
-                  "$ref": "#/components/schemas/batch_wrapped"
-                },
-                {
-                  "$ref": "#/components/schemas/batch_entry"
-                }
-              ]
-            }
-          }
-        }
+        "$ref": "#/components/responses/error"
       }
     }
   }

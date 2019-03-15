@@ -2,22 +2,11 @@
   "get": {
     "description": "Returns all orders.",
     "responses": {
+      "200": {
+        "$ref": "#/components/responses/orders_200"
+      },
       "default": {
-        "description": "List of orders.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "oneOf": [
-                {
-                  "$ref": "#/components/schemas/orders_wrapped"
-                },
-                {
-                  "$ref": "#/components/schemas/orders_array"
-                }
-              ]
-            }
-          }
-        }
+        "$ref": "#/components/responses/error"
       }
     }
   }
@@ -31,22 +20,11 @@
       }
     ],
     "responses": {
+      "200": {
+        "$ref": "#/components/responses/order_200"
+      },
       "default": {
-        "description": "Single order",
-        "content": {
-          "application/json": {
-            "schema": {
-              "oneOf": [
-                {
-                  "$ref": "#/components/schemas/order_wrapped"
-                },
-                {
-                  "$ref": "#/components/schemas/order_entry"
-                }
-              ]
-            }
-          }
-        }
+        "$ref": "#/components/responses/error"
       }
     }
   }
