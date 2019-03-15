@@ -13,7 +13,7 @@ func AllDictsHandler(w http.ResponseWriter, r *http.Request) {
 
 	reply := LoadDictsReply()
 	if reply == nil {
-		shr.Http_500(&w)
+		shr.Http_500(w)
 		return
 	}
 

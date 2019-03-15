@@ -20,11 +20,11 @@ func OpenAPIHandler(w http.ResponseWriter, r *http.Request) {
 	specLoader.Do(loadSpec)
 
 	if spec == nil {
-		shr.Http_500(&w)
+		shr.Http_500(w)
 		return
 	}
 
-	shr.AppendJSONHeaders(&w)
+	shr.AppendJSONHeaders(w)
 	json.NewEncoder(w).Encode(spec)
 }
 

@@ -13,7 +13,7 @@ func AllBatchesHandler(w http.ResponseWriter, r *http.Request) {
 
 	batches := LoadBatches()
 	if batches == nil {
-		shr.Http_500(&w)
+		shr.Http_500(w)
 		return
 	}
 

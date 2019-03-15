@@ -55,17 +55,18 @@ func LogIfErr(err error) bool {
 
 // Http_500 sets up the response with generic 500 error details. This method
 // should be used when ever a 500 error needs to be returned
-func Http_500(w *http.ResponseWriter) {
+func Http_500(w http.ResponseWriter) {
 	r := Reply{
 		Message: "Internal server error",
 	}
 
 	AppendJSONHeaders(w)
-	json.NewEncoder(*w).Encode(r)
+	w.WriteHeader(500)
+	json.NewEncoder(w).Encode(r)
 }
 
 // Http_4xx sets up the response as a 4xx error
-func Http_4xx(w *http.ResponseWriter, status int, message string) {
+func Http_4xx(w http.ResponseWriter, status int, message string) {
 	if status < 400 && status > 499 {
 		panic("Status code must be between 400 and 499")
 	}
@@ -74,9 +75,9 @@ func Http_4xx(w *http.ResponseWriter, status int, message string) {
 		Message: message,
 	}
 
-	(*w).WriteHeader(status)
-	json.NewEncoder(*w).Encode(r)
 	AppendJSONHeaders(w)
+	w.WriteHeader(status)
+	json.NewEncoder(w).Encode(r)
 }
 
 // WrapData returns true if the client has specified that the response data
@@ -91,16 +92,18 @@ func WrapData(r *http.Request) bool {
 
 // AppendJSONHeaders appends the response headers for JSON requests to
 // ResponseWriters
-func AppendJSONHeaders(w *http.ResponseWriter) {
-	(*w).Header().Set("Content-Type", "application/json")
-	(*w).Header().Set("Access-Control-Allow-Origin", "*")
+func AppendJSONHeaders(w http.ResponseWriter) {
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "*")
 }
 
 // WriteJsonReply writes either the reply or the reply data using the
 // ResponseWriter and appends the required JSON headers
 func WriteJsonReply(reply Reply, w http.ResponseWriter, r *http.Request) {
+	AppendJSONHeaders(w)
 	w.WriteHeader(http.StatusOK)
-	AppendJSONHeaders(&w)
 
 	if WrapData(r) {
 		reply.Self = r.URL.String()

@@ -16,7 +16,7 @@ func SingleOrderHandler(w http.ResponseWriter, r *http.Request) {
 
 	orders := LoadOrders()
 	if orders == nil {
-		shr.Http_500(&w)
+		shr.Http_500(w)
 		return
 	}
 
@@ -24,7 +24,7 @@ func SingleOrderHandler(w http.ResponseWriter, r *http.Request) {
 	var order *shr.WorkItem = shr.FindWorkItem(orders, id)
 
 	if order == nil {
-		shr.Http_4xx(&w, 404, fmt.Sprintf("Order %v not found", id))
+		shr.Http_4xx(w, 404, fmt.Sprintf("Order %v not found", id))
 		return
 	}
 

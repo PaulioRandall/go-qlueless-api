@@ -13,7 +13,7 @@ func AllOrdersHandler(w http.ResponseWriter, r *http.Request) {
 
 	orders := LoadOrders()
 	if orders == nil {
-		shr.Http_500(&w)
+		shr.Http_500(w)
 		return
 	}
 

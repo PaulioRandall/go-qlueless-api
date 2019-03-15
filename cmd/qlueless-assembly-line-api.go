@@ -23,7 +23,7 @@ var reply shr.Reply = shr.Reply{
 // Not_found_handler handles requests for which no handler could be found
 func QluelessNotFoundHandler(w http.ResponseWriter, r *http.Request) {
 	shr.LogRequest(r)
-	shr.AppendJSONHeaders(&w)
+	shr.AppendJSONHeaders(w)
 	json.NewEncoder(w).Encode(reply)
 }
 

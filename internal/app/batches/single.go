@@ -16,7 +16,7 @@ func SingleBatchHandler(w http.ResponseWriter, r *http.Request) {
 
 	batches := LoadBatches()
 	if batches == nil {
-		shr.Http_500(&w)
+		shr.Http_500(w)
 		return
 	}
 
@@ -24,7 +24,7 @@ func SingleBatchHandler(w http.ResponseWriter, r *http.Request) {
 	var batch *shr.WorkItem = shr.FindWorkItem(batches, id)
 
 	if batch == nil {
-		shr.Http_4xx(&w, 404, fmt.Sprintf("Batch %v not found", id))
+		shr.Http_4xx(w, 404, fmt.Sprintf("Batch %v not found", id))
 		return
 	}
 
