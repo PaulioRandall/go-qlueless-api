@@ -1,4 +1,4 @@
-# Qlueless Assembly Line API
+# Go Qlueless Assembly API
 
 This is a Go implementation of an API to access Kanban style lists with a manufacturing theme. 
 
@@ -27,13 +27,13 @@ Within a terminal:
 ```
 mkdir -p "${GOPATH}/src/github.com/PaulioRandall"
 cd "${GOPATH}/src/github.com/PaulioRandall"
-git clone https://github.com/PaulioRandall/qlueless-assembly-line-api.git
+git clone https://github.com/PaulioRandall/go-qlueless-assembly-api.git
 ```
 
 From there move to the `scripts` directory for a range of activities including building, testing, running, and opening documentation within your browser:
 
 ```
-cd qlueless-assembly-line-api/scripts
+cd go-qlueless-assembly-api/scripts
 ```
 
 ### Running unit tests (Linux/Bash)
@@ -41,7 +41,7 @@ cd qlueless-assembly-line-api/scripts
 Within a terminal:
 
 ```
-cd "${GOPATH}/src/github.com/PaulioRandall/qlueless-assembly-line-api/scripts"
+cd "${GOPATH}/src/github.com/PaulioRandall/go-qlueless-assembly-api/scripts"
 ./test-all
 ```
 
@@ -72,7 +72,7 @@ I don't think this is applicable, at least not within the foreseeable future.
 
 ## Versioning
 
-This projects [CHANGELOG](https://github.com/PaulioRandall/qlueless-assembly-line-api/blob/master/api/CHANGELOG.md) format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+This projects [CHANGELOG](https://github.com/PaulioRandall/go-qlueless-assembly-api/blob/master/api/CHANGELOG.md) format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Authors
 
@@ -80,7 +80,7 @@ This projects [CHANGELOG](https://github.com/PaulioRandall/qlueless-assembly-lin
 
 ## License
 
-This project is licensed under the [MIT License](https://github.com/PaulioRandall/qlueless-assembly-line-api/blob/master/LICENSE).
+This project is licensed under the [MIT License](https://github.com/PaulioRandall/go-qlueless-assembly-api/blob/master/LICENSE).
 
 ## Acknowledgments
 
