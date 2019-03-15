@@ -10,7 +10,7 @@
 		    "description": "Returns all service dictionaires.",
 		    "parameters": [
 		      {
-		        "$ref": "#/components/parameters/wrap"
+		        "$ref": "#/components/parameters/wrap_with"
 		      }
 		    ],
 		    "responses": {
@@ -28,7 +28,7 @@
 		    "description": "Returns all orders.",
 		    "parameters": [
 		      {
-		        "$ref": "#/components/parameters/wrap"
+		        "$ref": "#/components/parameters/wrap_with"
 		      }
 		    ],
 		    "responses": {
@@ -49,7 +49,7 @@
 		        "$ref": "#/components/parameters/order_id"
 		      },
 		      {
-		        "$ref": "#/components/parameters/wrap"
+		        "$ref": "#/components/parameters/wrap_with"
 		      }
 		    ],
 		    "responses": {
@@ -67,7 +67,7 @@
 		    "description": "Returns all batches.",
 		    "parameters": [
 		      {
-		        "$ref": "#/components/parameters/wrap"
+		        "$ref": "#/components/parameters/wrap_with"
 		      }
 		    ],
 		    "responses": {
@@ -88,7 +88,7 @@
 		        "$ref": "#/components/parameters/batch_id"
 		      },
 		      {
-		        "$ref": "#/components/parameters/wrap"
+		        "$ref": "#/components/parameters/wrap_with"
 		      }
 		    ],
 		    "responses": {
@@ -122,14 +122,15 @@
 			    "type": "string"
 			  }
 			},
-			"wrap": {
-			  "name": "wrap",
+			"wrap_with": {
+			  "name": "wrap_with",
 			  "in": "query",
-			  "description": "Present if responses should be wrapped and meta information be included within the response.",
+			  "description": "A dot `.` separated list of meta information properties that should be returned in place of the response.",
 			  "required": false,
 			  "schema": {
 			    "type": "string"
-			  }
+			  },
+			  "example": "message.self.data"
 			}
     },
     "responses": {
