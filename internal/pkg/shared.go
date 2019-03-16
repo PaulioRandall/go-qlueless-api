@@ -21,13 +21,13 @@ type Reply struct {
 
 // A WorkItem represents and is a genralisation of orders and batches
 type WorkItem struct {
-	Title               string `json:"title"`
-	Description         string `json:"description"`
-	Work_item_id        string `json:"work_item_id"`
-	Parent_work_item_id string `json:"parent_work_item_id,omitempty"`
-	Tag_id              string `json:"tag_id"`
-	Status_id           string `json:"status_id"`
-	Additional          string `json:"additional,omitempty"`
+	Title            string `json:"title"`
+	Description      string `json:"description"`
+	WorkItemID       string `json:"work_item_id"`
+	ParentWorkItemID string `json:"parent_work_item_id,omitempty"`
+	TagID            string `json:"tag_id"`
+	StatusID         string `json:"status_id"`
+	Additional       string `json:"additional,omitempty"`
 }
 
 // Str returns a pointer to the passed string, useful for getting the address of
@@ -50,7 +50,7 @@ func LogRequest(req *http.Request) {
 	if req.URL.RawQuery == "" {
 		log.Println(req.URL.Path)
 	} else {
-		log.Println(req.URL.Path + "?" + req.URL.RawQuery)
+		log.Println(req.URL.String())
 	}
 }
 
@@ -204,7 +204,7 @@ func WriteJsonReply(r *Reply, message *string, data interface{}, hints *string) 
 // nil
 func FindWorkItem(items []WorkItem, id string) *WorkItem {
 	for _, v := range items {
-		if id == v.Work_item_id {
+		if id == v.WorkItemID {
 			return &v
 		}
 	}

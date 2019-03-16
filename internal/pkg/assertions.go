@@ -23,10 +23,10 @@ func CheckNotBlank(t *testing.T, s string, m ...interface{}) {
 func CheckWorkItem(t *testing.T, w WorkItem) {
 	CheckNotBlank(t, w.Title, "WorkItem.Title")
 	CheckNotBlank(t, w.Description, "WorkItem.Description")
-	CheckNotBlank(t, w.Work_item_id, "WorkItem.Work_item_id")
-	CheckIsNumber(t, w.Work_item_id, "WorkItem.Work_item_id")
-	CheckNotBlank(t, w.Tag_id, "WorkItem.Tag_id")
-	CheckNotBlank(t, w.Status_id, "WorkItem.Status_id")
+	CheckNotBlank(t, w.WorkItemID, "WorkItem.Work_item_id")
+	CheckIsNumber(t, w.WorkItemID, "WorkItem.Work_item_id")
+	CheckNotBlank(t, w.TagID, "WorkItem.Tag_id")
+	CheckNotBlank(t, w.StatusID, "WorkItem.Status_id")
 }
 
 func CheckOrder(t *testing.T, o WorkItem) {
@@ -35,8 +35,8 @@ func CheckOrder(t *testing.T, o WorkItem) {
 
 func CheckBatch(t *testing.T, b WorkItem) {
 	CheckWorkItem(t, b)
-	CheckNotBlank(t, b.Parent_work_item_id, "WorkItem.Parent_work_item_id")
-	CheckIsNumber(t, b.Parent_work_item_id, "WorkItem.Parent_work_item_id")
+	CheckNotBlank(t, b.ParentWorkItemID, "WorkItem.Parent_work_item_id")
+	CheckIsNumber(t, b.ParentWorkItemID, "WorkItem.Parent_work_item_id")
 }
 
 func CheckTag(t *testing.T, e map[string]interface{}) {

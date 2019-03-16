@@ -6,7 +6,7 @@ import (
 	"os"
 	"sync"
 
-	shr "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg"
+	. "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg"
 )
 
 var dictionaries map[string]interface{}
@@ -27,13 +27,13 @@ func loadJson() {
 		"/web/dictionaries.json"
 
 	bytes, err := ioutil.ReadFile(path)
-	if shr.LogIfErr(err) {
+	if LogIfErr(err) {
 		dictionaries = nil
 		return
 	}
 
 	err = json.Unmarshal(bytes, &dictionaries)
-	if shr.LogIfErr(err) {
+	if LogIfErr(err) {
 		dictionaries = nil
 	}
 }
