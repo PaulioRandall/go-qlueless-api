@@ -12,9 +12,12 @@ import (
 // A Reply represents the top level JSON returned by all endpoints
 // OUTDATED
 type Reply struct {
-	Message string      `json:"message,omitempty"`
-	Self    string      `json:"self,omitempty"`
-	Data    interface{} `json:"data,omitempty"`
+	Request  *http.Request  `json:"-"`
+	Response *http.Response `json:"-"`
+	Message  string         `json:"message,omitempty"`
+	Self     string         `json:"self,omitempty"`
+	Data     interface{}    `json:"data,omitempty"`
+	Hints    string         `json:"hints,omitempty"`
 }
 
 // A WorkItem represents and is a genralisation of orders and batches
@@ -61,7 +64,6 @@ func LogIfErr(err error) bool {
 		log.Println(err)
 		return true
 	}
-
 	return false
 }
 
@@ -69,7 +71,7 @@ func LogIfErr(err error) bool {
 // should be used when ever a 500 error needs to be returned
 func Http_500(w http.ResponseWriter) {
 	r := Reply{
-		Message: "Internal server error",
+		Message: "Sorry, something went wrong on our end",
 	}
 
 	AppendJSONHeaders(w)
@@ -78,13 +80,14 @@ func Http_500(w http.ResponseWriter) {
 }
 
 // Http_4xx sets up the response as a 4xx error
-func Http_4xx(w http.ResponseWriter, status int, message string) {
+func Http_4xx(w http.ResponseWriter, status int, message string, hints string) {
 	if status < 400 && status > 499 {
 		panic("Status code must be between 400 and 499")
 	}
 
 	r := Reply{
 		Message: message,
+		Hints:   hints,
 	}
 
 	AppendJSONHeaders(w)
@@ -134,6 +137,8 @@ func isWrapperProp(p string) bool {
 	case "self":
 		fallthrough
 	case "data":
+		fallthrough
+	case "hints":
 		return true
 	}
 	return false
@@ -150,10 +155,10 @@ func AppendJSONHeaders(w http.ResponseWriter) {
 
 // WriteJsonReply writes either the reply or the reply data using the
 // ResponseWriter and appends the required JSON headers
-func WriteJsonReply(message string, data interface{}, w http.ResponseWriter, r *http.Request) {
+func WriteJsonReply(message string, data interface{}, hints string, w http.ResponseWriter, r *http.Request) {
 	v, err := wrapData(r)
 	if err != nil {
-		Http_4xx(w, 400, err.Error())
+		Http_4xx(w, 400, err.Error(), "Valid values [message|self|data|hints] e.g. 'wrap_with=message.data'")
 		return
 	}
 
@@ -174,6 +179,8 @@ func WriteJsonReply(message string, data interface{}, w http.ResponseWriter, r *
 			reply.Self = r.URL.String()
 		case "data":
 			reply.Data = data
+		case "hints":
+			reply.Hints = hints
 		}
 	}
 

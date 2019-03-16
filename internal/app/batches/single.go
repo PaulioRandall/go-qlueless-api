@@ -24,9 +24,9 @@ func SingleBatchHandler(w http.ResponseWriter, r *http.Request) {
 	var b *shr.WorkItem = shr.FindWorkItem(batches, id)
 
 	if b == nil {
-		shr.Http_4xx(w, 404, fmt.Sprintf("Batch %v not found", id))
+		shr.Http_4xx(w, 404, fmt.Sprintf("Batch %v not found", id), "")
 		return
 	}
 
-	shr.WriteJsonReply(fmt.Sprintf("Found batch %v", id), b, w, r)
+	shr.WriteJsonReply(fmt.Sprintf("Found batch %v", id), b, "", w, r)
 }

@@ -17,5 +17,5 @@ func AllDictsHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	shr.WriteJsonReply("All service dictionaries", dicts, w, r)
+	shr.WriteJsonReply("All service dictionaries", dicts, "", w, r)
 }

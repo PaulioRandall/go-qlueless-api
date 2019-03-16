@@ -24,9 +24,9 @@ func SingleOrderHandler(w http.ResponseWriter, r *http.Request) {
 	var o *shr.WorkItem = shr.FindWorkItem(orders, id)
 
 	if o == nil {
-		shr.Http_4xx(w, 404, fmt.Sprintf("Order %v not found", id))
+		shr.Http_4xx(w, 404, fmt.Sprintf("Order %v not found", id), "")
 		return
 	}
 
-	shr.WriteJsonReply(fmt.Sprintf("Found order %v", id), o, w, r)
+	shr.WriteJsonReply(fmt.Sprintf("Found order %v", id), o, "", w, r)
 }

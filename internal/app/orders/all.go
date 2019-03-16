@@ -17,5 +17,5 @@ func AllOrdersHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	shr.WriteJsonReply("Found all orders", orders, w, r)
+	shr.WriteJsonReply("Found all orders", orders, "", w, r)
 }
