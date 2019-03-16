@@ -23,8 +23,8 @@ func TestLogIfErr___2(t *testing.T) {
 	// Computer says no!
 }
 
-func dummyWorkItems() []WorkItem {
-	return []WorkItem{
+func dummyWorkItems() *[]WorkItem {
+	return &[]WorkItem{
 		WorkItem{
 			Title:       "Outline the saga",
 			Description: "Create a rough outline of the new saga.",
@@ -105,6 +105,22 @@ func TestIsBlank___2(t *testing.T) {
 func TestIsBlank___3(t *testing.T) {
 	act := IsBlank("Captain Vimes")
 	assert.False(t, act)
+}
+
+// When a value is present, it is returned
+func TestValueOrEmpty___1(t *testing.T) {
+	m := make(map[string]interface{})
+	m["key"] = "value"
+	act := ValueOrEmpty(m, "key")
+	assert.Equal(t, "value", act)
+}
+
+// When a value is not present, empty string is returned
+func TestValueOrEmpty___2(t *testing.T) {
+	m := make(map[string]interface{})
+	m["key"] = "value"
+	act := ValueOrEmpty(m, "responsibilities")
+	assert.Empty(t, act)
 }
 
 // When given an empty string, false is returned

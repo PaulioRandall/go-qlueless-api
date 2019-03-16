@@ -6,19 +6,19 @@ import (
 	. "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg"
 )
 
-var batches []WorkItem
+var batches *[]WorkItem
 var batchLoader sync.Once
 
 // LoadBatches loads all batches into the batches array and then returns the
 // array
-func LoadBatches() []WorkItem {
+func LoadBatches() *[]WorkItem {
 	batchLoader.Do(createDummyBatches)
 	return batches
 }
 
 // createDummyBatches creates some dummy batches
 func createDummyBatches() {
-	batches = []WorkItem{
+	batches = &[]WorkItem{
 		WorkItem{
 			Title:            "Name the saga",
 			Description:      "Think of a name for the saga.",

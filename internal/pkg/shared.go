@@ -45,6 +45,15 @@ func IsBlank(s string) bool {
 	return false
 }
 
+// ValueOrEmpty returns the value of the parameter or an empty string
+func ValueOrEmpty(m map[string]interface{}, k string) string {
+	v, ok := m[k].(string)
+	if ok {
+		return v
+	}
+	return ""
+}
+
 // LogRequest logs the details of a request such as the URL
 func LogRequest(req *http.Request) {
 	if req.URL.RawQuery == "" {
@@ -161,7 +170,7 @@ func isWrapperProp(p string) bool {
 func AppendJSONHeaders(r *Reply) {
 	(*r.Res).Header().Set("Content-Type", "application/json; charset=utf-8")
 	(*r.Res).Header().Set("Access-Control-Allow-Origin", "*")
-	(*r.Res).Header().Set("Access-Control-Allow-Methods", "*")
+	(*r.Res).Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
 	(*r.Res).Header().Set("Access-Control-Allow-Headers", "*")
 }
 
@@ -202,8 +211,8 @@ func WriteJsonReply(r *Reply, message *string, data interface{}, hints *string) 
 
 // FindWorkItem finds the WorkItem with the specified work_item_id else returns
 // nil
-func FindWorkItem(items []WorkItem, id string) *WorkItem {
-	for _, v := range items {
+func FindWorkItem(items *[]WorkItem, id string) *WorkItem {
+	for _, v := range *items {
 		if id == v.WorkItemID {
 			return &v
 		}

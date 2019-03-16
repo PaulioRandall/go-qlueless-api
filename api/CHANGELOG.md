@@ -30,3 +30,4 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Added `message` meta information property as an optional wrapped JSON response property. It provides a summary for the response
 - Added `data` meta information property as an optional wrapped JSON response property. It holds the actual response data
 - Added `self` meta information property as an optional wrapped JSON response property. It holds the relative URL of the request
+- Added `(POST) /order` which creates a new order within the data store

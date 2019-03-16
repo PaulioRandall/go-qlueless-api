@@ -14,7 +14,9 @@
         "$ref": "#/components/responses/error"
       }
     }
-  },
+  }
+},
+"/order": {
   "post": {
     "description": "Creates a new order.",
     "requestBody": {

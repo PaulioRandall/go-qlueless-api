@@ -14,8 +14,8 @@ func TestLoadBatches___1(t *testing.T) {
 
 // When invoked, should return array of valid batches
 func TestLoadBatches___2(t *testing.T) {
-	var act []WorkItem = LoadBatches()
-	for _, b := range act {
+	act := LoadBatches()
+	for _, b := range *act {
 		CheckBatch(t, b)
 	}
 }
