@@ -7,25 +7,29 @@ import (
 	"os"
 	"sync"
 
-	shr "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg"
+	. "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg"
 )
 
 var spec map[string]interface{}
 var specLoader sync.Once
 
 // OpenAPIHandler handles requests for the services OpenAPI specification
-func OpenAPIHandler(w http.ResponseWriter, r *http.Request) {
-	shr.LogRequest(r)
+func OpenAPIHandler(res http.ResponseWriter, req *http.Request) {
+	LogRequest(req)
+	r := Reply{
+		Req: req,
+		Res: &res,
+	}
 
 	specLoader.Do(loadSpec)
 
 	if spec == nil {
-		shr.Http_500(w)
+		Http_500(&r)
 		return
 	}
 
-	shr.AppendJSONHeaders(w)
-	json.NewEncoder(w).Encode(spec)
+	AppendJSONHeaders(&r)
+	json.NewEncoder(res).Encode(spec)
 }
 
 // loadJson loads the dictionary response from a file
@@ -37,13 +41,13 @@ func loadSpec() {
 		"/api/openapi/openapi.json"
 
 	bytes, err := ioutil.ReadFile(path)
-	if shr.LogIfErr(err) {
+	if LogIfErr(err) {
 		spec = nil
 		return
 	}
 
 	err = json.Unmarshal(bytes, &spec)
-	if shr.LogIfErr(err) {
+	if LogIfErr(err) {
 		spec = nil
 	}
 }

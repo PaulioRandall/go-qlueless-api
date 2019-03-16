@@ -3,19 +3,23 @@ package batches
 import (
 	"net/http"
 
-	shr "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg"
+	. "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg"
 )
 
 // AllBatchesHandler handles requests for all batches currently within the
 // service
-func AllBatchesHandler(w http.ResponseWriter, r *http.Request) {
-	shr.LogRequest(r)
+func AllBatchesHandler(res http.ResponseWriter, req *http.Request) {
+	LogRequest(req)
+	r := Reply{
+		Req: req,
+		Res: &res,
+	}
 
 	batches := LoadBatches()
 	if batches == nil {
-		shr.Http_500(w)
+		Http_500(&r)
 		return
 	}
 
-	shr.WriteJsonReply("Found all batches", batches, "", w, r)
+	WriteJsonReply(&r, Str("Found all batches"), batches, nil)
 }

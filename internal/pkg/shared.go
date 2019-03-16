@@ -10,14 +10,13 @@ import (
 )
 
 // A Reply represents the top level JSON returned by all endpoints
-// OUTDATED
 type Reply struct {
-	Request  *http.Request  `json:"-"`
-	Response *http.Response `json:"-"`
-	Message  string         `json:"message,omitempty"`
-	Self     string         `json:"self,omitempty"`
-	Data     interface{}    `json:"data,omitempty"`
-	Hints    string         `json:"hints,omitempty"`
+	Req     *http.Request        `json:"-"`
+	Res     *http.ResponseWriter `json:"-"`
+	Message *string              `json:"message,omitempty"`
+	Self    *string              `json:"self,omitempty"`
+	Data    interface{}          `json:"data,omitempty"`
+	Hints   *string              `json:"hints,omitempty"`
 }
 
 // A WorkItem represents and is a genralisation of orders and batches
@@ -31,6 +30,12 @@ type WorkItem struct {
 	Additional          string `json:"additional,omitempty"`
 }
 
+// Str returns a pointer to the passed string, useful for getting the address of
+// a string in one line
+func Str(s string) *string {
+	return &s
+}
+
 // IsBlank returns true if the string is empty or only contains whitespace
 func IsBlank(s string) bool {
 	v := strings.TrimSpace(s)
@@ -41,11 +46,11 @@ func IsBlank(s string) bool {
 }
 
 // LogRequest logs the details of a request such as the URL
-func LogRequest(r *http.Request) {
-	if r.URL.RawQuery == "" {
-		log.Println(r.URL.Path)
+func LogRequest(req *http.Request) {
+	if req.URL.RawQuery == "" {
+		log.Println(req.URL.Path)
 	} else {
-		log.Println(r.URL.Path + "?" + r.URL.RawQuery)
+		log.Println(req.URL.Path + "?" + req.URL.RawQuery)
 	}
 }
 
@@ -69,37 +74,44 @@ func LogIfErr(err error) bool {
 
 // Http_500 sets up the response with generic 500 error details. This method
 // should be used when ever a 500 error needs to be returned
-func Http_500(w http.ResponseWriter) {
-	r := Reply{
-		Message: "Sorry, something went wrong on our end",
+func Http_500(r *Reply) {
+	reply := Reply{
+		Message: Str("Sorry, something went wrong at our end"),
 	}
 
-	AppendJSONHeaders(w)
-	w.WriteHeader(500)
-	json.NewEncoder(w).Encode(r)
+	AppendJSONHeaders(r)
+	(*r.Res).WriteHeader(500)
+	json.NewEncoder(*r.Res).Encode(reply)
 }
 
 // Http_4xx sets up the response as a 4xx error
-func Http_4xx(w http.ResponseWriter, status int, message string, hints string) {
+func Http_4xx(r *Reply, status int) {
 	if status < 400 && status > 499 {
 		panic("Status code must be between 400 and 499")
 	}
 
-	r := Reply{
-		Message: message,
-		Hints:   hints,
+	if r.Message == nil {
+		log.Println("[BUG] Reply.Message required for error messages")
+		Http_500(r)
+		return
 	}
 
-	AppendJSONHeaders(w)
-	w.WriteHeader(status)
-	json.NewEncoder(w).Encode(r)
+	reply := Reply{
+		Message: r.Message,
+		Self:    r.Self,
+		Hints:   r.Hints,
+	}
+
+	AppendJSONHeaders(r)
+	(*r.Res).WriteHeader(status)
+	json.NewEncoder(*r.Res).Encode(reply)
 }
 
 // wrapData returns a nil if the client has not requested a wrapped response.
 // If they have, a list of the requested meta information properties will be
 // returned
-func wrapData(r *http.Request) ([]string, error) {
-	v := r.URL.Query()["wrap_with"]
+func wrapData(r *Reply) ([]string, error) {
+	v := (*r.Req).URL.Query()["wrap_with"]
 	if v != nil {
 		if len(v) > 1 {
 			return nil, errors.New("Multiple 'wrap_with' query parameters not allowed")
@@ -146,45 +158,46 @@ func isWrapperProp(p string) bool {
 
 // AppendJSONHeaders appends the response headers for JSON requests to
 // ResponseWriters
-func AppendJSONHeaders(w http.ResponseWriter) {
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Methods", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "*")
+func AppendJSONHeaders(r *Reply) {
+	(*r.Res).Header().Set("Content-Type", "application/json; charset=utf-8")
+	(*r.Res).Header().Set("Access-Control-Allow-Origin", "*")
+	(*r.Res).Header().Set("Access-Control-Allow-Methods", "*")
+	(*r.Res).Header().Set("Access-Control-Allow-Headers", "*")
 }
 
 // WriteJsonReply writes either the reply or the reply data using the
 // ResponseWriter and appends the required JSON headers
-func WriteJsonReply(message string, data interface{}, hints string, w http.ResponseWriter, r *http.Request) {
+func WriteJsonReply(r *Reply, message *string, data interface{}, hints *string) {
 	v, err := wrapData(r)
 	if err != nil {
-		Http_4xx(w, 400, err.Error(), "Valid values [message|self|data|hints] e.g. 'wrap_with=message.data'")
+		r.Hints = Str("Valid values [message|self|data|hints] e.g. 'wrap_with=message.data'")
+		r.Message = Str(err.Error())
+		Http_4xx(r, 400)
 		return
 	}
 
-	AppendJSONHeaders(w)
-	w.WriteHeader(http.StatusOK)
+	AppendJSONHeaders(r)
+	(*r.Res).WriteHeader(http.StatusOK)
 
 	if v == nil {
-		json.NewEncoder(w).Encode(data)
+		json.NewEncoder((*r.Res)).Encode(data)
 		return
 	}
 
-	reply := Reply{}
 	for _, p := range v {
 		switch p {
 		case "message":
-			reply.Message = message
+			r.Message = message
 		case "self":
-			reply.Self = r.URL.String()
+			r.Self = Str(r.Req.URL.String())
 		case "data":
-			reply.Data = data
+			r.Data = data
 		case "hints":
-			reply.Hints = hints
+			r.Hints = hints
 		}
 	}
 
-	json.NewEncoder(w).Encode(reply)
+	json.NewEncoder(*r.Res).Encode(r)
 }
 
 // FindWorkItem finds the WorkItem with the specified work_item_id else returns

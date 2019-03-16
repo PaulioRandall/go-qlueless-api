@@ -4,7 +4,5 @@ exe=go-qlueless-assembly-api
 root=${GOPATH}/src/github.com/PaulioRandall/${exe}
 
 cd "${root}/scripts"
+clear
 ./build-test-all
-
-cd "${GOPATH}/bin"
-./${exe}

@@ -3,19 +3,23 @@ package orders
 import (
 	"net/http"
 
-	shr "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg"
+	. "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg"
 )
 
 // AllOrdersHandler handles requests for all orders currently within the
 // service
-func AllOrdersHandler(w http.ResponseWriter, r *http.Request) {
-	shr.LogRequest(r)
+func AllOrdersHandler(res http.ResponseWriter, req *http.Request) {
+	LogRequest(req)
+	r := Reply{
+		Req: req,
+		Res: &res,
+	}
 
 	orders := LoadOrders()
 	if orders == nil {
-		shr.Http_500(w)
+		Http_500(&r)
 		return
 	}
 
-	shr.WriteJsonReply("Found all orders", orders, "", w, r)
+	WriteJsonReply(&r, Str("Found all orders"), orders, nil)
 }

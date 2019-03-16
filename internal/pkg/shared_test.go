@@ -181,7 +181,13 @@ func TestWrapWith___6(t *testing.T) {
 // be returned
 func TestWrapData___1(t *testing.T) {
 	req, err := http.NewRequest("GET", "http://example.com/", nil)
-	act, err := wrapData(req)
+	if err != nil {
+		panic(err)
+	}
+	r := Reply{
+		Req: req,
+	}
+	act, err := wrapData(&r)
 	assert.Nil(t, act)
 	assert.Nil(t, err)
 }
@@ -193,7 +199,10 @@ func TestWrapData___2(t *testing.T) {
 	if err != nil {
 		panic(err)
 	}
-	act, err := wrapData(req)
+	r := Reply{
+		Req: req,
+	}
+	act, err := wrapData(&r)
 	assert.Nil(t, act)
 	assert.NotNil(t, err)
 }
@@ -205,7 +214,10 @@ func TestWrapData___3(t *testing.T) {
 	if err != nil {
 		panic(err)
 	}
-	act, err := wrapData(req)
+	r := Reply{
+		Req: req,
+	}
+	act, err := wrapData(&r)
 	assert.NotNil(t, act)
 	assert.Nil(t, err)
 	assert.Len(t, act, 2)

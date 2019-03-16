@@ -6,27 +6,33 @@ import (
 
 	"github.com/gorilla/mux"
 
-	shr "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg"
+	. "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg"
 )
 
 // SingleOrderHandler handles requests for a specific orders currently
 // within the service
-func SingleOrderHandler(w http.ResponseWriter, r *http.Request) {
-	shr.LogRequest(r)
+func SingleOrderHandler(res http.ResponseWriter, req *http.Request) {
+	LogRequest(req)
+	r := Reply{
+		Req: req,
+		Res: &res,
+	}
 
 	orders := LoadOrders()
 	if orders == nil {
-		shr.Http_500(w)
+		Http_500(&r)
 		return
 	}
 
-	id := mux.Vars(r)["order_id"]
-	var o *shr.WorkItem = shr.FindWorkItem(orders, id)
+	id := mux.Vars(req)["order_id"]
+	var o *WorkItem = FindWorkItem(orders, id)
 
 	if o == nil {
-		shr.Http_4xx(w, 404, fmt.Sprintf("Order %v not found", id), "")
+		r.Message = Str(fmt.Sprintf("Order %v not found", id))
+		Http_4xx(&r, 404)
 		return
 	}
 
-	shr.WriteJsonReply(fmt.Sprintf("Found order %v", id), o, "", w, r)
+	m := Str(fmt.Sprintf("Found order %v", id))
+	WriteJsonReply(&r, m, o, nil)
 }

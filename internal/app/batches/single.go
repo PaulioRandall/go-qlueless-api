@@ -6,27 +6,33 @@ import (
 
 	"github.com/gorilla/mux"
 
-	shr "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg"
+	. "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg"
 )
 
 // SingleBatchHandler handles requests for a specific batches currently
 // within the service
-func SingleBatchHandler(w http.ResponseWriter, r *http.Request) {
-	shr.LogRequest(r)
+func SingleBatchHandler(res http.ResponseWriter, req *http.Request) {
+	LogRequest(req)
+	r := Reply{
+		Req: req,
+		Res: &res,
+	}
 
 	batches := LoadBatches()
 	if batches == nil {
-		shr.Http_500(w)
+		Http_500(&r)
 		return
 	}
 
-	id := mux.Vars(r)["batch_id"]
-	var b *shr.WorkItem = shr.FindWorkItem(batches, id)
+	id := mux.Vars(req)["batch_id"]
+	var b *WorkItem = FindWorkItem(batches, id)
 
 	if b == nil {
-		shr.Http_4xx(w, 404, fmt.Sprintf("Batch %v not found", id), "")
+		r.Message = Str(fmt.Sprintf("Batch %v not found", id))
+		Http_4xx(&r, 404)
 		return
 	}
 
-	shr.WriteJsonReply(fmt.Sprintf("Found batch %v", id), b, "", w, r)
+	m := Str(fmt.Sprintf("Found batch %v", id))
+	WriteJsonReply(&r, m, b, nil)
 }

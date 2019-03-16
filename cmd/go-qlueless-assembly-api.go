@@ -13,18 +13,21 @@ import (
 	dict "github.com/PaulioRandall/go-qlueless-assembly-api/internal/app/dictionaries"
 	oai "github.com/PaulioRandall/go-qlueless-assembly-api/internal/app/openapi"
 	ord "github.com/PaulioRandall/go-qlueless-assembly-api/internal/app/orders"
-	shr "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg"
+	. "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg"
 )
 
-var reply shr.Reply = shr.Reply{
-	Message: "Resource not found",
-}
-
 // Not_found_handler handles requests for which no handler could be found
-func QluelessNotFoundHandler(w http.ResponseWriter, r *http.Request) {
-	shr.LogRequest(r)
-	shr.AppendJSONHeaders(w)
-	json.NewEncoder(w).Encode(reply)
+func QluelessNotFoundHandler(res http.ResponseWriter, req *http.Request) {
+	LogRequest(req)
+
+	r := Reply{
+		Req:     req,
+		Res:     &res,
+		Message: Str("Resource not found"),
+	}
+
+	AppendJSONHeaders(&r)
+	json.NewEncoder(res).Encode(r)
 }
 
 // Main is the entry point for the web server

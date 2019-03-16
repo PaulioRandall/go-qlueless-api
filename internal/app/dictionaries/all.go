@@ -4,18 +4,22 @@ package dictionaries
 import (
 	"net/http"
 
-	shr "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg"
+	. "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg"
 )
 
 // All_dictionaries_handler handles requests for the service dictionaries
-func AllDictsHandler(w http.ResponseWriter, r *http.Request) {
-	shr.LogRequest(r)
+func AllDictsHandler(res http.ResponseWriter, req *http.Request) {
+	LogRequest(req)
+	r := Reply{
+		Req: req,
+		Res: &res,
+	}
 
 	dicts := LoadDicts()
 	if dicts == nil {
-		shr.Http_500(w)
+		Http_500(&r)
 		return
 	}
 
-	shr.WriteJsonReply("All service dictionaries", dicts, "", w, r)
+	WriteJsonReply(&r, Str("All service dictionaries"), dicts, nil)
 }
