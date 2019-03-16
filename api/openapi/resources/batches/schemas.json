@@ -1,3 +1,26 @@
+"new_batch": {
+  "type": "object",
+  "properties": {
+    "title": {
+      "$ref": "#/components/x-hidden/title"
+    },
+    "description": {
+      "$ref": "#/components/x-hidden/description"
+    },
+    "parent_work_item_id": {
+      "$ref": "#/components/x-hidden/parent_work_item_id"
+    },
+    "tag_id": {
+      "$ref": "#/components/x-hidden/tag_id"
+    },
+    "status_id": {
+      "$ref": "#/components/x-hidden/status_id"
+    },
+    "additional": {
+      "$ref": "#/components/x-hidden/additional"
+    }
+  }
+},
 "batch": {
   "type": "object",
   "properties": {

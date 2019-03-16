@@ -31,4 +31,14 @@
       }
     }
   }
+},
+"order_201": {
+  "description": "Single order",
+  "content": {
+    "application/json": {
+      "schema": {
+        "$ref": "#/components/schemas/order"
+      }
+    }
+  }
 }

@@ -39,6 +39,20 @@
 		        "$ref": "#/components/responses/error"
 		      }
 		    }
+		  },
+		  "post": {
+		    "description": "Creates a new order.",
+		    "requestBody": {
+		      "$ref": "#/components/requestBodies/new_order"
+		    },
+		    "responses": {
+		      "201": {
+		        "$ref": "#/components/responses/order_201"
+		      },
+		      "default": {
+		        "$ref": "#/components/responses/error"
+		      }
+		    }
 		  }
 		},
 		"/orders/{order_id}": {
@@ -73,6 +87,20 @@
 		    "responses": {
 		      "200": {
 		        "$ref": "#/components/responses/batches_200"
+		      },
+		      "default": {
+		        "$ref": "#/components/responses/error"
+		      }
+		    }
+		  },
+		  "post": {
+		    "description": "Creates a new batch.",
+		    "requestBody": {
+		      "$ref": "#/components/requestBodies/new_batch"
+		    },
+		    "responses": {
+		      "201": {
+		        "$ref": "#/components/responses/batch_201"
 		      },
 		      "default": {
 		        "$ref": "#/components/responses/error"
@@ -133,6 +161,26 @@
 			  "example": "message.self.data"
 			}
     },
+    "requestBodies": {
+			"new_order": {
+			  "content": {
+			    "application/json": {
+			      "schema": {
+			        "$ref": "#/components/schemas/new_order"
+			      }
+			    }
+			  }
+			},
+			"new_batch": {
+			  "content": {
+			    "application/json": {
+			      "schema": {
+			        "$ref": "#/components/schemas/new_batch"
+			      }
+			    }
+			  }
+			}
+    },
     "responses": {
 			"dicts_200": {
 			  "description": "Mapped list of dictionaries.",
@@ -185,6 +233,16 @@
 			    }
 			  }
 			},
+			"order_201": {
+			  "description": "Single order",
+			  "content": {
+			    "application/json": {
+			      "schema": {
+			        "$ref": "#/components/schemas/order"
+			      }
+			    }
+			  }
+			},
 			"batches_200": {
 			  "description": "List of batches.",
 			  "content": {
@@ -215,6 +273,16 @@
 			            "$ref": "#/components/schemas/batch"
 			          }
 			        ]
+			      }
+			    }
+			  }
+			},
+			"batch_201": {
+			  "description": "Single batch.",
+			  "content": {
+			    "application/json": {
+			      "schema": {
+			        "$ref": "#/components/schemas/batch"
 			      }
 			    }
 			  }
@@ -282,6 +350,26 @@
 			    }
 			  }
 			},
+			"new_order": {
+			  "type": "object",
+			  "properties": {
+			    "title": {
+			      "$ref": "#/components/x-hidden/title"
+			    },
+			    "description": {
+			      "$ref": "#/components/x-hidden/description"
+			    },
+			    "tag_id": {
+			      "$ref": "#/components/x-hidden/tag_id"
+			    },
+			    "status_id": {
+			      "$ref": "#/components/x-hidden/status_id"
+			    },
+			    "additional": {
+			      "$ref": "#/components/x-hidden/additional"
+			    }
+			  }
+			},
 			"order": {
 			  "type": "object",
 			  "properties": {
@@ -293,6 +381,29 @@
 			    },
 			    "work_item_id": {
 			      "$ref": "#/components/x-hidden/work_item_id"
+			    },
+			    "tag_id": {
+			      "$ref": "#/components/x-hidden/tag_id"
+			    },
+			    "status_id": {
+			      "$ref": "#/components/x-hidden/status_id"
+			    },
+			    "additional": {
+			      "$ref": "#/components/x-hidden/additional"
+			    }
+			  }
+			},
+			"new_batch": {
+			  "type": "object",
+			  "properties": {
+			    "title": {
+			      "$ref": "#/components/x-hidden/title"
+			    },
+			    "description": {
+			      "$ref": "#/components/x-hidden/description"
+			    },
+			    "parent_work_item_id": {
+			      "$ref": "#/components/x-hidden/parent_work_item_id"
 			    },
 			    "tag_id": {
 			      "$ref": "#/components/x-hidden/tag_id"

@@ -31,4 +31,14 @@
       }
     }
   }
+},
+"batch_201": {
+  "description": "Single batch.",
+  "content": {
+    "application/json": {
+      "schema": {
+        "$ref": "#/components/schemas/batch"
+      }
+    }
+  }
 }

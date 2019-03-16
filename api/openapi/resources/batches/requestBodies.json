@@ -1,0 +1,9 @@
+"new_batch": {
+  "content": {
+    "application/json": {
+      "schema": {
+        "$ref": "#/components/schemas/new_batch"
+      }
+    }
+  }
+}

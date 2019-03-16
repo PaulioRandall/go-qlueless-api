@@ -1,3 +1,23 @@
+"new_order": {
+  "type": "object",
+  "properties": {
+    "title": {
+      "$ref": "#/components/x-hidden/title"
+    },
+    "description": {
+      "$ref": "#/components/x-hidden/description"
+    },
+    "tag_id": {
+      "$ref": "#/components/x-hidden/tag_id"
+    },
+    "status_id": {
+      "$ref": "#/components/x-hidden/status_id"
+    },
+    "additional": {
+      "$ref": "#/components/x-hidden/additional"
+    }
+  }
+},
 "order": {
   "type": "object",
   "properties": {

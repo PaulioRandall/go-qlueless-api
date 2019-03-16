@@ -1,0 +1,9 @@
+"new_order": {
+  "content": {
+    "application/json": {
+      "schema": {
+        "$ref": "#/components/schemas/new_order"
+      }
+    }
+  }
+}

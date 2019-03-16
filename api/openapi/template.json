@@ -15,6 +15,10 @@
       {{- "\n"}}{{ .Inject "/batches/parameters.json" 3}},
       {{- "\n"}}{{ .Inject "/shared/parameters.json" 3}}
     },
+    "requestBodies": {
+      {{- "\n"}}{{ .Inject "/orders/requestBodies.json" 3}},
+      {{- "\n"}}{{ .Inject "/batches/requestBodies.json" 3}}
+    },
     "responses": {
       {{- "\n"}}{{ .Inject "/dictionaires/responses.json" 3}},
       {{- "\n"}}{{ .Inject "/orders/responses.json" 3}},
