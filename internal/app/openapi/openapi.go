@@ -16,7 +16,7 @@ func OpenAPIHandler(res http.ResponseWriter, req *http.Request) {
 	LogRequest(req)
 
 	if spec == nil {
-		Http_500(&res, req)
+		Reply500(&res, req)
 		return
 	}
 

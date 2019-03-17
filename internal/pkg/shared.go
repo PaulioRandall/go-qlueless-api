@@ -62,11 +62,7 @@ func ValueOrEmpty(m map[string]interface{}, k string) string {
 
 // LogRequest logs the details of a request such as the URL
 func LogRequest(req *http.Request) {
-	if req.URL.RawQuery == "" {
-		log.Println(req.URL.Path)
-	} else {
-		log.Println(req.URL.String())
-	}
+	log.Println(req.URL.String())
 }
 
 // Check is a shorthand function for panic if err is not nil
@@ -76,7 +72,7 @@ func Check(err error) {
 	}
 }
 
-// Log_if_err checks if the input err is NOT nil returning true if it is.
+// LogIfErr checks if the input err is NOT nil returning true if it is.
 // When true the error is logged so all the calling handler needs to do is
 // clean up then invoke Http_500(*http.ResponseWriter) before returning
 func LogIfErr(err error) bool {
@@ -87,9 +83,9 @@ func LogIfErr(err error) bool {
 	return false
 }
 
-// Http_500 sets up the response with generic 500 error details. This method
+// Reply500 sets up the response with generic 500 error details. This method
 // should be used when ever a 500 error needs to be returned
-func Http_500(res *http.ResponseWriter, req *http.Request) {
+func Reply500(res *http.ResponseWriter, req *http.Request) {
 	r := ReplyWrapped{
 		Message: "Bummer! Something went wrong on the server.",
 		Self:    (*req).URL.String(),
@@ -104,13 +100,13 @@ func Http_500(res *http.ResponseWriter, req *http.Request) {
 func Http_4XX(status int, r *Reply4XX) {
 	if status < 400 && status > 499 {
 		log.Println("[BUG] Status code must be between 400 and 499")
-		Http_500(r.Res, r.Req)
+		Reply500(r.Res, r.Req)
 		return
 	}
 
 	if (*r).Message == "" {
 		log.Println("[BUG] 4xx response message is missing")
-		Http_500(r.Res, r.Req)
+		Reply500(r.Res, r.Req)
 		return
 	}
 

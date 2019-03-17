@@ -33,7 +33,7 @@ func NewOrderHandler(res http.ResponseWriter, req *http.Request) {
 	o := mapToOrder(m)
 	o.WorkItemID, err = addOrder(o)
 	if err != nil {
-		Http_500(&res, req)
+		Reply500(&res, req)
 		return
 	}
 

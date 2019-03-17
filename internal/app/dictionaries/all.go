@@ -12,7 +12,7 @@ func AllDictsHandler(res http.ResponseWriter, req *http.Request) {
 	LogRequest(req)
 
 	if dicts == nil {
-		Http_500(&res, req)
+		Reply500(&res, req)
 		return
 	}
 

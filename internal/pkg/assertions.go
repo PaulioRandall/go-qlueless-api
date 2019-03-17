@@ -1,6 +1,7 @@
 package pkg
 
 import (
+	"net/http"
 	"strconv"
 	"strings"
 	"testing"
@@ -63,4 +64,28 @@ func CheckWorkItemType(t *testing.T, e map[string]interface{}) {
 	CheckNotBlank(t, e["description"].(string), "Dicts.WorkItemType.Description")
 	assert.NotNil(t, e["work_item_type_id"])
 	CheckNotBlank(t, e["work_item_type_id"].(string), "Dicts.WorkItemType.Work_item_type_id")
+}
+
+func CheckPanic(t *testing.T, f func()) {
+	defer func() {
+		if r := recover(); r == nil {
+			assert.Fail(t, "Expected code to panic but it didn't")
+		}
+	}()
+	f()
+}
+
+func CheckHeaderExists(t *testing.T, h http.Header, k string) {
+	assert.NotEmpty(t, h.Get(k))
+}
+
+func CheckHeaderValue(t *testing.T, h http.Header, k string, exp string) {
+	assert.Equal(t, exp, h.Get(k))
+}
+
+func CheckJSONResponseHeaders(t *testing.T, h http.Header) {
+	CheckHeaderValue(t, h, "Content-Type", "application/json; charset=utf-8")
+	CheckHeaderValue(t, h, "Access-Control-Allow-Origin", "*")
+	CheckHeaderExists(t, h, "Access-Control-Allow-Methods")
+	CheckHeaderExists(t, h, "Access-Control-Allow-Headers")
 }
