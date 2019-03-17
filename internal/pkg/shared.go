@@ -138,6 +138,21 @@ func WrapUpReply(req *http.Request) bool {
 	return true
 }
 
+// PrepResponseData returns the response data after wrapping it up and adding
+// meta information but only if the client has requested it be so. Else the
+// input data is returned unchanged
+func PrepResponseData(req *http.Request, data interface{}, msg string) interface{} {
+	if WrapUpReply(req) {
+		return ReplyWrapped{
+			Message: msg,
+			Self:    req.URL.String(),
+			Data:    data,
+		}
+	} else {
+		return data
+	}
+}
+
 // AppendJSONHeaders appends the response headers for JSON requests to
 // ResponseWriters
 func AppendJSONHeaders(res *http.ResponseWriter) {

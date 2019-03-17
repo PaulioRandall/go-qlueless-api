@@ -16,19 +16,6 @@ func AllDictsHandler(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	data := prepData(req, dicts)
+	data := PrepResponseData(req, dicts, "All service dictionaries")
 	WriteReply(&res, req, data)
-}
-
-// prepData prepares the data by wrapping it up if the client has requested
-func prepData(req *http.Request, data interface{}) interface{} {
-	if WrapUpReply(req) {
-		return ReplyWrapped{
-			Message: "All service dictionaries",
-			Self:    req.URL.String(),
-			Data:    data,
-		}
-	} else {
-		return data
-	}
 }

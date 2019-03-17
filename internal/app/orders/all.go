@@ -16,20 +16,6 @@ func AllOrdersHandler(res http.ResponseWriter, req *http.Request) {
 		o = append(o, v)
 	}
 
-	data := prepOrdersData(req, o)
+	data := PrepResponseData(req, o, "Found all orders")
 	WriteReply(&res, req, data)
-}
-
-// prepOrdersData prepares the data by wrapping it up if the client has
-// requested
-func prepOrdersData(req *http.Request, data interface{}) interface{} {
-	if WrapUpReply(req) {
-		return ReplyWrapped{
-			Message: "Found all orders",
-			Self:    req.URL.String(),
-			Data:    data,
-		}
-	} else {
-		return data
-	}
 }

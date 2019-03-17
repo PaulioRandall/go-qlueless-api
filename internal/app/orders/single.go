@@ -27,20 +27,6 @@ func SingleOrderHandler(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	data := prepOrderData(req, o)
+	data := PrepResponseData(req, o, "Found order")
 	WriteReply(&res, req, data)
-}
-
-// prepOrderData prepares the data by wrapping it up if the client has
-// requested
-func prepOrderData(req *http.Request, data interface{}) interface{} {
-	if WrapUpReply(req) {
-		return ReplyWrapped{
-			Message: "Found order",
-			Self:    req.URL.String(),
-			Data:    data,
-		}
-	} else {
-		return data
-	}
 }

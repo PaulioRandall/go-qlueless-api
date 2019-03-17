@@ -154,6 +154,7 @@ func TestWrite500Reply___3(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Contains(t, m, "message")
 	assert.Contains(t, m, "self")
+	assert.Len(t, m, 2)
 }
 
 // When not 4XX status code, sets 500 status code
@@ -232,6 +233,7 @@ func TestWrite4XXReply___5(t *testing.T) {
 	assert.Equal(t, "abc", m["message"])
 	assert.Equal(t, "/search?q=dan+north", m["self"])
 	assert.Equal(t, "xyz", m["hints"])
+	assert.Len(t, m, 3)
 }
 
 // When Reply4XX.Self is not set, Reply4XX.Self is set for us
@@ -267,6 +269,46 @@ func TestWrapUpReply___2(t *testing.T) {
 	assert.Nil(t, err)
 	act := WrapUpReply(req)
 	assert.False(t, act)
+}
+
+// When 'wrap' not present and data is nil, nil is returned
+func TestPrepResponseData___1(t *testing.T) {
+	req, err := http.NewRequest("GET", "http://example.com/", nil)
+	assert.Nil(t, err)
+
+	act := PrepResponseData(req, nil, "ignored")
+	assert.Nil(t, act)
+}
+
+// When 'wrap' not present and data is provided, data is returned unchanged
+func TestPrepResponseData___2(t *testing.T) {
+	req, err := http.NewRequest("GET", "http://example.com/", nil)
+	assert.Nil(t, err)
+	data := make(map[string]interface{})
+	data["album"] = "As Daylight Dies"
+
+	act := PrepResponseData(req, data, "ignored")
+	assert.NotNil(t, act)
+	assert.Equal(t, data, act)
+}
+
+// When 'wrap' is present and data is provided, wrapped reply is returned
+func TestPrepResponseData___3(t *testing.T) {
+	req, err := http.NewRequest("GET", "http://example.com/?wrap", nil)
+	assert.Nil(t, err)
+
+	data := make(map[string]interface{})
+	data["album"] = "As Daylight Dies"
+
+	exp := ReplyWrapped{
+		Message: "Cheese",
+		Self:    req.URL.String(),
+		Data:    data,
+	}
+
+	act := PrepResponseData(req, data, "Cheese")
+	assert.NotNil(t, act)
+	assert.Equal(t, exp, act)
 }
 
 // When invoked, the JSON response headers are set
@@ -310,8 +352,7 @@ func TestWriteReply___3(t *testing.T) {
 	var m map[string]interface{}
 	err := json.NewDecoder(rec.Body).Decode(&m)
 	assert.Nil(t, err)
-	assert.NotEmpty(t, m["killswitch"])
-	assert.Equal(t, "engage", m["killswitch"])
+	assert.Equal(t, data, m)
 }
 
 // When given valid inputs, 200 status code is set

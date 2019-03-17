@@ -27,19 +27,6 @@ func SingleBatchHandler(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	data := prepBatchData(req, b)
+	data := PrepResponseData(req, b, "Found batch")
 	WriteReply(&res, req, data)
-}
-
-// prepData prepares the data by wrapping it up if the client has requested
-func prepBatchData(req *http.Request, data interface{}) interface{} {
-	if WrapUpReply(req) {
-		return ReplyWrapped{
-			Message: "Found batch",
-			Self:    req.URL.String(),
-			Data:    data,
-		}
-	} else {
-		return data
-	}
 }

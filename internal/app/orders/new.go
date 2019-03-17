@@ -37,20 +37,6 @@ func NewOrderHandler(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	data := prepNewOrderData(req, o)
+	data := PrepResponseData(req, o, "New order created")
 	WriteReply(&res, req, data)
-}
-
-// prepNewOrderData prepares the data by wrapping it up if the client has
-// requested
-func prepNewOrderData(req *http.Request, data interface{}) interface{} {
-	if WrapUpReply(req) {
-		return ReplyWrapped{
-			Message: "New order created",
-			Self:    req.URL.String(),
-			Data:    data,
-		}
-	} else {
-		return data
-	}
 }

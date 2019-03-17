@@ -16,19 +16,6 @@ func AllBatchesHandler(res http.ResponseWriter, req *http.Request) {
 		b = append(b, v)
 	}
 
-	data := prepBatchesData(req, b)
+	data := PrepResponseData(req, b, "Found all batches")
 	WriteReply(&res, req, data)
-}
-
-// prepData prepares the data by wrapping it up if the client has requested
-func prepBatchesData(req *http.Request, data interface{}) interface{} {
-	if WrapUpReply(req) {
-		return ReplyWrapped{
-			Message: "Found all batches",
-			Self:    req.URL.String(),
-			Data:    data,
-		}
-	} else {
-		return data
-	}
 }
