@@ -10,7 +10,7 @@
 		    "description": "Returns all service dictionaires.",
 		    "parameters": [
 		      {
-		        "$ref": "#/components/parameters/wrap"
+		        "$ref": "#/components/parameters/meta"
 		      }
 		    ],
 		    "responses": {
@@ -28,7 +28,7 @@
 		    "description": "Returns all orders.",
 		    "parameters": [
 		      {
-		        "$ref": "#/components/parameters/wrap"
+		        "$ref": "#/components/parameters/meta"
 		      }
 		    ],
 		    "responses": {
@@ -65,7 +65,7 @@
 		        "$ref": "#/components/parameters/order_id"
 		      },
 		      {
-		        "$ref": "#/components/parameters/wrap"
+		        "$ref": "#/components/parameters/meta"
 		      }
 		    ],
 		    "responses": {
@@ -83,7 +83,7 @@
 		    "description": "Returns all batches.",
 		    "parameters": [
 		      {
-		        "$ref": "#/components/parameters/wrap"
+		        "$ref": "#/components/parameters/meta"
 		      }
 		    ],
 		    "responses": {
@@ -118,7 +118,7 @@
 		        "$ref": "#/components/parameters/batch_id"
 		      },
 		      {
-		        "$ref": "#/components/parameters/wrap"
+		        "$ref": "#/components/parameters/meta"
 		      }
 		    ],
 		    "responses": {
@@ -152,8 +152,8 @@
 			    "type": "string"
 			  }
 			},
-			"wrap": {
-			  "name": "wrap",
+			"meta": {
+			  "name": "meta",
 			  "in": "query",
 			  "description": "If present wraps the response and includes meta information within the response.",
 			  "required": false,
@@ -452,7 +452,7 @@
 			      "$ref": "#/components/x-hidden/self"
 			    },
 			    "data": {
-			      "description": "The wrapped response data; should be identical to the response returned by the same request without the `wrap` parameter"
+			      "description": "The wrapped response data; should be identical to the response returned by the same request without the `meta` parameter"
 			    }
 			  }
 			}

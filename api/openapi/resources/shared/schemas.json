@@ -19,7 +19,7 @@
       "$ref": "#/components/x-hidden/self"
     },
     "data": {
-      "description": "The wrapped response data; should be identical to the response returned by the same request without the `wrap` parameter"
+      "description": "The wrapped response data; should be identical to the response returned by the same request without the `meta` parameter"
     }
   }
 }

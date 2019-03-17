@@ -255,23 +255,23 @@ func TestWrite4XXReply___6(t *testing.T) {
 	assert.Equal(t, "/search?q=dan+north", m["self"])
 }
 
-// When the 'wrap' query param is present in a request, returns true
-func TestWrapUpReply___1(t *testing.T) {
-	req, err := http.NewRequest("GET", "http://example.com/?wrap=", nil)
+// When the 'meta' query param is present in a request, returns true
+func TestIsMetaReply___1(t *testing.T) {
+	req, err := http.NewRequest("GET", "http://example.com/?meta=", nil)
 	assert.Nil(t, err)
-	act := WrapUpReply(req)
+	act := IsMetaReply(req)
 	assert.True(t, act)
 }
 
-// When the 'wrap' query param is not present in a request, returns false
-func TestWrapUpReply___2(t *testing.T) {
+// When the 'meta' query param is not present in a request, returns false
+func TestIsMetaReply___2(t *testing.T) {
 	req, err := http.NewRequest("GET", "http://example.com/?q=abc", nil)
 	assert.Nil(t, err)
-	act := WrapUpReply(req)
+	act := IsMetaReply(req)
 	assert.False(t, act)
 }
 
-// When 'wrap' not present and data is nil, nil is returned
+// When 'meta' not present and data is nil, nil is returned
 func TestPrepResponseData___1(t *testing.T) {
 	req, err := http.NewRequest("GET", "http://example.com/", nil)
 	assert.Nil(t, err)
@@ -280,7 +280,7 @@ func TestPrepResponseData___1(t *testing.T) {
 	assert.Nil(t, act)
 }
 
-// When 'wrap' not present and data is provided, data is returned unchanged
+// When 'meta' not present and data is provided, data is returned unchanged
 func TestPrepResponseData___2(t *testing.T) {
 	req, err := http.NewRequest("GET", "http://example.com/", nil)
 	assert.Nil(t, err)
@@ -292,15 +292,15 @@ func TestPrepResponseData___2(t *testing.T) {
 	assert.Equal(t, data, act)
 }
 
-// When 'wrap' is present and data is provided, wrapped reply is returned
+// When 'meta' is present and data is provided, wrapped reply is returned
 func TestPrepResponseData___3(t *testing.T) {
-	req, err := http.NewRequest("GET", "http://example.com/?wrap", nil)
+	req, err := http.NewRequest("GET", "http://example.com/?meta", nil)
 	assert.Nil(t, err)
 
 	data := make(map[string]interface{})
 	data["album"] = "As Daylight Dies"
 
-	exp := ReplyWrapped{
+	exp := ReplyMeta{
 		Message: "Cheese",
 		Self:    req.URL.String(),
 		Data:    data,

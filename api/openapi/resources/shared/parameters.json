@@ -1,5 +1,5 @@
-"wrap": {
-  "name": "wrap",
+"meta": {
+  "name": "meta",
   "in": "query",
   "description": "If present wraps the response and includes meta information within the response.",
   "required": false,

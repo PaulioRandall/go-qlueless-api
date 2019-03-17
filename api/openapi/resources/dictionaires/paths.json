@@ -3,7 +3,7 @@
     "description": "Returns all service dictionaires.",
     "parameters": [
       {
-        "$ref": "#/components/parameters/wrap"
+        "$ref": "#/components/parameters/meta"
       }
     ],
     "responses": {

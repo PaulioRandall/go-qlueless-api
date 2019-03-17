@@ -8,9 +8,9 @@ import (
 	"strings"
 )
 
-// A ReplyWrapped represents the response that should be returned when the
+// A ReplyMeta represents the response that should be returned when the
 // client has requested data be wrapped and meta information included
-type ReplyWrapped struct {
+type ReplyMeta struct {
 	Message string      `json:"message"`
 	Self    string      `json:"self"`
 	Data    interface{} `json:"data,omitempty"`
@@ -95,7 +95,7 @@ func LogIfErr(err error) bool {
 // Reply500 sets up the response with generic 500 error details. This method
 // should be used when ever a 500 error needs to be returned
 func Write500Reply(res *http.ResponseWriter, req *http.Request) {
-	r := ReplyWrapped{
+	r := ReplyMeta{
 		Message: "Bummer! Something went wrong on the server.",
 		Self:    (*req).URL.String(),
 	}
@@ -128,10 +128,10 @@ func Write4XXReply(status int, r *Reply4XX) {
 	json.NewEncoder(*r.Res).Encode(r)
 }
 
-// WrapUpReply returns true if the response should be wrapped and meta
+// IsMetaReply returns true if the response should be wrapped and meta
 // information included
-func WrapUpReply(req *http.Request) bool {
-	v := req.URL.Query()["wrap"]
+func IsMetaReply(req *http.Request) bool {
+	v := req.URL.Query()["meta"]
 	if v == nil {
 		return false
 	}
@@ -142,8 +142,8 @@ func WrapUpReply(req *http.Request) bool {
 // meta information but only if the client has requested it be so. Else the
 // input data is returned unchanged
 func PrepResponseData(req *http.Request, data interface{}, msg string) interface{} {
-	if WrapUpReply(req) {
-		return ReplyWrapped{
+	if IsMetaReply(req) {
+		return ReplyMeta{
 			Message: msg,
 			Self:    req.URL.String(),
 			Data:    data,
