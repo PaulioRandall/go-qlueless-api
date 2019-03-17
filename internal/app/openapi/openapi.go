@@ -5,35 +5,26 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
-	"sync"
 
 	. "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg"
 )
 
-var spec map[string]interface{}
-var specLoader sync.Once
+var spec map[string]interface{} = nil
 
 // OpenAPIHandler handles requests for the services OpenAPI specification
 func OpenAPIHandler(res http.ResponseWriter, req *http.Request) {
 	LogRequest(req)
-	r := Reply{
-		Req: req,
-		Res: &res,
-	}
-
-	specLoader.Do(loadSpec)
 
 	if spec == nil {
-		Http_500(&r)
+		Http_500(&res, req)
 		return
 	}
 
-	AppendJSONHeaders(&r)
-	json.NewEncoder(res).Encode(spec)
+	WriteReply(&res, req, spec)
 }
 
-// loadJson loads the dictionary response from a file
-func loadSpec() {
+// LoadJson loads the OpenAPI specification from a file
+func LoadSpec() {
 
 	go_path := os.Getenv("GOPATH")
 	path := go_path +

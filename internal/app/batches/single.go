@@ -13,20 +13,33 @@ import (
 // within the service
 func SingleBatchHandler(res http.ResponseWriter, req *http.Request) {
 	LogRequest(req)
-	r := Reply{
-		Req: req,
-		Res: &res,
-	}
 
 	id := mux.Vars(req)["batch_id"]
 	b, ok := batches[id]
 
 	if !ok {
-		r.Message = Str(fmt.Sprintf("Batch %v not found", id))
-		Http_4xx(&r, 404)
+		r := Reply4XX{
+			Res:     &res,
+			Req:     req,
+			Message: fmt.Sprintf("Batch %v not found", id),
+		}
+		Http_4XX(404, &r)
 		return
 	}
 
-	m := Str(fmt.Sprintf("Found batch %v", id))
-	WriteJsonReply(&r, m, b, nil)
+	data := prepBatchData(req, b)
+	WriteReply(&res, req, data)
+}
+
+// prepData prepares the data by wrapping it up if the client has requested
+func prepBatchData(req *http.Request, data interface{}) interface{} {
+	if WrapUpReply(req) {
+		return ReplyWrapped{
+			Message: "Found batch",
+			Self:    req.URL.String(),
+			Data:    data,
+		}
+	} else {
+		return data
+	}
 }

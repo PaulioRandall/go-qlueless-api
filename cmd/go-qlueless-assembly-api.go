@@ -3,7 +3,6 @@
 package main
 
 import (
-	"encoding/json"
 	"log"
 	"net/http"
 
@@ -20,23 +19,23 @@ import (
 func QluelessNotFoundHandler(res http.ResponseWriter, req *http.Request) {
 	LogRequest(req)
 
-	r := Reply{
-		Req:     req,
+	r := Reply4XX{
 		Res:     &res,
-		Message: Str("Resource not found"),
+		Req:     req,
+		Message: "Resource not found",
 	}
 
-	AppendJSONHeaders(&r)
-	json.NewEncoder(res).Encode(r)
+	Http_4XX(404, &r)
 }
 
 // Main is the entry point for the web server
 func main() {
 	log.Println("[Go Qlueless Assembly API]: Starting application")
 
+	oai.LoadSpec()
+	dict.LoadDicts()
 	ord.CreateDummyOrders()
 	bat.CreateDummyBatches()
-	dict.LoadDicts()
 
 	gorilla := mux.NewRouter()
 

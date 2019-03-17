@@ -8,14 +8,22 @@ import (
 	"strings"
 )
 
-// A Reply represents the top level JSON returned by all endpoints
-type Reply struct {
-	Req     *http.Request        `json:"-"`
+// A ReplyWrapped represents the response that should be returned when the
+// client has requested data be wrapped and meta information included
+type ReplyWrapped struct {
+	Message string      `json:"message"`
+	Self    string      `json:"self"`
+	Data    interface{} `json:"data,omitempty"`
+	Hints   string      `json:"hints,omitempty"`
+}
+
+// A Reply4XX represents the response that is returned for a client '4xx' error
+type Reply4XX struct {
 	Res     *http.ResponseWriter `json:"-"`
-	Message *string              `json:"message,omitempty"`
-	Self    *string              `json:"self,omitempty"`
-	Data    interface{}          `json:"data,omitempty"`
-	Hints   *string              `json:"hints,omitempty"`
+	Req     *http.Request        `json:"-"`
+	Message string               `json:"message"`
+	Self    string               `json:"self"`
+	Hints   string               `json:"hints,omitempty"`
 }
 
 // A WorkItem represents and is a genralisation of orders and batches
@@ -81,65 +89,69 @@ func LogIfErr(err error) bool {
 
 // Http_500 sets up the response with generic 500 error details. This method
 // should be used when ever a 500 error needs to be returned
-func Http_500(r *Reply) {
-	reply := Reply{
-		Message: Str("Sorry, something went wrong at our end"),
+func Http_500(res *http.ResponseWriter, req *http.Request) {
+	r := ReplyWrapped{
+		Message: "Bummer! Something went wrong on the server.",
+		Self:    (*req).URL.String(),
 	}
 
-	AppendJSONHeaders(r)
-	(*r.Res).WriteHeader(500)
-	json.NewEncoder(*r.Res).Encode(reply)
+	AppendJSONHeaders(res)
+	(*res).WriteHeader(500)
+	json.NewEncoder(*res).Encode(r)
 }
 
-// Http_4xx sets up the response as a 4xx error
-func Http_4xx(r *Reply, status int) {
+// Http_4XX sets up the response as a 4xx error
+func Http_4XX(status int, r *Reply4XX) {
 	if status < 400 && status > 499 {
-		panic("Status code must be between 400 and 499")
-	}
-
-	if r.Message == nil {
-		log.Println("[BUG] Reply.Message required for error messages")
-		Http_500(r)
+		log.Println("[BUG] Status code must be between 400 and 499")
+		Http_500(r.Res, r.Req)
 		return
 	}
 
-	reply := Reply{
-		Message: r.Message,
-		Self:    r.Self,
-		Hints:   r.Hints,
+	if (*r).Message == "" {
+		log.Println("[BUG] 4xx response message is missing")
+		Http_500(r.Res, r.Req)
+		return
 	}
 
-	AppendJSONHeaders(r)
+	if (*r).Self == "" {
+		(*r).Self = (*r).Req.URL.String()
+	}
+
+	AppendJSONHeaders((*r).Res)
 	(*r.Res).WriteHeader(status)
-	json.NewEncoder(*r.Res).Encode(reply)
+	json.NewEncoder(*r.Res).Encode(r)
+}
+
+// WrapUpReply returns true if the response should be wrapped and meta
+// information included
+func WrapUpReply(req *http.Request) bool {
+	v := req.URL.Query()["wrap"]
+	if v == nil {
+		return false
+	}
+	return true
 }
 
 // AppendJSONHeaders appends the response headers for JSON requests to
 // ResponseWriters
-func AppendJSONHeaders(r *Reply) {
-	(*r.Res).Header().Set("Content-Type", "application/json; charset=utf-8")
-	(*r.Res).Header().Set("Access-Control-Allow-Origin", "*")
-	(*r.Res).Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-	(*r.Res).Header().Set("Access-Control-Allow-Headers", "*")
+func AppendJSONHeaders(res *http.ResponseWriter) {
+	(*res).Header().Set("Content-Type", "application/json; charset=utf-8")
+	(*res).Header().Set("Access-Control-Allow-Origin", "*")
+	(*res).Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+	(*res).Header().Set("Access-Control-Allow-Headers", "*")
 }
 
-// WriteJsonReply writes either the reply or the reply data using the
-// ResponseWriter and appends the required JSON headers
-func WriteJsonReply(r *Reply, message *string, data interface{}, hints *string) {
+// WriteReply appends the required JSON headers and then writes the response
+// data
+func WriteReply(res *http.ResponseWriter, req *http.Request, data interface{}) {
+	AppendJSONHeaders(res)
+	(*res).WriteHeader(http.StatusOK)
+	json.NewEncoder(*res).Encode(data)
+}
 
-	AppendJSONHeaders(r)
-	(*r.Res).WriteHeader(http.StatusOK)
-
-	v := (*r.Req).URL.Query()["wrap"]
-	if v == nil {
-		json.NewEncoder(*r.Res).Encode(data)
-		return
-	}
-
-	r.Message = message
-	r.Self = Str(r.Req.URL.String())
-	r.Data = data
-	r.Hints = hints
-
-	json.NewEncoder(*r.Res).Encode(r)
+// WriteEmptyReply appends the required JSON headers and sets status as OK
+func WriteEmptyReply(res *http.ResponseWriter) {
+	AppendJSONHeaders(res)
+	(*res).WriteHeader(http.StatusOK)
 }

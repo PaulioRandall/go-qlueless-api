@@ -10,15 +10,25 @@ import (
 // All_dictionaries_handler handles requests for the service dictionaries
 func AllDictsHandler(res http.ResponseWriter, req *http.Request) {
 	LogRequest(req)
-	r := Reply{
-		Req: req,
-		Res: &res,
-	}
 
 	if dicts == nil {
-		Http_500(&r)
+		Http_500(&res, req)
 		return
 	}
 
-	WriteJsonReply(&r, Str("All service dictionaries"), dicts, nil)
+	data := prepData(req, dicts)
+	WriteReply(&res, req, data)
+}
+
+// prepData prepares the data by wrapping it up if the client has requested
+func prepData(req *http.Request, data interface{}) interface{} {
+	if WrapUpReply(req) {
+		return ReplyWrapped{
+			Message: "All service dictionaries",
+			Self:    req.URL.String(),
+			Data:    data,
+		}
+	} else {
+		return data
+	}
 }

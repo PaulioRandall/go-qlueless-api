@@ -10,14 +10,9 @@ import (
 // NewOrderHandler handles requests to create new orders
 func NewOrderHandler(res http.ResponseWriter, req *http.Request) {
 	LogRequest(req)
-	r := Reply{
-		Req: req,
-		Res: &res,
-	}
 
 	if req.Method == "OPTIONS" {
-		AppendJSONHeaders(&r)
-		res.WriteHeader(200)
+		WriteEmptyReply(&res)
 		return
 	}
 
@@ -26,17 +21,36 @@ func NewOrderHandler(res http.ResponseWriter, req *http.Request) {
 
 	err := d.Decode(&m)
 	if err != nil {
-		r.Message = Str("Unable to decode create order request body")
-		Http_4xx(&r, 400)
+		r := Reply4XX{
+			Res:     &res,
+			Req:     req,
+			Message: "Unable to decode create order request body",
+		}
+		Http_4XX(400, &r)
 		return
 	}
 
 	o := mapToOrder(m)
 	o.WorkItemID, err = addOrder(o)
 	if err != nil {
-		Http_500(&r)
+		Http_500(&res, req)
 		return
 	}
 
-	WriteJsonReply(&r, Str("New order created"), o, nil)
+	data := prepNewOrderData(req, o)
+	WriteReply(&res, req, data)
+}
+
+// prepNewOrderData prepares the data by wrapping it up if the client has
+// requested
+func prepNewOrderData(req *http.Request, data interface{}) interface{} {
+	if WrapUpReply(req) {
+		return ReplyWrapped{
+			Message: "New order created",
+			Self:    req.URL.String(),
+			Data:    data,
+		}
+	} else {
+		return data
+	}
 }
