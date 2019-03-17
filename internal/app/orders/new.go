@@ -31,6 +31,7 @@ func NewOrderHandler(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 
+	LoadOrders()
 	o := MapToOrder(m)
 	o.WorkItemID, err = AddOrder(o)
 	if err != nil {

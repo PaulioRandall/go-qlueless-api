@@ -19,7 +19,6 @@ func LoadOrders() *[]WorkItem {
 // MapToOrder converts a map representing an order to an order struct
 func MapToOrder(m map[string]interface{}) WorkItem {
 	return WorkItem{
-		Title:            ValueOrEmpty(m, "title"),
 		Description:      ValueOrEmpty(m, "description"),
 		WorkItemID:       ValueOrEmpty(m, "work_item_id"),
 		ParentWorkItemID: ValueOrEmpty(m, "parent_work_item_id"),
@@ -52,8 +51,7 @@ func AddOrder(o WorkItem) (string, error) {
 func createDummyOrders() {
 	orders = &[]WorkItem{
 		WorkItem{
-			Title:       "Outline the saga",
-			Description: "Create a rough outline of the new saga.",
+			Description: "# Outline the saga\nCreate a rough outline of the new saga.",
 			WorkItemID:  "1",
 			TagID:       "mid",
 			StatusID:    "in_progress",

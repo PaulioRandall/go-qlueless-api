@@ -23,11 +23,10 @@ func TestLoadOrders___2(t *testing.T) {
 // When a valid map is provided, a WorkItem is returned
 func TestMapToOrder___1(t *testing.T) {
 	m := make(map[string]interface{})
-	m["title"] = "title"
+	m["description"] = "description"
 
 	act := MapToOrder(m)
-	assert.Equal(t, "title", act.Title)
-	assert.Empty(t, act.Description)
+	assert.Equal(t, "description", act.Description)
 	assert.Empty(t, act.WorkItemID)
 	assert.Empty(t, act.ParentWorkItemID)
 	assert.Empty(t, act.TagID)
@@ -38,7 +37,6 @@ func TestMapToOrder___1(t *testing.T) {
 // When a valid map is provided, a WorkItem is returned
 func TestMapToOrder___2(t *testing.T) {
 	m := make(map[string]interface{})
-	m["title"] = "title"
 	m["description"] = "description"
 	m["work_item_id"] = "work_item_id"
 	m["parent_work_item_id"] = "parent_work_item_id"
@@ -47,7 +45,6 @@ func TestMapToOrder___2(t *testing.T) {
 	m["additional"] = "abc: xyz; colour: black"
 
 	act := MapToOrder(m)
-	assert.Equal(t, "title", act.Title)
 	assert.Equal(t, "description", act.Description)
 	assert.Equal(t, "work_item_id", act.WorkItemID)
 	assert.Equal(t, "parent_work_item_id", act.ParentWorkItemID)
@@ -58,8 +55,7 @@ func TestMapToOrder___2(t *testing.T) {
 
 func createDummyOrder() WorkItem {
 	return WorkItem{
-		Title:       "Outline the saga",
-		Description: "Create a rough outline of the new saga.",
+		Description: "# Outline the saga\nCreate a rough outline of the new saga.",
 		TagID:       "mid",
 		StatusID:    "in_progress",
 	}

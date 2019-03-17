@@ -20,16 +20,14 @@ func LoadBatches() *[]WorkItem {
 func createDummyBatches() {
 	batches = &[]WorkItem{
 		WorkItem{
-			Title:            "Name the saga",
-			Description:      "Think of a name for the saga.",
+			Description:      "# Name the saga\nThink of a name for the saga.",
 			WorkItemID:       "2",
 			ParentWorkItemID: "1",
 			TagID:            "mid",
 			StatusID:         "potential",
 		},
 		WorkItem{
-			Title:            "Outline the first chapter",
-			Description:      "Outline the first chapter.",
+			Description:      "# Outline the first chapter.",
 			WorkItemID:       "3",
 			ParentWorkItemID: "1",
 			TagID:            "mid",
@@ -37,8 +35,7 @@ func createDummyBatches() {
 			Additional:       "archive_note:Done but not a compelling start",
 		},
 		WorkItem{
-			Title:            "Outline the second chapter",
-			Description:      "Outline the second chapter.",
+			Description:      "# Outline the second chapter.",
 			WorkItemID:       "4",
 			ParentWorkItemID: "1",
 			TagID:            "mid",

@@ -21,7 +21,6 @@ type Reply struct {
 
 // A WorkItem represents and is a genralisation of orders and batches
 type WorkItem struct {
-	Title            string `json:"title"`
 	Description      string `json:"description"`
 	WorkItemID       string `json:"work_item_id"`
 	ParentWorkItemID string `json:"parent_work_item_id,omitempty"`

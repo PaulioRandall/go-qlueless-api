@@ -21,7 +21,6 @@ func CheckNotBlank(t *testing.T, s string, m ...interface{}) {
 }
 
 func CheckWorkItem(t *testing.T, w WorkItem) {
-	CheckNotBlank(t, w.Title, "WorkItem.Title")
 	CheckNotBlank(t, w.Description, "WorkItem.Description")
 	CheckNotBlank(t, w.WorkItemID, "WorkItem.Work_item_id")
 	CheckIsNumber(t, w.WorkItemID, "WorkItem.Work_item_id")

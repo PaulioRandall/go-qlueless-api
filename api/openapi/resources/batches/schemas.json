@@ -1,9 +1,6 @@
 "new_batch": {
   "type": "object",
   "properties": {
-    "title": {
-      "$ref": "#/components/x-hidden/title"
-    },
     "description": {
       "$ref": "#/components/x-hidden/description"
     },
@@ -24,9 +21,6 @@
 "batch": {
   "type": "object",
   "properties": {
-    "title": {
-      "$ref": "#/components/x-hidden/title"
-    },
     "description": {
       "$ref": "#/components/x-hidden/description"
     },
