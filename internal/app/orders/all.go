@@ -15,11 +15,16 @@ func AllOrdersHandler(res http.ResponseWriter, req *http.Request) {
 		Res: &res,
 	}
 
-	orders := LoadOrders()
-	if orders == nil {
+	m := LoadOrders()
+	if m == nil {
 		Http_500(&r)
 		return
 	}
 
-	WriteJsonReply(&r, Str("Found all orders"), orders, nil)
+	o := make([]WorkItem, 0)
+	for _, v := range m {
+		o = append(o, v)
+	}
+
+	WriteJsonReply(&r, Str("Found all orders"), o, nil)
 }

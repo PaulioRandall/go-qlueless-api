@@ -15,11 +15,16 @@ func AllBatchesHandler(res http.ResponseWriter, req *http.Request) {
 		Res: &res,
 	}
 
-	batches := LoadBatches()
+	m := LoadBatches()
 	if batches == nil {
 		Http_500(&r)
 		return
 	}
 
-	WriteJsonReply(&r, Str("Found all batches"), batches, nil)
+	b := make([]WorkItem, 0)
+	for _, v := range m {
+		b = append(b, v)
+	}
+
+	WriteJsonReply(&r, Str("Found all batches"), b, nil)
 }

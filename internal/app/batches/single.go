@@ -25,9 +25,9 @@ func SingleBatchHandler(res http.ResponseWriter, req *http.Request) {
 	}
 
 	id := mux.Vars(req)["batch_id"]
-	var b *WorkItem = FindWorkItem(batches, id)
+	b, ok := batches[id]
 
-	if b == nil {
+	if !ok {
 		r.Message = Str(fmt.Sprintf("Batch %v not found", id))
 		Http_4xx(&r, 404)
 		return

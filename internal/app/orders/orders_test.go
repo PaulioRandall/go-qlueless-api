@@ -15,7 +15,7 @@ func TestLoadOrders___1(t *testing.T) {
 // When invoked, should return array of valid orders
 func TestLoadOrders___2(t *testing.T) {
 	act := LoadOrders()
-	for _, o := range *act {
+	for _, o := range act {
 		CheckOrder(t, o)
 	}
 }
@@ -63,18 +63,21 @@ func createDummyOrder() WorkItem {
 
 // When given an order, returns an order ID
 func TestAddOrder___1(t *testing.T) {
-	*orders = make([]WorkItem, 0)
+	m := LoadOrders()
 	o := createDummyOrder()
 	act, err := AddOrder(o)
 	assert.Nil(t, err)
 	assert.NotEmpty(t, act)
 	o.WorkItemID = act
-	assert.Contains(t, *orders, o)
+
+	stored, ok := m[o.WorkItemID]
+	assert.True(t, ok)
+	assert.Equal(t, o, stored)
 }
 
-// When invoked twice with the same order, returns differnet IDs each time
+// When invoked twice with the same order, returns differnt IDs each time
 func TestAddOrder___2(t *testing.T) {
-	*orders = make([]WorkItem, 0)
+	m := LoadOrders()
 
 	a := createDummyOrder()
 	ID_1, err := AddOrder(a)
@@ -87,6 +90,12 @@ func TestAddOrder___2(t *testing.T) {
 	b.WorkItemID = ID_2
 
 	assert.NotEqual(t, ID_1, ID_2)
-	assert.Contains(t, *orders, a)
-	assert.Contains(t, *orders, b)
+
+	stored, ok := m[a.WorkItemID]
+	assert.True(t, ok)
+	assert.Equal(t, a, stored)
+
+	stored, ok = m[b.WorkItemID]
+	assert.True(t, ok)
+	assert.Equal(t, b, stored)
 }

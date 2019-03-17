@@ -207,14 +207,3 @@ func WriteJsonReply(r *Reply, message *string, data interface{}, hints *string) 
 
 	json.NewEncoder(*r.Res).Encode(r)
 }
-
-// FindWorkItem finds the WorkItem with the specified work_item_id else returns
-// nil
-func FindWorkItem(items *[]WorkItem, id string) *WorkItem {
-	for _, v := range *items {
-		if id == v.WorkItemID {
-			return &v
-		}
-	}
-	return nil
-}

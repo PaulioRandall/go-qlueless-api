@@ -7,11 +7,11 @@ import (
 	. "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg"
 )
 
-var orders *[]WorkItem
+var orders map[string]WorkItem = nil
 var orderLoader sync.Once
 
 // LoadOrders loads all orders into the orders array
-func LoadOrders() *[]WorkItem {
+func LoadOrders() map[string]WorkItem {
 	orderLoader.Do(createDummyOrders)
 	return orders
 }
@@ -31,8 +31,8 @@ func MapToOrder(m map[string]interface{}) WorkItem {
 // AddOrder adds a new order to the data store returning the newly assigned ID
 func AddOrder(o WorkItem) (string, error) {
 	next := 1
-	for _, w := range *orders {
-		ID, err := strconv.Atoi(w.WorkItemID)
+	for k, _ := range orders {
+		ID, err := strconv.Atoi(k)
 		if err != nil {
 			return "", nil
 		}
@@ -44,17 +44,16 @@ func AddOrder(o WorkItem) (string, error) {
 
 	next++
 	o.WorkItemID = strconv.Itoa(next)
-	*orders = append(*orders, o)
+	orders[o.WorkItemID] = o
 	return o.WorkItemID, nil
 }
 
 func createDummyOrders() {
-	orders = &[]WorkItem{
-		WorkItem{
-			Description: "# Outline the saga\nCreate a rough outline of the new saga.",
-			WorkItemID:  "1",
-			TagID:       "mid",
-			StatusID:    "in_progress",
-		},
+	orders = map[string]WorkItem{}
+	orders["1"] = WorkItem{
+		Description: "# Outline the saga\nCreate a rough outline of the new saga.",
+		WorkItemID:  "1",
+		TagID:       "mid",
+		StatusID:    "in_progress",
 	}
 }

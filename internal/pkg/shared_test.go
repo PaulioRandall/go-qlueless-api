@@ -56,35 +56,6 @@ func dummyWorkItems() *[]WorkItem {
 	}
 }
 
-// When given some WorkItems and the ID of an item that appears within those
-// WorkItems, does NOT return nil
-func TestFindWorkItem___1(t *testing.T) {
-	items := dummyWorkItems()
-	var w *WorkItem
-	w = FindWorkItem(items, "1")
-	assert.NotNil(t, w)
-	w = FindWorkItem(items, "3")
-	assert.NotNil(t, w)
-}
-
-// When given some batches and the ID of an item that does NOT appear within
-// those batches, returns nil
-func TestFindWorkItem___2(t *testing.T) {
-	items := dummyWorkItems()
-	id := "99999999999"
-	w := FindWorkItem(items, id)
-	assert.Nil(t, w)
-}
-
-// When given some batches and the ID of an item that appears within those
-// batches, returns the expected batch
-func TestFindWorkItem___3(t *testing.T) {
-	items := dummyWorkItems()
-	id := "2"
-	w := FindWorkItem(items, id)
-	assert.Equal(t, id, w.WorkItemID)
-}
-
 // When given an empty string, true is returned
 func TestIsBlank___1(t *testing.T) {
 	act := IsBlank("")

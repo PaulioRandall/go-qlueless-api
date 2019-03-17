@@ -25,9 +25,9 @@ func SingleOrderHandler(res http.ResponseWriter, req *http.Request) {
 	}
 
 	id := mux.Vars(req)["order_id"]
-	var o *WorkItem = FindWorkItem(orders, id)
+	o, ok := orders[id]
 
-	if o == nil {
+	if !ok {
 		r.Message = Str(fmt.Sprintf("Order %v not found", id))
 		Http_4xx(&r, 404)
 		return
