@@ -60,6 +60,15 @@ func ValueOrEmpty(m map[string]interface{}, k string) string {
 	return ""
 }
 
+// RelURL creates the absolute relative URL of the request without any fragment
+func RelURL(req *http.Request) string {
+	r := req.URL.Path
+	if req.URL.RawQuery != "" {
+		r += "?" + req.URL.RawQuery
+	}
+	return r
+}
+
 // LogRequest logs the details of a request such as the URL
 func LogRequest(req *http.Request) {
 	log.Println(req.URL.String())
@@ -85,7 +94,7 @@ func LogIfErr(err error) bool {
 
 // Reply500 sets up the response with generic 500 error details. This method
 // should be used when ever a 500 error needs to be returned
-func Reply500(res *http.ResponseWriter, req *http.Request) {
+func Write500Reply(res *http.ResponseWriter, req *http.Request) {
 	r := ReplyWrapped{
 		Message: "Bummer! Something went wrong on the server.",
 		Self:    (*req).URL.String(),
@@ -96,22 +105,22 @@ func Reply500(res *http.ResponseWriter, req *http.Request) {
 	json.NewEncoder(*res).Encode(r)
 }
 
-// Http_4XX sets up the response as a 4xx error
-func Http_4XX(status int, r *Reply4XX) {
-	if status < 400 && status > 499 {
+// Reply4XX sets up the response as a 4XX error
+func Write4XXReply(status int, r *Reply4XX) {
+	if status < 400 || status > 499 {
 		log.Println("[BUG] Status code must be between 400 and 499")
-		Reply500(r.Res, r.Req)
+		Write500Reply(r.Res, r.Req)
 		return
 	}
 
 	if (*r).Message == "" {
 		log.Println("[BUG] 4xx response message is missing")
-		Reply500(r.Res, r.Req)
+		Write500Reply(r.Res, r.Req)
 		return
 	}
 
 	if (*r).Self == "" {
-		(*r).Self = (*r).Req.URL.String()
+		(*r).Self = RelURL(r.Req)
 	}
 
 	AppendJSONHeaders((*r).Res)

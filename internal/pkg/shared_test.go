@@ -61,6 +61,15 @@ func TestIsBlank___3(t *testing.T) {
 	assert.False(t, act)
 }
 
+// When given a request, returns the absolute relative URL of the request
+func TestRelURL(t *testing.T) {
+	req, err := http.NewRequest("GET", "http://example.com/character?q=Nobby", nil)
+	assert.Nil(t, err)
+
+	act := RelURL(req)
+	assert.Equal(t, "/character?q=Nobby", act)
+}
+
 // When a value is present, it is returned
 func TestValueOrEmpty___1(t *testing.T) {
 	m := make(map[string]interface{})
@@ -107,8 +116,8 @@ func TestLogIfErr___2(t *testing.T) {
 	// Computer says no!
 }
 
-func createRequest() (*http.Request, *http.ResponseWriter, *httptest.ResponseRecorder) {
-	req, err := http.NewRequest("GET", "http://example.com/angels", nil)
+func createRequest(path string) (*http.Request, *http.ResponseWriter, *httptest.ResponseRecorder) {
+	req, err := http.NewRequest("GET", "http://example.com"+path, nil)
 	if err != nil {
 		panic(err)
 	}
@@ -118,26 +127,26 @@ func createRequest() (*http.Request, *http.ResponseWriter, *httptest.ResponseRec
 }
 
 // When invoked, sets 500 status code
-func TestReply500___1(t *testing.T) {
-	req, res, rec := createRequest()
+func TestWrite500Reply___1(t *testing.T) {
+	req, res, rec := createRequest("/")
 
-	Reply500(res, req)
+	Write500Reply(res, req)
 	assert.Equal(t, 500, rec.Code)
 }
 
 // When invoked, writes JSON headers
-func TestReply500___2(t *testing.T) {
-	req, res, _ := createRequest()
+func TestWrite500Reply___2(t *testing.T) {
+	req, res, _ := createRequest("/")
 
-	Reply500(res, req)
+	Write500Reply(res, req)
 	CheckJSONResponseHeaders(t, (*res).Header())
 }
 
 // When invoked, writes JSON headers
-func TestReply500___3(t *testing.T) {
-	req, res, rec := createRequest()
+func TestWrite500Reply___3(t *testing.T) {
+	req, res, rec := createRequest("/")
 
-	Reply500(res, req)
+	Write500Reply(res, req)
 
 	assert.NotNil(t, rec.Body)
 	var m map[string]interface{}
@@ -145,4 +154,101 @@ func TestReply500___3(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Contains(t, m, "message")
 	assert.Contains(t, m, "self")
+}
+
+// When not 4XX status code, sets 500 status code
+func TestWrite4XXReply___1(t *testing.T) {
+	req, res, rec := createRequest("/")
+	r := Reply4XX{
+		Req:     req,
+		Res:     res,
+		Message: "message",
+	}
+
+	Write4XXReply(300, &r)
+	assert.Equal(t, 500, rec.Code)
+}
+
+// When Reply4XX.Message not set, sets 500 status code
+func TestWrite4XXReply___2(t *testing.T) {
+	req, res, rec := createRequest("/")
+	r := Reply4XX{
+		Req: req,
+		Res: res,
+	}
+
+	Write4XXReply(400, &r)
+	assert.Equal(t, 500, rec.Code)
+}
+
+// When complete Reply4XX passed, sets 200 status code
+func TestWrite4XXReply___3(t *testing.T) {
+	req, res, rec := createRequest("/search?q=dan+north")
+	r := Reply4XX{
+		Req:     req,
+		Res:     res,
+		Message: "abc",
+		Self:    (*req).URL.String(),
+		Hints:   "xyz",
+	}
+
+	Write4XXReply(400, &r)
+	assert.Equal(t, 400, rec.Code)
+}
+
+// When complete Reply4XX passed, JSON headers are set
+func TestWrite4XXReply___4(t *testing.T) {
+	req, res, _ := createRequest("/search?q=dan+north")
+	r := Reply4XX{
+		Req:     req,
+		Res:     res,
+		Message: "abc",
+		Self:    (*req).URL.String(),
+		Hints:   "xyz",
+	}
+
+	Write4XXReply(400, &r)
+	CheckJSONResponseHeaders(t, (*res).Header())
+}
+
+// When complete Reply4XX passed, body is set with expected JSON
+func TestWrite4XXReply___5(t *testing.T) {
+	req, res, rec := createRequest("/search?q=dan+north")
+	r := Reply4XX{
+		Req:     req,
+		Res:     res,
+		Message: "abc",
+		Self:    (*req).URL.Path + "?" + (*req).URL.RawQuery,
+		Hints:   "xyz",
+	}
+
+	Write4XXReply(400, &r)
+
+	assert.NotNil(t, rec.Body)
+	var m map[string]interface{}
+	err := json.NewDecoder(rec.Body).Decode(&m)
+
+	assert.Nil(t, err)
+	assert.Equal(t, "abc", m["message"])
+	assert.Equal(t, "/search?q=dan+north", m["self"])
+	assert.Equal(t, "xyz", m["hints"])
+}
+
+// When Reply4XX.Self is not set, Reply4XX.Self is set for us
+func TestWrite4XXReply___6(t *testing.T) {
+	req, res, rec := createRequest("/search?q=dan+north")
+	r := Reply4XX{
+		Req:     req,
+		Res:     res,
+		Message: "abc",
+		Hints:   "xyz",
+	}
+
+	Write4XXReply(400, &r)
+
+	assert.NotNil(t, rec.Body)
+	var m map[string]interface{}
+	err := json.NewDecoder(rec.Body).Decode(&m)
+	assert.Nil(t, err)
+	assert.Equal(t, "/search?q=dan+north", m["self"])
 }

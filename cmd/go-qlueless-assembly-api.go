@@ -25,7 +25,7 @@ func QluelessNotFoundHandler(res http.ResponseWriter, req *http.Request) {
 		Message: "Resource not found",
 	}
 
-	Http_4XX(404, &r)
+	Write4XXReply(404, &r)
 }
 
 // Main is the entry point for the web server

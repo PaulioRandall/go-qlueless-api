@@ -23,7 +23,7 @@ func SingleBatchHandler(res http.ResponseWriter, req *http.Request) {
 			Req:     req,
 			Message: fmt.Sprintf("Batch %v not found", id),
 		}
-		Http_4XX(404, &r)
+		Write4XXReply(404, &r)
 		return
 	}
 

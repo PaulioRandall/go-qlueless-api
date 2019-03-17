@@ -26,14 +26,14 @@ func NewOrderHandler(res http.ResponseWriter, req *http.Request) {
 			Req:     req,
 			Message: "Unable to decode create order request body",
 		}
-		Http_4XX(400, &r)
+		Write4XXReply(400, &r)
 		return
 	}
 
 	o := mapToOrder(m)
 	o.WorkItemID, err = addOrder(o)
 	if err != nil {
-		Reply500(&res, req)
+		Write500Reply(&res, req)
 		return
 	}
 
