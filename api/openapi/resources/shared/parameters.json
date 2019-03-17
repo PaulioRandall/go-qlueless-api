@@ -1,10 +1,9 @@
-"wrap_with": {
-  "name": "wrap_with",
+"wrap": {
+  "name": "wrap",
   "in": "query",
-  "description": "A dot `.` separated list of meta information properties that should be returned in place of the response.",
+  "description": "If present wraps the response and includes meta information within the response.",
   "required": false,
   "schema": {
     "type": "string"
-  },
-  "example": "message.self.data"
+  }
 }

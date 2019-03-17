@@ -3,7 +3,7 @@
     "description": "Returns all batches.",
     "parameters": [
       {
-        "$ref": "#/components/parameters/wrap_with"
+        "$ref": "#/components/parameters/wrap"
       }
     ],
     "responses": {
@@ -38,7 +38,7 @@
         "$ref": "#/components/parameters/batch_id"
       },
       {
-        "$ref": "#/components/parameters/wrap_with"
+        "$ref": "#/components/parameters/wrap"
       }
     ],
     "responses": {

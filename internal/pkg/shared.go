@@ -3,7 +3,6 @@ package pkg
 
 import (
 	"encoding/json"
-	"errors"
 	"log"
 	"net/http"
 	"strings"
@@ -115,55 +114,6 @@ func Http_4xx(r *Reply, status int) {
 	json.NewEncoder(*r.Res).Encode(reply)
 }
 
-// wrapData returns a nil if the client has not requested a wrapped response.
-// If they have, a list of the requested meta information properties will be
-// returned
-func wrapData(r *Reply) ([]string, error) {
-	v := (*r.Req).URL.Query()["wrap_with"]
-	if v != nil {
-		if len(v) > 1 {
-			return nil, errors.New("Multiple 'wrap_with' query parameters not allowed")
-		}
-		return wrapWith(v[0])
-	}
-	return nil, nil
-}
-
-// wrapWith splits a dot `.` delimitered string of meta information properties
-// and validates each one
-func wrapWith(p string) ([]string, error) {
-	v := strings.Split(p, ".")
-	if len(v) == 0 {
-		return nil, errors.New("At least one value within 'wrap_with' must be provided")
-	}
-	for _, p := range v {
-		if IsBlank(p) {
-			return nil, errors.New("Blank values within 'wrap_with' are not allowed")
-		}
-		if !isWrapperProp(p) {
-			return nil, errors.New("Invalid value within 'wrap_with': " + p)
-		}
-	}
-	return v, nil
-}
-
-// isWrapperProp returns true if the input string is a meta information property
-// name
-func isWrapperProp(p string) bool {
-	p = strings.ToLower(p)
-	switch p {
-	case "message":
-		fallthrough
-	case "self":
-		fallthrough
-	case "data":
-		fallthrough
-	case "hints":
-		return true
-	}
-	return false
-}
-
 // AppendJSONHeaders appends the response headers for JSON requests to
 // ResponseWriters
 func AppendJSONHeaders(r *Reply) {
@@ -176,34 +126,20 @@ func AppendJSONHeaders(r *Reply) {
 // WriteJsonReply writes either the reply or the reply data using the
 // ResponseWriter and appends the required JSON headers
 func WriteJsonReply(r *Reply, message *string, data interface{}, hints *string) {
-	v, err := wrapData(r)
-	if err != nil {
-		r.Hints = Str("Valid values [message|self|data|hints] e.g. 'wrap_with=message.data'")
-		r.Message = Str(err.Error())
-		Http_4xx(r, 400)
-		return
-	}
 
 	AppendJSONHeaders(r)
 	(*r.Res).WriteHeader(http.StatusOK)
 
+	v := (*r.Req).URL.Query()["wrap"]
 	if v == nil {
-		json.NewEncoder((*r.Res)).Encode(data)
+		json.NewEncoder(*r.Res).Encode(data)
 		return
 	}
 
-	for _, p := range v {
-		switch p {
-		case "message":
-			r.Message = message
-		case "self":
-			r.Self = Str(r.Req.URL.String())
-		case "data":
-			r.Data = data
-		case "hints":
-			r.Hints = hints
-		}
-	}
+	r.Message = message
+	r.Self = Str(r.Req.URL.String())
+	r.Data = data
+	r.Hints = hints
 
 	json.NewEncoder(*r.Res).Encode(r)
 }

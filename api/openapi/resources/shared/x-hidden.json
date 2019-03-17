@@ -8,7 +8,7 @@
 },
 "title": {
   "type": "string",
-  "description": "Presentable and human readable title of the entity instance."
+  "description": "Presentable and human readable title of the dictionary entry."
 },
 "description": {
   "type": "string",
