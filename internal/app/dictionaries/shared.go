@@ -4,22 +4,14 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"os"
-	"sync"
 
 	. "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg"
 )
 
-var dictionaries map[string]interface{}
-var dictLoader sync.Once
+var dicts map[string]interface{} = nil
 
-// LoadDicts loads the service dictionaries
-func LoadDicts() map[string]interface{} {
-	dictLoader.Do(loadJson)
-	return dictionaries
-}
-
-// loadJson loads the dictionary response from a file
-func loadJson() {
+// LoadDicts loads the dictionaries data
+func LoadDicts() {
 
 	go_path := os.Getenv("GOPATH")
 	path := go_path +
@@ -28,12 +20,12 @@ func loadJson() {
 
 	bytes, err := ioutil.ReadFile(path)
 	if LogIfErr(err) {
-		dictionaries = nil
+		dicts = nil
 		return
 	}
 
-	err = json.Unmarshal(bytes, &dictionaries)
+	err = json.Unmarshal(bytes, &dicts)
 	if LogIfErr(err) {
-		dictionaries = nil
+		dicts = nil
 	}
 }

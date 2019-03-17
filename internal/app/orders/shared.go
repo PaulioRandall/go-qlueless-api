@@ -2,22 +2,14 @@ package orders
 
 import (
 	"strconv"
-	"sync"
 
 	. "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg"
 )
 
-var orders map[string]WorkItem = nil
-var orderLoader sync.Once
-
-// LoadOrders loads all orders into the orders array
-func LoadOrders() map[string]WorkItem {
-	orderLoader.Do(createDummyOrders)
-	return orders
-}
+var orders = map[string]WorkItem{}
 
 // MapToOrder converts a map representing an order to an order struct
-func MapToOrder(m map[string]interface{}) WorkItem {
+func mapToOrder(m map[string]interface{}) WorkItem {
 	return WorkItem{
 		Description:      ValueOrEmpty(m, "description"),
 		WorkItemID:       ValueOrEmpty(m, "work_item_id"),
@@ -29,7 +21,7 @@ func MapToOrder(m map[string]interface{}) WorkItem {
 }
 
 // AddOrder adds a new order to the data store returning the newly assigned ID
-func AddOrder(o WorkItem) (string, error) {
+func addOrder(o WorkItem) (string, error) {
 	next := 1
 	for k, _ := range orders {
 		ID, err := strconv.Atoi(k)
@@ -48,8 +40,9 @@ func AddOrder(o WorkItem) (string, error) {
 	return o.WorkItemID, nil
 }
 
-func createDummyOrders() {
-	orders = map[string]WorkItem{}
+// CreateDummyOrders creates some dummy orders for testing during these initial
+// phases of development
+func CreateDummyOrders() {
 	orders["1"] = WorkItem{
 		Description: "# Outline the saga\nCreate a rough outline of the new saga.",
 		WorkItemID:  "1",

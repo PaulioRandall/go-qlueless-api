@@ -15,14 +15,8 @@ func AllBatchesHandler(res http.ResponseWriter, req *http.Request) {
 		Res: &res,
 	}
 
-	m := LoadBatches()
-	if batches == nil {
-		Http_500(&r)
-		return
-	}
-
 	b := make([]WorkItem, 0)
-	for _, v := range m {
+	for _, v := range batches {
 		b = append(b, v)
 	}
 

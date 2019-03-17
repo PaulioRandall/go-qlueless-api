@@ -9,27 +9,40 @@ import (
 
 // When invoked, should not return nil
 func TestLoadDict___1(t *testing.T) {
-	assert.NotNil(t, LoadDicts())
+	LoadDicts()
+	assert.NotNil(t, dicts)
 }
 
-// When invoked, should return valid reply struct containing valid dictionaries
-// with entries
+// When invoked, should create a dictionary map containing a valid tag
+// dictionary
 func TestLoadDicts___2(t *testing.T) {
-	act := LoadDicts()
+	LoadDicts()
 
-	tags := act["tags"].([]interface{})
+	tags := dicts["tags"].([]interface{})
 	assert.NotNil(t, tags)
 	for _, e := range tags {
 		CheckTag(t, e.(map[string]interface{}))
 	}
+}
 
-	statuses := act["statuses"].([]interface{})
+// When invoked, should create a dictionary map containing a valid statuses
+// dictionary
+func TestLoadDicts___3(t *testing.T) {
+	LoadDicts()
+
+	statuses := dicts["statuses"].([]interface{})
 	assert.NotNil(t, statuses)
 	for _, e := range statuses {
 		CheckStatus(t, e.(map[string]interface{}))
 	}
+}
 
-	workItemTypes := act["work_item_types"].([]interface{})
+// When invoked, should create a dictionary map containing a valid work item
+// types dictionary
+func TestLoadDicts___4(t *testing.T) {
+	LoadDicts()
+
+	workItemTypes := dicts["work_item_types"].([]interface{})
 	assert.NotNil(t, workItemTypes)
 	for _, e := range workItemTypes {
 		CheckWorkItemType(t, e.(map[string]interface{}))

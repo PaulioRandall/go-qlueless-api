@@ -15,14 +15,8 @@ func AllOrdersHandler(res http.ResponseWriter, req *http.Request) {
 		Res: &res,
 	}
 
-	m := LoadOrders()
-	if m == nil {
-		Http_500(&r)
-		return
-	}
-
 	o := make([]WorkItem, 0)
-	for _, v := range m {
+	for _, v := range orders {
 		o = append(o, v)
 	}
 

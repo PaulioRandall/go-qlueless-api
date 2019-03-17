@@ -18,7 +18,6 @@ func SingleOrderHandler(res http.ResponseWriter, req *http.Request) {
 		Res: &res,
 	}
 
-	orders := LoadOrders()
 	if orders == nil {
 		Http_500(&r)
 		return

@@ -15,7 +15,6 @@ func AllDictsHandler(res http.ResponseWriter, req *http.Request) {
 		Res: &res,
 	}
 
-	dicts := LoadDicts()
 	if dicts == nil {
 		Http_500(&r)
 		return

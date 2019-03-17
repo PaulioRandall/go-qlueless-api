@@ -34,24 +34,21 @@ func QluelessNotFoundHandler(res http.ResponseWriter, req *http.Request) {
 func main() {
 	log.Println("[Go Qlueless Assembly API]: Starting application")
 
+	ord.CreateDummyOrders()
+	bat.CreateDummyBatches()
+	dict.LoadDicts()
+
 	gorilla := mux.NewRouter()
 
-	gorilla.HandleFunc("/openapi", oai.OpenAPIHandler).
-		Methods("GET")
-	gorilla.HandleFunc("/dictionaries", dict.AllDictsHandler).
-		Methods("GET")
-	gorilla.HandleFunc("/orders", ord.AllOrdersHandler).
-		Methods("GET")
-	gorilla.HandleFunc("/order", ord.NewOrderHandler).
-		Methods("POST", "OPTIONS")
-	gorilla.HandleFunc("/orders/{order_id}", ord.SingleOrderHandler).
-		Methods("GET")
-	gorilla.HandleFunc("/batches", bat.AllBatchesHandler).
-		Methods("GET")
-	gorilla.HandleFunc("/batches/{batch_id}", bat.SingleBatchHandler).
-		Methods("GET")
-	gorilla.NotFoundHandler = http.HandlerFunc(QluelessNotFoundHandler)
+	gorilla.HandleFunc("/openapi", oai.OpenAPIHandler).Methods("GET")
+	gorilla.HandleFunc("/dictionaries", dict.AllDictsHandler).Methods("GET")
+	gorilla.HandleFunc("/orders", ord.AllOrdersHandler).Methods("GET")
+	gorilla.HandleFunc("/order", ord.NewOrderHandler).Methods("POST", "OPTIONS")
+	gorilla.HandleFunc("/orders/{order_id}", ord.SingleOrderHandler).Methods("GET")
+	gorilla.HandleFunc("/batches", bat.AllBatchesHandler).Methods("GET")
+	gorilla.HandleFunc("/batches/{batch_id}", bat.SingleBatchHandler).Methods("GET")
 
+	gorilla.NotFoundHandler = http.HandlerFunc(QluelessNotFoundHandler)
 	http.Handle("/", gorilla)
 
 	log.Println("[Go Qlueless Assembly API]: Starting server")

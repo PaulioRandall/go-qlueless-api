@@ -1,24 +1,14 @@
 package batches
 
 import (
-	"sync"
-
 	. "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg"
 )
 
-var batches map[string]WorkItem
-var batchLoader sync.Once
+var batches = make(map[string]WorkItem)
 
-// LoadBatches loads all batches into the batches array and then returns the
-// array
-func LoadBatches() map[string]WorkItem {
-	batchLoader.Do(createDummyBatches)
-	return batches
-}
-
-// createDummyBatches creates some dummy batches
-func createDummyBatches() {
-	batches = make(map[string]WorkItem)
+// CreateDummyBatches creates some dummy batches for testing during these
+// initial phases of development
+func CreateDummyBatches() {
 	batches["2"] = WorkItem{
 		Description:      "# Name the saga\nThink of a name for the saga.",
 		WorkItemID:       "2",

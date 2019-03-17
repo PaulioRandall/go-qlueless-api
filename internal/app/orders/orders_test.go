@@ -7,25 +7,12 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-// When invoked, should not return nil
-func TestLoadOrders___1(t *testing.T) {
-	assert.NotNil(t, LoadOrders())
-}
-
-// When invoked, should return array of valid orders
-func TestLoadOrders___2(t *testing.T) {
-	act := LoadOrders()
-	for _, o := range act {
-		CheckOrder(t, o)
-	}
-}
-
 // When a valid map is provided, a WorkItem is returned
 func TestMapToOrder___1(t *testing.T) {
 	m := make(map[string]interface{})
 	m["description"] = "description"
 
-	act := MapToOrder(m)
+	act := mapToOrder(m)
 	assert.Equal(t, "description", act.Description)
 	assert.Empty(t, act.WorkItemID)
 	assert.Empty(t, act.ParentWorkItemID)
@@ -44,7 +31,7 @@ func TestMapToOrder___2(t *testing.T) {
 	m["status_id"] = "status_id"
 	m["additional"] = "abc: xyz; colour: black"
 
-	act := MapToOrder(m)
+	act := mapToOrder(m)
 	assert.Equal(t, "description", act.Description)
 	assert.Equal(t, "work_item_id", act.WorkItemID)
 	assert.Equal(t, "parent_work_item_id", act.ParentWorkItemID)
@@ -63,39 +50,36 @@ func createDummyOrder() WorkItem {
 
 // When given an order, returns an order ID
 func TestAddOrder___1(t *testing.T) {
-	m := LoadOrders()
 	o := createDummyOrder()
-	act, err := AddOrder(o)
+	act, err := addOrder(o)
 	assert.Nil(t, err)
 	assert.NotEmpty(t, act)
 	o.WorkItemID = act
 
-	stored, ok := m[o.WorkItemID]
+	stored, ok := orders[o.WorkItemID]
 	assert.True(t, ok)
 	assert.Equal(t, o, stored)
 }
 
 // When invoked twice with the same order, returns differnt IDs each time
 func TestAddOrder___2(t *testing.T) {
-	m := LoadOrders()
-
 	a := createDummyOrder()
-	ID_1, err := AddOrder(a)
+	ID_1, err := addOrder(a)
 	assert.Nil(t, err)
 	a.WorkItemID = ID_1
 
 	b := createDummyOrder()
-	ID_2, err := AddOrder(b)
+	ID_2, err := addOrder(b)
 	assert.Nil(t, err)
 	b.WorkItemID = ID_2
 
 	assert.NotEqual(t, ID_1, ID_2)
 
-	stored, ok := m[a.WorkItemID]
+	stored, ok := orders[a.WorkItemID]
 	assert.True(t, ok)
 	assert.Equal(t, a, stored)
 
-	stored, ok = m[b.WorkItemID]
+	stored, ok = orders[b.WorkItemID]
 	assert.True(t, ok)
 	assert.Equal(t, b, stored)
 }

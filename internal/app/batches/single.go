@@ -18,12 +18,6 @@ func SingleBatchHandler(res http.ResponseWriter, req *http.Request) {
 		Res: &res,
 	}
 
-	batches := LoadBatches()
-	if batches == nil {
-		Http_500(&r)
-		return
-	}
-
 	id := mux.Vars(req)["batch_id"]
 	b, ok := batches[id]
 
