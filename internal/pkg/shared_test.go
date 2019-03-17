@@ -43,6 +43,16 @@ func dummyWorkItems() *[]WorkItem {
 	}
 }
 
+func createRequest(path string) (*http.Request, *http.ResponseWriter, *httptest.ResponseRecorder) {
+	req, err := http.NewRequest("GET", "http://example.com"+path, nil)
+	if err != nil {
+		panic(err)
+	}
+	rec := httptest.NewRecorder()
+	var res http.ResponseWriter = rec
+	return req, &res, rec
+}
+
 // When given an empty string, true is returned
 func TestIsBlank___1(t *testing.T) {
 	act := IsBlank("")
@@ -116,16 +126,6 @@ func TestLogIfErr___2(t *testing.T) {
 	// Computer says no!
 }
 
-func createRequest(path string) (*http.Request, *http.ResponseWriter, *httptest.ResponseRecorder) {
-	req, err := http.NewRequest("GET", "http://example.com"+path, nil)
-	if err != nil {
-		panic(err)
-	}
-	rec := httptest.NewRecorder()
-	var res http.ResponseWriter = rec
-	return req, &res, rec
-}
-
 // When invoked, sets 500 status code
 func TestWrite500Reply___1(t *testing.T) {
 	req, res, rec := createRequest("/")
@@ -136,10 +136,10 @@ func TestWrite500Reply___1(t *testing.T) {
 
 // When invoked, writes JSON headers
 func TestWrite500Reply___2(t *testing.T) {
-	req, res, _ := createRequest("/")
+	req, res, rec := createRequest("/")
 
 	Write500Reply(res, req)
-	CheckJSONResponseHeaders(t, (*res).Header())
+	CheckJSONResponseHeaders(t, (*rec).Header())
 }
 
 // When invoked, writes JSON headers
@@ -198,7 +198,7 @@ func TestWrite4XXReply___3(t *testing.T) {
 
 // When complete Reply4XX passed, JSON headers are set
 func TestWrite4XXReply___4(t *testing.T) {
-	req, res, _ := createRequest("/search?q=dan+north")
+	req, res, rec := createRequest("/search?q=dan+north")
 	r := Reply4XX{
 		Req:     req,
 		Res:     res,
@@ -208,7 +208,7 @@ func TestWrite4XXReply___4(t *testing.T) {
 	}
 
 	Write4XXReply(400, &r)
-	CheckJSONResponseHeaders(t, (*res).Header())
+	CheckJSONResponseHeaders(t, (*rec).Header())
 }
 
 // When complete Reply4XX passed, body is set with expected JSON
@@ -251,4 +251,89 @@ func TestWrite4XXReply___6(t *testing.T) {
 	err := json.NewDecoder(rec.Body).Decode(&m)
 	assert.Nil(t, err)
 	assert.Equal(t, "/search?q=dan+north", m["self"])
+}
+
+// When the 'wrap' query param is present in a request, returns true
+func TestWrapUpReply___1(t *testing.T) {
+	req, err := http.NewRequest("GET", "http://example.com/?wrap=", nil)
+	assert.Nil(t, err)
+	act := WrapUpReply(req)
+	assert.True(t, act)
+}
+
+// When the 'wrap' query param is not present in a request, returns false
+func TestWrapUpReply___2(t *testing.T) {
+	req, err := http.NewRequest("GET", "http://example.com/?q=abc", nil)
+	assert.Nil(t, err)
+	act := WrapUpReply(req)
+	assert.False(t, act)
+}
+
+// When invoked, the JSON response headers are set
+func TestAppendJSONHeaders___1(t *testing.T) {
+	rec := httptest.NewRecorder()
+	var res http.ResponseWriter = rec
+	AppendJSONHeaders(&res)
+	CheckJSONResponseHeaders(t, rec.Header())
+}
+
+// When given valid inputs, 200 status code is set
+func TestWriteReply___1(t *testing.T) {
+	req, res, rec := createRequest("/")
+	m := make(map[string]interface{})
+	m["killswitch"] = "engage"
+
+	WriteReply(res, req, m)
+	assert.Equal(t, 200, rec.Code)
+}
+
+// When given valid inputs, the JSON response headers are set
+func TestWriteReply___2(t *testing.T) {
+	req, res, rec := createRequest("/")
+	m := make(map[string]interface{})
+	m["killswitch"] = "engage"
+
+	WriteReply(res, req, m)
+	CheckJSONResponseHeaders(t, rec.Header())
+}
+
+// When given valid inputs, the data is serialised into JSON the response body
+// is set
+func TestWriteReply___3(t *testing.T) {
+	req, res, rec := createRequest("/")
+	data := make(map[string]interface{})
+	data["killswitch"] = "engage"
+
+	WriteReply(res, req, data)
+
+	assert.NotNil(t, rec.Body)
+	var m map[string]interface{}
+	err := json.NewDecoder(rec.Body).Decode(&m)
+	assert.Nil(t, err)
+	assert.NotEmpty(t, m["killswitch"])
+	assert.Equal(t, "engage", m["killswitch"])
+}
+
+// When given valid inputs, 200 status code is set
+func TestWriteEmptyReply___1(t *testing.T) {
+	rec := httptest.NewRecorder()
+	var res http.ResponseWriter = rec
+	WriteEmptyReply(&res)
+	assert.Equal(t, 200, rec.Code)
+}
+
+// When given valid inputs, the JSON response headers are set
+func TestWriteEmptyReply___2(t *testing.T) {
+	rec := httptest.NewRecorder()
+	var res http.ResponseWriter = rec
+	WriteEmptyReply(&res)
+	CheckJSONResponseHeaders(t, rec.Header())
+}
+
+// When given valid inputs, no response body is set
+func TestWriteEmptyReply___3(t *testing.T) {
+	rec := httptest.NewRecorder()
+	var res http.ResponseWriter = rec
+	WriteEmptyReply(&res)
+	assert.Empty(t, rec.Body)
 }
