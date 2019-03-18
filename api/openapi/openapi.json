@@ -334,7 +334,7 @@
 			    }
 			  }
 			},
-			"work_item_type": {
+			"thing_type": {
 			  "type": "object",
 			  "properties": {
 			    "title": {
@@ -343,8 +343,8 @@
 			    "description": {
 			      "$ref": "#/components/x-hidden/description"
 			    },
-			    "work_item_type_id": {
-			      "$ref": "#/components/x-hidden/work_item_type_id"
+			    "thing_type_id": {
+			      "$ref": "#/components/x-hidden/thing_type_id"
 			    },
 			    "additional": {
 			      "$ref": "#/components/x-hidden/additional"
@@ -374,8 +374,8 @@
 			    "description": {
 			      "$ref": "#/components/x-hidden/description"
 			    },
-			    "work_item_id": {
-			      "$ref": "#/components/x-hidden/work_item_id"
+			    "thing_id": {
+			      "$ref": "#/components/x-hidden/thing_id"
 			    },
 			    "tag_id": {
 			      "$ref": "#/components/x-hidden/tag_id"
@@ -394,8 +394,8 @@
 			    "description": {
 			      "$ref": "#/components/x-hidden/description"
 			    },
-			    "parent_work_item_id": {
-			      "$ref": "#/components/x-hidden/parent_work_item_id"
+			    "parent_id": {
+			      "$ref": "#/components/x-hidden/parent_thing_id"
 			    },
 			    "tag_id": {
 			      "$ref": "#/components/x-hidden/tag_id"
@@ -414,11 +414,11 @@
 			    "description": {
 			      "$ref": "#/components/x-hidden/description"
 			    },
-			    "work_item_id": {
-			      "$ref": "#/components/x-hidden/work_item_id"
+			    "thing_id": {
+			      "$ref": "#/components/x-hidden/thing_id"
 			    },
-			    "parent_work_item_id": {
-			      "$ref": "#/components/x-hidden/parent_work_item_id"
+			    "parent_id": {
+			      "$ref": "#/components/x-hidden/parent_thing_id"
 			    },
 			    "tag_id": {
 			      "$ref": "#/components/x-hidden/tag_id"
@@ -487,10 +487,10 @@
 			        "$ref": "#/components/schemas/status"
 			      }
 			    },
-			    "work_item_types": {
+			    "thing_types": {
 			      "type": "array",
 			      "items": {
-			        "$ref": "#/components/schemas/work_item_type"
+			        "$ref": "#/components/schemas/thing_type"
 			      }
 			    }
 			  }
@@ -579,13 +579,13 @@
 			  "type": "string",
 			  "description": "Presentable and human readable description of the entity instance."
 			},
-			"work_item_id": {
+			"thing_id": {
 			  "type": "string",
-			  "description": "Unique identifier of the work item."
+			  "description": "Unique identifier of the thing."
 			},
-			"parent_work_item_id": {
+			"parent_thing_id": {
 			  "type": "string",
-			  "description": "Unique identifier of the work items parent."
+			  "description": "Unique identifier of the things parent."
 			},
 			"tag_id": {
 			  "type": "string",
@@ -595,9 +595,9 @@
 			  "type": "string",
 			  "description": "Unique identifier of a status."
 			},
-			"work_item_type_id": {
+			"thing_type_id": {
 			  "type": "string",
-			  "description": "Unique identifier of the work item type."
+			  "description": "Unique identifier of the things type."
 			},
 			"additional": {
 			  "type": "string",

@@ -10,35 +10,35 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func dummyWorkItems() *[]WorkItem {
-	return &[]WorkItem{
-		WorkItem{
+func dummyThings() *[]Thing {
+	return &[]Thing{
+		Thing{
 			Description: "# Outline the saga\nCreate a rough outline of the new saga.",
-			WorkItemID:  "1",
+			ID:          "1",
 			TagID:       "mid",
 			StatusID:    "in_progress",
 		},
-		WorkItem{
-			Description:      "# Name the saga\nThink of a name for the saga.",
-			WorkItemID:       "2",
-			ParentWorkItemID: "1",
-			TagID:            "mid",
-			StatusID:         "potential",
+		Thing{
+			Description: "# Name the saga\nThink of a name for the saga.",
+			ID:          "2",
+			ParentID:    "1",
+			TagID:       "mid",
+			StatusID:    "potential",
 		},
-		WorkItem{
-			Description:      "# Outline the first chapter",
-			WorkItemID:       "3",
-			ParentWorkItemID: "1",
-			TagID:            "mid",
-			StatusID:         "delivered",
-			Additional:       "archive_note:Done but not a compelling start",
+		Thing{
+			Description: "# Outline the first chapter",
+			ID:          "3",
+			ParentID:    "1",
+			TagID:       "mid",
+			StatusID:    "delivered",
+			Additional:  "archive_note:Done but not a compelling start",
 		},
-		WorkItem{
-			Description:      "# Outline the second chapter",
-			WorkItemID:       "4",
-			ParentWorkItemID: "1",
-			TagID:            "mid",
-			StatusID:         "in_progress",
+		Thing{
+			Description: "# Outline the second chapter",
+			ID:          "4",
+			ParentID:    "1",
+			TagID:       "mid",
+			StatusID:    "in_progress",
 		},
 	}
 }

@@ -32,7 +32,7 @@
     }
   }
 },
-"work_item_type": {
+"thing_type": {
   "type": "object",
   "properties": {
     "title": {
@@ -41,8 +41,8 @@
     "description": {
       "$ref": "#/components/x-hidden/description"
     },
-    "work_item_type_id": {
-      "$ref": "#/components/x-hidden/work_item_type_id"
+    "thing_type_id": {
+      "$ref": "#/components/x-hidden/thing_type_id"
     },
     "additional": {
       "$ref": "#/components/x-hidden/additional"

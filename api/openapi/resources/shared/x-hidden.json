@@ -14,13 +14,13 @@
   "type": "string",
   "description": "Presentable and human readable description of the entity instance."
 },
-"work_item_id": {
+"thing_id": {
   "type": "string",
-  "description": "Unique identifier of the work item."
+  "description": "Unique identifier of the thing."
 },
-"parent_work_item_id": {
+"parent_thing_id": {
   "type": "string",
-  "description": "Unique identifier of the work items parent."
+  "description": "Unique identifier of the things parent."
 },
 "tag_id": {
   "type": "string",
@@ -30,9 +30,9 @@
   "type": "string",
   "description": "Unique identifier of a status."
 },
-"work_item_type_id": {
+"thing_type_id": {
   "type": "string",
-  "description": "Unique identifier of the work item type."
+  "description": "Unique identifier of the things type."
 },
 "additional": {
   "type": "string",

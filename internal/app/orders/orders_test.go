@@ -7,41 +7,41 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-// When a valid map is provided, a WorkItem is returned
+// When a valid map is provided, a Thing is returned
 func TestMapToOrder___1(t *testing.T) {
 	m := make(map[string]interface{})
 	m["description"] = "description"
 
 	act := mapToOrder(m)
 	assert.Equal(t, "description", act.Description)
-	assert.Empty(t, act.WorkItemID)
-	assert.Empty(t, act.ParentWorkItemID)
+	assert.Empty(t, act.ID)
+	assert.Empty(t, act.ParentID)
 	assert.Empty(t, act.TagID)
 	assert.Empty(t, act.StatusID)
 	assert.Empty(t, act.Additional)
 }
 
-// When a valid map is provided, a WorkItem is returned
+// When a valid map is provided, a Thing is returned
 func TestMapToOrder___2(t *testing.T) {
 	m := make(map[string]interface{})
 	m["description"] = "description"
-	m["work_item_id"] = "work_item_id"
-	m["parent_work_item_id"] = "parent_work_item_id"
+	m["id"] = "id"
+	m["parent_id"] = "parent_id"
 	m["tag_id"] = "tag_id"
 	m["status_id"] = "status_id"
 	m["additional"] = "abc: xyz; colour: black"
 
 	act := mapToOrder(m)
 	assert.Equal(t, "description", act.Description)
-	assert.Equal(t, "work_item_id", act.WorkItemID)
-	assert.Equal(t, "parent_work_item_id", act.ParentWorkItemID)
+	assert.Equal(t, "id", act.ID)
+	assert.Equal(t, "parent_id", act.ParentID)
 	assert.Equal(t, "tag_id", act.TagID)
 	assert.Equal(t, "status_id", act.StatusID)
 	assert.Equal(t, "abc: xyz; colour: black", act.Additional)
 }
 
-func createDummyOrder() WorkItem {
-	return WorkItem{
+func createDummyOrder() Thing {
+	return Thing{
 		Description: "# Outline the saga\nCreate a rough outline of the new saga.",
 		TagID:       "mid",
 		StatusID:    "in_progress",
@@ -54,9 +54,9 @@ func TestAddOrder___1(t *testing.T) {
 	act, err := addOrder(o)
 	assert.Nil(t, err)
 	assert.NotEmpty(t, act)
-	o.WorkItemID = act
+	o.ID = act
 
-	stored, ok := orders[o.WorkItemID]
+	stored, ok := orders[o.ID]
 	assert.True(t, ok)
 	assert.Equal(t, o, stored)
 }
@@ -66,20 +66,20 @@ func TestAddOrder___2(t *testing.T) {
 	a := createDummyOrder()
 	ID_1, err := addOrder(a)
 	assert.Nil(t, err)
-	a.WorkItemID = ID_1
+	a.ID = ID_1
 
 	b := createDummyOrder()
 	ID_2, err := addOrder(b)
 	assert.Nil(t, err)
-	b.WorkItemID = ID_2
+	b.ID = ID_2
 
 	assert.NotEqual(t, ID_1, ID_2)
 
-	stored, ok := orders[a.WorkItemID]
+	stored, ok := orders[a.ID]
 	assert.True(t, ok)
 	assert.Equal(t, a, stored)
 
-	stored, ok = orders[b.WorkItemID]
+	stored, ok = orders[b.ID]
 	assert.True(t, ok)
 	assert.Equal(t, b, stored)
 }

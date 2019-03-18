@@ -37,7 +37,7 @@ func TestLoadDicts___3(t *testing.T) {
 	}
 }
 
-// When invoked, should create a dictionary map containing a valid work item
+// When invoked, should create a dictionary map containing a valid thing
 // types dictionary
 func TestLoadDicts___4(t *testing.T) {
 	LoadDicts()
@@ -45,6 +45,6 @@ func TestLoadDicts___4(t *testing.T) {
 	workItemTypes := dicts["work_item_types"].([]interface{})
 	assert.NotNil(t, workItemTypes)
 	for _, e := range workItemTypes {
-		CheckWorkItemType(t, e.(map[string]interface{}))
+		CheckThingType(t, e.(map[string]interface{}))
 	}
 }

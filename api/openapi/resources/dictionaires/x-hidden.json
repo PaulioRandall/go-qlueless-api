@@ -27,10 +27,10 @@
         "$ref": "#/components/schemas/status"
       }
     },
-    "work_item_types": {
+    "thing_types": {
       "type": "array",
       "items": {
-        "$ref": "#/components/schemas/work_item_type"
+        "$ref": "#/components/schemas/thing_type"
       }
     }
   }

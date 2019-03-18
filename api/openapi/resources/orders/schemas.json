@@ -21,8 +21,8 @@
     "description": {
       "$ref": "#/components/x-hidden/description"
     },
-    "work_item_id": {
-      "$ref": "#/components/x-hidden/work_item_id"
+    "thing_id": {
+      "$ref": "#/components/x-hidden/thing_id"
     },
     "tag_id": {
       "$ref": "#/components/x-hidden/tag_id"

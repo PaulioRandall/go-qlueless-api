@@ -11,7 +11,7 @@ import (
 func AllOrdersHandler(res http.ResponseWriter, req *http.Request) {
 	LogRequest(req)
 
-	o := make([]WorkItem, 0)
+	o := make([]Thing, 0)
 	for _, v := range orders {
 		o = append(o, v)
 	}

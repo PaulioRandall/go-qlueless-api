@@ -11,7 +11,7 @@ import (
 func AllBatchesHandler(res http.ResponseWriter, req *http.Request) {
 	LogRequest(req)
 
-	b := make([]WorkItem, 0)
+	b := make([]Thing, 0)
 	for _, v := range batches {
 		b = append(b, v)
 	}

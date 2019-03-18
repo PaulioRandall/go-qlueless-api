@@ -1,26 +1,26 @@
 package pkg
 
-// A WorkItem represents and is a genralisation of orders and batches
-type WorkItem struct {
-	Description      string `json:"description"`
-	WorkItemID       string `json:"work_item_id"`
-	ParentWorkItemID string `json:"parent_work_item_id,omitempty"`
-	TagID            string `json:"tag_id"`
-	StatusID         string `json:"status_id"`
-	Additional       string `json:"additional,omitempty"`
+// A Thing represents a... err... Thing
+type Thing struct {
+	Description string `json:"description"`
+	ID          string `json:"id"`
+	ParentID    string `json:"parent_id,omitempty"`
+	TagID       string `json:"tag_id"`
+	StatusID    string `json:"status_id"`
+	Additional  string `json:"additional,omitempty"`
 }
 
-// A WorkItemStore provides synchronisation for accessing WorkItems
-type WorkItemStore struct {
-	setChan chan WorkItem
-	getChan chan map[string]WorkItem
+// A ThingStore provides synchronisation for accessing Things
+type ThingStore struct {
+	setChan chan Thing
+	getChan chan map[string]Thing
 }
 
-// NewWorkItemStore creates a new WorkItemStore
-func NewWorkItemStore() WorkItemStore {
-	wis := WorkItemStore{
-		setChan: make(chan WorkItem),
-		getChan: make(chan map[string]WorkItem),
+// NewThingStore creates a new ThingStore
+func NewThingStore() ThingStore {
+	wis := ThingStore{
+		setChan: make(chan Thing),
+		getChan: make(chan map[string]Thing),
 	}
 	go wis.mux()
 	return wis
@@ -28,15 +28,15 @@ func NewWorkItemStore() WorkItemStore {
 
 // mux should be invoked as a goroutine; it forever loops handling incoming
 // channel communications sequentially
-func (wis WorkItemStore) mux() {
-	m := make(map[string]WorkItem)
-	var r map[string]WorkItem
+func (wis ThingStore) mux() {
+	m := make(map[string]Thing)
+	var r map[string]Thing
 	for {
 		select {
 		case w := <-wis.setChan:
-			m[w.WorkItemID] = w
+			m[w.ID] = w
 		case wis.getChan <- r:
-			t := make(map[string]WorkItem)
+			t := make(map[string]Thing)
 			for k, v := range m {
 				t[k] = v
 			}
@@ -44,12 +44,12 @@ func (wis WorkItemStore) mux() {
 	}
 }
 
-// Get gets all WorkItems
-func (wis WorkItemStore) Get() map[string]WorkItem {
+// Get gets all Things
+func (wis ThingStore) Get() map[string]Thing {
 	return <-wis.getChan
 }
 
-// Set sets a WorkItem
-func (wis WorkItemStore) Set(w WorkItem) {
+// Set sets a Thing
+func (wis ThingStore) Set(w Thing) {
 	wis.setChan <- w
 }

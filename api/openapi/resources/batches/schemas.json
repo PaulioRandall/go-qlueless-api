@@ -4,8 +4,8 @@
     "description": {
       "$ref": "#/components/x-hidden/description"
     },
-    "parent_work_item_id": {
-      "$ref": "#/components/x-hidden/parent_work_item_id"
+    "parent_id": {
+      "$ref": "#/components/x-hidden/parent_thing_id"
     },
     "tag_id": {
       "$ref": "#/components/x-hidden/tag_id"
@@ -24,11 +24,11 @@
     "description": {
       "$ref": "#/components/x-hidden/description"
     },
-    "work_item_id": {
-      "$ref": "#/components/x-hidden/work_item_id"
+    "thing_id": {
+      "$ref": "#/components/x-hidden/thing_id"
     },
-    "parent_work_item_id": {
-      "$ref": "#/components/x-hidden/parent_work_item_id"
+    "parent_id": {
+      "$ref": "#/components/x-hidden/parent_thing_id"
     },
     "tag_id": {
       "$ref": "#/components/x-hidden/tag_id"
