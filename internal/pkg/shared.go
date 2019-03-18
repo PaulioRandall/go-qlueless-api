@@ -26,16 +26,6 @@ type Reply4XX struct {
 	Hints   string               `json:"hints,omitempty"`
 }
 
-// A WorkItem represents and is a genralisation of orders and batches
-type WorkItem struct {
-	Description      string `json:"description"`
-	WorkItemID       string `json:"work_item_id"`
-	ParentWorkItemID string `json:"parent_work_item_id,omitempty"`
-	TagID            string `json:"tag_id"`
-	StatusID         string `json:"status_id"`
-	Additional       string `json:"additional,omitempty"`
-}
-
 // Str returns a pointer to the passed string, useful for getting the address of
 // a string in one line
 func Str(s string) *string {
