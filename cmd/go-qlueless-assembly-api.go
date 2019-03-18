@@ -9,7 +9,6 @@ import (
 	"github.com/gorilla/mux"
 
 	bat "github.com/PaulioRandall/go-qlueless-assembly-api/internal/app/batches"
-	dict "github.com/PaulioRandall/go-qlueless-assembly-api/internal/app/dictionaries"
 	oai "github.com/PaulioRandall/go-qlueless-assembly-api/internal/app/openapi"
 	ord "github.com/PaulioRandall/go-qlueless-assembly-api/internal/app/orders"
 	. "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg"
@@ -33,14 +32,12 @@ func main() {
 	log.Println("[Go Qlueless Assembly API]: Starting application")
 
 	oai.LoadSpec()
-	dict.LoadDicts()
 	ord.CreateDummyOrders()
 	bat.CreateDummyBatches()
 
 	gorilla := mux.NewRouter()
 
 	gorilla.HandleFunc("/openapi", oai.OpenAPIHandler).Methods("GET")
-	gorilla.HandleFunc("/dictionaries", dict.AllDictsHandler).Methods("GET")
 	gorilla.HandleFunc("/orders", ord.AllOrdersHandler).Methods("GET")
 	gorilla.HandleFunc("/order", ord.NewOrderHandler).Methods("POST", "OPTIONS")
 	gorilla.HandleFunc("/orders/{order_id}", ord.SingleOrderHandler).Methods("GET")

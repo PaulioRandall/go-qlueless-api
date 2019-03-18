@@ -5,24 +5,6 @@
 		"version": "0.0.1"
 	},
 	"paths": {
-		"/dictionaries": {
-		  "get": {
-		    "description": "Returns all service dictionaires.",
-		    "parameters": [
-		      {
-		        "$ref": "#/components/parameters/meta"
-		      }
-		    ],
-		    "responses": {
-		      "200": {
-		        "$ref": "#/components/responses/dicts_200"
-		      },
-		      "default": {
-		        "$ref": "#/components/responses/error"
-		      }
-		    }
-		  }
-		},
 		"/orders": {
 		  "get": {
 		    "description": "Returns all orders.",
@@ -183,23 +165,6 @@
 			}
     },
     "responses": {
-			"dicts_200": {
-			  "description": "Mapped list of dictionaries.",
-			  "content": {
-			    "application/json": {
-			      "schema": {
-			        "oneOf": [
-			          {
-			            "$ref": "#/components/x-hidden/dictionaries_wrapped"
-			          },
-			          {
-			            "$ref": "#/components/x-hidden/dictionaries_object"
-			          }
-			        ]
-			      }
-			    }
-			  }
-			},
 			"orders_200": {
 			  "description": "List of orders.",
 			  "content": {
@@ -300,57 +265,6 @@
 			}
     },
 		"schemas": {
-			"tag": {
-			  "type": "object",
-			  "properties": {
-			    "title": {
-			      "$ref": "#/components/x-hidden/title"
-			    },
-			    "description": {
-			      "$ref": "#/components/x-hidden/description"
-			    },
-			    "tag_id": {
-			      "$ref": "#/components/x-hidden/tag_id"
-			    },
-			    "additional": {
-			      "$ref": "#/components/x-hidden/additional"
-			    }
-			  }
-			},
-			"status": {
-			  "type": "object",
-			  "properties": {
-			    "title": {
-			      "$ref": "#/components/x-hidden/title"
-			    },
-			    "description": {
-			      "$ref": "#/components/x-hidden/description"
-			    },
-			    "status_id": {
-			      "$ref": "#/components/x-hidden/status_id"
-			    },
-			    "additional": {
-			      "$ref": "#/components/x-hidden/additional"
-			    }
-			  }
-			},
-			"thing_type": {
-			  "type": "object",
-			  "properties": {
-			    "title": {
-			      "$ref": "#/components/x-hidden/title"
-			    },
-			    "description": {
-			      "$ref": "#/components/x-hidden/description"
-			    },
-			    "thing_type_id": {
-			      "$ref": "#/components/x-hidden/thing_type_id"
-			    },
-			    "additional": {
-			      "$ref": "#/components/x-hidden/additional"
-			    }
-			  }
-			},
 			"new_order": {
 			  "type": "object",
 			  "properties": {
@@ -458,43 +372,6 @@
 			}
     },
     "x-hidden": {
-			"dictionaries_wrapped": {
-			  "type": "object",
-			  "properties": {
-			    "message": {
-			      "$ref": "#/components/x-hidden/message"
-			    },
-			    "self": {
-			      "$ref": "#/components/x-hidden/self"
-			    },
-			    "data": {
-			      "$ref": "#/components/x-hidden/dictionaries_object"
-			    }
-			  }
-			},
-			"dictionaries_object": {
-			  "type": "object",
-			  "properties": {
-			    "tags": {
-			      "type": "array",
-			      "items": {
-			        "$ref": "#/components/schemas/tag"
-			      }
-			    },
-			    "statuses": {
-			      "type": "array",
-			      "items": {
-			        "$ref": "#/components/schemas/status"
-			      }
-			    },
-			    "thing_types": {
-			      "type": "array",
-			      "items": {
-			        "$ref": "#/components/schemas/thing_type"
-			      }
-			    }
-			  }
-			},
 			"orders_wrapped": {
 			  "type": "object",
 			  "properties": {

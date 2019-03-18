@@ -5,7 +5,6 @@
 		"version": "0.0.1"
 	},
 	"paths": {
-    {{- "\n"}}{{ .Inject "/dictionaires/paths.json" 2}},
     {{- "\n"}}{{ .Inject "/orders/paths.json" 2}},
     {{- "\n"}}{{ .Inject "/batches/paths.json" 2}}
   },
@@ -20,19 +19,16 @@
       {{- "\n"}}{{ .Inject "/batches/requestBodies.json" 3}}
     },
     "responses": {
-      {{- "\n"}}{{ .Inject "/dictionaires/responses.json" 3}},
       {{- "\n"}}{{ .Inject "/orders/responses.json" 3}},
       {{- "\n"}}{{ .Inject "/batches/responses.json" 3}},
       {{- "\n"}}{{ .Inject "/shared/responses.json" 3}}
     },
 		"schemas": {
-      {{- "\n"}}{{ .Inject "/dictionaires/schemas.json" 3}},
       {{- "\n"}}{{ .Inject "/orders/schemas.json" 3}},
 			{{- "\n"}}{{ .Inject "/batches/schemas.json" 3}},
 			{{- "\n"}}{{ .Inject "/shared/schemas.json" 3}}
     },
     "x-hidden": {
-      {{- "\n"}}{{ .Inject "/dictionaires/x-hidden.json" 3}},
       {{- "\n"}}{{ .Inject "/orders/x-hidden.json" 3}},
       {{- "\n"}}{{ .Inject "/batches/x-hidden.json" 3}},
       {{- "\n"}}{{ .Inject "/shared/x-hidden.json" 3}}

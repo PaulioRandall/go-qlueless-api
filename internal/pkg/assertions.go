@@ -39,33 +39,6 @@ func CheckBatch(t *testing.T, b Thing) {
 	CheckIsNumber(t, b.ParentID, "Thing.Parent_id")
 }
 
-func CheckTag(t *testing.T, e map[string]interface{}) {
-	assert.NotNil(t, e["title"])
-	CheckNotBlank(t, e["title"].(string), "Dicts.Tag.Title")
-	assert.NotNil(t, e["description"])
-	CheckNotBlank(t, e["description"].(string), "Dicts.Tag.Description")
-	assert.NotNil(t, e["tag_id"])
-	CheckNotBlank(t, e["tag_id"].(string), "Dicts.Tag.Tag_id")
-}
-
-func CheckStatus(t *testing.T, e map[string]interface{}) {
-	assert.NotNil(t, e["title"])
-	CheckNotBlank(t, e["title"].(string), "Dicts.Status.Title")
-	assert.NotNil(t, e["description"])
-	CheckNotBlank(t, e["description"].(string), "Dicts.Tag.Description")
-	assert.NotNil(t, e["status_id"])
-	CheckNotBlank(t, e["status_id"].(string), "Dicts.Tag.Status_id")
-}
-
-func CheckThingType(t *testing.T, e map[string]interface{}) {
-	assert.NotNil(t, e["title"])
-	CheckNotBlank(t, e["title"].(string), "Dicts.ThingType.Title")
-	assert.NotNil(t, e["description"])
-	CheckNotBlank(t, e["description"].(string), "Dicts.ThingType.Description")
-	assert.NotNil(t, e["work_item_type_id"])
-	CheckNotBlank(t, e["work_item_type_id"].(string), "Dicts.ThingType.Work_item_type_id")
-}
-
 func CheckPanic(t *testing.T, f func()) {
 	defer func() {
 		if r := recover(); r == nil {
