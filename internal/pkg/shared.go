@@ -59,6 +59,19 @@ func ValueOrFalse(m map[string]interface{}, k string) bool {
 	return false
 }
 
+// ValueOrEmptyArray returns the value of the parameter or an empty string array
+func ValueOrEmptyArray(m map[string]interface{}, k string) []string {
+	v, ok := m[k].([]string)
+	if ok {
+		r := make([]string, len(v))
+		for i, s := range v {
+			r[i] = s
+		}
+		return r
+	}
+	return make([]string, 0)
+}
+
 // RelURL creates the absolute relative URL of the request without any fragment
 func RelURL(req *http.Request) string {
 	r := req.URL.Path

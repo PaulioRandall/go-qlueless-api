@@ -4,9 +4,6 @@
     "description": {
       "$ref": "#/components/x-hidden/description"
     },
-    "parent_id": {
-      "$ref": "#/components/x-hidden/id"
-    },
     "state": {
       "$ref": "#/components/x-hidden/state"
     },
@@ -23,9 +20,6 @@
     },
     "id": {
       "$ref": "#/components/x-hidden/id"
-    },
-    "parent_id": {
-      "$ref": "#/components/x-hidden/parent_id"
     },
     "state": {
       "$ref": "#/components/x-hidden/state"

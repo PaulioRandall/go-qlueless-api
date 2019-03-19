@@ -294,6 +294,9 @@
 			    "state": {
 			      "$ref": "#/components/x-hidden/state"
 			    },
+			    "childrens_ids": {
+			      "$ref": "#/components/x-hidden/childrens_ids"
+			    },
 			    "additional": {
 			      "$ref": "#/components/x-hidden/additional"
 			    }
@@ -304,9 +307,6 @@
 			  "properties": {
 			    "description": {
 			      "$ref": "#/components/x-hidden/description"
-			    },
-			    "parent_id": {
-			      "$ref": "#/components/x-hidden/id"
 			    },
 			    "state": {
 			      "$ref": "#/components/x-hidden/state"
@@ -324,9 +324,6 @@
 			    },
 			    "id": {
 			      "$ref": "#/components/x-hidden/id"
-			    },
-			    "parent_id": {
-			      "$ref": "#/components/x-hidden/parent_id"
 			    },
 			    "state": {
 			      "$ref": "#/components/x-hidden/state"
@@ -447,9 +444,12 @@
 			  "type": "string",
 			  "description": "Unique identifier of the thing."
 			},
-			"parent_id": {
-			  "type": "string",
-			  "description": "Unique identifier of the things parent."
+			"childrens_ids": {
+			  "type": "array",
+			  "description": "Things that this Thing is a parent of.",
+			  "items": {
+			    "$ref": "#/components/x-hidden/id"
+			  }
 			},
 			"state": {
 			  "type": "string",

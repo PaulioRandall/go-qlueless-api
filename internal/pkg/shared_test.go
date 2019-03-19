@@ -15,25 +15,27 @@ func dummyThings() *[]Thing {
 		Thing{
 			Description: "# Outline the saga\nCreate a rough outline of the new saga.",
 			ID:          "1",
-			State:       "in_progress",
+			ChildrenIDs: []string{
+				"2",
+				"3",
+				"4",
+			},
+			State: "in_progress",
 		},
 		Thing{
 			Description: "# Name the saga\nThink of a name for the saga.",
 			ID:          "2",
-			ParentID:    "1",
 			State:       "potential",
 		},
 		Thing{
 			Description: "# Outline the first chapter",
 			ID:          "3",
-			ParentID:    "1",
 			State:       "delivered",
 			Additional:  "archive_note:Done but not a compelling start",
 		},
 		Thing{
 			Description: "# Outline the second chapter",
 			ID:          "4",
-			ParentID:    "1",
 			State:       "in_progress",
 		},
 	}
@@ -106,6 +108,22 @@ func TestValueOrFalse___2(t *testing.T) {
 	m["key"] = "value"
 	act := ValueOrFalse(m, "responsibilities")
 	assert.False(t, act)
+}
+
+// When a value is present, it is returned
+func TestValueOrEmptyArray___1(t *testing.T) {
+	m := make(map[string]interface{})
+	m["key"] = []string{"1", "2"}
+	act := ValueOrEmptyArray(m, "key")
+	assert.Equal(t, []string{"1", "2"}, act)
+}
+
+// When a value is not present, empty array is returned
+func TestValueOrEmptyArray___2(t *testing.T) {
+	m := make(map[string]interface{})
+	m["key"] = []string{"1", "2"}
+	act := ValueOrEmptyArray(m, "responsibilities")
+	assert.Empty(t, act)
 }
 
 // When given nil, does nothing

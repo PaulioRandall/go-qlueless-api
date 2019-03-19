@@ -28,14 +28,20 @@ func CheckThing(t *testing.T, w Thing) {
 	CheckNotBlank(t, w.State, "Thing.State")
 }
 
+func CheckChildrenIds(t *testing.T, o Thing) {
+	for _, id := range o.ChildrenIDs {
+		CheckNotBlank(t, id, "Thing.ChildrenIDs")
+		CheckIsNumber(t, id, "Thing.ChildrenIDs")
+	}
+}
+
 func CheckOrder(t *testing.T, o Thing) {
 	CheckThing(t, o)
+	CheckChildrenIds(t, o)
 }
 
 func CheckBatch(t *testing.T, b Thing) {
 	CheckThing(t, b)
-	CheckNotBlank(t, b.ParentID, "Thing.ParentID")
-	CheckIsNumber(t, b.ParentID, "Thing.ParentID")
 }
 
 func CheckPanic(t *testing.T, f func()) {

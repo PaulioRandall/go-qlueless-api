@@ -2,12 +2,12 @@ package pkg
 
 // A Thing represents a... err... Thing
 type Thing struct {
-	Description string `json:"description"`
-	ID          string `json:"id"`
-	ParentID    string `json:"parent_id,omitempty"`
-	State       string `json:"state"`
-	IsDead      bool   `json:"-"`
-	Additional  string `json:"additional,omitempty"`
+	Description string   `json:"description"`
+	ID          string   `json:"id"`
+	ChildrenIDs []string `json:"childrens_ids,omitempty"`
+	State       string   `json:"state"`
+	IsDead      bool     `json:"-"`
+	Additional  string   `json:"additional,omitempty"`
 }
 
 // A ThingStore provides synchronisation for accessing Things

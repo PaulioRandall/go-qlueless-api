@@ -27,6 +27,9 @@
     "state": {
       "$ref": "#/components/x-hidden/state"
     },
+    "childrens_ids": {
+      "$ref": "#/components/x-hidden/childrens_ids"
+    },
     "additional": {
       "$ref": "#/components/x-hidden/additional"
     }

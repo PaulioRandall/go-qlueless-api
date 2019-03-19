@@ -14,9 +14,12 @@
   "type": "string",
   "description": "Unique identifier of the thing."
 },
-"parent_id": {
-  "type": "string",
-  "description": "Unique identifier of the things parent."
+"childrens_ids": {
+  "type": "array",
+  "description": "Things that this Thing is a parent of.",
+  "items": {
+    "$ref": "#/components/x-hidden/id"
+  }
 },
 "state": {
   "type": "string",
