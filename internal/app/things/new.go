@@ -1,4 +1,4 @@
-package orders
+package things
 
 import (
 	"encoding/json"
@@ -7,8 +7,8 @@ import (
 	. "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg"
 )
 
-// NewOrderHandler handles requests to create new orders
-func NewOrderHandler(res http.ResponseWriter, req *http.Request) {
+// NewThingHandler handles requests to create new things
+func NewThingHandler(res http.ResponseWriter, req *http.Request) {
 	LogRequest(req)
 
 	if req.Method == "OPTIONS" {
@@ -24,19 +24,19 @@ func NewOrderHandler(res http.ResponseWriter, req *http.Request) {
 		r := Reply4XX{
 			Res:     &res,
 			Req:     req,
-			Message: "Unable to decode create order request body",
+			Message: "Unable to decode create thing request body",
 		}
 		Write4XXReply(400, &r)
 		return
 	}
 
-	o := mapToOrder(m)
-	o.ID, err = addOrder(o)
+	o := mapToThing(m)
+	o.ID, err = addThing(o)
 	if err != nil {
 		Write500Reply(&res, req)
 		return
 	}
 
-	data := PrepResponseData(req, o, "New order created")
+	data := PrepResponseData(req, o, "New thing created")
 	WriteReply(&res, req, data)
 }

@@ -9,7 +9,7 @@ import (
 	"github.com/gorilla/mux"
 
 	oai "github.com/PaulioRandall/go-qlueless-assembly-api/internal/app/openapi"
-	ord "github.com/PaulioRandall/go-qlueless-assembly-api/internal/app/orders"
+	thg "github.com/PaulioRandall/go-qlueless-assembly-api/internal/app/things"
 	. "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg"
 )
 
@@ -31,14 +31,14 @@ func main() {
 	log.Println("[Go Qlueless Assembly API]: Starting application")
 
 	oai.LoadSpec()
-	ord.CreateDummyOrders()
+	thg.CreateDummyThings()
 
 	gorilla := mux.NewRouter()
 
 	gorilla.HandleFunc("/openapi", oai.OpenAPIHandler).Methods("GET")
-	gorilla.HandleFunc("/orders", ord.AllOrdersHandler).Methods("GET")
-	gorilla.HandleFunc("/order", ord.NewOrderHandler).Methods("POST", "OPTIONS")
-	gorilla.HandleFunc("/orders/{order_id}", ord.SingleOrderHandler).Methods("GET")
+	gorilla.HandleFunc("/things", thg.AllThingsHandler).Methods("GET")
+	gorilla.HandleFunc("/thing", thg.NewThingHandler).Methods("POST", "OPTIONS")
+	gorilla.HandleFunc("/things/{id}", thg.SingleThingHandler).Methods("GET")
 
 	gorilla.NotFoundHandler = http.HandlerFunc(QluelessNotFoundHandler)
 	http.Handle("/", gorilla)

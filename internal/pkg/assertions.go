@@ -25,6 +25,7 @@ func CheckThing(t *testing.T, w Thing) {
 	CheckNotBlank(t, w.Description, "Thing.Description")
 	CheckNotBlank(t, w.ID, "Thing.ID")
 	CheckIsNumber(t, w.ID, "Thing.ID")
+	CheckChildrenIds(t, w)
 	CheckNotBlank(t, w.State, "Thing.State")
 }
 
@@ -33,11 +34,6 @@ func CheckChildrenIds(t *testing.T, o Thing) {
 		CheckNotBlank(t, id, "Thing.ChildrenIDs")
 		CheckIsNumber(t, id, "Thing.ChildrenIDs")
 	}
-}
-
-func CheckOrder(t *testing.T, o Thing) {
-	CheckThing(t, o)
-	CheckChildrenIds(t, o)
 }
 
 func CheckPanic(t *testing.T, f func()) {
