@@ -8,7 +8,6 @@ import (
 
 	"github.com/gorilla/mux"
 
-	bat "github.com/PaulioRandall/go-qlueless-assembly-api/internal/app/batches"
 	oai "github.com/PaulioRandall/go-qlueless-assembly-api/internal/app/openapi"
 	ord "github.com/PaulioRandall/go-qlueless-assembly-api/internal/app/orders"
 	. "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg"
@@ -33,7 +32,6 @@ func main() {
 
 	oai.LoadSpec()
 	ord.CreateDummyOrders()
-	bat.CreateDummyBatches()
 
 	gorilla := mux.NewRouter()
 
@@ -41,8 +39,6 @@ func main() {
 	gorilla.HandleFunc("/orders", ord.AllOrdersHandler).Methods("GET")
 	gorilla.HandleFunc("/order", ord.NewOrderHandler).Methods("POST", "OPTIONS")
 	gorilla.HandleFunc("/orders/{order_id}", ord.SingleOrderHandler).Methods("GET")
-	gorilla.HandleFunc("/batches", bat.AllBatchesHandler).Methods("GET")
-	gorilla.HandleFunc("/batches/{batch_id}", bat.SingleBatchHandler).Methods("GET")
 
 	gorilla.NotFoundHandler = http.HandlerFunc(QluelessNotFoundHandler)
 	http.Handle("/", gorilla)

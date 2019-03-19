@@ -40,10 +40,6 @@ func CheckOrder(t *testing.T, o Thing) {
 	CheckChildrenIds(t, o)
 }
 
-func CheckBatch(t *testing.T, b Thing) {
-	CheckThing(t, b)
-}
-
 func CheckPanic(t *testing.T, f func()) {
 	defer func() {
 		if r := recover(); r == nil {

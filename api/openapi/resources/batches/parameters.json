@@ -1,9 +1,0 @@
-"batch_id": {
-  "name": "batch_id",
-  "in": "path",
-  "description": "Unique identifier of a batch",
-  "required": true,
-  "schema": {
-    "type": "string"
-  }
-}

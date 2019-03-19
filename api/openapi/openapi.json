@@ -59,59 +59,6 @@
 		      }
 		    }
 		  }
-		},
-		"/batches": {
-		  "get": {
-		    "description": "Returns all batches.",
-		    "parameters": [
-		      {
-		        "$ref": "#/components/parameters/meta"
-		      }
-		    ],
-		    "responses": {
-		      "200": {
-		        "$ref": "#/components/responses/batches_200"
-		      },
-		      "default": {
-		        "$ref": "#/components/responses/error"
-		      }
-		    }
-		  },
-		  "post": {
-		    "description": "Creates a new batch.",
-		    "requestBody": {
-		      "$ref": "#/components/requestBodies/new_batch"
-		    },
-		    "responses": {
-		      "201": {
-		        "$ref": "#/components/responses/batch_201"
-		      },
-		      "default": {
-		        "$ref": "#/components/responses/error"
-		      }
-		    }
-		  }
-		},
-		"/batches/{batch_id}": {
-		  "get": {
-		    "description": "Returns a single batch.",
-		    "parameters": [
-		      {
-		        "$ref": "#/components/parameters/batch_id"
-		      },
-		      {
-		        "$ref": "#/components/parameters/meta"
-		      }
-		    ],
-		    "responses": {
-		      "200": {
-		        "$ref": "#/components/responses/batch_200"
-		      },
-		      "default": {
-		        "$ref": "#/components/responses/error"
-		      }
-		    }
-		  }
 		}
   },
 	"components": {
@@ -120,15 +67,6 @@
 			  "name": "order_id",
 			  "in": "path",
 			  "description": "Unique identifier of an order",
-			  "required": true,
-			  "schema": {
-			    "type": "string"
-			  }
-			},
-			"batch_id": {
-			  "name": "batch_id",
-			  "in": "path",
-			  "description": "Unique identifier of a batch",
 			  "required": true,
 			  "schema": {
 			    "type": "string"
@@ -150,15 +88,6 @@
 			    "application/json": {
 			      "schema": {
 			        "$ref": "#/components/schemas/new_order"
-			      }
-			    }
-			  }
-			},
-			"new_batch": {
-			  "content": {
-			    "application/json": {
-			      "schema": {
-			        "$ref": "#/components/schemas/new_batch"
 			      }
 			    }
 			  }
@@ -209,50 +138,6 @@
 			    }
 			  }
 			},
-			"batches_200": {
-			  "description": "List of batches.",
-			  "content": {
-			    "application/json": {
-			      "schema": {
-			        "oneOf": [
-			          {
-			            "$ref": "#/components/x-hidden/batches_wrapped"
-			          },
-			          {
-			            "$ref": "#/components/x-hidden/batches_array"
-			          }
-			        ]
-			      }
-			    }
-			  }
-			},
-			"batch_200": {
-			  "description": "Single batch.",
-			  "content": {
-			    "application/json": {
-			      "schema": {
-			        "oneOf": [
-			          {
-			            "$ref": "#/components/x-hidden/batch_wrapped"
-			          },
-			          {
-			            "$ref": "#/components/schemas/batch"
-			          }
-			        ]
-			      }
-			    }
-			  }
-			},
-			"batch_201": {
-			  "description": "Single batch.",
-			  "content": {
-			    "application/json": {
-			      "schema": {
-			        "$ref": "#/components/schemas/batch"
-			      }
-			    }
-			  }
-			},
 			"error": {
 			  "description": "Client or service error.",
 			  "content": {
@@ -296,37 +181,6 @@
 			    },
 			    "childrens_ids": {
 			      "$ref": "#/components/x-hidden/childrens_ids"
-			    },
-			    "additional": {
-			      "$ref": "#/components/x-hidden/additional"
-			    }
-			  }
-			},
-			"new_batch": {
-			  "type": "object",
-			  "properties": {
-			    "description": {
-			      "$ref": "#/components/x-hidden/description"
-			    },
-			    "state": {
-			      "$ref": "#/components/x-hidden/state"
-			    },
-			    "additional": {
-			      "$ref": "#/components/x-hidden/additional"
-			    }
-			  }
-			},
-			"batch": {
-			  "type": "object",
-			  "properties": {
-			    "description": {
-			      "$ref": "#/components/x-hidden/description"
-			    },
-			    "id": {
-			      "$ref": "#/components/x-hidden/id"
-			    },
-			    "state": {
-			      "$ref": "#/components/x-hidden/state"
 			    },
 			    "additional": {
 			      "$ref": "#/components/x-hidden/additional"
@@ -391,40 +245,6 @@
 			    },
 			    "data": {
 			      "$ref": "#/components/schemas/order"
-			    }
-			  }
-			},
-			"batches_wrapped": {
-			  "type": "object",
-			  "properties": {
-			    "message": {
-			      "$ref": "#/components/x-hidden/message"
-			    },
-			    "self": {
-			      "$ref": "#/components/x-hidden/self"
-			    },
-			    "data": {
-			      "$ref": "#/components/x-hidden/batches_array"
-			    }
-			  }
-			},
-			"batches_array": {
-			  "type": "array",
-			  "items": {
-			    "$ref": "#/components/schemas/batch"
-			  }
-			},
-			"batch_wrapped": {
-			  "type": "object",
-			  "properties": {
-			    "message": {
-			      "$ref": "#/components/x-hidden/message"
-			    },
-			    "self": {
-			      "$ref": "#/components/x-hidden/self"
-			    },
-			    "data": {
-			      "$ref": "#/components/schemas/batch"
 			    }
 			  }
 			},

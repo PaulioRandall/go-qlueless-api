@@ -15,9 +15,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Added
 - Created `/orders` which returns all orders
 - Created `/orders/{order_id}` which returns a specific order by ID
-- Created `/batches` which returns all batches
-- Created `/batches/{batch_id}` which returns a specific batch by ID
-- Added `description`, `id`, `parent_id`, `state`, and `additional` properties to both `/orders` and `/batches`
+- Added `description`, `id`, `parent_id`, `state`, and `additional` properties to `/orders`
 - Added `/openapi` which returns the OpenAPI specification of the API
 - Added the `meta` query parameter to all `GET` endpoints except `/openapi` that will wrap the response data and include meta information within the response
 - Added `message` meta information property to wrapped JSON responses that provides a summary for the response
