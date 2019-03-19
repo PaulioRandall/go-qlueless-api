@@ -1,9 +1,0 @@
-"order_id": {
-  "name": "order_id",
-  "in": "path",
-  "description": "Unique identifier of an order",
-  "required": true,
-  "schema": {
-    "type": "string"
-  }
-}

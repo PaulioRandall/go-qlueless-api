@@ -1,4 +1,4 @@
-"new_order": {
+"new_thing": {
   "type": "object",
   "properties": {
     "description": {
@@ -15,7 +15,7 @@
     }
   }
 },
-"order": {
+"thing": {
   "type": "object",
   "properties": {
     "description": {

@@ -1,0 +1,9 @@
+"thing_id": {
+  "name": "thing_id",
+  "in": "path",
+  "description": "Unique identifier of a thing",
+  "required": true,
+  "schema": {
+    "type": "string"
+  }
+}

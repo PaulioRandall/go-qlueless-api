@@ -9,23 +9,22 @@
   },
 	"components": {
     "parameters": {
-      {{- "\n"}}{{ .Inject "/orders/parameters.json" 3}},
+      {{- "\n"}}{{ .Inject "/things/parameters.json" 3}},
       {{- "\n"}}{{ .Inject "/shared/parameters.json" 3}}
     },
     "requestBodies": {
-      {{- "\n"}}{{ .Inject "/orders/requestBodies.json" 3}}
+      {{- "\n"}}{{ .Inject "/things/requestBodies.json" 3}}
     },
     "responses": {
-      {{- "\n"}}{{ .Inject "/orders/responses.json" 3}},
+      {{- "\n"}}{{ .Inject "/things/responses.json" 3}},
       {{- "\n"}}{{ .Inject "/shared/responses.json" 3}}
     },
 		"schemas": {
-      {{- "\n"}}{{ .Inject "/orders/schemas.json" 3}},
+      {{- "\n"}}{{ .Inject "/things/schemas.json" 3}},
 			{{- "\n"}}{{ .Inject "/shared/schemas.json" 3}}
     },
     "x-hidden": {
-      {{- "\n"}}{{ .Inject "/orders/x-hidden.json" 3}},
-      {{- "\n"}}{{ .Inject "/shared/x-hidden.json" 3}}
+      {{- "\n"}}{{ .Inject "/orders/x-hidden.json" 3}}
     }
 	}
 }

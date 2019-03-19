@@ -1,0 +1,44 @@
+"things_200": {
+  "description": "List of things.",
+  "content": {
+    "application/json": {
+      "schema": {
+        "oneOf": [
+          {
+            "$ref": "#/components/x-hidden/things_wrapped"
+          },
+          {
+            "$ref": "#/components/x-hidden/things_array"
+          }
+        ]
+      }
+    }
+  }
+},
+"thing_200": {
+  "description": "Single thing",
+  "content": {
+    "application/json": {
+      "schema": {
+        "oneOf": [
+          {
+            "$ref": "#/components/x-hidden/thing_wrapped"
+          },
+          {
+            "$ref": "#/components/schemas/thing"
+          }
+        ]
+      }
+    }
+  }
+},
+"thing_201": {
+  "description": "Single thing",
+  "content": {
+    "application/json": {
+      "schema": {
+        "$ref": "#/components/schemas/thing"
+      }
+    }
+  }
+}

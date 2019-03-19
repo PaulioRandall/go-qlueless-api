@@ -1,3 +1,37 @@
+"things_wrapped": {
+  "type": "object",
+  "properties": {
+    "message": {
+      "$ref": "#/components/x-hidden/message"
+    },
+    "self": {
+      "$ref": "#/components/x-hidden/self"
+    },
+    "data": {
+      "$ref": "#/components/x-hidden/things_array"
+    }
+  }
+},
+"things_array": {
+  "type": "array",
+  "items": {
+    "$ref": "#/components/schemas/thing"
+  }
+},
+"thing_wrapped": {
+  "type": "object",
+  "properties": {
+    "message": {
+      "$ref": "#/components/x-hidden/message"
+    },
+    "self": {
+      "$ref": "#/components/x-hidden/self"
+    },
+    "data": {
+      "$ref": "#/components/schemas/thing"
+    }
+  }
+},
 "message": {
   "type": "string",
   "description": "Human readable summary of the response in a form presentable to end users."

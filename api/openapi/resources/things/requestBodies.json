@@ -1,8 +1,8 @@
-"new_order": {
+"new_thing": {
   "content": {
     "application/json": {
       "schema": {
-        "$ref": "#/components/schemas/new_order"
+        "$ref": "#/components/schemas/new_thing"
       }
     }
   }

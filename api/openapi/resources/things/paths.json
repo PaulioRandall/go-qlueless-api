@@ -1,6 +1,6 @@
-"/orders": {
+"/things": {
   "get": {
-    "description": "Returns all orders.",
+    "description": "Returns all things.",
     "parameters": [
       {
         "$ref": "#/components/parameters/meta"
@@ -8,7 +8,7 @@
     ],
     "responses": {
       "200": {
-        "$ref": "#/components/responses/orders_200"
+        "$ref": "#/components/responses/things_200"
       },
       "default": {
         "$ref": "#/components/responses/error"
@@ -16,15 +16,15 @@
     }
   }
 },
-"/order": {
+"/thing": {
   "post": {
     "description": "Creates a new order.",
     "requestBody": {
-      "$ref": "#/components/requestBodies/new_order"
+      "$ref": "#/components/requestBodies/new_thing"
     },
     "responses": {
       "201": {
-        "$ref": "#/components/responses/order_201"
+        "$ref": "#/components/responses/thing_201"
       },
       "default": {
         "$ref": "#/components/responses/error"
@@ -32,12 +32,12 @@
     }
   }
 },
-"/orders/{order_id}": {
+"/things/{thing_id}": {
   "get": {
-    "description": "Returns a single orders.",
+    "description": "Returns a single thing.",
     "parameters": [
       {
-        "$ref": "#/components/parameters/order_id"
+        "$ref": "#/components/parameters/thing_id"
       },
       {
         "$ref": "#/components/parameters/meta"
@@ -45,7 +45,7 @@
     ],
     "responses": {
       "200": {
-        "$ref": "#/components/responses/order_200"
+        "$ref": "#/components/responses/thing_200"
       },
       "default": {
         "$ref": "#/components/responses/error"
