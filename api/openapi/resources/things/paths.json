@@ -18,7 +18,7 @@
 },
 "/thing": {
   "post": {
-    "description": "Creates a new order.",
+    "description": "Creates a new thing.",
     "requestBody": {
       "$ref": "#/components/requestBodies/new_thing"
     },

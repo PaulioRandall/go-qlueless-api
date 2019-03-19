@@ -5,7 +5,7 @@
 		"version": "0.0.1"
 	},
 	"paths": {
-    {{- "\n"}}{{ .Inject "/orders/paths.json" 2}}
+    {{- "\n"}}{{ .Inject "/things/paths.json" 2}}
   },
 	"components": {
     "parameters": {
@@ -24,7 +24,7 @@
 			{{- "\n"}}{{ .Inject "/shared/schemas.json" 3}}
     },
     "x-hidden": {
-      {{- "\n"}}{{ .Inject "/orders/x-hidden.json" 3}}
+      {{- "\n"}}{{ .Inject "/things/x-hidden.json" 3}}
     }
 	}
 }
