@@ -24,16 +24,16 @@ func TestMapToOrder___1(t *testing.T) {
 func TestMapToOrder___2(t *testing.T) {
 	m := make(map[string]interface{})
 	m["description"] = "description"
-	m["thing_id"] = "thing_id"
-	m["parent_thing_id"] = "parent_thing_id"
-	m["thing_state"] = "thing_state"
+	m["id"] = "id"
+	m["parent_id"] = "parent_id"
+	m["state"] = "state"
 	m["additional"] = "abc: xyz; colour: black"
 
 	act := mapToOrder(m)
 	assert.Equal(t, "description", act.Description)
-	assert.Equal(t, "thing_id", act.ID)
-	assert.Equal(t, "parent_thing_id", act.ParentID)
-	assert.Equal(t, "thing_state", act.State)
+	assert.Equal(t, "id", act.ID)
+	assert.Equal(t, "parent_id", act.ParentID)
+	assert.Equal(t, "state", act.State)
 	assert.Equal(t, "abc: xyz; colour: black", act.Additional)
 }
 

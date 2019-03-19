@@ -12,9 +12,9 @@ var orders = map[string]Thing{}
 func mapToOrder(m map[string]interface{}) Thing {
 	return Thing{
 		Description: ValueOrEmpty(m, "description"),
-		ID:          ValueOrEmpty(m, "thing_id"),
-		ParentID:    ValueOrEmpty(m, "parent_thing_id"),
-		State:       ValueOrEmpty(m, "thing_state"),
+		ID:          ValueOrEmpty(m, "id"),
+		ParentID:    ValueOrEmpty(m, "parent_id"),
+		State:       ValueOrEmpty(m, "state"),
 		Additional:  ValueOrEmpty(m, "additional"),
 	}
 }

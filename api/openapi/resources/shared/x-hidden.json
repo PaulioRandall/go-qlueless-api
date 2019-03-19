@@ -10,15 +10,15 @@
   "type": "string",
   "description": "Presentable and human readable description of the entity instance."
 },
-"thing_id": {
+"id": {
   "type": "string",
   "description": "Unique identifier of the thing."
 },
-"parent_thing_id": {
+"parent_id": {
   "type": "string",
   "description": "Unique identifier of the things parent."
 },
-"thing_state": {
+"state": {
   "type": "string",
   "description": "State of a thing."
 },

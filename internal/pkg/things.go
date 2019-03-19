@@ -3,9 +3,9 @@ package pkg
 // A Thing represents a... err... Thing
 type Thing struct {
 	Description string `json:"description"`
-	ID          string `json:"thing_id"`
-	ParentID    string `json:"parent_thing_id,omitempty"`
-	State       string `json:"thing_state"`
+	ID          string `json:"id"`
+	ParentID    string `json:"parent_id,omitempty"`
+	State       string `json:"state"`
 	Additional  string `json:"additional,omitempty"`
 }
 
