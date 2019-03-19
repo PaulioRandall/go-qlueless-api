@@ -38,7 +38,7 @@
 },
 "self": {
   "type": "string",
-  "description": "Full path of the URL that made the request."
+  "description": "Full path of the URL to the entity or, if wrapped for meta information, the path of the request URL."
 },
 "description": {
   "type": "string",

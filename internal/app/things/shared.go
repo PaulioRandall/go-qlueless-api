@@ -2,6 +2,7 @@ package things
 
 import (
 	"errors"
+	"fmt"
 	"strconv"
 
 	. "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg"
@@ -14,7 +15,7 @@ func addThing(t Thing) (*Thing, error) {
 	next := 1
 	for k, _ := range things {
 		ID, err := strconv.Atoi(k)
-		if err != nil {
+		if LogIfErr(err) {
 			return nil, errors.New("[BUG] An unparsable ID exists within the data store")
 		}
 
@@ -25,6 +26,7 @@ func addThing(t Thing) (*Thing, error) {
 
 	next++
 	t.ID = strconv.Itoa(next)
+	t.Self = fmt.Sprintf("/things/%s", t.ID)
 	things[t.ID] = t
 	return &t, nil
 }
@@ -41,21 +43,25 @@ func CreateDummyThings() {
 			"4",
 		},
 		State: "in_progress",
+		Self:  "/things/1",
 	}
 	things["2"] = Thing{
 		Description: "# Name the saga\nThink of a name for the saga.",
 		ID:          "2",
 		State:       "potential",
+		Self:        "/things/2",
 	}
 	things["3"] = Thing{
 		Description: "# Outline the first chapter",
 		ID:          "3",
 		State:       "delivered",
 		Additional:  "archive_note:Done but not a compelling start",
+		Self:        "/things/3",
 	}
 	things["4"] = Thing{
 		Description: "# Outline the second chapter",
 		ID:          "4",
 		State:       "in_progress",
+		Self:        "/things/4",
 	}
 }

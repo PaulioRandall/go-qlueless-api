@@ -2,7 +2,6 @@ package things
 
 import (
 	"encoding/json"
-	"log"
 	"net/http"
 
 	. "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg"
@@ -21,7 +20,6 @@ func NewThingHandler(res http.ResponseWriter, req *http.Request) {
 	d := json.NewDecoder(req.Body)
 	err := d.Decode(&t)
 	if err != nil {
-		log.Println(err)
 		r := Reply4XX{
 			Res:     &res,
 			Req:     req,
@@ -32,7 +30,7 @@ func NewThingHandler(res http.ResponseWriter, req *http.Request) {
 	}
 
 	result, err := addThing(t)
-	if err != nil {
+	if LogIfErr(err) {
 		Write500Reply(&res, req)
 		return
 	}

@@ -32,6 +32,9 @@
     },
     "additional": {
       "$ref": "#/components/x-hidden/additional"
+    },
+    "self": {
+      "$ref": "#/components/x-hidden/self"
     }
   }
 }

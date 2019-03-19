@@ -8,6 +8,7 @@ type Thing struct {
 	State       string   `json:"state"`
 	IsDead      bool     `json:"-"`
 	Additional  string   `json:"additional,omitempty"`
+	Self        string   `json:"self"`
 }
 
 // A ThingStore provides synchronisation for accessing Things

@@ -15,10 +15,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Added
 - Created `/things` which returns all things
 - Created `/things/{id}` which returns a specific thing by ID
-- Added `description`, `id`, `parent_id`, `state`, and `additional` properties to `/things`
+- Added `description`, `id`, `parent_id`, `state`, `additional` and `self` properties to `/things`
 - Added `/openapi` which returns the OpenAPI specification of the API
 - Added the `meta` query parameter to all `GET` endpoints except `/openapi` that will wrap the response data and include meta information within the response
-- Added `message` meta information property to wrapped JSON responses that provides a summary for the response
-- Added `data` meta information property to wrapped JSON responses that holds the actual response data
-- Added `self` meta information property to wrapped JSON responses that holds the relative URL of the request
+- Added `message`, `data` and `self` meta information properties to wrapped JSON responses
 - Added `(POST) /thing` which creates a new thing within the data store

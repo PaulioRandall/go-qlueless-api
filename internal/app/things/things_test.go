@@ -32,11 +32,13 @@ func TestAddThing___2(t *testing.T) {
 	w1, err := addThing(a)
 	assert.Nil(t, err)
 	a.ID = w1.ID
+	a.Self = "/things/" + a.ID
 
 	b := createDummyThing()
 	w2, err := addThing(b)
 	assert.Nil(t, err)
 	b.ID = w2.ID
+	b.Self = "/things/" + b.ID
 
 	assert.NotEqual(t, w1, w2)
 	assert.NotEqual(t, *w1, *w2)
