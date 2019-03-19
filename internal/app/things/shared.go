@@ -1,6 +1,7 @@
 package things
 
 import (
+	"errors"
 	"strconv"
 
 	. "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg"
@@ -8,25 +9,13 @@ import (
 
 var things = map[string]Thing{}
 
-// MapToThing converts a map representing an thing to an thing struct
-func mapToThing(m map[string]interface{}) Thing {
-	return Thing{
-		Description: ValueOrEmpty(m, "description"),
-		ID:          ValueOrEmpty(m, "id"),
-		ChildrenIDs: ValueOrEmptyArray(m, "childrens_ids"),
-		State:       ValueOrEmpty(m, "state"),
-		IsDead:      ValueOrFalse(m, "is_dead"),
-		Additional:  ValueOrEmpty(m, "additional"),
-	}
-}
-
 // AddThing adds a new thing to the data store returning the newly assigned ID
-func addThing(o Thing) (string, error) {
+func addThing(t Thing) (*Thing, error) {
 	next := 1
 	for k, _ := range things {
 		ID, err := strconv.Atoi(k)
 		if err != nil {
-			return "", nil
+			return nil, errors.New("[BUG] An unparsable ID exists within the data store")
 		}
 
 		if ID > next {
@@ -35,9 +24,9 @@ func addThing(o Thing) (string, error) {
 	}
 
 	next++
-	o.ID = strconv.Itoa(next)
-	things[o.ID] = o
-	return o.ID, nil
+	t.ID = strconv.Itoa(next)
+	things[t.ID] = t
+	return &t, nil
 }
 
 // CreateDummyThings creates some dummy things for testing during these initial

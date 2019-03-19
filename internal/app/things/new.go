@@ -2,6 +2,7 @@ package things
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 
 	. "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg"
@@ -16,27 +17,26 @@ func NewThingHandler(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 
+	var t Thing
 	d := json.NewDecoder(req.Body)
-	var m map[string]interface{}
-
-	err := d.Decode(&m)
+	err := d.Decode(&t)
 	if err != nil {
+		log.Println(err)
 		r := Reply4XX{
 			Res:     &res,
 			Req:     req,
-			Message: "Unable to decode create thing request body",
+			Message: "Unable to decode request body into a Thing",
 		}
 		Write4XXReply(400, &r)
 		return
 	}
 
-	o := mapToThing(m)
-	o.ID, err = addThing(o)
+	result, err := addThing(t)
 	if err != nil {
 		Write500Reply(&res, req)
 		return
 	}
 
-	data := PrepResponseData(req, o, "New thing created")
+	data := PrepResponseData(req, result, "New thing created")
 	WriteReply(&res, req, data)
 }

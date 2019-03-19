@@ -78,54 +78,6 @@ func TestRelURL(t *testing.T) {
 	assert.Equal(t, "/character?q=Nobby", act)
 }
 
-// When a value is present, it is returned
-func TestValueOrEmpty___1(t *testing.T) {
-	m := make(map[string]interface{})
-	m["key"] = "value"
-	act := ValueOrEmpty(m, "key")
-	assert.Equal(t, "value", act)
-}
-
-// When a value is not present, empty string is returned
-func TestValueOrEmpty___2(t *testing.T) {
-	m := make(map[string]interface{})
-	m["key"] = "value"
-	act := ValueOrEmpty(m, "responsibilities")
-	assert.Empty(t, act)
-}
-
-// When a value is present, it is returned
-func TestValueOrFalse___1(t *testing.T) {
-	m := make(map[string]interface{})
-	m["key"] = true
-	act := ValueOrFalse(m, "key")
-	assert.True(t, act)
-}
-
-// When a value is not present, false is returned
-func TestValueOrFalse___2(t *testing.T) {
-	m := make(map[string]interface{})
-	m["key"] = "value"
-	act := ValueOrFalse(m, "responsibilities")
-	assert.False(t, act)
-}
-
-// When a value is present, it is returned
-func TestValueOrEmptyArray___1(t *testing.T) {
-	m := make(map[string]interface{})
-	m["key"] = []string{"1", "2"}
-	act := ValueOrEmptyArray(m, "key")
-	assert.Equal(t, []string{"1", "2"}, act)
-}
-
-// When a value is not present, empty array is returned
-func TestValueOrEmptyArray___2(t *testing.T) {
-	m := make(map[string]interface{})
-	m["key"] = []string{"1", "2"}
-	act := ValueOrEmptyArray(m, "responsibilities")
-	assert.Empty(t, act)
-}
-
 // When given nil, does nothing
 func TestCheck___1(t *testing.T) {
 	Check(nil)

@@ -41,37 +41,6 @@ func IsBlank(s string) bool {
 	return false
 }
 
-// ValueOrEmpty returns the value of the parameter or an empty string
-func ValueOrEmpty(m map[string]interface{}, k string) string {
-	v, ok := m[k].(string)
-	if ok {
-		return v
-	}
-	return ""
-}
-
-// ValueOrFalse returns the value of the parameter or false
-func ValueOrFalse(m map[string]interface{}, k string) bool {
-	v, ok := m[k].(bool)
-	if ok {
-		return v
-	}
-	return false
-}
-
-// ValueOrEmptyArray returns the value of the parameter or an empty string array
-func ValueOrEmptyArray(m map[string]interface{}, k string) []string {
-	v, ok := m[k].([]string)
-	if ok {
-		r := make([]string, len(v))
-		for i, s := range v {
-			r[i] = s
-		}
-		return r
-	}
-	return make([]string, 0)
-}
-
 // RelURL creates the absolute relative URL of the request without any fragment
 func RelURL(req *http.Request) string {
 	r := req.URL.Path
