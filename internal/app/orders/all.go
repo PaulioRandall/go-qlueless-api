@@ -13,7 +13,9 @@ func AllOrdersHandler(res http.ResponseWriter, req *http.Request) {
 
 	o := make([]Thing, 0)
 	for _, v := range orders {
-		o = append(o, v)
+		if !v.IsDead {
+			o = append(o, v)
+		}
 	}
 
 	data := PrepResponseData(req, o, "Found all orders")

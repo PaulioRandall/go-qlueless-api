@@ -17,7 +17,7 @@ func SingleOrderHandler(res http.ResponseWriter, req *http.Request) {
 	id := mux.Vars(req)["order_id"]
 	o, ok := orders[id]
 
-	if !ok {
+	if !ok || o.IsDead {
 		r := Reply4XX{
 			Res:     &res,
 			Req:     req,

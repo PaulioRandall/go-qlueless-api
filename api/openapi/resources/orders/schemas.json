@@ -7,6 +7,9 @@
     "state": {
       "$ref": "#/components/x-hidden/state"
     },
+    "is_dead": {
+      "$ref": "#/components/x-hidden/is_dead"
+    },
     "additional": {
       "$ref": "#/components/x-hidden/additional"
     }

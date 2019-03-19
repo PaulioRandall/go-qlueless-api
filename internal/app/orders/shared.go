@@ -15,6 +15,7 @@ func mapToOrder(m map[string]interface{}) Thing {
 		ID:          ValueOrEmpty(m, "id"),
 		ParentID:    ValueOrEmpty(m, "parent_id"),
 		State:       ValueOrEmpty(m, "state"),
+		IsDead:      ValueOrFalse(m, "is_dead"),
 		Additional:  ValueOrEmpty(m, "additional"),
 	}
 }

@@ -274,6 +274,9 @@
 			    "state": {
 			      "$ref": "#/components/x-hidden/state"
 			    },
+			    "is_dead": {
+			      "$ref": "#/components/x-hidden/is_dead"
+			    },
 			    "additional": {
 			      "$ref": "#/components/x-hidden/additional"
 			    }
@@ -451,6 +454,10 @@
 			"state": {
 			  "type": "string",
 			  "description": "State of a thing."
+			},
+			"is_dead": {
+			  "type": "boolean",
+			  "description": "True if the thing is dead and should not show up in searches."
 			},
 			"additional": {
 			  "type": "string",

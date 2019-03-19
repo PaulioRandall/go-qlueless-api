@@ -6,6 +6,7 @@ type Thing struct {
 	ID          string `json:"id"`
 	ParentID    string `json:"parent_id,omitempty"`
 	State       string `json:"state"`
+	IsDead      bool   `json:"-"`
 	Additional  string `json:"additional,omitempty"`
 }
 
@@ -37,7 +38,9 @@ func (wis ThingStore) mux() {
 		case wis.getChan <- r:
 			t := make(map[string]Thing)
 			for k, v := range m {
-				t[k] = v
+				if !v.IsDead {
+					t[k] = v
+				}
 			}
 		}
 	}

@@ -92,6 +92,22 @@ func TestValueOrEmpty___2(t *testing.T) {
 	assert.Empty(t, act)
 }
 
+// When a value is present, it is returned
+func TestValueOrFalse___1(t *testing.T) {
+	m := make(map[string]interface{})
+	m["key"] = true
+	act := ValueOrFalse(m, "key")
+	assert.True(t, act)
+}
+
+// When a value is not present, false is returned
+func TestValueOrFalse___2(t *testing.T) {
+	m := make(map[string]interface{})
+	m["key"] = "value"
+	act := ValueOrFalse(m, "responsibilities")
+	assert.False(t, act)
+}
+
 // When given nil, does nothing
 func TestCheck___1(t *testing.T) {
 	Check(nil)
