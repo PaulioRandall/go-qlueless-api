@@ -5,7 +5,6 @@ type Thing struct {
 	Description string `json:"description"`
 	ID          string `json:"id"`
 	ParentID    string `json:"parent_id,omitempty"`
-	TagID       string `json:"tag_id"`
 	StatusID    string `json:"status_id"`
 	Additional  string `json:"additional,omitempty"`
 }

@@ -271,9 +271,6 @@
 			    "description": {
 			      "$ref": "#/components/x-hidden/description"
 			    },
-			    "tag_id": {
-			      "$ref": "#/components/x-hidden/tag_id"
-			    },
 			    "status_id": {
 			      "$ref": "#/components/x-hidden/status_id"
 			    },
@@ -291,9 +288,6 @@
 			    "thing_id": {
 			      "$ref": "#/components/x-hidden/thing_id"
 			    },
-			    "tag_id": {
-			      "$ref": "#/components/x-hidden/tag_id"
-			    },
 			    "status_id": {
 			      "$ref": "#/components/x-hidden/status_id"
 			    },
@@ -310,9 +304,6 @@
 			    },
 			    "parent_id": {
 			      "$ref": "#/components/x-hidden/parent_thing_id"
-			    },
-			    "tag_id": {
-			      "$ref": "#/components/x-hidden/tag_id"
 			    },
 			    "status_id": {
 			      "$ref": "#/components/x-hidden/status_id"
@@ -333,9 +324,6 @@
 			    },
 			    "parent_id": {
 			      "$ref": "#/components/x-hidden/parent_thing_id"
-			    },
-			    "tag_id": {
-			      "$ref": "#/components/x-hidden/tag_id"
 			    },
 			    "status_id": {
 			      "$ref": "#/components/x-hidden/status_id"
@@ -448,10 +436,6 @@
 			  "type": "string",
 			  "description": "Full path of the URL that made the request."
 			},
-			"title": {
-			  "type": "string",
-			  "description": "Presentable and human readable title of the dictionary entry."
-			},
 			"description": {
 			  "type": "string",
 			  "description": "Presentable and human readable description of the entity instance."
@@ -464,17 +448,9 @@
 			  "type": "string",
 			  "description": "Unique identifier of the things parent."
 			},
-			"tag_id": {
-			  "type": "string",
-			  "description": "Unique identifier of a tag."
-			},
 			"status_id": {
 			  "type": "string",
 			  "description": "Unique identifier of a status."
-			},
-			"thing_type_id": {
-			  "type": "string",
-			  "description": "Unique identifier of the things type."
 			},
 			"additional": {
 			  "type": "string",

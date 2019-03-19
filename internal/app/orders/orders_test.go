@@ -16,7 +16,6 @@ func TestMapToOrder___1(t *testing.T) {
 	assert.Equal(t, "description", act.Description)
 	assert.Empty(t, act.ID)
 	assert.Empty(t, act.ParentID)
-	assert.Empty(t, act.TagID)
 	assert.Empty(t, act.StatusID)
 	assert.Empty(t, act.Additional)
 }
@@ -27,7 +26,6 @@ func TestMapToOrder___2(t *testing.T) {
 	m["description"] = "description"
 	m["id"] = "id"
 	m["parent_id"] = "parent_id"
-	m["tag_id"] = "tag_id"
 	m["status_id"] = "status_id"
 	m["additional"] = "abc: xyz; colour: black"
 
@@ -35,7 +33,6 @@ func TestMapToOrder___2(t *testing.T) {
 	assert.Equal(t, "description", act.Description)
 	assert.Equal(t, "id", act.ID)
 	assert.Equal(t, "parent_id", act.ParentID)
-	assert.Equal(t, "tag_id", act.TagID)
 	assert.Equal(t, "status_id", act.StatusID)
 	assert.Equal(t, "abc: xyz; colour: black", act.Additional)
 }
@@ -43,7 +40,6 @@ func TestMapToOrder___2(t *testing.T) {
 func createDummyOrder() Thing {
 	return Thing{
 		Description: "# Outline the saga\nCreate a rough outline of the new saga.",
-		TagID:       "mid",
 		StatusID:    "in_progress",
 	}
 }

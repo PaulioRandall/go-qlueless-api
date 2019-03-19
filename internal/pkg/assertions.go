@@ -25,7 +25,6 @@ func CheckThing(t *testing.T, w Thing) {
 	CheckNotBlank(t, w.Description, "Thing.Description")
 	CheckNotBlank(t, w.ID, "Thing.Work_item_id")
 	CheckIsNumber(t, w.ID, "Thing.Work_item_id")
-	CheckNotBlank(t, w.TagID, "Thing.Tag_id")
 	CheckNotBlank(t, w.StatusID, "Thing.Status_id")
 }
 

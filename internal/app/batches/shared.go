@@ -13,14 +13,12 @@ func CreateDummyBatches() {
 		Description: "# Name the saga\nThink of a name for the saga.",
 		ID:          "2",
 		ParentID:    "1",
-		TagID:       "mid",
 		StatusID:    "potential",
 	}
 	batches["3"] = Thing{
 		Description: "# Outline the first chapter.",
 		ID:          "3",
 		ParentID:    "1",
-		TagID:       "mid",
 		StatusID:    "delivered",
 		Additional:  "archive_note:Done but not a compelling start",
 	}
@@ -28,7 +26,6 @@ func CreateDummyBatches() {
 		Description: "# Outline the second chapter.",
 		ID:          "4",
 		ParentID:    "1",
-		TagID:       "mid",
 		StatusID:    "in_progress",
 	}
 }
