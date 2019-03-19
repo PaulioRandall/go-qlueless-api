@@ -12,9 +12,9 @@ var orders = map[string]Thing{}
 func mapToOrder(m map[string]interface{}) Thing {
 	return Thing{
 		Description: ValueOrEmpty(m, "description"),
-		ID:          ValueOrEmpty(m, "id"),
-		ParentID:    ValueOrEmpty(m, "parent_id"),
-		StatusID:    ValueOrEmpty(m, "status_id"),
+		ID:          ValueOrEmpty(m, "thing_id"),
+		ParentID:    ValueOrEmpty(m, "parent_thing_id"),
+		State:       ValueOrEmpty(m, "thing_state"),
 		Additional:  ValueOrEmpty(m, "additional"),
 	}
 }
@@ -45,6 +45,6 @@ func CreateDummyOrders() {
 	orders["1"] = Thing{
 		Description: "# Outline the saga\nCreate a rough outline of the new saga.",
 		ID:          "1",
-		StatusID:    "in_progress",
+		State:       "in_progress",
 	}
 }

@@ -16,7 +16,7 @@ func TestMapToOrder___1(t *testing.T) {
 	assert.Equal(t, "description", act.Description)
 	assert.Empty(t, act.ID)
 	assert.Empty(t, act.ParentID)
-	assert.Empty(t, act.StatusID)
+	assert.Empty(t, act.State)
 	assert.Empty(t, act.Additional)
 }
 
@@ -24,23 +24,23 @@ func TestMapToOrder___1(t *testing.T) {
 func TestMapToOrder___2(t *testing.T) {
 	m := make(map[string]interface{})
 	m["description"] = "description"
-	m["id"] = "id"
-	m["parent_id"] = "parent_id"
-	m["status_id"] = "status_id"
+	m["thing_id"] = "thing_id"
+	m["parent_thing_id"] = "parent_thing_id"
+	m["thing_state"] = "thing_state"
 	m["additional"] = "abc: xyz; colour: black"
 
 	act := mapToOrder(m)
 	assert.Equal(t, "description", act.Description)
-	assert.Equal(t, "id", act.ID)
-	assert.Equal(t, "parent_id", act.ParentID)
-	assert.Equal(t, "status_id", act.StatusID)
+	assert.Equal(t, "thing_id", act.ID)
+	assert.Equal(t, "parent_thing_id", act.ParentID)
+	assert.Equal(t, "thing_state", act.State)
 	assert.Equal(t, "abc: xyz; colour: black", act.Additional)
 }
 
 func createDummyOrder() Thing {
 	return Thing{
 		Description: "# Outline the saga\nCreate a rough outline of the new saga.",
-		StatusID:    "in_progress",
+		State:       "in_progress",
 	}
 }
 

@@ -4,11 +4,11 @@
     "description": {
       "$ref": "#/components/x-hidden/description"
     },
-    "parent_id": {
+    "parent_thing_id": {
       "$ref": "#/components/x-hidden/parent_thing_id"
     },
-    "status_id": {
-      "$ref": "#/components/x-hidden/status_id"
+    "thing_state": {
+      "$ref": "#/components/x-hidden/thing_state"
     },
     "additional": {
       "$ref": "#/components/x-hidden/additional"
@@ -24,11 +24,11 @@
     "thing_id": {
       "$ref": "#/components/x-hidden/thing_id"
     },
-    "parent_id": {
+    "parent_thing_id": {
       "$ref": "#/components/x-hidden/parent_thing_id"
     },
-    "status_id": {
-      "$ref": "#/components/x-hidden/status_id"
+    "thing_state": {
+      "$ref": "#/components/x-hidden/thing_state"
     },
     "additional": {
       "$ref": "#/components/x-hidden/additional"

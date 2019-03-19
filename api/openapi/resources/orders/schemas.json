@@ -4,8 +4,8 @@
     "description": {
       "$ref": "#/components/x-hidden/description"
     },
-    "status_id": {
-      "$ref": "#/components/x-hidden/status_id"
+    "thing_state": {
+      "$ref": "#/components/x-hidden/thing_state"
     },
     "additional": {
       "$ref": "#/components/x-hidden/additional"
@@ -21,8 +21,8 @@
     "thing_id": {
       "$ref": "#/components/x-hidden/thing_id"
     },
-    "status_id": {
-      "$ref": "#/components/x-hidden/status_id"
+    "thing_state": {
+      "$ref": "#/components/x-hidden/thing_state"
     },
     "additional": {
       "$ref": "#/components/x-hidden/additional"

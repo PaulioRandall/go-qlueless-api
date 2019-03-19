@@ -23,9 +23,9 @@ func CheckNotBlank(t *testing.T, s string, m ...interface{}) {
 
 func CheckThing(t *testing.T, w Thing) {
 	CheckNotBlank(t, w.Description, "Thing.Description")
-	CheckNotBlank(t, w.ID, "Thing.Work_item_id")
-	CheckIsNumber(t, w.ID, "Thing.Work_item_id")
-	CheckNotBlank(t, w.StatusID, "Thing.Status_id")
+	CheckNotBlank(t, w.ID, "Thing.ID")
+	CheckIsNumber(t, w.ID, "Thing.ID")
+	CheckNotBlank(t, w.State, "Thing.State")
 }
 
 func CheckOrder(t *testing.T, o Thing) {
@@ -34,8 +34,8 @@ func CheckOrder(t *testing.T, o Thing) {
 
 func CheckBatch(t *testing.T, b Thing) {
 	CheckThing(t, b)
-	CheckNotBlank(t, b.ParentID, "Thing.Parent_id")
-	CheckIsNumber(t, b.ParentID, "Thing.Parent_id")
+	CheckNotBlank(t, b.ParentID, "Thing.ParentID")
+	CheckIsNumber(t, b.ParentID, "Thing.ParentID")
 }
 
 func CheckPanic(t *testing.T, f func()) {

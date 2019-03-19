@@ -18,9 +18,9 @@
   "type": "string",
   "description": "Unique identifier of the things parent."
 },
-"status_id": {
+"thing_state": {
   "type": "string",
-  "description": "Unique identifier of a status."
+  "description": "State of a thing."
 },
 "additional": {
   "type": "string",

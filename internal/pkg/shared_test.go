@@ -15,26 +15,26 @@ func dummyThings() *[]Thing {
 		Thing{
 			Description: "# Outline the saga\nCreate a rough outline of the new saga.",
 			ID:          "1",
-			StatusID:    "in_progress",
+			State:       "in_progress",
 		},
 		Thing{
 			Description: "# Name the saga\nThink of a name for the saga.",
 			ID:          "2",
 			ParentID:    "1",
-			StatusID:    "potential",
+			State:       "potential",
 		},
 		Thing{
 			Description: "# Outline the first chapter",
 			ID:          "3",
 			ParentID:    "1",
-			StatusID:    "delivered",
+			State:       "delivered",
 			Additional:  "archive_note:Done but not a compelling start",
 		},
 		Thing{
 			Description: "# Outline the second chapter",
 			ID:          "4",
 			ParentID:    "1",
-			StatusID:    "in_progress",
+			State:       "in_progress",
 		},
 	}
 }
