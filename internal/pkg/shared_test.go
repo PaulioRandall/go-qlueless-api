@@ -51,6 +51,21 @@ func createRequest(path string) (*http.Request, *http.ResponseWriter, *httptest.
 	return req, &res, rec
 }
 
+// When given a valid int string, true is returned
+func TestIsInt___1(t *testing.T) {
+	assert.True(t, IsInt("123"))
+}
+
+// When given an invalid int string, false is returned
+func TestIsInt___2(t *testing.T) {
+	assert.False(t, IsInt("abc"))
+}
+
+// When given an invalid int string, false is returned
+func TestIsInt___3(t *testing.T) {
+	assert.False(t, IsInt("123abc"))
+}
+
 // When given a slice and index, the item is removed but other items remain
 func TestDeleteStr___1(t *testing.T) {
 	s := []string{"0", "1", "2", "3", "4"}

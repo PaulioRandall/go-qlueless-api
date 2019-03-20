@@ -2,18 +2,14 @@ package pkg
 
 import (
 	"net/http"
-	"strconv"
 	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
 
-func CheckIsNumber(t *testing.T, s string, m ...interface{}) {
-	n, err := strconv.Atoi(s)
-	assert.Nil(t, err, "Expected string to be a number")
-	s2 := strconv.Itoa(n)
-	assert.Equal(t, s, s2, "Expected stringified number to equal the original string")
+func CheckIsInt(t *testing.T, s string, m ...interface{}) {
+	assert.True(t, IsInt(s), "Expected string to be a number")
 }
 
 func CheckNotBlank(t *testing.T, s string, m ...interface{}) {
@@ -24,7 +20,7 @@ func CheckNotBlank(t *testing.T, s string, m ...interface{}) {
 func CheckThing(t *testing.T, w Thing) {
 	CheckNotBlank(t, w.Description, "Thing.Description")
 	CheckNotBlank(t, w.ID, "Thing.ID")
-	CheckIsNumber(t, w.ID, "Thing.ID")
+	CheckIsInt(t, w.ID, "Thing.ID")
 	CheckChildrenIds(t, w)
 	CheckNotBlank(t, w.State, "Thing.State")
 }
@@ -32,7 +28,7 @@ func CheckThing(t *testing.T, w Thing) {
 func CheckChildrenIds(t *testing.T, o Thing) {
 	for _, id := range o.ChildrenIDs {
 		CheckNotBlank(t, id, "Thing.ChildrenIDs")
-		CheckIsNumber(t, id, "Thing.ChildrenIDs")
+		CheckIsInt(t, id, "Thing.ChildrenIDs")
 	}
 }
 

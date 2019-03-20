@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 	"strings"
 )
 
@@ -25,6 +26,12 @@ type Reply4XX struct {
 	Message string               `json:"message"`
 	Self    string               `json:"self"`
 	Hints   string               `json:"hints,omitempty"`
+}
+
+// IsInt returns true if the string contains an integer
+func IsInt(s string) bool {
+	_, err := strconv.Atoi(s)
+	return err == nil
 }
 
 // Str returns a pointer to the passed string, useful for getting the address of

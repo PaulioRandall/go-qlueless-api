@@ -56,16 +56,88 @@ func TestCleanThing___3(t *testing.T) {
 	assert.Equal(t, true, thing.IsDead)
 }
 
-// When given an empty string, an appended message is returned
+// When given an empty string, the message is appended
 func TestAppendIfEmpty___1(t *testing.T) {
-	act := appendIfEmpty("", "abc", "efg")
-	assert.Equal(t, "abcefg", act)
+	act := appendIfEmpty("", []string{}, "abc")
+	assert.Len(t, act, 1)
+	assert.Contains(t, act, "abc")
+}
+
+// When given an empty string, the message is appended
+func TestAppendIfEmpty___2(t *testing.T) {
+	act := appendIfEmpty("", []string{"xyz"}, "abc")
+	assert.Len(t, act, 2)
+	assert.Contains(t, act, "xyz")
+	assert.Contains(t, act, "abc")
 }
 
 // When given a non-empty string, no appending occurs
-func TestAppendIfEmpty___2(t *testing.T) {
-	act := appendIfEmpty("NOT-EMPTY", "abc", "efg")
-	assert.Equal(t, "abc", act)
+func TestAppendIfEmpty___3(t *testing.T) {
+	act := appendIfEmpty("NOT-EMPTY", []string{}, "abc")
+	assert.Len(t, act, 0)
+}
+
+// When given a new valid Thing, an empty slice is returned
+func TestValidateThing___1(t *testing.T) {
+	thing := Thing{
+		Description: "description",
+		State:       "state",
+		ChildrenIDs: []string{"1", "2"},
+	}
+	act := validateThing(&thing, true)
+	assert.Empty(t, act)
+}
+
+// When given a non-new valid Thing, an empty slice is returned
+func TestValidateThing___2(t *testing.T) {
+	thing := Thing{
+		Description: "description",
+		State:       "state",
+		ChildrenIDs: []string{"1", "2"},
+		ID:          "1",
+		Self:        "/self",
+	}
+	act := validateThing(&thing, false)
+	assert.Empty(t, act)
+}
+
+// When given a non-new valid Thing without children, an empty slice is
+// returned
+func TestValidateThing___3(t *testing.T) {
+	thing := Thing{
+		Description: "description",
+		State:       "state",
+		ID:          "1",
+		Self:        "/self",
+	}
+	act := validateThing(&thing, false)
+	assert.Empty(t, act)
+}
+
+// When given a new Thing with invalid property values, a slice containing all
+// expected errors is returned
+func TestValidateThing___4(t *testing.T) {
+	thing := Thing{
+		Description: "",
+		State:       "",
+		ChildrenIDs: []string{"abc", "efg"},
+	}
+	act := validateThing(&thing, true)
+	assert.Len(t, act, 4)
+}
+
+// When given a non-new Thing with invalid property values, a slice containing
+// all expected errors is returned
+func TestValidateThing___5(t *testing.T) {
+	thing := Thing{
+		Description: "",
+		State:       "",
+		ChildrenIDs: []string{"abc", "efg"},
+		ID:          "",
+		Self:        "",
+	}
+	act := validateThing(&thing, false)
+	assert.Len(t, act, 6)
 }
 
 // When given an thing, returns an thing ID

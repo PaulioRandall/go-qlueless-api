@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strings"
 
 	. "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg"
 )
@@ -51,6 +52,18 @@ func StoreNewThing(res *http.ResponseWriter, req *http.Request) {
 			Res:     res,
 			Req:     req,
 			Message: "Unable to decode request body into a Thing",
+		}
+		Write4XXReply(400, &r)
+		return
+	}
+
+	cleanThing(&t)
+	e := validateThing(&t, true)
+	if e != nil {
+		r := Reply4XX{
+			Res:     res,
+			Req:     req,
+			Message: strings.Join(e, " "),
 		}
 		Write4XXReply(400, &r)
 		return

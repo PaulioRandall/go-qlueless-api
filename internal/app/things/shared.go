@@ -37,37 +37,35 @@ func cleanThing(t *Thing) {
 }
 
 // appendIfEmpty appends 'm' to 'r' if 's' is empty
-func appendIfEmpty(s string, r string, m string) string {
+func appendIfEmpty(s string, r []string, m string) []string {
 	if s == "" {
-		return r + m
+		return append(r, m)
 	}
 	return r
 }
 
-/*
 // validateThing validates a Thing contains the required and valid content. The
-// result will be an empty string if the Thing is valid else a string of
-// readable descriptions. The result may be used as a response message
-func validateThing(t Thing, isNew bool) string {
-	r := ""
+// result will be an slice of strings each being a readable description of a
+// violation. The result may be supplied to the client
+func validateThing(t *Thing, isNew bool) []string {
+	var r []string
 
+	r = appendIfEmpty((*t).Description, r, "'Description' must not be empty.")
+	r = appendIfEmpty((*t).State, r, "'State' must not be empty.")
 
-	r = appendIfEmpty(t.Description, r, "'Description' must not be empty. ")
-	r = appendIfEmpty(t.State, r, "'State' must not be empty. ")
-
-	for i, v := t.ChildrenIDs {
-
+	for _, c := range (*t).ChildrenIDs {
+		if !IsInt(c) {
+			r = append(r, fmt.Sprintf("'ChildrenIDs:%s' is not an integer.", c))
+		}
 	}
 
 	if !isNew {
-		r = appendIfEmpty(t.ID, r, "The 'ID' must be present. ")
-		r = appendIfEmpty(t., r, "The 'ID' must be present. ")
+		r = appendIfEmpty((*t).ID, r, "The 'ID' must be present.")
+		r = appendIfEmpty((*t).Self, r, "The 'Self' must be present.")
 	}
 
-	return strings.Trim(r)
+	return r
 }
-
-*/
 
 // AddThing adds a new thing to the data store returning the newly assigned ID
 func addThing(t Thing) (*Thing, error) {
