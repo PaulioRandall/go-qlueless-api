@@ -51,6 +51,16 @@ func createRequest(path string) (*http.Request, *http.ResponseWriter, *httptest.
 	return req, &res, rec
 }
 
+// When given a slice and index, the item is removed but other items remain
+func TestDeleteStr___1(t *testing.T) {
+	s := []string{"0", "1", "2", "3", "4"}
+	act := DeleteStr(s, 2)
+	assert.Contains(t, act, "0")
+	assert.Contains(t, act, "1")
+	assert.Contains(t, act, "3")
+	assert.Contains(t, act, "4")
+}
+
 // When given an empty string, true is returned
 func TestIsBlank___1(t *testing.T) {
 	act := IsBlank("")

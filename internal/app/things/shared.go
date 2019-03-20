@@ -3,24 +3,71 @@ package things
 import (
 	"errors"
 	"fmt"
-	"net/http"
 	"strconv"
+	"strings"
 
 	. "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg"
 )
 
 var things = map[string]Thing{}
 
-// methodNotAllowed handles cases where a HTTP method has been used but is not
-// handled by this particular endpoint
-func methodNotAllowed(res *http.ResponseWriter, req *http.Request) {
-	reply := Reply4XX{
-		Res:     res,
-		Req:     req,
-		Message: fmt.Sprintf("Method not allowed for this endpoint (%s)", req.Method),
+// cleanThing cleans up a Things contents, e.g. triming whitespace from its
+// description
+func cleanThing(t *Thing) {
+	t.Description = strings.TrimSpace(t.Description)
+	t.Additional = strings.TrimSpace(t.Additional)
+	t.State = strings.TrimSpace(t.State)
+
+	if t.ChildrenIDs == nil {
+		return
 	}
-	Write4XXReply(405, &reply)
+
+	for i, l := 0, len(t.ChildrenIDs); i < l; {
+		c := t.ChildrenIDs[i]
+		c = strings.TrimSpace(c)
+
+		if c == "" {
+			t.ChildrenIDs = DeleteStr(t.ChildrenIDs, i)
+			l--
+		} else {
+			t.ChildrenIDs[i] = c
+			i++
+		}
+	}
 }
+
+// appendIfEmpty appends 'm' to 'r' if 's' is empty
+func appendIfEmpty(s string, r string, m string) string {
+	if s == "" {
+		return r + m
+	}
+	return r
+}
+
+/*
+// validateThing validates a Thing contains the required and valid content. The
+// result will be an empty string if the Thing is valid else a string of
+// readable descriptions. The result may be used as a response message
+func validateThing(t Thing, isNew bool) string {
+	r := ""
+
+
+	r = appendIfEmpty(t.Description, r, "'Description' must not be empty. ")
+	r = appendIfEmpty(t.State, r, "'State' must not be empty. ")
+
+	for i, v := t.ChildrenIDs {
+
+	}
+
+	if !isNew {
+		r = appendIfEmpty(t.ID, r, "The 'ID' must be present. ")
+		r = appendIfEmpty(t., r, "The 'ID' must be present. ")
+	}
+
+	return strings.Trim(r)
+}
+
+*/
 
 // AddThing adds a new thing to the data store returning the newly assigned ID
 func addThing(t Thing) (*Thing, error) {

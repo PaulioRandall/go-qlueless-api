@@ -14,6 +14,60 @@ func createDummyThing() Thing {
 	}
 }
 
+// When given a new Thing to clean, a cleaned Thing is returned
+func TestCleanThing___1(t *testing.T) {
+	thing := Thing{
+		Description: "  description  ",
+		State:       "  state  ",
+		Additional:  "  additional  ",
+		ChildrenIDs: []string{"  1  ", "   ", "  3  "},
+	}
+	cleanThing(&thing)
+	assert.Equal(t, "description", thing.Description)
+	assert.Equal(t, "state", thing.State)
+	assert.Equal(t, "additional", thing.Additional)
+	assert.Equal(t, []string{"1", "3"}, thing.ChildrenIDs)
+}
+
+// When given an empty Thing to clean, an empty Thing is returned
+func TestCleanThing___2(t *testing.T) {
+	thing := Thing{}
+	cleanThing(&thing)
+	assert.Equal(t, "", thing.Description)
+	assert.Equal(t, "", thing.State)
+	assert.Equal(t, "", thing.Additional)
+	assert.Empty(t, thing.ChildrenIDs)
+}
+
+// When given a Thing with nothing to clean, nothing is cleaned
+func TestCleanThing___3(t *testing.T) {
+	thing := Thing{
+		Self:   "  self  ",
+		ID:     "  id  ",
+		IsDead: true,
+	}
+	cleanThing(&thing)
+	assert.Equal(t, "", thing.Description)
+	assert.Equal(t, "", thing.State)
+	assert.Equal(t, "", thing.Additional)
+	assert.Empty(t, thing.ChildrenIDs)
+	assert.Equal(t, "  self  ", thing.Self)
+	assert.Equal(t, "  id  ", thing.ID)
+	assert.Equal(t, true, thing.IsDead)
+}
+
+// When given an empty string, an appended message is returned
+func TestAppendIfEmpty___1(t *testing.T) {
+	act := appendIfEmpty("", "abc", "efg")
+	assert.Equal(t, "abcefg", act)
+}
+
+// When given a non-empty string, no appending occurs
+func TestAppendIfEmpty___2(t *testing.T) {
+	act := appendIfEmpty("NOT-EMPTY", "abc", "efg")
+	assert.Equal(t, "abc", act)
+}
+
 // When given an thing, returns an thing ID
 func TestAddThing___1(t *testing.T) {
 	o := createDummyThing()

@@ -3,6 +3,7 @@ package openapi
 import (
 	"encoding/json"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"os"
 
@@ -15,12 +16,27 @@ var spec map[string]interface{} = nil
 func OpenAPIHandler(res http.ResponseWriter, req *http.Request) {
 	LogRequest(req)
 
+	switch req.Method {
+	case "GET":
+		GetSpec(&res, req)
+	case "HEAD":
+		WriteEmptyReply(&res)
+	case "OPTIONS":
+		WriteEmptyReply(&res)
+	default:
+		MethodNotAllowed(&res, req)
+	}
+}
+
+// GetSpec generates responses for obtaining the OpenAPI specification
+func GetSpec(res *http.ResponseWriter, req *http.Request) {
 	if spec == nil {
-		Write500Reply(&res, req)
+		log.Println("[BUG] OpenAPI specification not loaded")
+		Write500Reply(res, req)
 		return
 	}
 
-	WriteReply(&res, req, spec)
+	WriteReply(res, req, spec)
 }
 
 // LoadJson loads the OpenAPI specification from a file

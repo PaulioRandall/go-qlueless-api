@@ -3,6 +3,7 @@ package pkg
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"strings"
@@ -30,6 +31,14 @@ type Reply4XX struct {
 // a string in one line
 func Str(s string) *string {
 	return &s
+}
+
+// DeleteStr removes a string from a string array
+func DeleteStr(s []string, i int) []string {
+	l := len(s) - 1
+	s[i] = s[l]
+	s[l] = "" // Set to zero value
+	return s[:l]
 }
 
 // IsBlank returns true if the string is empty or only contains whitespace
@@ -155,4 +164,15 @@ func WriteReply(res *http.ResponseWriter, req *http.Request, data interface{}) {
 func WriteEmptyReply(res *http.ResponseWriter) {
 	AppendJSONHeaders(res)
 	(*res).WriteHeader(http.StatusOK)
+}
+
+// methodNotAllowed handles cases where a HTTP method has been used but is not
+// handled by this particular endpoint
+func MethodNotAllowed(res *http.ResponseWriter, req *http.Request) {
+	reply := Reply4XX{
+		Res:     res,
+		Req:     req,
+		Message: fmt.Sprintf("Method not allowed for this endpoint (%s)", req.Method),
+	}
+	Write4XXReply(405, &reply)
 }

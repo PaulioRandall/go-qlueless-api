@@ -20,7 +20,7 @@ func ThingsHandler(res http.ResponseWriter, req *http.Request) {
 	case "OPTIONS":
 		WriteEmptyReply(&res)
 	default:
-		methodNotAllowed(&res, req)
+		MethodNotAllowed(&res, req)
 	}
 }
 
