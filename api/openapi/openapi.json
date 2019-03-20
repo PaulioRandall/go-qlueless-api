@@ -21,9 +21,7 @@
 		        "$ref": "#/components/responses/error"
 		      }
 		    }
-		  }
-		},
-		"/thing": {
+		  },
 		  "post": {
 		    "description": "Creates a new thing.",
 		    "requestBody": {

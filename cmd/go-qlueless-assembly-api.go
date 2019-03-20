@@ -32,13 +32,11 @@ func main() {
 
 	oai.LoadSpec()
 	thg.CreateDummyThings()
-
 	gorilla := mux.NewRouter()
 
-	gorilla.HandleFunc("/openapi", oai.OpenAPIHandler).Methods("GET")
-	gorilla.HandleFunc("/things", thg.AllThingsHandler).Methods("GET")
-	gorilla.HandleFunc("/thing", thg.NewThingHandler).Methods("POST", "OPTIONS")
-	gorilla.HandleFunc("/things/{id}", thg.SingleThingHandler).Methods("GET")
+	gorilla.HandleFunc("/openapi", oai.OpenAPIHandler)
+	gorilla.HandleFunc("/things", thg.ThingsHandler)
+	gorilla.HandleFunc("/things/{id}", thg.ThingHandler)
 
 	gorilla.NotFoundHandler = http.HandlerFunc(QluelessNotFoundHandler)
 	http.Handle("/", gorilla)

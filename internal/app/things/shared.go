@@ -3,12 +3,24 @@ package things
 import (
 	"errors"
 	"fmt"
+	"net/http"
 	"strconv"
 
 	. "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg"
 )
 
 var things = map[string]Thing{}
+
+// methodNotAllowed handles cases where a HTTP method has been used but is not
+// handled by this particular endpoint
+func methodNotAllowed(res *http.ResponseWriter, req *http.Request) {
+	reply := Reply4XX{
+		Res:     res,
+		Req:     req,
+		Message: fmt.Sprintf("Method not allowed for this endpoint (%s)", req.Method),
+	}
+	Write4XXReply(405, &reply)
+}
 
 // AddThing adds a new thing to the data store returning the newly assigned ID
 func addThing(t Thing) (*Thing, error) {
