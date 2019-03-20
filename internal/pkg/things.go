@@ -1,5 +1,10 @@
 package pkg
 
+import (
+	"fmt"
+	"strings"
+)
+
 // A Thing represents a... err... Thing
 type Thing struct {
 	Description string   `json:"description"`
@@ -11,48 +16,93 @@ type Thing struct {
 	Self        string   `json:"self"`
 }
 
-// A ThingStore provides synchronisation for accessing Things
-type ThingStore struct {
-	setChan chan Thing
-	getChan chan map[string]Thing
-}
+// CleanThing cleans up a Things contents, e.g. triming whitespace from its
+// description
+func CleanThing(t *Thing) {
+	t.Description = strings.TrimSpace(t.Description)
+	t.Additional = strings.TrimSpace(t.Additional)
+	t.State = strings.TrimSpace(t.State)
 
-// NewThingStore creates a new ThingStore
-func NewThingStore() ThingStore {
-	wis := ThingStore{
-		setChan: make(chan Thing),
-		getChan: make(chan map[string]Thing),
+	if t.ChildrenIDs == nil {
+		return
 	}
-	go wis.mux()
-	return wis
-}
 
-// mux should be invoked as a goroutine; it forever loops handling incoming
-// channel communications sequentially
-func (wis ThingStore) mux() {
-	m := make(map[string]Thing)
-	var r map[string]Thing
-	for {
-		select {
-		case w := <-wis.setChan:
-			m[w.ID] = w
-		case wis.getChan <- r:
-			t := make(map[string]Thing)
-			for k, v := range m {
-				if !v.IsDead {
-					t[k] = v
-				}
-			}
+	for i, l := 0, len(t.ChildrenIDs); i < l; {
+		c := t.ChildrenIDs[i]
+		c = strings.TrimSpace(c)
+
+		if c == "" {
+			t.ChildrenIDs = DeleteStr(t.ChildrenIDs, i)
+			l--
+		} else {
+			t.ChildrenIDs[i] = c
+			i++
 		}
 	}
 }
 
-// Get gets all Things
-func (wis ThingStore) Get() map[string]Thing {
-	return <-wis.getChan
+// appendIfEmpty appends 'm' to 'r' if 's' is empty
+func appendIfEmpty(s string, r []string, m string) []string {
+	if s == "" {
+		return append(r, m)
+	}
+	return r
 }
 
-// Set sets a Thing
-func (wis ThingStore) Set(w Thing) {
-	wis.setChan <- w
+// ValidateThing validates a Thing contains the required and valid content. The
+// result will be an slice of strings each being a readable description of a
+// violation. The result may be supplied to the client
+func ValidateThing(t *Thing, isNew bool) []string {
+	var r []string
+
+	r = appendIfEmpty((*t).Description, r, "'Description' must not be empty.")
+	r = appendIfEmpty((*t).State, r, "'State' must not be empty.")
+
+	for _, c := range (*t).ChildrenIDs {
+		if !IsInt(c) {
+			r = append(r, fmt.Sprintf("'ChildrenIDs:%s' is not an integer.", c))
+		}
+	}
+
+	if !isNew {
+		r = appendIfEmpty((*t).ID, r, "The 'ID' must be present.")
+		r = appendIfEmpty((*t).Self, r, "The 'Self' must be present.")
+	}
+
+	return r
+}
+
+// CreateDummyThings creates some dummy things for testing during these initial
+// phases of development
+func CreateDummyThings() {
+	ThingSlice["1"] = Thing{
+		Description: "# Outline the saga\nCreate a rough outline of the new saga.",
+		ID:          "1",
+		ChildrenIDs: []string{
+			"2",
+			"3",
+			"4",
+		},
+		State: "in_progress",
+		Self:  "/things/1",
+	}
+	ThingSlice["2"] = Thing{
+		Description: "# Name the saga\nThink of a name for the saga.",
+		ID:          "2",
+		State:       "potential",
+		Self:        "/things/2",
+	}
+	ThingSlice["3"] = Thing{
+		Description: "# Outline the first chapter",
+		ID:          "3",
+		State:       "delivered",
+		Additional:  "archive_note:Done but not a compelling start",
+		Self:        "/things/3",
+	}
+	ThingSlice["4"] = Thing{
+		Description: "# Outline the second chapter",
+		ID:          "4",
+		State:       "in_progress",
+		Self:        "/things/4",
+	}
 }

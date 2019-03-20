@@ -31,7 +31,7 @@ func main() {
 	log.Println("[Go Qlueless Assembly API]: Starting application")
 
 	oai.LoadSpec()
-	thg.CreateDummyThings()
+	CreateDummyThings()
 	gorilla := mux.NewRouter()
 
 	gorilla.HandleFunc("/openapi", oai.OpenAPIHandler)

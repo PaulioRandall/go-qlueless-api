@@ -29,7 +29,7 @@ func ThingsHandler(res http.ResponseWriter, req *http.Request) {
 func GetAllThings(res *http.ResponseWriter, req *http.Request) {
 
 	t := make([]Thing, 0)
-	for _, v := range things {
+	for _, v := range ThingSlice {
 		if !v.IsDead {
 			t = append(t, v)
 		}
@@ -57,8 +57,8 @@ func StoreNewThing(res *http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	cleanThing(&t)
-	e := validateThing(&t, true)
+	CleanThing(&t)
+	e := ValidateThing(&t, true)
 	if e != nil {
 		r := Reply4XX{
 			Res:     res,
@@ -69,7 +69,7 @@ func StoreNewThing(res *http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	r, err := addThing(t)
+	r, err := AddThing(t)
 	if LogIfErr(err) {
 		Write500Reply(res, req)
 		return

@@ -28,7 +28,7 @@ func ThingHandler(res http.ResponseWriter, req *http.Request) {
 // GetThing generates responses for requests for a single Thing
 func GetThing(res *http.ResponseWriter, req *http.Request) {
 	id := mux.Vars(req)["id"]
-	t, ok := things[id]
+	t, ok := ThingSlice[id]
 
 	if !ok || t.IsDead {
 		r := Reply4XX{
