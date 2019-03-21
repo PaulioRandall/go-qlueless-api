@@ -10,6 +10,7 @@ func createDummyThing() Thing {
 	return Thing{
 		Description: "# Outline the saga\nCreate a rough outline of the new saga.",
 		State:       "in_progress",
+		IsDead:      false,
 	}
 }
 

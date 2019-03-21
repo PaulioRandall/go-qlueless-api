@@ -9,7 +9,7 @@ import (
 )
 
 func CheckIsInt(t *testing.T, s string, m ...interface{}) {
-	assert.True(t, IsInt(s), "Expected string to be a number")
+	assert.True(t, IsInt(s), "Expected string to be an integer")
 }
 
 func CheckNotBlank(t *testing.T, s string, m ...interface{}) {

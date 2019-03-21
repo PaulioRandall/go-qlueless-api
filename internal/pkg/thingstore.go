@@ -4,55 +4,72 @@ import (
 	"errors"
 	"fmt"
 	"strconv"
+	"sync"
 )
 
 // A ThingStore provides synchronisation for accessing Things
 type ThingStore struct {
-	setChan chan Thing
-	getChan chan map[string]Thing
+	mutex  sync.RWMutex
+	things map[string]Thing
 }
-
-var ThingSlice = map[string]Thing{}
 
 // NewThingStore creates a new ThingStore
 func NewThingStore() ThingStore {
-	wis := ThingStore{
-		setChan: make(chan Thing),
-		getChan: make(chan map[string]Thing),
+	ts := ThingStore{
+		mutex:  sync.RWMutex{},
+		things: map[string]Thing{},
 	}
-	go wis.mux()
-	return wis
+	return ts
 }
 
-// mux should be invoked as a goroutine; it forever loops handling incoming
-// channel communications sequentially
-func (wis ThingStore) mux() {
-	m := make(map[string]Thing)
-	var r map[string]Thing
-	for {
-		select {
-		case w := <-wis.setChan:
-			m[w.ID] = w
-		case wis.getChan <- r:
-			t := make(map[string]Thing)
-			for k, v := range m {
-				if !v.IsDead {
-					t[k] = v
-				}
-			}
+// GetAll returns the map of all Things currently held within the data store
+func (ts ThingStore) GetAll() map[string]Thing {
+	ts.mutex.RLock()
+	defer ts.mutex.RUnlock()
+	return ts.things
+}
+
+// Get returns a specific Thing or nil if the Thing does not exist
+func (ts ThingStore) Get(id string) Thing {
+	ts.mutex.RLock()
+	defer ts.mutex.RUnlock()
+	return ts.things[id]
+}
+
+// Add adds a Thing to the data store assigning an unused ID
+func (ts ThingStore) Add(t Thing) (Thing, error) {
+	ts.mutex.Lock()
+	defer ts.mutex.Unlock()
+
+	ID, err := ts.genNewID()
+	if err != nil {
+		return Thing{}, err
+	}
+
+	t.ID = ID
+	t.Self = fmt.Sprintf("/things/%s", t.ID)
+
+	ts.things[ID] = t
+	return t, nil
+}
+
+// genNewID generates a new, unused, Thing ID
+func (ts ThingStore) genNewID() (string, error) {
+	newID := 0
+	for k, _ := range ts.things {
+		ID, err := strconv.Atoi(k)
+		if LogIfErr(err) {
+			return "", errors.New("[BUG] An unparsable ID exists within the data store")
+		}
+		if ID > newID {
+			newID = ID
 		}
 	}
+	newID++
+	return strconv.Itoa(newID), nil
 }
 
-// Get gets all Things
-func (wis ThingStore) Get() map[string]Thing {
-	return <-wis.getChan
-}
-
-// Set sets a Thing
-func (wis ThingStore) Set(t Thing) {
-	wis.setChan <- t
-}
+var ThingSlice = map[string]Thing{}
 
 // AddThing adds a new thing to the data store returning the newly assigned ID
 func AddThing(t Thing) (*Thing, error) {
