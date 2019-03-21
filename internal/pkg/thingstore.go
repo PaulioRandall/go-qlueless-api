@@ -68,26 +68,3 @@ func (ts ThingStore) genNewID() (string, error) {
 	newID++
 	return strconv.Itoa(newID), nil
 }
-
-var ThingSlice = map[string]Thing{}
-
-// AddThing adds a new thing to the data store returning the newly assigned ID
-func AddThing(t Thing) (*Thing, error) {
-	next := 1
-	for k, _ := range ThingSlice {
-		ID, err := strconv.Atoi(k)
-		if LogIfErr(err) {
-			return nil, errors.New("[BUG] An unparsable ID exists within the data store")
-		}
-
-		if ID > next {
-			next = ID
-		}
-	}
-
-	next++
-	t.ID = strconv.Itoa(next)
-	t.Self = fmt.Sprintf("/things/%s", t.ID)
-	ThingSlice[t.ID] = t
-	return &t, nil
-}

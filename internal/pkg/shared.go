@@ -10,6 +10,8 @@ import (
 	"strings"
 )
 
+var Things ThingStore = NewThingStore()
+
 // A ReplyMeta represents the response that should be returned when the
 // client has requested data be wrapped and meta information included
 type ReplyMeta struct {

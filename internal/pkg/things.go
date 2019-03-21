@@ -75,7 +75,7 @@ func ValidateThing(t *Thing, isNew bool) []string {
 // CreateDummyThings creates some dummy things for testing during these initial
 // phases of development
 func CreateDummyThings() {
-	ThingSlice["1"] = Thing{
+	Things.Add(Thing{
 		Description: "# Outline the saga\nCreate a rough outline of the new saga.",
 		ID:          "1",
 		ChildrenIDs: []string{
@@ -85,24 +85,24 @@ func CreateDummyThings() {
 		},
 		State: "in_progress",
 		Self:  "/things/1",
-	}
-	ThingSlice["2"] = Thing{
+	})
+	Things.Add(Thing{
 		Description: "# Name the saga\nThink of a name for the saga.",
 		ID:          "2",
 		State:       "potential",
 		Self:        "/things/2",
-	}
-	ThingSlice["3"] = Thing{
+	})
+	Things.Add(Thing{
 		Description: "# Outline the first chapter",
 		ID:          "3",
 		State:       "delivered",
 		Additional:  "archive_note:Done but not a compelling start",
 		Self:        "/things/3",
-	}
-	ThingSlice["4"] = Thing{
+	})
+	Things.Add(Thing{
 		Description: "# Outline the second chapter",
 		ID:          "4",
 		State:       "in_progress",
 		Self:        "/things/4",
-	}
+	})
 }
