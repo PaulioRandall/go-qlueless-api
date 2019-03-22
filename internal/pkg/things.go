@@ -22,37 +22,23 @@ func CleanThing(t *Thing) {
 	t.Description = strings.TrimSpace(t.Description)
 	t.Additional = strings.TrimSpace(t.Additional)
 	t.State = strings.TrimSpace(t.State)
+	cleanThingsChildIDs(t)
+}
 
-	if t.ChildrenIDs == nil {
-		return
-	}
+// cleanThingsChildIDs cleans the child IDs within a Thing
+func cleanThingsChildIDs(t *Thing) {
+	if t.ChildrenIDs != nil {
+		for i, l := 0, len(t.ChildrenIDs); i < l; {
+			c := t.ChildrenIDs[i]
 
-	for i, l := 0, len(t.ChildrenIDs); i < l; {
-		c := t.ChildrenIDs[i]
-
-		if c < 1 {
-			t.ChildrenIDs = DeleteInt(t.ChildrenIDs, i)
-			l--
-		} else {
-			i++
+			if c < 1 {
+				t.ChildrenIDs = DeleteInt(t.ChildrenIDs, i)
+				l--
+			} else {
+				i++
+			}
 		}
 	}
-}
-
-// appendIfEmpty appends 'm' to 'r' if 's' is empty
-func appendIfEmpty(s string, r []string, m string) []string {
-	if s == "" {
-		return append(r, m)
-	}
-	return r
-}
-
-// appendIfNotPositive appends 'm' to 'r' if 'i' is not positive
-func appendIfNotPositive(i int, r []string, m string) []string {
-	if i < 1 {
-		return append(r, m)
-	}
-	return r
 }
 
 // ValidateThing validates a Thing contains the required and valid content. The
@@ -75,6 +61,22 @@ func ValidateThing(t *Thing, isNew bool) []string {
 		r = appendIfEmpty((*t).Self, r, "The 'Self' must be present.")
 	}
 
+	return r
+}
+
+// appendIfEmpty appends 'm' to 'r' if 's' is empty
+func appendIfEmpty(s string, r []string, m string) []string {
+	if s == "" {
+		return append(r, m)
+	}
+	return r
+}
+
+// appendIfNotPositive appends 'm' to 'r' if 'i' is not positive
+func appendIfNotPositive(i int, r []string, m string) []string {
+	if i < 1 {
+		return append(r, m)
+	}
 	return r
 }
 

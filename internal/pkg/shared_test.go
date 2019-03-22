@@ -10,47 +10,6 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func dummyThings() *[]Thing {
-	return &[]Thing{
-		Thing{
-			Description: "# Outline the saga\nCreate a rough outline of the new saga.",
-			ID:          1,
-			ChildrenIDs: []int{
-				2,
-				3,
-				4,
-			},
-			State: "in_progress",
-		},
-		Thing{
-			Description: "# Name the saga\nThink of a name for the saga.",
-			ID:          2,
-			State:       "potential",
-		},
-		Thing{
-			Description: "# Outline the first chapter",
-			ID:          3,
-			State:       "delivered",
-			Additional:  "archive_note:Done but not a compelling start",
-		},
-		Thing{
-			Description: "# Outline the second chapter",
-			ID:          4,
-			State:       "in_progress",
-		},
-	}
-}
-
-func createRequest(path string) (*http.Request, *http.ResponseWriter, *httptest.ResponseRecorder) {
-	req, err := http.NewRequest("GET", "http://example.com"+path, nil)
-	if err != nil {
-		panic(err)
-	}
-	rec := httptest.NewRecorder()
-	var res http.ResponseWriter = rec
-	return req, &res, rec
-}
-
 // When given a valid int string, true is returned
 func TestIsInt___1(t *testing.T) {
 	assert.True(t, IsInt("123"))
@@ -135,7 +94,7 @@ func TestLogIfErr___2(t *testing.T) {
 
 // When invoked, sets 500 status code
 func TestWrite500Reply___1(t *testing.T) {
-	req, res, rec := createRequest("/")
+	req, res, rec := SetupRequest("/")
 
 	Write500Reply(res, req)
 	assert.Equal(t, 500, rec.Code)
@@ -143,7 +102,7 @@ func TestWrite500Reply___1(t *testing.T) {
 
 // When invoked, writes JSON headers
 func TestWrite500Reply___2(t *testing.T) {
-	req, res, rec := createRequest("/")
+	req, res, rec := SetupRequest("/")
 
 	Write500Reply(res, req)
 	CheckJSONResponseHeaders(t, (*rec).Header())
@@ -151,7 +110,7 @@ func TestWrite500Reply___2(t *testing.T) {
 
 // When invoked, writes JSON headers
 func TestWrite500Reply___3(t *testing.T) {
-	req, res, rec := createRequest("/")
+	req, res, rec := SetupRequest("/")
 
 	Write500Reply(res, req)
 
@@ -166,7 +125,7 @@ func TestWrite500Reply___3(t *testing.T) {
 
 // When not 4XX status code, sets 500 status code
 func TestWrite4XXReply___1(t *testing.T) {
-	req, res, rec := createRequest("/")
+	req, res, rec := SetupRequest("/")
 	r := Reply4XX{
 		Req:     req,
 		Res:     res,
@@ -179,7 +138,7 @@ func TestWrite4XXReply___1(t *testing.T) {
 
 // When Reply4XX.Message not set, sets 500 status code
 func TestWrite4XXReply___2(t *testing.T) {
-	req, res, rec := createRequest("/")
+	req, res, rec := SetupRequest("/")
 	r := Reply4XX{
 		Req: req,
 		Res: res,
@@ -191,7 +150,7 @@ func TestWrite4XXReply___2(t *testing.T) {
 
 // When complete Reply4XX passed, sets 200 status code
 func TestWrite4XXReply___3(t *testing.T) {
-	req, res, rec := createRequest("/search?q=dan+north")
+	req, res, rec := SetupRequest("/search?q=dan+north")
 	r := Reply4XX{
 		Req:     req,
 		Res:     res,
@@ -206,7 +165,7 @@ func TestWrite4XXReply___3(t *testing.T) {
 
 // When complete Reply4XX passed, JSON headers are set
 func TestWrite4XXReply___4(t *testing.T) {
-	req, res, rec := createRequest("/search?q=dan+north")
+	req, res, rec := SetupRequest("/search?q=dan+north")
 	r := Reply4XX{
 		Req:     req,
 		Res:     res,
@@ -221,7 +180,7 @@ func TestWrite4XXReply___4(t *testing.T) {
 
 // When complete Reply4XX passed, body is set with expected JSON
 func TestWrite4XXReply___5(t *testing.T) {
-	req, res, rec := createRequest("/search?q=dan+north")
+	req, res, rec := SetupRequest("/search?q=dan+north")
 	r := Reply4XX{
 		Req:     req,
 		Res:     res,
@@ -245,7 +204,7 @@ func TestWrite4XXReply___5(t *testing.T) {
 
 // When Reply4XX.Self is not set, Reply4XX.Self is set for us
 func TestWrite4XXReply___6(t *testing.T) {
-	req, res, rec := createRequest("/search?q=dan+north")
+	req, res, rec := SetupRequest("/search?q=dan+north")
 	r := Reply4XX{
 		Req:     req,
 		Res:     res,
@@ -328,7 +287,7 @@ func TestAppendJSONHeaders___1(t *testing.T) {
 
 // When given valid inputs, 200 status code is set
 func TestWriteReply___1(t *testing.T) {
-	req, res, rec := createRequest("/")
+	req, res, rec := SetupRequest("/")
 	m := make(map[string]interface{})
 	m["killswitch"] = "engage"
 
@@ -338,7 +297,7 @@ func TestWriteReply___1(t *testing.T) {
 
 // When given valid inputs, the JSON response headers are set
 func TestWriteReply___2(t *testing.T) {
-	req, res, rec := createRequest("/")
+	req, res, rec := SetupRequest("/")
 	m := make(map[string]interface{})
 	m["killswitch"] = "engage"
 
@@ -349,7 +308,7 @@ func TestWriteReply___2(t *testing.T) {
 // When given valid inputs, the data is serialised into JSON the response body
 // is set
 func TestWriteReply___3(t *testing.T) {
-	req, res, rec := createRequest("/")
+	req, res, rec := SetupRequest("/")
 	data := make(map[string]interface{})
 	data["killswitch"] = "engage"
 

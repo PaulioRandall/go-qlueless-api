@@ -6,14 +6,6 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func createDummyThing() Thing {
-	return Thing{
-		Description: "# Outline the saga\nCreate a rough outline of the new saga.",
-		State:       "in_progress",
-		IsDead:      false,
-	}
-}
-
 // When given a new Thing to clean, a cleaned Thing is returned
 func TestCleanThing___1(t *testing.T) {
 	thing := Thing{
@@ -51,6 +43,23 @@ func TestCleanThing___3(t *testing.T) {
 	assert.Equal(t, "  self  ", thing.Self)
 	assert.Equal(t, 1, thing.ID)
 	assert.Equal(t, true, thing.IsDead)
+}
+
+// When given a new Thing to clean, its child IDs are cleaned
+func TestCleanThingsChildIDs___1(t *testing.T) {
+	thing := Thing{
+		ChildrenIDs: []int{1, 0, -1, 3},
+	}
+	cleanThingsChildIDs(&thing)
+	assert.Equal(t, []int{1, 3}, thing.ChildrenIDs)
+}
+
+// When given a new Thing with no child IDs, nothing changes
+func TestCleanThingsChildIDs___2(t *testing.T) {
+	thing := Thing{}
+	cleanThingsChildIDs(&thing)
+	var exp []int
+	assert.Equal(t, exp, thing.ChildrenIDs)
 }
 
 // When given an empty string, the message is appended

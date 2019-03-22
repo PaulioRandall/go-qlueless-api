@@ -27,6 +27,20 @@ func (ts ThingStore) GetAll() map[int]Thing {
 	return ts.things
 }
 
+// GetAllAlive returns a slice of all Things which are not dead
+func (ts ThingStore) GetAllAlive() []Thing {
+	ts.mutex.RLock()
+	defer ts.mutex.RUnlock()
+
+	r := []Thing{}
+	for _, v := range ts.things {
+		if !v.IsDead {
+			r = append(r, v)
+		}
+	}
+	return r
+}
+
 // Get returns a specific Thing or nil if the Thing does not exist
 func (ts ThingStore) Get(id int) Thing {
 	ts.mutex.RLock()

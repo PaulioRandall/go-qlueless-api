@@ -18,7 +18,7 @@ func OpenAPIHandler(res http.ResponseWriter, req *http.Request) {
 
 	switch req.Method {
 	case "GET":
-		GetSpec(&res, req)
+		get_Spec(&res, req)
 	case "HEAD":
 		WriteEmptyReply(&res)
 	case "OPTIONS":
@@ -28,8 +28,8 @@ func OpenAPIHandler(res http.ResponseWriter, req *http.Request) {
 	}
 }
 
-// GetSpec generates responses for obtaining the OpenAPI specification
-func GetSpec(res *http.ResponseWriter, req *http.Request) {
+// get_Spec generates responses for obtaining the OpenAPI specification
+func get_Spec(res *http.ResponseWriter, req *http.Request) {
 	if spec == nil {
 		log.Println("[BUG] OpenAPI specification not loaded")
 		Write500Reply(res, req)
