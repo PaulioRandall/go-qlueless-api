@@ -13,7 +13,7 @@ import (
 func main() {
 	log.Println("[Go Qlueless Assembly API]: Starting application")
 
-	s := Server{
+	s := QServer{
 		router: mux.NewRouter(),
 	}
 
