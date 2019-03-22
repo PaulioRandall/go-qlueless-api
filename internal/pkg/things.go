@@ -7,13 +7,13 @@ import (
 
 // A Thing represents a... err... Thing
 type Thing struct {
-	Description string   `json:"description"`
-	ID          string   `json:"id"`
-	ChildrenIDs []string `json:"childrens_ids,omitempty"`
-	State       string   `json:"state"`
-	IsDead      bool     `json:"-"`
-	Additional  string   `json:"additional,omitempty"`
-	Self        string   `json:"self"`
+	Description string `json:"description"`
+	ID          int    `json:"id"`
+	ChildrenIDs []int  `json:"childrens_ids,omitempty"`
+	State       string `json:"state"`
+	IsDead      bool   `json:"-"`
+	Additional  string `json:"additional,omitempty"`
+	Self        string `json:"self"`
 }
 
 // CleanThing cleans up a Things contents, e.g. triming whitespace from its
@@ -29,13 +29,11 @@ func CleanThing(t *Thing) {
 
 	for i, l := 0, len(t.ChildrenIDs); i < l; {
 		c := t.ChildrenIDs[i]
-		c = strings.TrimSpace(c)
 
-		if c == "" {
-			t.ChildrenIDs = DeleteStr(t.ChildrenIDs, i)
+		if c < 1 {
+			t.ChildrenIDs = DeleteInt(t.ChildrenIDs, i)
 			l--
 		} else {
-			t.ChildrenIDs[i] = c
 			i++
 		}
 	}
@@ -44,6 +42,14 @@ func CleanThing(t *Thing) {
 // appendIfEmpty appends 'm' to 'r' if 's' is empty
 func appendIfEmpty(s string, r []string, m string) []string {
 	if s == "" {
+		return append(r, m)
+	}
+	return r
+}
+
+// appendIfNotPositive appends 'm' to 'r' if 'i' is not positive
+func appendIfNotPositive(i int, r []string, m string) []string {
+	if i < 1 {
 		return append(r, m)
 	}
 	return r
@@ -59,13 +65,13 @@ func ValidateThing(t *Thing, isNew bool) []string {
 	r = appendIfEmpty((*t).State, r, "'State' must not be empty.")
 
 	for _, c := range (*t).ChildrenIDs {
-		if !IsInt(c) {
-			r = append(r, fmt.Sprintf("'ChildrenIDs:%s' is not an integer.", c))
-		}
+		r = appendIfNotPositive(c, r,
+			fmt.Sprintf("'ChildrenIDs:%d' must be defined and a positive integer.", c))
 	}
 
 	if !isNew {
-		r = appendIfEmpty((*t).ID, r, "The 'ID' must be present.")
+		r = appendIfNotPositive((*t).ID, r,
+			fmt.Sprintf("The ID '%d' is not allowed to be zero or negative.", (*t).ID))
 		r = appendIfEmpty((*t).Self, r, "The 'Self' must be present.")
 	}
 
@@ -77,31 +83,31 @@ func ValidateThing(t *Thing, isNew bool) []string {
 func CreateDummyThings() {
 	Things.Add(Thing{
 		Description: "# Outline the saga\nCreate a rough outline of the new saga.",
-		ID:          "1",
-		ChildrenIDs: []string{
-			"2",
-			"3",
-			"4",
+		ID:          1,
+		ChildrenIDs: []int{
+			2,
+			3,
+			4,
 		},
 		State: "in_progress",
 		Self:  "/things/1",
 	})
 	Things.Add(Thing{
 		Description: "# Name the saga\nThink of a name for the saga.",
-		ID:          "2",
+		ID:          2,
 		State:       "potential",
 		Self:        "/things/2",
 	})
 	Things.Add(Thing{
 		Description: "# Outline the first chapter",
-		ID:          "3",
+		ID:          3,
 		State:       "delivered",
 		Additional:  "archive_note:Done but not a compelling start",
 		Self:        "/things/3",
 	})
 	Things.Add(Thing{
 		Description: "# Outline the second chapter",
-		ID:          "4",
+		ID:          4,
 		State:       "in_progress",
 		Self:        "/things/4",
 	})

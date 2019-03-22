@@ -20,30 +20,27 @@ func TestCleanThing___1(t *testing.T) {
 		Description: "  description  ",
 		State:       "  state  ",
 		Additional:  "  additional  ",
-		ChildrenIDs: []string{"  1  ", "   ", "  3  "},
+		ChildrenIDs: []int{1, 0, -1, 3},
 	}
 	CleanThing(&thing)
 	assert.Equal(t, "description", thing.Description)
 	assert.Equal(t, "state", thing.State)
 	assert.Equal(t, "additional", thing.Additional)
-	assert.Equal(t, []string{"1", "3"}, thing.ChildrenIDs)
+	assert.Equal(t, []int{1, 3}, thing.ChildrenIDs)
 }
 
 // When given an empty Thing to clean, an empty Thing is returned
 func TestCleanThing___2(t *testing.T) {
 	thing := Thing{}
 	CleanThing(&thing)
-	assert.Equal(t, "", thing.Description)
-	assert.Equal(t, "", thing.State)
-	assert.Equal(t, "", thing.Additional)
-	assert.Empty(t, thing.ChildrenIDs)
+	assert.Equal(t, Thing{}, thing)
 }
 
 // When given a Thing with nothing to clean, nothing is cleaned
 func TestCleanThing___3(t *testing.T) {
 	thing := Thing{
 		Self:   "  self  ",
-		ID:     "  id  ",
+		ID:     1,
 		IsDead: true,
 	}
 	CleanThing(&thing)
@@ -52,7 +49,7 @@ func TestCleanThing___3(t *testing.T) {
 	assert.Equal(t, "", thing.Additional)
 	assert.Empty(t, thing.ChildrenIDs)
 	assert.Equal(t, "  self  ", thing.Self)
-	assert.Equal(t, "  id  ", thing.ID)
+	assert.Equal(t, 1, thing.ID)
 	assert.Equal(t, true, thing.IsDead)
 }
 
@@ -77,12 +74,44 @@ func TestAppendIfEmpty___3(t *testing.T) {
 	assert.Len(t, act, 0)
 }
 
+// When given a positive integer, the message is NOT appended
+func TestAppendIfNotPositive___1(t *testing.T) {
+	act := appendIfNotPositive(5, []string{}, "abc")
+	assert.Len(t, act, 0)
+}
+
+// When given zero, the message is appended
+func TestAppendIfNotPositive___2(t *testing.T) {
+	act := appendIfNotPositive(0, []string{}, "abc")
+	assert.Len(t, act, 1)
+	assert.Contains(t, act, "abc")
+}
+
+// When given a negative number, the message is appended
+func TestAppendIfNotPositive___3(t *testing.T) {
+	act := appendIfNotPositive(-5, []string{}, "abc")
+	assert.Len(t, act, 1)
+	assert.Contains(t, act, "abc")
+}
+
+// When given a multiple non-positive inputs, all messages are appended
+func TestAppendIfNotPositive___4(t *testing.T) {
+	act := []string{}
+	act = appendIfNotPositive(-1, act, "abc")
+	act = appendIfNotPositive(-1, act, "efg")
+	act = appendIfNotPositive(-1, act, "hij")
+	assert.Len(t, act, 3)
+	assert.Contains(t, act, "abc")
+	assert.Contains(t, act, "efg")
+	assert.Contains(t, act, "hij")
+}
+
 // When given a new valid Thing, an empty slice is returned
 func TestValidateThing___1(t *testing.T) {
 	thing := Thing{
 		Description: "description",
 		State:       "state",
-		ChildrenIDs: []string{"1", "2"},
+		ChildrenIDs: []int{2, 3},
 	}
 	act := ValidateThing(&thing, true)
 	assert.Empty(t, act)
@@ -93,8 +122,8 @@ func TestValidateThing___2(t *testing.T) {
 	thing := Thing{
 		Description: "description",
 		State:       "state",
-		ChildrenIDs: []string{"1", "2"},
-		ID:          "1",
+		ChildrenIDs: []int{2, 3},
+		ID:          1,
 		Self:        "/self",
 	}
 	act := ValidateThing(&thing, false)
@@ -107,7 +136,7 @@ func TestValidateThing___3(t *testing.T) {
 	thing := Thing{
 		Description: "description",
 		State:       "state",
-		ID:          "1",
+		ID:          1,
 		Self:        "/self",
 	}
 	act := ValidateThing(&thing, false)
@@ -120,7 +149,7 @@ func TestValidateThing___4(t *testing.T) {
 	thing := Thing{
 		Description: "",
 		State:       "",
-		ChildrenIDs: []string{"abc", "efg"},
+		ChildrenIDs: []int{0, -9000},
 	}
 	act := ValidateThing(&thing, true)
 	assert.Len(t, act, 4)
@@ -132,8 +161,8 @@ func TestValidateThing___5(t *testing.T) {
 	thing := Thing{
 		Description: "",
 		State:       "",
-		ChildrenIDs: []string{"abc", "efg"},
-		ID:          "",
+		ChildrenIDs: []int{0, -9000},
+		ID:          0,
 		Self:        "",
 	}
 	act := ValidateThing(&thing, false)

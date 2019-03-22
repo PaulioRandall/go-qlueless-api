@@ -50,6 +50,14 @@ func DeleteStr(s []string, i int) []string {
 	return s[:l]
 }
 
+// DeleteInt removes an int from an int array
+func DeleteInt(s []int, i int) []int {
+	l := len(s) - 1
+	s[i] = s[l]
+	s[l] = 0
+	return s[:l]
+}
+
 // IsBlank returns true if the string is empty or only contains whitespace
 func IsBlank(s string) bool {
 	v := strings.TrimSpace(s)

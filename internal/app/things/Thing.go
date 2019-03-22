@@ -3,6 +3,7 @@ package things
 import (
 	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/gorilla/mux"
 
@@ -27,20 +28,30 @@ func ThingHandler(res http.ResponseWriter, req *http.Request) {
 
 // GetThing generates responses for requests for a single Thing
 func GetThing(res *http.ResponseWriter, req *http.Request) {
-	id := mux.Vars(req)["id"]
-	t := Things.Get(id)
-
-	if t.ID == "" || t.IsDead {
+	idStr := mux.Vars(req)["id"]
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
 		r := Reply4XX{
 			Res:     res,
 			Req:     req,
-			Message: fmt.Sprintf("Thing %v not found", id),
+			Message: fmt.Sprintf("ID '%s' could not be parsed to an integer", idStr),
+		}
+		Write4XXReply(400, &r)
+		return
+	}
+
+	t := Things.Get(id)
+	if t.ID < 1 || t.IsDead {
+		r := Reply4XX{
+			Res:     res,
+			Req:     req,
+			Message: fmt.Sprintf("Thing %d not found", id),
 		}
 		Write4XXReply(404, &r)
 		return
 	}
 
-	m := fmt.Sprintf("Found Thing with ID %s", id)
+	m := fmt.Sprintf("Found Thing with ID %d", id)
 	data := PrepResponseData(req, t, m)
 	WriteReply(res, req, data)
 }

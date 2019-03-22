@@ -1,9 +1,9 @@
-"thing_id": {
-  "name": "thing_id",
+"id": {
+  "name": "id",
   "in": "path",
   "description": "Unique identifier of a thing",
   "required": true,
   "schema": {
-    "type": "string"
+    "$ref": "#/components/x-hidden/id"
   }
 }

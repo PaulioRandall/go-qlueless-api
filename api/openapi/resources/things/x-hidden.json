@@ -45,7 +45,8 @@
   "description": "Presentable and human readable description of the entity instance."
 },
 "id": {
-  "type": "string",
+  "type": "integer",
+  "format": "int64",
   "description": "Unique identifier of the thing."
 },
 "childrens_ids": {

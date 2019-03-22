@@ -30,12 +30,12 @@
     }
   }
 },
-"/things/{thing_id}": {
+"/things/{id}": {
   "get": {
     "description": "Returns a single thing.",
     "parameters": [
       {
-        "$ref": "#/components/parameters/thing_id"
+        "$ref": "#/components/parameters/id"
       },
       {
         "$ref": "#/components/parameters/meta"

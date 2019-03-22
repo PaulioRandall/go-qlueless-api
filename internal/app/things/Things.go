@@ -69,13 +69,8 @@ func StoreNewThing(res *http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	t, err = Things.Add(t)
-	if err != nil {
-		Write500Reply(res, req)
-		return
-	}
-
-	m := fmt.Sprintf("New Thing with ID %s created", t.ID)
+	t = Things.Add(t)
+	m := fmt.Sprintf("New Thing with ID %d created", t.ID)
 	data := PrepResponseData(req, t, m)
 	WriteReply(res, req, data)
 }

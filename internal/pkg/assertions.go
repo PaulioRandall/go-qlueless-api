@@ -8,8 +8,8 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func CheckIsInt(t *testing.T, s string, m ...interface{}) {
-	assert.True(t, IsInt(s), "Expected string to be an integer")
+func CheckIsPositive(t *testing.T, i int, m ...interface{}) {
+	assert.Greater(t, 0, i, m)
 }
 
 func CheckNotBlank(t *testing.T, s string, m ...interface{}) {
@@ -19,16 +19,14 @@ func CheckNotBlank(t *testing.T, s string, m ...interface{}) {
 
 func CheckThing(t *testing.T, w Thing) {
 	CheckNotBlank(t, w.Description, "Thing.Description")
-	CheckNotBlank(t, w.ID, "Thing.ID")
-	CheckIsInt(t, w.ID, "Thing.ID")
+	CheckIsPositive(t, w.ID, "Thing.ID")
 	CheckChildrenIds(t, w)
 	CheckNotBlank(t, w.State, "Thing.State")
 }
 
 func CheckChildrenIds(t *testing.T, o Thing) {
 	for _, id := range o.ChildrenIDs {
-		CheckNotBlank(t, id, "Thing.ChildrenIDs")
-		CheckIsInt(t, id, "Thing.ChildrenIDs")
+		CheckIsPositive(t, id, "Thing.ChildrenIDs")
 	}
 }
 
