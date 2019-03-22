@@ -6,285 +6,285 @@
 	},
 	"paths": {
 		"/things": {
-			"get": {
-				"description": "Returns all things.",
-				"parameters": [
-					{
-						"$ref": "#/components/parameters/meta"
-					}
-				],
-				"responses": {
-					"200": {
-						"$ref": "#/components/responses/things_200"
-					},
-					"default": {
-						"$ref": "#/components/responses/error"
-					}
-				}
-			},
-			"post": {
-				"description": "Creates a new thing.",
-				"requestBody": {
-					"$ref": "#/components/requestBodies/new_thing"
-				},
-				"responses": {
-					"201": {
-						"$ref": "#/components/responses/thing_201"
-					},
-					"default": {
-						"$ref": "#/components/responses/error"
-					}
-				}
-			}
+		  "get": {
+		    "description": "Returns all things.",
+		    "parameters": [
+		      {
+		        "$ref": "#/components/parameters/meta"
+		      }
+		    ],
+		    "responses": {
+		      "200": {
+		        "$ref": "#/components/responses/things_200"
+		      },
+		      "default": {
+		        "$ref": "#/components/responses/error"
+		      }
+		    }
+		  },
+		  "post": {
+		    "description": "Creates a new thing.",
+		    "requestBody": {
+		      "$ref": "#/components/requestBodies/new_thing"
+		    },
+		    "responses": {
+		      "201": {
+		        "$ref": "#/components/responses/thing_201"
+		      },
+		      "default": {
+		        "$ref": "#/components/responses/error"
+		      }
+		    }
+		  }
 		},
 		"/things/{id}": {
-			"get": {
-				"description": "Returns a single thing.",
-				"parameters": [
-					{
-						"$ref": "#/components/parameters/id"
-					},
-					{
-						"$ref": "#/components/parameters/meta"
-					}
-				],
-				"responses": {
-					"200": {
-						"$ref": "#/components/responses/thing_200"
-					},
-					"default": {
-						"$ref": "#/components/responses/error"
-					}
-				}
-			}
+		  "get": {
+		    "description": "Returns a single thing.",
+		    "parameters": [
+		      {
+		        "$ref": "#/components/parameters/id"
+		      },
+		      {
+		        "$ref": "#/components/parameters/meta"
+		      }
+		    ],
+		    "responses": {
+		      "200": {
+		        "$ref": "#/components/responses/thing_200"
+		      },
+		      "default": {
+		        "$ref": "#/components/responses/error"
+		      }
+		    }
+		  }
 		}
-	},
+  },
 	"components": {
-		"parameters": {
+    "parameters": {
 			"id": {
-				"name": "id",
-				"in": "path",
-				"description": "Unique identifier of a thing",
-				"required": true,
-				"schema": {
-					"$ref": "#/components/x-hidden/id"
-				}
+			  "name": "id",
+			  "in": "path",
+			  "description": "Unique identifier of a thing",
+			  "required": true,
+			  "schema": {
+			    "$ref": "#/components/x-hidden/id"
+			  }
 			},
 			"meta": {
-				"name": "meta",
-				"in": "query",
-				"description": "If present wraps the response and includes meta information within the response.",
-				"required": false,
-				"schema": {
-					"type": "string"
-				}
+			  "name": "meta",
+			  "in": "query",
+			  "description": "If present wraps the response and includes meta information within the response.",
+			  "required": false,
+			  "schema": {
+			    "type": "string"
+			  }
 			}
-		},
-		"requestBodies": {
+    },
+    "requestBodies": {
 			"new_thing": {
-				"content": {
-					"application/json": {
-						"schema": {
-							"$ref": "#/components/schemas/new_thing"
-						}
-					}
-				}
+			  "content": {
+			    "application/json": {
+			      "schema": {
+			        "$ref": "#/components/schemas/new_thing"
+			      }
+			    }
+			  }
 			}
-		},
-		"responses": {
+    },
+    "responses": {
 			"things_200": {
-				"description": "List of things.",
-				"content": {
-					"application/json": {
-						"schema": {
-							"oneOf": [
-								{
-									"$ref": "#/components/x-hidden/things_wrapped"
-								},
-								{
-									"$ref": "#/components/x-hidden/things_array"
-								}
-							]
-						}
-					}
-				}
+			  "description": "List of things.",
+			  "content": {
+			    "application/json": {
+			      "schema": {
+			        "oneOf": [
+			          {
+			            "$ref": "#/components/x-hidden/things_wrapped"
+			          },
+			          {
+			            "$ref": "#/components/x-hidden/things_array"
+			          }
+			        ]
+			      }
+			    }
+			  }
 			},
 			"thing_200": {
-				"description": "Single thing",
-				"content": {
-					"application/json": {
-						"schema": {
-							"oneOf": [
-								{
-									"$ref": "#/components/x-hidden/thing_wrapped"
-								},
-								{
-									"$ref": "#/components/schemas/thing"
-								}
-							]
-						}
-					}
-				}
+			  "description": "Single thing",
+			  "content": {
+			    "application/json": {
+			      "schema": {
+			        "oneOf": [
+			          {
+			            "$ref": "#/components/x-hidden/thing_wrapped"
+			          },
+			          {
+			            "$ref": "#/components/schemas/thing"
+			          }
+			        ]
+			      }
+			    }
+			  }
 			},
 			"thing_201": {
-				"description": "Single thing",
-				"content": {
-					"application/json": {
-						"schema": {
-							"$ref": "#/components/schemas/thing"
-						}
-					}
-				}
+			  "description": "Single thing",
+			  "content": {
+			    "application/json": {
+			      "schema": {
+			        "$ref": "#/components/schemas/thing"
+			      }
+			    }
+			  }
 			},
 			"error": {
-				"description": "Client or service error.",
-				"content": {
-					"application/json": {
-						"schema": {
-							"$ref": "#/components/schemas/error"
-						}
-					}
-				}
+			  "description": "Client or service error.",
+			  "content": {
+			    "application/json": {
+			      "schema": {
+			        "$ref": "#/components/schemas/error"
+			      }
+			    }
+			  }
 			}
-		},
+    },
 		"schemas": {
 			"new_thing": {
-				"type": "object",
-				"properties": {
-					"description": {
-						"$ref": "#/components/x-hidden/description"
-					},
-					"state": {
-						"$ref": "#/components/x-hidden/state"
-					},
-					"is_dead": {
-						"$ref": "#/components/x-hidden/is_dead"
-					},
-					"additional": {
-						"$ref": "#/components/x-hidden/additional"
-					}
-				}
+			  "type": "object",
+			  "properties": {
+			    "description": {
+			      "$ref": "#/components/x-hidden/description"
+			    },
+			    "state": {
+			      "$ref": "#/components/x-hidden/state"
+			    },
+			    "is_dead": {
+			      "$ref": "#/components/x-hidden/is_dead"
+			    },
+			    "additional": {
+			      "$ref": "#/components/x-hidden/additional"
+			    }
+			  }
 			},
 			"thing": {
-				"type": "object",
-				"properties": {
-					"description": {
-						"$ref": "#/components/x-hidden/description"
-					},
-					"id": {
-						"$ref": "#/components/x-hidden/id"
-					},
-					"state": {
-						"$ref": "#/components/x-hidden/state"
-					},
-					"childrens_ids": {
-						"$ref": "#/components/x-hidden/childrens_ids"
-					},
-					"additional": {
-						"$ref": "#/components/x-hidden/additional"
-					},
-					"self": {
-						"$ref": "#/components/x-hidden/self"
-					}
-				}
+			  "type": "object",
+			  "properties": {
+			    "description": {
+			      "$ref": "#/components/x-hidden/description"
+			    },
+			    "id": {
+			      "$ref": "#/components/x-hidden/id"
+			    },
+			    "state": {
+			      "$ref": "#/components/x-hidden/state"
+			    },
+			    "childrens_ids": {
+			      "$ref": "#/components/x-hidden/childrens_ids"
+			    },
+			    "additional": {
+			      "$ref": "#/components/x-hidden/additional"
+			    },
+			    "self": {
+			      "$ref": "#/components/x-hidden/self"
+			    }
+			  }
 			},
 			"error": {
-				"type": "object",
-				"properties": {
-					"message": {
-						"$ref": "#/components/x-hidden/message"
-					},
-					"self": {
-						"$ref": "#/components/x-hidden/self"
-					}
-				}
+			  "type": "object",
+			  "properties": {
+			    "message": {
+			      "$ref": "#/components/x-hidden/message"
+			    },
+			    "self": {
+			      "$ref": "#/components/x-hidden/self"
+			    }
+			  }
 			},
 			"wrapped_response": {
-				"type": "object",
-				"properties": {
-					"message": {
-						"$ref": "#/components/x-hidden/message"
-					},
-					"self": {
-						"$ref": "#/components/x-hidden/self"
-					},
-					"data": {
-						"description": "The wrapped response data; should be identical to the response returned by the same request without the `meta` parameter"
-					}
-				}
+			  "type": "object",
+			  "properties": {
+			    "message": {
+			      "$ref": "#/components/x-hidden/message"
+			    },
+			    "self": {
+			      "$ref": "#/components/x-hidden/self"
+			    },
+			    "data": {
+			      "description": "The wrapped response data; should be identical to the response returned by the same request without the `meta` parameter"
+			    }
+			  }
 			}
-		},
-		"x-hidden": {
+    },
+    "x-hidden": {
 			"things_wrapped": {
-				"type": "object",
-				"properties": {
-					"message": {
-						"$ref": "#/components/x-hidden/message"
-					},
-					"self": {
-						"$ref": "#/components/x-hidden/self"
-					},
-					"data": {
-						"$ref": "#/components/x-hidden/things_array"
-					}
-				}
+			  "type": "object",
+			  "properties": {
+			    "message": {
+			      "$ref": "#/components/x-hidden/message"
+			    },
+			    "self": {
+			      "$ref": "#/components/x-hidden/self"
+			    },
+			    "data": {
+			      "$ref": "#/components/x-hidden/things_array"
+			    }
+			  }
 			},
 			"things_array": {
-				"type": "array",
-				"items": {
-					"$ref": "#/components/schemas/thing"
-				}
+			  "type": "array",
+			  "items": {
+			    "$ref": "#/components/schemas/thing"
+			  }
 			},
 			"thing_wrapped": {
-				"type": "object",
-				"properties": {
-					"message": {
-						"$ref": "#/components/x-hidden/message"
-					},
-					"self": {
-						"$ref": "#/components/x-hidden/self"
-					},
-					"data": {
-						"$ref": "#/components/schemas/thing"
-					}
-				}
+			  "type": "object",
+			  "properties": {
+			    "message": {
+			      "$ref": "#/components/x-hidden/message"
+			    },
+			    "self": {
+			      "$ref": "#/components/x-hidden/self"
+			    },
+			    "data": {
+			      "$ref": "#/components/schemas/thing"
+			    }
+			  }
 			},
 			"message": {
-				"type": "string",
-				"description": "Human readable summary of the response in a form presentable to end users."
+			  "type": "string",
+			  "description": "Human readable summary of the response in a form presentable to end users."
 			},
 			"self": {
-				"type": "string",
-				"description": "Full path of the URL to the entity or, if wrapped for meta information, the path of the request URL."
+			  "type": "string",
+			  "description": "Full path of the URL to the entity or, if wrapped for meta information, the path of the request URL."
 			},
 			"description": {
-				"type": "string",
-				"description": "Presentable and human readable description of the entity instance."
+			  "type": "string",
+			  "description": "Presentable and human readable description of the entity instance."
 			},
 			"id": {
-				"type": "integer",
-				"format": "int64",
-				"description": "Unique identifier of the thing."
+			  "type": "integer",
+			  "format": "int64",
+			  "description": "Unique identifier of the thing."
 			},
 			"childrens_ids": {
-				"type": "array",
-				"description": "Things that this Thing is a parent of.",
-				"items": {
-					"$ref": "#/components/x-hidden/id"
-				}
+			  "type": "array",
+			  "description": "Things that this Thing is a parent of.",
+			  "items": {
+			    "$ref": "#/components/x-hidden/id"
+			  }
 			},
 			"state": {
-				"type": "string",
-				"description": "State of a thing."
+			  "type": "string",
+			  "description": "State of a thing."
 			},
 			"is_dead": {
-				"type": "boolean",
-				"description": "True if the thing is dead and should not show up in searches."
+			  "type": "boolean",
+			  "description": "True if the thing is dead and should not show up in searches."
 			},
 			"additional": {
-				"type": "string",
-				"description": "Semicolon ';' separated list of additional attributes managed by clients. Each property is a key value pair using a colon ':' as the delimiter, i.e. 'key: value'."
+			  "type": "string",
+			  "description": "Semicolon ';' separated list of additional attributes managed by clients. Each property is a key value pair using a colon ':' as the delimiter, i.e. 'key: value'."
 			}
-		}
+    }
 	}
 }

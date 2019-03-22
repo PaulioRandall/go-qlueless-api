@@ -7,39 +7,18 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-
-	oai "github.com/PaulioRandall/go-qlueless-assembly-api/internal/app/openapi"
-	thg "github.com/PaulioRandall/go-qlueless-assembly-api/internal/app/things"
-	. "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg"
 )
-
-// Not_found_handler handles requests for which no handler could be found
-func QluelessNotFoundHandler(res http.ResponseWriter, req *http.Request) {
-	LogRequest(req)
-
-	r := Reply4XX{
-		Res:     &res,
-		Req:     req,
-		Message: "Resource not found",
-	}
-
-	Write4XXReply(404, &r)
-}
 
 // Main is the entry point for the web server
 func main() {
 	log.Println("[Go Qlueless Assembly API]: Starting application")
 
-	oai.LoadSpec()
-	CreateDummyThings()
-	gorilla := mux.NewRouter()
+	s := Server{
+		router: mux.NewRouter(),
+	}
 
-	gorilla.HandleFunc("/openapi", oai.OpenAPIHandler)
-	gorilla.HandleFunc("/things", thg.ThingsHandler)
-	gorilla.HandleFunc("/things/{id}", thg.ThingHandler)
-
-	gorilla.NotFoundHandler = http.HandlerFunc(QluelessNotFoundHandler)
-	http.Handle("/", gorilla)
+	s.preload()
+	s.routes()
 
 	log.Println("[Go Qlueless Assembly API]: Starting server")
 	log.Fatal(http.ListenAndServe(":8080", nil))

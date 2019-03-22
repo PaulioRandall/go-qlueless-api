@@ -4,4 +4,4 @@ exe=go-qlueless-assembly-api
 root=${GOPATH}/src/github.com/PaulioRandall/${exe}
 
 cd "${root}/cmd"
-go build -o "${GOPATH}/bin/${exe}" "./${exe}.go"
+go build -o "${GOPATH}/bin/${exe}" *.go
