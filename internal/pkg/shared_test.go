@@ -62,19 +62,6 @@ func TestRelURL(t *testing.T) {
 	assert.Equal(t, "/character?q=Nobby", act)
 }
 
-// When given nil, does nothing
-func TestCheck___1(t *testing.T) {
-	Check(nil)
-}
-
-// When given an error, a panics ensues
-func TestCheck___2(t *testing.T) {
-	CheckPanic(t, func() {
-		err := errors.New("Computer says no!")
-		Check(err)
-	})
-}
-
 // When given nil, returns false and doesn't print anything
 func TestLogIfErr___1(t *testing.T) {
 	act := LogIfErr(nil)
@@ -123,73 +110,113 @@ func TestWrite500Reply___3(t *testing.T) {
 	assert.Len(t, m, 2)
 }
 
-// When not 4XX status code, sets 500 status code
-func TestWrite4XXReply___1(t *testing.T) {
-	req, res, rec := SetupRequest("/")
-	r := Reply4XX{
-		Req:     req,
-		Res:     res,
+// When ReplyMeta.Message is set, returns true
+func TestCheckReplyMetaMessage___1(t *testing.T) {
+	req, res, _ := SetupRequest("/")
+	r := ReplyMeta{
 		Message: "message",
 	}
 
-	Write4XXReply(300, &r)
+	act := CheckReplyMetaMessage(res, req, r)
+	assert.True(t, act)
+}
+
+// When ReplyMeta.Message not set, sets 500 status code and returns false
+func TestCheckReplyMetaMessage___2(t *testing.T) {
+	req, res, rec := SetupRequest("/")
+	r := ReplyMeta{}
+
+	act := CheckReplyMetaMessage(res, req, r)
+	assert.False(t, act)
 	assert.Equal(t, 500, rec.Code)
 }
 
-// When Reply4XX.Message not set, sets 500 status code
-func TestWrite4XXReply___2(t *testing.T) {
+// When given a status between max and min, true is returned
+func TestCheckStatusBetween___1(t *testing.T) {
+	req, res, _ := SetupRequest("/")
+	act := CheckStatusBetween(res, req, 404, 400, 499)
+	assert.True(t, act)
+}
+
+// When given a status equal to max or min, true is returned
+func TestCheckStatusCode___2(t *testing.T) {
+	req, res, _ := SetupRequest("/")
+	act := CheckStatusBetween(res, req, 400, 400, 499)
+	assert.True(t, act)
+	act = CheckStatusBetween(res, req, 499, 400, 499)
+	assert.True(t, act)
+}
+
+// When given a status less than min or greater than max, false is returned and
+// 500 status set in response
+func TestCheckStatusCode___3(t *testing.T) {
 	req, res, rec := SetupRequest("/")
-	r := Reply4XX{
-		Req: req,
-		Res: res,
+	act := CheckStatusBetween(res, req, 300, 400, 499)
+	assert.False(t, act)
+	assert.Equal(t, 500, rec.Code)
+
+	req, res, rec = SetupRequest("/")
+	act = CheckStatusBetween(res, req, 500, 400, 499)
+	assert.False(t, act)
+	assert.Equal(t, 500, rec.Code)
+}
+
+// When not 4XX status code, sets 500 status code
+func TestWrite4XXReply___1(t *testing.T) {
+	req, res, rec := SetupRequest("/")
+	r := ReplyMeta{
+		Message: "message",
 	}
 
-	Write4XXReply(400, &r)
+	Write4XXReply(res, req, 300, r)
 	assert.Equal(t, 500, rec.Code)
 }
 
-// When complete Reply4XX passed, sets 200 status code
+// When ReplyMeta.Message not set, sets 500 status code
+func TestWrite4XXReply___2(t *testing.T) {
+	req, res, rec := SetupRequest("/")
+	r := ReplyMeta{}
+
+	Write4XXReply(res, req, 400, r)
+	assert.Equal(t, 500, rec.Code)
+}
+
+// When complete ReplyMeta passed, sets 200 status code
 func TestWrite4XXReply___3(t *testing.T) {
 	req, res, rec := SetupRequest("/search?q=dan+north")
-	r := Reply4XX{
-		Req:     req,
-		Res:     res,
+	r := ReplyMeta{
 		Message: "abc",
 		Self:    (*req).URL.String(),
 		Hints:   "xyz",
 	}
 
-	Write4XXReply(400, &r)
+	Write4XXReply(res, req, 400, r)
 	assert.Equal(t, 400, rec.Code)
 }
 
-// When complete Reply4XX passed, JSON headers are set
+// When complete ReplyMeta passed, JSON headers are set
 func TestWrite4XXReply___4(t *testing.T) {
 	req, res, rec := SetupRequest("/search?q=dan+north")
-	r := Reply4XX{
-		Req:     req,
-		Res:     res,
+	r := ReplyMeta{
 		Message: "abc",
 		Self:    (*req).URL.String(),
 		Hints:   "xyz",
 	}
 
-	Write4XXReply(400, &r)
+	Write4XXReply(res, req, 400, r)
 	CheckJSONResponseHeaders(t, (*rec).Header())
 }
 
 // When complete Reply4XX passed, body is set with expected JSON
 func TestWrite4XXReply___5(t *testing.T) {
 	req, res, rec := SetupRequest("/search?q=dan+north")
-	r := Reply4XX{
-		Req:     req,
-		Res:     res,
+	r := ReplyMeta{
 		Message: "abc",
 		Self:    (*req).URL.Path + "?" + (*req).URL.RawQuery,
 		Hints:   "xyz",
 	}
 
-	Write4XXReply(400, &r)
+	Write4XXReply(res, req, 400, r)
 
 	assert.NotNil(t, rec.Body)
 	var m map[string]interface{}
@@ -205,14 +232,12 @@ func TestWrite4XXReply___5(t *testing.T) {
 // When Reply4XX.Self is not set, Reply4XX.Self is set for us
 func TestWrite4XXReply___6(t *testing.T) {
 	req, res, rec := SetupRequest("/search?q=dan+north")
-	r := Reply4XX{
-		Req:     req,
-		Res:     res,
+	r := ReplyMeta{
 		Message: "abc",
 		Hints:   "xyz",
 	}
 
-	Write4XXReply(400, &r)
+	Write4XXReply(res, req, 400, r)
 
 	assert.NotNil(t, rec.Body)
 	var m map[string]interface{}

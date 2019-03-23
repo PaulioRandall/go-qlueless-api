@@ -14,12 +14,10 @@ import (
 func parseThingID(idStr string, res *http.ResponseWriter, req *http.Request) (int, bool) {
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
-		r := Reply4XX{
-			Res:     res,
-			Req:     req,
+		r := ReplyMeta{
 			Message: fmt.Sprintf("ID '%s' could not be parsed to an integer", idStr),
 		}
-		Write4XXReply(400, &r)
+		Write4XXReply(res, req, 400, r)
 		return 0, false
 	}
 	return id, true
@@ -29,12 +27,10 @@ func parseThingID(idStr string, res *http.ResponseWriter, req *http.Request) (in
 func findThing(id int, res *http.ResponseWriter, req *http.Request) (Thing, bool) {
 	t := Things.Get(id)
 	if t.ID < 1 || t.IsDead {
-		r := Reply4XX{
-			Res:     res,
-			Req:     req,
+		r := ReplyMeta{
 			Message: fmt.Sprintf("Thing %d not found", id),
 		}
-		Write4XXReply(404, &r)
+		Write4XXReply(res, req, 404, r)
 		return Thing{}, false
 	}
 	return t, true
@@ -46,12 +42,10 @@ func decodeThing(res *http.ResponseWriter, req *http.Request) (Thing, bool) {
 	d := json.NewDecoder(req.Body)
 	err := d.Decode(&t)
 	if err != nil {
-		r := Reply4XX{
-			Res:     res,
-			Req:     req,
+		r := ReplyMeta{
 			Message: "Unable to decode request body into a Thing",
 		}
-		Write4XXReply(400, &r)
+		Write4XXReply(res, req, 400, r)
 		return Thing{}, false
 	}
 	return t, true
@@ -62,12 +56,10 @@ func checkThing(t Thing, res *http.ResponseWriter, req *http.Request) (Thing, bo
 	CleanThing(&t)
 	e := ValidateThing(&t, true)
 	if e != nil {
-		r := Reply4XX{
-			Res:     res,
-			Req:     req,
+		r := ReplyMeta{
 			Message: strings.Join(e, " "),
 		}
-		Write4XXReply(400, &r)
+		Write4XXReply(res, req, 400, r)
 		return Thing{}, false
 	}
 	return t, true

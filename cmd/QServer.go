@@ -43,12 +43,10 @@ func HomeHandler(res http.ResponseWriter, req *http.Request) {
 	LogRequest(req)
 
 	//if req.URL.Path != "/" {
-	r := Reply4XX{
-		Res:     &res,
-		Req:     req,
+	r := ReplyMeta{
 		Message: "Resource not found",
 	}
 
-	Write4XXReply(404, &r)
+	Write4XXReply(&res, req, 404, r)
 	//}
 }

@@ -1,4 +1,3 @@
-// Package internal/pkg contains reusable internal application code
 package pkg
 
 import (
@@ -21,13 +20,13 @@ type ReplyMeta struct {
 	Hints   string      `json:"hints,omitempty"`
 }
 
-// A Reply4XX represents the response that is returned for a client '4xx' error
-type Reply4XX struct {
-	Res     *http.ResponseWriter `json:"-"`
-	Req     *http.Request        `json:"-"`
-	Message string               `json:"message"`
-	Self    string               `json:"self"`
-	Hints   string               `json:"hints,omitempty"`
+// RelURL creates the absolute relative URL of the request without any fragment
+func RelURL(req *http.Request) string {
+	r := req.URL.Path
+	if req.URL.RawQuery != "" {
+		r += "?" + req.URL.RawQuery
+	}
+	return r
 }
 
 // IsInt returns true if the string contains an integer
@@ -42,7 +41,7 @@ func Str(s string) *string {
 	return &s
 }
 
-// DeleteStr removes a string from a string array
+// DeleteStr removes a string from a string slice
 func DeleteStr(s []string, i int) []string {
 	l := len(s) - 1
 	s[i] = s[l]
@@ -50,7 +49,7 @@ func DeleteStr(s []string, i int) []string {
 	return s[:l]
 }
 
-// DeleteInt removes an int from an int array
+// DeleteInt removes an int from an int slice
 func DeleteInt(s []int, i int) []int {
 	l := len(s) - 1
 	s[i] = s[l]
@@ -67,25 +66,9 @@ func IsBlank(s string) bool {
 	return false
 }
 
-// RelURL creates the absolute relative URL of the request without any fragment
-func RelURL(req *http.Request) string {
-	r := req.URL.Path
-	if req.URL.RawQuery != "" {
-		r += "?" + req.URL.RawQuery
-	}
-	return r
-}
-
 // LogRequest logs the details of a request such as the URL
 func LogRequest(req *http.Request) {
 	log.Println(req.URL.String())
-}
-
-// Check is a shorthand function for panic if err is not nil
-func Check(err error) {
-	if err != nil {
-		panic(err)
-	}
 }
 
 // LogIfErr checks if the input err is NOT nil returning true if it is.
@@ -112,27 +95,43 @@ func Write500Reply(res *http.ResponseWriter, req *http.Request) {
 	json.NewEncoder(*res).Encode(r)
 }
 
-// Reply4XX sets up the response as a 4XX error
-func Write4XXReply(status int, r *Reply4XX) {
-	if status < 400 || status > 499 {
-		log.Println("[BUG] Status code must be between 400 and 499")
-		Write500Reply(r.Res, r.Req)
+// CheckStatusBetween validates that the status code is between the max an min
+func CheckStatusBetween(res *http.ResponseWriter, req *http.Request, status int, minInc int, maxInc int) bool {
+	if status < minInc || status > maxInc {
+		log.Printf("[BUG] Status code must be between %d and %d\n", minInc, maxInc)
+		Write500Reply(res, req)
+		return false
+	}
+	return true
+}
+
+// CheckReplyMetaMessage validates that the ReplyMeta.Message is not empty
+func CheckReplyMetaMessage(res *http.ResponseWriter, req *http.Request, r ReplyMeta) bool {
+	if r.Message == "" {
+		log.Println("[BUG] error response message is missing")
+		Write500Reply(res, req)
+		return false
+	}
+	return true
+}
+
+// Write4XXReply writes the response for a 4XX error
+func Write4XXReply(res *http.ResponseWriter, req *http.Request, status int, r ReplyMeta) {
+	if !CheckStatusBetween(res, req, status, 400, 499) {
 		return
 	}
 
-	if (*r).Message == "" {
-		log.Println("[BUG] 4xx response message is missing")
-		Write500Reply(r.Res, r.Req)
+	if !CheckReplyMetaMessage(res, req, r) {
 		return
 	}
 
-	if (*r).Self == "" {
-		(*r).Self = RelURL(r.Req)
+	if r.Self == "" {
+		r.Self = RelURL(req)
 	}
 
-	AppendJSONHeaders((*r).Res)
-	(*r.Res).WriteHeader(status)
-	json.NewEncoder(*r.Res).Encode(r)
+	AppendJSONHeaders(res)
+	(*res).WriteHeader(status)
+	json.NewEncoder(*res).Encode(r)
 }
 
 // IsMetaReply returns true if the response should be wrapped and meta
@@ -186,10 +185,8 @@ func WriteEmptyReply(res *http.ResponseWriter) {
 // methodNotAllowed handles cases where a HTTP method has been used but is not
 // handled by this particular endpoint
 func MethodNotAllowed(res *http.ResponseWriter, req *http.Request) {
-	reply := Reply4XX{
-		Res:     res,
-		Req:     req,
+	r := ReplyMeta{
 		Message: fmt.Sprintf("Method not allowed for this endpoint (%s)", req.Method),
 	}
-	Write4XXReply(405, &reply)
+	Write4XXReply(res, req, 405, r)
 }
