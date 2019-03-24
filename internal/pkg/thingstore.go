@@ -7,17 +7,16 @@ import (
 
 // A ThingStore provides synchronisation for accessing Things
 type ThingStore struct {
-	mutex  sync.RWMutex
+	mutex  *sync.RWMutex
 	things map[int]Thing
 }
 
 // NewThingStore creates a new ThingStore
 func NewThingStore() ThingStore {
-	ts := ThingStore{
-		mutex:  sync.RWMutex{},
+	return ThingStore{
+		mutex:  &sync.RWMutex{},
 		things: map[int]Thing{},
 	}
-	return ts
 }
 
 // GetAll returns the map of all Things currently held within the data store
