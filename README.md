@@ -84,7 +84,7 @@ This project is licensed under the [MIT License](https://github.com/PaulioRandal
 
 ## Acknowledgments
 
-- Designs influences
-  - 'The Goal' (by Eliyhahu M. Goldratt)
+- Influences
+  - 'The Goal' by Eliyhahu M. Goldratt
   - Continuous Integration
   - Continuous Delivery

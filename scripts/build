@@ -1,8 +1,6 @@
 #!/bin/bash
 
-exe=go-qlueless-assembly-api
-root=${GOPATH}/src/github.com/PaulioRandall/${exe}
-
-cd "${root}/scripts"
-./build-openapi
-./build-app
+clear
+SCRIPTS=$(cd `dirname $0` && pwd)
+"${SCRIPTS}/_build-openapi"
+"${SCRIPTS}/_build-app"

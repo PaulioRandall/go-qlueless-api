@@ -2,4 +2,4 @@
 
 clear
 SCRIPTS=$(cd `dirname $0` && pwd)
-"${SCRIPTS}/../cmd/go-qlueless-assembly-api.go"
+go test -v "${SCRIPTS}/../..."

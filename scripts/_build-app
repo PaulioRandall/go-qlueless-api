@@ -1,0 +1,8 @@
+#!/bin/bash
+
+SCRIPTS=$(cd `dirname $0` && pwd)
+cd "${SCRIPTS}/.."
+mkdir -p "./bin"
+cd "./cmd"
+go build -o "${SCRIPTS}/../bin/go-qlueless-assembly-api" *.go
+

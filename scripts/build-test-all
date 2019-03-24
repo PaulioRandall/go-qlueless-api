@@ -1,8 +1,0 @@
-#!/bin/bash
-
-exe=go-qlueless-assembly-api
-root=${GOPATH}/src/github.com/PaulioRandall/${exe}
-
-cd "${root}/scripts"
-./build
-./test-all

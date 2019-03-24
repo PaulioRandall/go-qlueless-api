@@ -1,7 +1,0 @@
-#!/bin/bash
-
-exe=go-qlueless-assembly-api
-root=${GOPATH}/src/github.com/PaulioRandall/${exe}
-
-cd "${root}/api/openapi"
-./injector.go

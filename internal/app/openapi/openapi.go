@@ -5,7 +5,6 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"os"
 
 	. "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg"
 )
@@ -42,11 +41,7 @@ func get_Spec(res *http.ResponseWriter, req *http.Request) {
 // LoadJson loads the OpenAPI specification from a file
 func LoadSpec() {
 
-	go_path := os.Getenv("GOPATH")
-	path := go_path +
-		"/src/github.com/PaulioRandall/go-qlueless-assembly-api" +
-		"/api/openapi/openapi.json"
-
+	path := "../api/openapi/openapi.json"
 	bytes, err := ioutil.ReadFile(path)
 	if LogIfErr(err) {
 		spec = nil

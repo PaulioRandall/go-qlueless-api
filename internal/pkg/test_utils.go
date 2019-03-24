@@ -10,7 +10,9 @@ import (
 )
 
 func CheckIsPositive(t *testing.T, i int, m ...interface{}) {
-	assert.Greater(t, 0, i, m)
+	if i < 1 {
+		assert.Fail(t, "Not positive", m)
+	}
 }
 
 func CheckNotBlank(t *testing.T, s string, m ...interface{}) {

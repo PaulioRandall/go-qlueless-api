@@ -1,0 +1,32 @@
+#!/bin/bash
+
+# I run this script once at the start of each working
+# session to open up a browser tab to the service entry point
+# and one for the OpenAPI documentation. By using continuous
+# integration (almost there, just need a pipeline) and
+# always leaving both the remote and my local copy of the
+# source in a state that builds, passes tests, and runs this
+# script should never fail. If it does then my first job is
+# to fix it! It's very rare for me to finish a working
+# session with local code changes that have not been
+# committed and pushed.
+
+clear
+SCRIPTS=$(cd `dirname $0` && pwd)
+"${SCRIPTS}/_build-openapi"
+"${SCRIPTS}/_build-app"
+"${SCRIPTS}/_test"
+
+# Start server in the background but store its PID
+"${SCRIPTS}/../bin/go-qlueless-assembly-api" &
+api_pid=$!
+
+# Open the entry point in the default browser
+"${SCRIPTS}/open-in-browser"
+
+# Open an OpenAPI viewer showing the the service
+# specifcation within the default browser
+"${SCRIPTS}/openapi-in-browser"
+
+# Bring the server back to the foreground
+kill -CONT ${api_pid}

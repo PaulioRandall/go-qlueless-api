@@ -1,0 +1,6 @@
+#!/bin/bash
+
+SCRIPTS=$(cd `dirname $0` && pwd)
+cd "${SCRIPTS}/../api/openapi"
+"./injector.go"
+
