@@ -1,6 +1,6 @@
 # Go Qlueless Assembly API
 
-This is a Go implementation of an API to access Kanban style lists with a manufacturing theme. 
+A Go implementation of a simple API to store and access Kanban related entities and events.
 
 - This project is undertaken with the audible aid of [Avantasia](https://www.avantasia.net)
 - This README was structured on a template by [PurpleBooth](https://gist.github.com/PurpleBooth/109311bb0361f32d87a2)
@@ -17,38 +17,49 @@ I apologise, it's a poor play on words attempting to combine:
 ### Prerequisites
 
 - Go: [https://golang.org/dl/]
+- Git: [https://git-scm.com]
 - https://github.com/gorilla/mux `go get -u github.com/gorilla/mux`
 - https://github.com/stretchr/testify `go get -u github.com/stretchr/testify`
+- A decent web browser
 
 ### Installing (Linux/Bash)
 
-Within a terminal:
+Navigate to a suitable directory, open a terminal, and copy+paste the following:
 
 ```
-mkdir -p "${GOPATH}/src/github.com/PaulioRandall"
-cd "${GOPATH}/src/github.com/PaulioRandall"
 git clone https://github.com/PaulioRandall/go-qlueless-assembly-api.git
-```
-
-From there move to the `scripts` directory for a range of activities including building, testing, running, and opening documentation within your browser:
-
-```
 cd go-qlueless-assembly-api/scripts
+./new-dev-session
 ```
+
+In order, this will:
+
+1. Clone the source code repository
+2. Navigate to the user `scripts` directory
+3. Execute script to build the OpenAPI script
+4. Execute script to build the application
+5. Execute script to test the application
+6. Start the application
+7. Execute script to open a tab to the entry endpoint in your browser
+8. Execute script to open a tab to an OpenAPI specification viewer in your browser
+9. Log server output it's terminated
+
+Many different scripts are available under `/scripts` but those prefixed with an underscore `_` are designed to be called by the other scripts.
 
 ### Running unit tests (Linux/Bash)
 
-Within a terminal:
+Open a terminal at the project root:
 
 ```
-cd "${GOPATH}/src/github.com/PaulioRandall/go-qlueless-assembly-api/scripts"
-./test-all
+cd /scripts
+./build-test
 ```
 
-Alternative you can run the tests with verbose `-v` flag enabled using:
+If you would like detailed test information:
 
 ```
-./test-all-verbose
+./build
+./test-verbose
 ```
 
 ### Running API tests (Linux/Bash)
@@ -72,7 +83,7 @@ I don't think this is applicable, at least not within the foreseeable future.
 
 ## Versioning
 
-This projects [CHANGELOG](https://github.com/PaulioRandall/go-qlueless-assembly-api/blob/master/api/CHANGELOG.md) format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+This projects API [CHANGELOG](https://github.com/PaulioRandall/go-qlueless-assembly-api/blob/master/api/CHANGELOG.md) format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and the API adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Authors
 
