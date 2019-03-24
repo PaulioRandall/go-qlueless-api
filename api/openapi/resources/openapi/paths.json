@@ -1,0 +1,17 @@
+"/openapi": {
+  "get": {
+    "description": "Returns this OpenAPI specification.",
+    "responses": {
+      "200": {
+        "description": "OpenAPI specification.",
+        "content": {
+          "application/vnd.oai.openapi+json": {
+          }
+        }
+      },
+      "default": {
+        "$ref": "#/components/responses/error"
+      }
+    }
+  }
+}

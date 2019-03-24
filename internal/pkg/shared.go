@@ -90,7 +90,7 @@ func Write500Reply(res *http.ResponseWriter, req *http.Request) {
 		Self:    (*req).URL.String(),
 	}
 
-	AppendJSONHeaders(res)
+	AppendJSONHeaders(res, "")
 	(*res).WriteHeader(500)
 	json.NewEncoder(*res).Encode(r)
 }
@@ -129,7 +129,7 @@ func Write4XXReply(res *http.ResponseWriter, req *http.Request, status int, r Re
 		r.Self = RelURL(req)
 	}
 
-	AppendJSONHeaders(res)
+	AppendJSONHeaders(res, "")
 	(*res).WriteHeader(status)
 	json.NewEncoder(*res).Encode(r)
 }
@@ -159,26 +159,46 @@ func PrepResponseData(req *http.Request, data interface{}, msg string) interface
 	}
 }
 
-// AppendJSONHeaders appends the response headers for JSON requests to
+// AppendCORSHeaders appends the CORS response headers for requests to
 // ResponseWriters
-func AppendJSONHeaders(res *http.ResponseWriter) {
-	(*res).Header().Set("Content-Type", "application/json; charset=utf-8")
+func AppendCORSHeaders(res *http.ResponseWriter) {
 	(*res).Header().Set("Access-Control-Allow-Origin", "*")
 	(*res).Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
 	(*res).Header().Set("Access-Control-Allow-Headers", "*")
 }
 
-// WriteReply appends the required JSON headers and then writes the response
+// AppendJSONHeaders appends the response headers for JSON requests to
+// ResponseWriters
+func AppendJSONHeaders(res *http.ResponseWriter, extensionType string) {
+	var ct string
+	if extensionType != "" {
+		ct = fmt.Sprintf("application/%s+json; charset=utf-8", extensionType)
+	} else {
+		ct = "application/json; charset=utf-8"
+	}
+	(*res).Header().Set("Content-Type", ct)
+	AppendCORSHeaders(res)
+}
+
+// WriteReply appends the required headers and then writes the response data
+func WriteReply(res *http.ResponseWriter, req *http.Request, data *[]byte, contentType string) {
+	(*res).Header().Set("Content-Type", contentType)
+	AppendCORSHeaders(res)
+	(*res).WriteHeader(http.StatusOK)
+	(*res).Write(*data)
+}
+
+// WriteJsonReply appends the required JSON headers and then writes the response
 // data
-func WriteReply(res *http.ResponseWriter, req *http.Request, data interface{}) {
-	AppendJSONHeaders(res)
+func WriteJsonReply(res *http.ResponseWriter, req *http.Request, data interface{}, extensionType string) {
+	AppendJSONHeaders(res, extensionType)
 	(*res).WriteHeader(http.StatusOK)
 	json.NewEncoder(*res).Encode(data)
 }
 
 // WriteEmptyReply appends the required JSON headers and sets status as OK
-func WriteEmptyReply(res *http.ResponseWriter) {
-	AppendJSONHeaders(res)
+func WriteEmptyJSONReply(res *http.ResponseWriter, extensionType string) {
+	AppendJSONHeaders(res, extensionType)
 	(*res).WriteHeader(http.StatusOK)
 }
 

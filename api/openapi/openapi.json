@@ -5,6 +5,40 @@
 		"version": "0.0.1"
 	},
 	"paths": {
+		"/openapi": {
+		  "get": {
+		    "description": "Returns this OpenAPI specification.",
+		    "responses": {
+		      "200": {
+		        "description": "OpenAPI specification.",
+		        "content": {
+		          "application/vnd.oai.openapi+json": {
+		          }
+		        }
+		      },
+		      "default": {
+		        "$ref": "#/components/responses/error"
+		      }
+		    }
+		  }
+		},
+		"/changelog": {
+		  "get": {
+		    "description": "Returns the API changelog.",
+		    "responses": {
+		      "200": {
+		        "description": "Changelog.",
+		        "content": {
+		          "text/markdown": {
+		          }
+		        }
+		      },
+		      "default": {
+		        "$ref": "#/components/responses/error"
+		      }
+		    }
+		  }
+		},
 		"/things": {
 		  "get": {
 		    "description": "Returns all things.",

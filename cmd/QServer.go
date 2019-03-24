@@ -6,6 +6,7 @@ import (
 
 	gor "github.com/gorilla/mux"
 
+	chg "github.com/PaulioRandall/go-qlueless-assembly-api/internal/app/changelog"
 	oai "github.com/PaulioRandall/go-qlueless-assembly-api/internal/app/openapi"
 	thg "github.com/PaulioRandall/go-qlueless-assembly-api/internal/app/things"
 	. "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg"
@@ -21,6 +22,7 @@ type QServer struct {
 // preload performs any loading of configurations or preloading of static values
 func (s *QServer) preload() {
 	s.preloadOnce.Do(func() {
+		chg.LoadChangelog()
 		oai.LoadSpec()
 		CreateDummyThings()
 	})
@@ -29,6 +31,7 @@ func (s *QServer) preload() {
 // routes attaches the service routes to the servers router
 func (s *QServer) routes() {
 	s.routeOnce.Do(func() {
+		s.router.HandleFunc("/changelog", chg.ChangelogHandler)
 		s.router.HandleFunc("/openapi", oai.OpenAPIHandler)
 		s.router.HandleFunc("/things", thg.ThingsHandler)
 		s.router.HandleFunc("/things/{id}", thg.ThingHandler)

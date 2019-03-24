@@ -50,11 +50,14 @@ func CheckHeaderValue(t *testing.T, h http.Header, k string, exp string) {
 	assert.Equal(t, exp, h.Get(k))
 }
 
-func CheckJSONResponseHeaders(t *testing.T, h http.Header) {
-	CheckHeaderValue(t, h, "Content-Type", "application/json; charset=utf-8")
+func CheckCORSResponseHeaders(t *testing.T, h http.Header) {
 	CheckHeaderValue(t, h, "Access-Control-Allow-Origin", "*")
 	CheckHeaderExists(t, h, "Access-Control-Allow-Methods")
 	CheckHeaderExists(t, h, "Access-Control-Allow-Headers")
+}
+
+func CheckJSONResponseHeaders(t *testing.T, h http.Header) {
+	CheckHeaderValue(t, h, "Content-Type", "application/json; charset=utf-8")
 }
 
 func NewDummyThing() Thing {

@@ -19,9 +19,9 @@ func OpenAPIHandler(res http.ResponseWriter, req *http.Request) {
 	case "GET":
 		get_Spec(&res, req)
 	case "HEAD":
-		WriteEmptyReply(&res)
+		WriteEmptyJSONReply(&res, "vnd.oai.openapi")
 	case "OPTIONS":
-		WriteEmptyReply(&res)
+		WriteEmptyJSONReply(&res, "vnd.oai.openapi")
 	default:
 		MethodNotAllowed(&res, req)
 	}
@@ -35,7 +35,7 @@ func get_Spec(res *http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	WriteReply(res, req, spec)
+	WriteJsonReply(res, req, spec, "vnd.oai.openapi")
 }
 
 // LoadJson loads the OpenAPI specification from a file

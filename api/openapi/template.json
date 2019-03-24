@@ -5,6 +5,8 @@
 		"version": "0.0.1"
 	},
 	"paths": {
+    {{- "\n"}}{{ .Inject "/openapi/paths.json" 2}},
+    {{- "\n"}}{{ .Inject "/changelog/paths.json" 2}},
     {{- "\n"}}{{ .Inject "/things/paths.json" 2}}
   },
 	"components": {

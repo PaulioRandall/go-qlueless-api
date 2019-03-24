@@ -17,7 +17,7 @@ func ThingsHandler(res http.ResponseWriter, req *http.Request) {
 	case "POST":
 		post_NewThing(&res, req)
 	case "OPTIONS":
-		WriteEmptyReply(&res)
+		WriteEmptyJSONReply(&res, "")
 	default:
 		MethodNotAllowed(&res, req)
 	}
@@ -28,7 +28,7 @@ func get_AllThings(res *http.ResponseWriter, req *http.Request) {
 	t := Things.GetAllAlive()
 	m := fmt.Sprintf("Found %d Things", len(t))
 	data := PrepResponseData(req, t, m)
-	WriteReply(res, req, data)
+	WriteJsonReply(res, req, data, "")
 }
 
 // post_NewThing handles requests to create new things
@@ -47,5 +47,5 @@ func post_NewThing(res *http.ResponseWriter, req *http.Request) {
 	t = Things.Add(t)
 	m := fmt.Sprintf("New Thing with ID %d created", t.ID)
 	data := PrepResponseData(req, t, m)
-	WriteReply(res, req, data)
+	WriteJsonReply(res, req, data, "")
 }

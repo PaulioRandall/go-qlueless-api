@@ -17,9 +17,9 @@ func ThingHandler(res http.ResponseWriter, req *http.Request) {
 	case "GET":
 		get_Thing(&res, req)
 	case "HEAD":
-		WriteEmptyReply(&res)
+		WriteEmptyJSONReply(&res, "")
 	case "OPTIONS":
-		WriteEmptyReply(&res)
+		WriteEmptyJSONReply(&res, "")
 	default:
 		MethodNotAllowed(&res, req)
 	}
@@ -40,5 +40,5 @@ func get_Thing(res *http.ResponseWriter, req *http.Request) {
 
 	m := fmt.Sprintf("Found Thing with ID %d", id)
 	data := PrepResponseData(req, t, m)
-	WriteReply(res, req, data)
+	WriteJsonReply(res, req, data, "")
 }

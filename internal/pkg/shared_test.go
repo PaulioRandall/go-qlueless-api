@@ -302,42 +302,81 @@ func TestPrepResponseData___3(t *testing.T) {
 	assert.Equal(t, exp, act)
 }
 
+// When invoked, the CORS response headers are set
+func TestAppendCORSHeaders___1(t *testing.T) {
+	rec := httptest.NewRecorder()
+	var res http.ResponseWriter = rec
+	AppendCORSHeaders(&res)
+	CheckCORSResponseHeaders(t, rec.Header())
+}
+
 // When invoked, the JSON response headers are set
 func TestAppendJSONHeaders___1(t *testing.T) {
 	rec := httptest.NewRecorder()
 	var res http.ResponseWriter = rec
-	AppendJSONHeaders(&res)
+	AppendJSONHeaders(&res, "")
 	CheckJSONResponseHeaders(t, rec.Header())
 }
 
 // When given valid inputs, 200 status code is set
 func TestWriteReply___1(t *testing.T) {
 	req, res, rec := SetupRequest("/")
-	m := make(map[string]interface{})
-	m["killswitch"] = "engage"
+	b := []byte("Ghost in the moon")
 
-	WriteReply(res, req, m)
+	WriteReply(res, req, &b, "text/plain")
 	assert.Equal(t, 200, rec.Code)
 }
 
-// When given valid inputs, the JSON response headers are set
+// When given valid inputs, the response headers are set
 func TestWriteReply___2(t *testing.T) {
+	req, res, rec := SetupRequest("/")
+	b := []byte("Ghost in the moon")
+
+	WriteReply(res, req, &b, "text/plain")
+	CheckCORSResponseHeaders(t, rec.Header())
+	CheckHeaderValue(t, rec.Header(), "Content-Type", "text/plain")
+}
+
+// When given valid inputs, the data is written to the response body
+func TestWriteReply___3(t *testing.T) {
+	req, res, rec := SetupRequest("/")
+	b := []byte("Ghost in the moon")
+
+	WriteReply(res, req, &b, "text/plain")
+
+	assert.NotNil(t, rec.Body)
+	s := string(rec.Body.String())
+	assert.Equal(t, "Ghost in the moon", s)
+}
+
+// When given valid inputs, 200 status code is set
+func TestWriteJsonReply___1(t *testing.T) {
 	req, res, rec := SetupRequest("/")
 	m := make(map[string]interface{})
 	m["killswitch"] = "engage"
 
-	WriteReply(res, req, m)
+	WriteJsonReply(res, req, m, "")
+	assert.Equal(t, 200, rec.Code)
+}
+
+// When given valid inputs, the JSON response headers are set
+func TestWriteJsonReply___2(t *testing.T) {
+	req, res, rec := SetupRequest("/")
+	m := make(map[string]interface{})
+	m["killswitch"] = "engage"
+
+	WriteJsonReply(res, req, m, "")
 	CheckJSONResponseHeaders(t, rec.Header())
 }
 
 // When given valid inputs, the data is serialised into JSON the response body
 // is set
-func TestWriteReply___3(t *testing.T) {
+func TestWriteJsonReply___3(t *testing.T) {
 	req, res, rec := SetupRequest("/")
 	data := make(map[string]interface{})
 	data["killswitch"] = "engage"
 
-	WriteReply(res, req, data)
+	WriteJsonReply(res, req, data, "")
 
 	assert.NotNil(t, rec.Body)
 	var m map[string]interface{}
@@ -350,7 +389,7 @@ func TestWriteReply___3(t *testing.T) {
 func TestWriteEmptyReply___1(t *testing.T) {
 	rec := httptest.NewRecorder()
 	var res http.ResponseWriter = rec
-	WriteEmptyReply(&res)
+	WriteEmptyJSONReply(&res, "")
 	assert.Equal(t, 200, rec.Code)
 }
 
@@ -358,7 +397,7 @@ func TestWriteEmptyReply___1(t *testing.T) {
 func TestWriteEmptyReply___2(t *testing.T) {
 	rec := httptest.NewRecorder()
 	var res http.ResponseWriter = rec
-	WriteEmptyReply(&res)
+	WriteEmptyJSONReply(&res, "")
 	CheckJSONResponseHeaders(t, rec.Header())
 }
 
@@ -366,6 +405,6 @@ func TestWriteEmptyReply___2(t *testing.T) {
 func TestWriteEmptyReply___3(t *testing.T) {
 	rec := httptest.NewRecorder()
 	var res http.ResponseWriter = rec
-	WriteEmptyReply(&res)
+	WriteEmptyJSONReply(&res, "")
 	assert.Empty(t, rec.Body)
 }

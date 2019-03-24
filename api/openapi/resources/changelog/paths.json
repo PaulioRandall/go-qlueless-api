@@ -1,0 +1,17 @@
+"/changelog": {
+  "get": {
+    "description": "Returns the API changelog.",
+    "responses": {
+      "200": {
+        "description": "Changelog.",
+        "content": {
+          "text/markdown": {
+          }
+        }
+      },
+      "default": {
+        "$ref": "#/components/responses/error"
+      }
+    }
+  }
+}

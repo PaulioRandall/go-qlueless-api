@@ -1,5 +1,5 @@
 # Changelog
-All notable changes to this project will be documented in this file.
+All notable changes to this projects API will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
@@ -13,10 +13,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased - 2019-03-13
 ### Added
-- Created `(GET) /things` which returns all things
-- Created `(GET) /things/{id}` which returns a specific thing
-- Added `description`, `id`, `parent_id`, `state`, `additional` and `self` properties to `/things`
 - Added `(GET) /openapi` which returns the OpenAPI specification of the API
-- Added the `meta` query parameter to all `GET` endpoints, except `(GET) /openapi`, that will wrap the response data and include meta information within the response
-- Added `message`, `data` and `self` meta information properties to wrapped JSON responses
-- Added `(POST) /thing` which creates a new thing within the data store
+- Added `(GET) /changelog` which returns this changelog
+- Added `(GET) /things` which returns all Things
+- Added `(GET) /things/{id}` which returns a specific Thing
+- Updated `(GET) /things` and `(GET) /things/{id}` to return Things or a Thing with the properties `description`, `id`, `childrens_ids`, `state`, `additional`, `is_dead`, and `self`
+- Added `(POST) /thing` which creates a new Thing within the data store
+- Updated `(POST) /thing` to accept a Thing with the properties: `description`, `childrens_ids`, `state`, `additional`, and `is_dead`
+- Added the `meta` query parameter to all `GET` endpoints, except `(GET) /openapi` and `(GET) /changelog`, that will wrap the response data to include meta information
+- Updated `meta` parameterised responses with the properties `message`, `data` and `self`
