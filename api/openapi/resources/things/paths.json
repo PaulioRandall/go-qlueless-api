@@ -3,7 +3,7 @@
     "description": "Returns all things.",
     "parameters": [
       {
-        "$ref": "#/components/parameters/meta"
+        "$ref": "#/components/parameters/wrap"
       }
     ],
     "responses": {
@@ -38,7 +38,7 @@
         "$ref": "#/components/parameters/id"
       },
       {
-        "$ref": "#/components/parameters/meta"
+        "$ref": "#/components/parameters/wrap"
       }
     ],
     "responses": {

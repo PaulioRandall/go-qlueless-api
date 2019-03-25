@@ -49,12 +49,10 @@
   "format": "int64",
   "description": "Unique identifier of the thing."
 },
-"childrens_ids": {
-  "type": "array",
-  "description": "Things that this Thing is a parent of.",
-  "items": {
-    "$ref": "#/components/x-hidden/id"
-  }
+"child_ids": {
+  "type": "string",
+  "format": "csv",
+  "description": "CSV of IDs that identify Things that this Thing is a parent of."
 },
 "state": {
   "type": "string",

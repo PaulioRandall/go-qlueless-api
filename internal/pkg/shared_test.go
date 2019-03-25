@@ -246,23 +246,23 @@ func TestWrite4XXReply___6(t *testing.T) {
 	assert.Equal(t, "/search?q=dan+north", m["self"])
 }
 
-// When the 'meta' query param is present in a request, returns true
-func TestIsMetaReply___1(t *testing.T) {
-	req, err := http.NewRequest("GET", "http://example.com/?meta=", nil)
+// When the 'wrap' query param is present in a request, returns true
+func TestWrapReply___1(t *testing.T) {
+	req, err := http.NewRequest("GET", "http://example.com/?wrap=", nil)
 	assert.Nil(t, err)
-	act := IsMetaReply(req)
+	act := WrapReply(req)
 	assert.True(t, act)
 }
 
-// When the 'meta' query param is not present in a request, returns false
+// When the 'wrap' query param is not present in a request, returns false
 func TestIsMetaReply___2(t *testing.T) {
 	req, err := http.NewRequest("GET", "http://example.com/?q=abc", nil)
 	assert.Nil(t, err)
-	act := IsMetaReply(req)
+	act := WrapReply(req)
 	assert.False(t, act)
 }
 
-// When 'meta' not present and data is nil, nil is returned
+// When 'wrap' not present and data is nil, nil is returned
 func TestPrepResponseData___1(t *testing.T) {
 	req, err := http.NewRequest("GET", "http://example.com/", nil)
 	assert.Nil(t, err)
@@ -271,7 +271,7 @@ func TestPrepResponseData___1(t *testing.T) {
 	assert.Nil(t, act)
 }
 
-// When 'meta' not present and data is provided, data is returned unchanged
+// When 'wrap' not present and data is provided, data is returned unchanged
 func TestPrepResponseData___2(t *testing.T) {
 	req, err := http.NewRequest("GET", "http://example.com/", nil)
 	assert.Nil(t, err)
@@ -285,7 +285,7 @@ func TestPrepResponseData___2(t *testing.T) {
 
 // When 'meta' is present and data is provided, wrapped reply is returned
 func TestPrepResponseData___3(t *testing.T) {
-	req, err := http.NewRequest("GET", "http://example.com/?meta", nil)
+	req, err := http.NewRequest("GET", "http://example.com/?wrap", nil)
 	assert.Nil(t, err)
 
 	data := make(map[string]interface{})

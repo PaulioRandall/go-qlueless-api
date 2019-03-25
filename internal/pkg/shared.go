@@ -134,10 +134,10 @@ func Write4XXReply(res *http.ResponseWriter, req *http.Request, status int, r Re
 	json.NewEncoder(*res).Encode(r)
 }
 
-// IsMetaReply returns true if the response should be wrapped and meta
+// WrapReply returns true if the response should be wrapped and meta
 // information included
-func IsMetaReply(req *http.Request) bool {
-	v := req.URL.Query()["meta"]
+func WrapReply(req *http.Request) bool {
+	v := req.URL.Query()["wrap"]
 	if v == nil {
 		return false
 	}
@@ -148,7 +148,7 @@ func IsMetaReply(req *http.Request) bool {
 // meta information but only if the client has requested it be so. Else the
 // input data is returned unchanged
 func PrepResponseData(req *http.Request, data interface{}, msg string) interface{} {
-	if IsMetaReply(req) {
+	if WrapReply(req) {
 		return ReplyMeta{
 			Message: msg,
 			Self:    req.URL.String(),

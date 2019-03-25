@@ -44,7 +44,7 @@
 		    "description": "Returns all things.",
 		    "parameters": [
 		      {
-		        "$ref": "#/components/parameters/meta"
+		        "$ref": "#/components/parameters/wrap"
 		      }
 		    ],
 		    "responses": {
@@ -79,7 +79,7 @@
 		        "$ref": "#/components/parameters/id"
 		      },
 		      {
-		        "$ref": "#/components/parameters/meta"
+		        "$ref": "#/components/parameters/wrap"
 		      }
 		    ],
 		    "responses": {
@@ -104,10 +104,10 @@
 			    "$ref": "#/components/x-hidden/id"
 			  }
 			},
-			"meta": {
-			  "name": "meta",
+			"wrap": {
+			  "name": "wrap",
 			  "in": "query",
-			  "description": "If present wraps the response and includes meta information within the response.",
+			  "description": "If present wraps the response and includes meta information to it.",
 			  "required": false,
 			  "schema": {
 			    "type": "string"
@@ -191,6 +191,9 @@
 			    "state": {
 			      "$ref": "#/components/x-hidden/state"
 			    },
+			    "child_ids": {
+			      "$ref": "#/components/x-hidden/child_ids"
+			    },
 			    "is_dead": {
 			      "$ref": "#/components/x-hidden/is_dead"
 			    },
@@ -211,8 +214,8 @@
 			    "state": {
 			      "$ref": "#/components/x-hidden/state"
 			    },
-			    "childrens_ids": {
-			      "$ref": "#/components/x-hidden/childrens_ids"
+			    "child_ids": {
+			      "$ref": "#/components/x-hidden/child_ids"
 			    },
 			    "additional": {
 			      "$ref": "#/components/x-hidden/additional"
@@ -300,12 +303,10 @@
 			  "format": "int64",
 			  "description": "Unique identifier of the thing."
 			},
-			"childrens_ids": {
-			  "type": "array",
-			  "description": "Things that this Thing is a parent of.",
-			  "items": {
-			    "$ref": "#/components/x-hidden/id"
-			  }
+			"child_ids": {
+			  "type": "string",
+			  "format": "csv",
+			  "description": "CSV of IDs that identify Things that this Thing is a parent of."
 			},
 			"state": {
 			  "type": "string",
