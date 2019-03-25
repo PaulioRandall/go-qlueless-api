@@ -28,7 +28,7 @@ func get_AllThings(res *http.ResponseWriter, req *http.Request) {
 	t := Things.GetAllAlive()
 	m := fmt.Sprintf("Found %d Things", len(t))
 	data := PrepResponseData(req, t, m)
-	WriteJsonReply(res, req, data, "")
+	WriteJSONReply(res, req, data, "")
 }
 
 // post_NewThing handles requests to create new things
@@ -47,5 +47,5 @@ func post_NewThing(res *http.ResponseWriter, req *http.Request) {
 	t = Things.Add(t)
 	m := fmt.Sprintf("New Thing with ID %d created", t.ID)
 	data := PrepResponseData(req, t, m)
-	WriteJsonReply(res, req, data, "")
+	WriteJSONReply(res, req, data, "")
 }

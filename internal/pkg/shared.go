@@ -181,22 +181,29 @@ func AppendJSONHeaders(res *http.ResponseWriter, extensionType string) {
 }
 
 // WriteReply appends the required headers and then writes the response data
-func WriteReply(res *http.ResponseWriter, req *http.Request, data *[]byte, contentType string) {
+func WriteReply(res *http.ResponseWriter, data *[]byte, contentType string) {
 	(*res).Header().Set("Content-Type", contentType)
 	AppendCORSHeaders(res)
 	(*res).WriteHeader(http.StatusOK)
 	(*res).Write(*data)
 }
 
-// WriteJsonReply appends the required JSON headers and then writes the response
+// WriteEmptyReply appends the required headers without writing any data
+func WriteEmptyReply(res *http.ResponseWriter, contentType string) {
+	(*res).Header().Set("Content-Type", contentType)
+	AppendCORSHeaders(res)
+	(*res).WriteHeader(http.StatusOK)
+}
+
+// WriteJSONReply appends the required JSON headers and then writes the response
 // data
-func WriteJsonReply(res *http.ResponseWriter, req *http.Request, data interface{}, extensionType string) {
+func WriteJSONReply(res *http.ResponseWriter, req *http.Request, data interface{}, extensionType string) {
 	AppendJSONHeaders(res, extensionType)
 	(*res).WriteHeader(http.StatusOK)
 	json.NewEncoder(*res).Encode(data)
 }
 
-// WriteEmptyReply appends the required JSON headers and sets status as OK
+// WriteEmptyJSONReply appends the required JSON headers and sets status as OK
 func WriteEmptyJSONReply(res *http.ResponseWriter, extensionType string) {
 	AppendJSONHeaders(res, extensionType)
 	(*res).WriteHeader(http.StatusOK)

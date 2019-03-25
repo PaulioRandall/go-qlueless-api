@@ -8,9 +8,11 @@ import (
 	. "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg"
 )
 
+const mime_md = "text/markdown; charset=utf-8"
+
 var changelog *[]byte = nil
 
-// ChangelogHandler handles requests for the APIs CHANGELOG
+// ChangelogHandler handles requests for the APIs changelog
 func ChangelogHandler(res http.ResponseWriter, req *http.Request) {
 	LogRequest(req)
 
@@ -18,9 +20,9 @@ func ChangelogHandler(res http.ResponseWriter, req *http.Request) {
 	case "GET":
 		get_Changelog(&res, req)
 	case "HEAD":
-		WriteEmptyJSONReply(&res, "")
+		WriteEmptyReply(&res, mime_md)
 	case "OPTIONS":
-		WriteEmptyJSONReply(&res, "")
+		WriteEmptyReply(&res, mime_md)
 	default:
 		MethodNotAllowed(&res, req)
 	}
@@ -34,7 +36,7 @@ func get_Changelog(res *http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	WriteReply(res, req, changelog, "text/markdown; charset=utf-8")
+	WriteReply(res, changelog, mime_md)
 }
 
 // LoadChangelog loads the changelog from a file

@@ -40,5 +40,5 @@ func get_Thing(res *http.ResponseWriter, req *http.Request) {
 
 	m := fmt.Sprintf("Found Thing with ID %d", id)
 	data := PrepResponseData(req, t, m)
-	WriteJsonReply(res, req, data, "")
+	WriteJSONReply(res, req, data, "")
 }

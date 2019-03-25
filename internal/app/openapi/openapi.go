@@ -35,7 +35,7 @@ func get_Spec(res *http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	WriteJsonReply(res, req, spec, "vnd.oai.openapi")
+	WriteJSONReply(res, req, spec, "vnd.oai.openapi")
 }
 
 // LoadJson loads the OpenAPI specification from a file
