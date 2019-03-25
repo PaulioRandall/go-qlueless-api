@@ -56,7 +56,6 @@ func TestDecodeThing___1(t *testing.T) {
 	assert.Equal(t, "description", act.Description)
 	assert.Equal(t, "state", act.State)
 	assert.Equal(t, "1", act.ID)
-	assert.Equal(t, "/things/1", act.Self)
 	assert.Equal(t, false, act.IsDead)
 	assert.Equal(t, "colour:red", act.Additional)
 }
@@ -91,7 +90,6 @@ func TestCheckThing___1(t *testing.T) {
 		Description: "description",
 		State:       "state",
 		IsDead:      false,
-		Self:        "/things/1",
 		ID:          "1",
 	}
 
@@ -108,7 +106,6 @@ func TestCheckThing___2(t *testing.T) {
 		State:       "   state   ",
 		ChildIDs:    "1,0,-1",
 		IsDead:      false,
-		Self:        "/things/1",
 		ID:          "1",
 	}
 
@@ -126,7 +123,6 @@ func TestCheckThing___3(t *testing.T) {
 		Description: "",
 		State:       "",
 		IsDead:      false,
-		Self:        "/things/1",
 		ID:          "1",
 	}
 

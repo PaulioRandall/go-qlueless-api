@@ -14,7 +14,6 @@ type Thing struct {
 	State       string `json:"state"`
 	IsDead      bool   `json:"-"`
 	Additional  string `json:"additional,omitempty"`
-	Self        string `json:"self"`
 }
 
 // SplitChildIDs returns the IDs of the children as a slice
@@ -73,7 +72,6 @@ func (t *Thing) ValidateThing(isNew bool) []string {
 	if !isNew {
 		r = appendIfNotPositive((*t).ID, r,
 			fmt.Sprintf("The ID '%s' is not allowed to be zero or negative.", (*t).ID))
-		r = appendIfEmpty((*t).Self, r, "The 'Self' must be present.")
 	}
 
 	return r
@@ -104,25 +102,21 @@ func CreateDummyThings() {
 		ID:          "1",
 		ChildIDs:    "2,3,4",
 		State:       "in_progress",
-		Self:        "/things/1",
 	})
 	Things.Add(Thing{
 		Description: "# Name the saga\nThink of a name for the saga.",
 		ID:          "2",
 		State:       "potential",
-		Self:        "/things/2",
 	})
 	Things.Add(Thing{
 		Description: "# Outline the first chapter",
 		ID:          "3",
 		State:       "delivered",
 		Additional:  "archive_note:Done but not a compelling start",
-		Self:        "/things/3",
 	})
 	Things.Add(Thing{
 		Description: "# Outline the second chapter",
 		ID:          "4",
 		State:       "in_progress",
-		Self:        "/things/4",
 	})
 }

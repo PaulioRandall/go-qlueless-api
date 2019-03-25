@@ -31,7 +31,6 @@ func TestCleanThing___2(t *testing.T) {
 // When given a Thing with nothing to clean, nothing is cleaned
 func TestCleanThing___3(t *testing.T) {
 	thing := Thing{
-		Self:   "  self  ",
 		ID:     "1",
 		IsDead: true,
 	}
@@ -40,7 +39,6 @@ func TestCleanThing___3(t *testing.T) {
 	assert.Equal(t, "", thing.State)
 	assert.Equal(t, "", thing.Additional)
 	assert.Empty(t, thing.ChildIDs)
-	assert.Equal(t, "  self  ", thing.Self)
 	assert.Equal(t, "1", thing.ID)
 	assert.Equal(t, true, thing.IsDead)
 }
@@ -132,7 +130,6 @@ func TestValidateThing___2(t *testing.T) {
 		State:       "state",
 		ChildIDs:    "2,3",
 		ID:          "1",
-		Self:        "/self",
 	}
 	act := thing.ValidateThing(false)
 	assert.Empty(t, act)
@@ -145,7 +142,6 @@ func TestValidateThing___3(t *testing.T) {
 		Description: "description",
 		State:       "state",
 		ID:          "1",
-		Self:        "/self",
 	}
 	act := thing.ValidateThing(false)
 	assert.Empty(t, act)
@@ -171,8 +167,7 @@ func TestValidateThing___5(t *testing.T) {
 		State:       "",
 		ChildIDs:    "0,-9000",
 		ID:          "0",
-		Self:        "",
 	}
 	act := thing.ValidateThing(false)
-	assert.Len(t, act, 6)
+	assert.Len(t, act, 5)
 }

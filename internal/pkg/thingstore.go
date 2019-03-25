@@ -1,7 +1,6 @@
 package pkg
 
 import (
-	"fmt"
 	"strconv"
 	"sync"
 )
@@ -54,7 +53,6 @@ func (ts ThingStore) Add(t Thing) Thing {
 	defer ts.mutex.Unlock()
 
 	t.ID = ts.genNewID()
-	t.Self = fmt.Sprintf("/things/%s", t.ID)
 
 	ts.things[t.ID] = t
 	return t

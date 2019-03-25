@@ -17,7 +17,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Added `(GET) /changelog` which returns this changelog
 - Added `(GET) /things` which returns all Things
 - Added `(GET) /things/{id}` which returns a specific Thing
-- Updated `(GET) /things` and `(GET) /things/{id}` to return Things or a Thing with the properties `description`, `id`, `child_ids`, `state`, `additional`, `is_dead`, and `self`
+- Updated `(GET) /things` and `(GET) /things/{id}` to return Things or a Thing with the properties `description`, `id`, `child_ids`, `state`, `additional`, and `is_dead`
 - Added `(POST) /thing` which creates a new Thing within the data store
 - Updated `(POST) /thing` to accept a Thing with the properties: `description`, `child_ids`, `state`, `additional`, and `is_dead`
 - Added the `wrap` query parameter to all `GET` endpoints, except `(GET) /openapi` and `(GET) /changelog`, that will wrap the response data to include meta information

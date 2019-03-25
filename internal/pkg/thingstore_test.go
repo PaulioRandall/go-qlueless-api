@@ -85,7 +85,6 @@ func TestThingStore___Add___1(t *testing.T) {
 
 	act := ts.Add(a)
 	assert.Equal(t, "1", act.ID)
-	assert.Equal(t, "/things/1", act.Self)
 	assert.Equal(t, a.Description, act.Description)
 	assert.Equal(t, a.State, act.State)
 }

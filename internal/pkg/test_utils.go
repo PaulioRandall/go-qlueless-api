@@ -74,7 +74,6 @@ func DummyThing() Thing {
 		Description: "# Outline the saga\nCreate a rough outline of the new saga.",
 		State:       "in_progress",
 		IsDead:      false,
-		Self:        "/things/1",
 		ID:          "1",
 	}
 }
