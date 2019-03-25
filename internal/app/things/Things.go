@@ -45,7 +45,7 @@ func post_NewThing(res *http.ResponseWriter, req *http.Request) {
 	}
 
 	t = Things.Add(t)
-	m := fmt.Sprintf("New Thing with ID %d created", t.ID)
+	m := fmt.Sprintf("New Thing with ID %s created", t.ID)
 	data := PrepResponseData(req, t, m)
 	WriteJSONReply(res, req, data, "")
 }

@@ -27,18 +27,14 @@ func ThingHandler(res http.ResponseWriter, req *http.Request) {
 
 // get_Thing generates responses for requests for a single Thing
 func get_Thing(res *http.ResponseWriter, req *http.Request) {
-	idStr := mux.Vars(req)["id"]
-	id, ok := parseThingID(idStr, res, req)
-	if !ok {
-		return
-	}
+	id := mux.Vars(req)["id"]
 
 	t, ok := findThing(id, res, req)
 	if !ok {
 		return
 	}
 
-	m := fmt.Sprintf("Found Thing with ID %d", id)
+	m := fmt.Sprintf("Found Thing with ID %s", id)
 	data := PrepResponseData(req, t, m)
 	WriteJSONReply(res, req, data, "")
 }

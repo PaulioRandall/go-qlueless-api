@@ -2,25 +2,26 @@ package pkg
 
 import (
 	"fmt"
+	"strconv"
 	"sync"
 )
 
 // A ThingStore provides synchronisation for accessing Things
 type ThingStore struct {
 	mutex  *sync.RWMutex
-	things map[int]Thing
+	things map[string]Thing
 }
 
 // NewThingStore creates a new ThingStore
 func NewThingStore() ThingStore {
 	return ThingStore{
 		mutex:  &sync.RWMutex{},
-		things: map[int]Thing{},
+		things: map[string]Thing{},
 	}
 }
 
 // GetAll returns the map of all Things currently held within the data store
-func (ts ThingStore) GetAll() map[int]Thing {
+func (ts ThingStore) GetAll() map[string]Thing {
 	ts.mutex.RLock()
 	defer ts.mutex.RUnlock()
 	return ts.things
@@ -41,7 +42,7 @@ func (ts ThingStore) GetAllAlive() []Thing {
 }
 
 // Get returns a specific Thing or nil if the Thing does not exist
-func (ts ThingStore) Get(id int) Thing {
+func (ts ThingStore) Get(id string) Thing {
 	ts.mutex.RLock()
 	defer ts.mutex.RUnlock()
 	return ts.things[id]
@@ -53,21 +54,25 @@ func (ts ThingStore) Add(t Thing) Thing {
 	defer ts.mutex.Unlock()
 
 	t.ID = ts.genNewID()
-	t.Self = fmt.Sprintf("/things/%d", t.ID)
+	t.Self = fmt.Sprintf("/things/%s", t.ID)
 
 	ts.things[t.ID] = t
 	return t
 }
 
 // genNewID generates a new, unused, Thing ID
-func (ts ThingStore) genNewID() int {
-	ID := 0
-	for k, _ := range ts.things {
-		if k > ID {
-			ID = k
+func (ts ThingStore) genNewID() string {
+	ID := 1
+	var r string
+
+	for {
+		r = strconv.Itoa(ID)
+		_, ok := ts.things[r]
+		if !ok {
+			break
 		}
+		ID++
 	}
 
-	ID++
-	return ID
+	return r
 }

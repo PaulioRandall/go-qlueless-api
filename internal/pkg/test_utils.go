@@ -22,14 +22,14 @@ func CheckNotBlank(t *testing.T, s string, m ...interface{}) {
 
 func CheckThing(t *testing.T, w Thing) {
 	CheckNotBlank(t, w.Description, "Thing.Description")
-	CheckIsPositive(t, w.ID, "Thing.ID")
+	CheckNotBlank(t, w.ID, "Thing.ID")
 	CheckChildrenIds(t, w)
 	CheckNotBlank(t, w.State, "Thing.State")
 }
 
 func CheckChildrenIds(t *testing.T, o Thing) {
 	for _, id := range o.ChildrenIDs {
-		CheckIsPositive(t, id, "Thing.ChildrenIDs")
+		CheckNotBlank(t, id, "Thing.Child.ID")
 	}
 }
 
@@ -74,7 +74,7 @@ func DummyThing() Thing {
 		State:       "in_progress",
 		IsDead:      false,
 		Self:        "/things/1",
-		ID:          1,
+		ID:          "1",
 	}
 }
 
@@ -82,28 +82,28 @@ func DummyThings() *[]Thing {
 	return &[]Thing{
 		Thing{
 			Description: "# Outline the saga\nCreate a rough outline of the new saga.",
-			ID:          1,
-			ChildrenIDs: []int{
-				2,
-				3,
-				4,
+			ID:          "1",
+			ChildrenIDs: []string{
+				"2",
+				"3",
+				"4",
 			},
 			State: "in_progress",
 		},
 		Thing{
 			Description: "# Name the saga\nThink of a name for the saga.",
-			ID:          2,
+			ID:          "2",
 			State:       "potential",
 		},
 		Thing{
 			Description: "# Outline the first chapter",
-			ID:          3,
+			ID:          "3",
 			State:       "delivered",
 			Additional:  "archive_note:Done but not a compelling start",
 		},
 		Thing{
 			Description: "# Outline the second chapter",
-			ID:          4,
+			ID:          "4",
 			State:       "in_progress",
 		},
 	}

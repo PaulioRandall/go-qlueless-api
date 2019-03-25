@@ -10,36 +10,13 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-// When given a parseable ID, it is parsed and returned
-func TestParseID___1(t *testing.T) {
-	req, res, _ := SetupRequest("/")
-	act, ok := parseThingID("1", res, req)
-	assert.True(t, ok)
-	assert.Equal(t, 1, act)
-}
-
-// When given an unparseable ID, 400 error is set
-func TestParseID___2(t *testing.T) {
-	req, res, rec := SetupRequest("/")
-
-	_, ok := parseThingID("abc", res, req)
-	assert.False(t, ok)
-	assert.Equal(t, 400, rec.Code)
-
-	assert.NotNil(t, rec.Body)
-	var m map[string]interface{}
-	err := json.NewDecoder(rec.Body).Decode(&m)
-	assert.Nil(t, err)
-	assert.NotEmpty(t, m["message"])
-}
-
 // When given an ID to an existing Thing, it is returned
 func TestFindThing___1(t *testing.T) {
 	req, res, _ := SetupRequest("/")
 	exp := DummyThing()
 	Things.Add(exp)
 
-	act, ok := findThing(1, res, req)
+	act, ok := findThing("1", res, req)
 	assert.True(t, ok)
 	assert.Equal(t, exp, act)
 }
@@ -50,7 +27,7 @@ func TestFindThing___2(t *testing.T) {
 	exp := NewDummyThing()
 	Things.Add(exp)
 
-	_, ok := findThing(999, res, req)
+	_, ok := findThing("999", res, req)
 	assert.False(t, ok)
 	assert.Equal(t, 404, rec.Code)
 
@@ -67,7 +44,7 @@ func TestDecodeThing___1(t *testing.T) {
 	json := `{
 		"description": "description",
 		"state": "state",
-		"ID": 1,
+		"ID": "1",
 		"self": "/things/1",
 		"is_dead": false,
 		"additional": "colour:red"
@@ -78,7 +55,7 @@ func TestDecodeThing___1(t *testing.T) {
 	assert.True(t, ok)
 	assert.Equal(t, "description", act.Description)
 	assert.Equal(t, "state", act.State)
-	assert.Equal(t, 1, act.ID)
+	assert.Equal(t, "1", act.ID)
 	assert.Equal(t, "/things/1", act.Self)
 	assert.Equal(t, false, act.IsDead)
 	assert.Equal(t, "colour:red", act.Additional)
@@ -115,7 +92,7 @@ func TestCheckThing___1(t *testing.T) {
 		State:       "state",
 		IsDead:      false,
 		Self:        "/things/1",
-		ID:          1,
+		ID:          "1",
 	}
 
 	act, ok := checkThing(exp, res, req)
@@ -129,14 +106,14 @@ func TestCheckThing___2(t *testing.T) {
 	exp := Thing{
 		Description: "   description   ",
 		State:       "   state   ",
-		ChildrenIDs: []int{1, 0, -1},
+		ChildrenIDs: []string{"1", "0", "-1"},
 		IsDead:      false,
 		Self:        "/things/1",
-		ID:          1,
+		ID:          "1",
 	}
 
 	act, _ := checkThing(exp, res, req)
-	exp.ChildrenIDs = []int{1}
+	exp.ChildrenIDs = []string{"1"}
 	exp.Description = "description"
 	exp.State = "state"
 	assert.Equal(t, exp, act)
@@ -150,7 +127,7 @@ func TestCheckThing___3(t *testing.T) {
 		State:       "",
 		IsDead:      false,
 		Self:        "/things/1",
-		ID:          1,
+		ID:          "1",
 	}
 
 	_, ok := checkThing(exp, res, req)

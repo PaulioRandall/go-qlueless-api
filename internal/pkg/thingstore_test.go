@@ -11,17 +11,17 @@ func TestThingStore___GetAll___1(t *testing.T) {
 	ts := NewThingStore()
 
 	a := NewDummyThing()
-	a.ID = 1
+	a.ID = "1"
 	ts.things[a.ID] = a
 
 	b := NewDummyThing()
-	b.ID = 2
+	b.ID = "2"
 	ts.things[b.ID] = b
 
 	act := ts.GetAll()
 	assert.NotEmpty(t, act)
-	assert.Equal(t, a, act[1])
-	assert.Equal(t, b, act[2])
+	assert.Equal(t, a, act["1"])
+	assert.Equal(t, b, act["2"])
 	assert.Len(t, act, 2)
 }
 
@@ -37,12 +37,12 @@ func TestThingStore___GetAllAlive___1(t *testing.T) {
 	ts := NewThingStore()
 
 	a := NewDummyThing()
-	a.ID = 1
+	a.ID = "1"
 	a.IsDead = true
 	ts.things[a.ID] = a
 
 	b := NewDummyThing()
-	b.ID = 2
+	b.ID = "2"
 	b.IsDead = false
 	ts.things[b.ID] = b
 
@@ -63,8 +63,8 @@ func TestThingStore___Get___1(t *testing.T) {
 	ts := NewThingStore()
 	a := DummyThing()
 
-	ts.things[1] = a
-	act := ts.Get(1)
+	ts.things["1"] = a
+	act := ts.Get("1")
 	assert.Equal(t, a, act)
 }
 
@@ -73,8 +73,8 @@ func TestThingStore___Get___2(t *testing.T) {
 	ts := NewThingStore()
 	a := DummyThing()
 
-	ts.things[1] = a
-	act := ts.Get(99999)
+	ts.things["1"] = a
+	act := ts.Get("99999")
 	assert.Empty(t, act)
 }
 
@@ -84,7 +84,7 @@ func TestThingStore___Add___1(t *testing.T) {
 	a := NewDummyThing()
 
 	act := ts.Add(a)
-	assert.Equal(t, 1, act.ID)
+	assert.Equal(t, "1", act.ID)
 	assert.Equal(t, "/things/1", act.Self)
 	assert.Equal(t, a.Description, act.Description)
 	assert.Equal(t, a.State, act.State)
@@ -96,7 +96,7 @@ func TestThingStore___Add___2(t *testing.T) {
 	a := NewDummyThing()
 
 	exp := ts.Add(a)
-	act, ok := ts.things[1]
+	act, ok := ts.things["1"]
 
 	assert.True(t, ok)
 	assert.Equal(t, exp, act)
