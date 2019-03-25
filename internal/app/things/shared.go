@@ -39,8 +39,8 @@ func decodeThing(res *http.ResponseWriter, req *http.Request) (Thing, bool) {
 
 // checkThing cleans and validates the Thing
 func checkThing(t Thing, res *http.ResponseWriter, req *http.Request) (Thing, bool) {
-	CleanThing(&t)
-	e := ValidateThing(&t, true)
+	t.CleanThing()
+	e := t.ValidateThing(true)
 	if e != nil {
 		r := ReplyMeta{
 			Message: strings.Join(e, " "),

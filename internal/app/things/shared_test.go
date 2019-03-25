@@ -106,14 +106,14 @@ func TestCheckThing___2(t *testing.T) {
 	exp := Thing{
 		Description: "   description   ",
 		State:       "   state   ",
-		ChildrenIDs: []string{"1", "0", "-1"},
+		ChildIDs:    "1,0,-1",
 		IsDead:      false,
 		Self:        "/things/1",
 		ID:          "1",
 	}
 
 	act, _ := checkThing(exp, res, req)
-	exp.ChildrenIDs = []string{"1"}
+	exp.ChildIDs = "1"
 	exp.Description = "description"
 	exp.State = "state"
 	assert.Equal(t, exp, act)

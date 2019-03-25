@@ -23,12 +23,13 @@ func CheckNotBlank(t *testing.T, s string, m ...interface{}) {
 func CheckThing(t *testing.T, w Thing) {
 	CheckNotBlank(t, w.Description, "Thing.Description")
 	CheckNotBlank(t, w.ID, "Thing.ID")
-	CheckChildrenIds(t, w)
+	CheckChildIds(t, w)
 	CheckNotBlank(t, w.State, "Thing.State")
 }
 
-func CheckChildrenIds(t *testing.T, o Thing) {
-	for _, id := range o.ChildrenIDs {
+func CheckChildIds(t *testing.T, o Thing) {
+	ids := strings.Split(o.ChildIDs, ",")
+	for _, id := range ids {
 		CheckNotBlank(t, id, "Thing.Child.ID")
 	}
 }
@@ -83,12 +84,8 @@ func DummyThings() *[]Thing {
 		Thing{
 			Description: "# Outline the saga\nCreate a rough outline of the new saga.",
 			ID:          "1",
-			ChildrenIDs: []string{
-				"2",
-				"3",
-				"4",
-			},
-			State: "in_progress",
+			ChildIDs:    "2,3,4",
+			State:       "in_progress",
 		},
 		Thing{
 			Description: "# Name the saga\nThink of a name for the saga.",

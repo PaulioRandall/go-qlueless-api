@@ -12,19 +12,19 @@ func TestCleanThing___1(t *testing.T) {
 		Description: "  description  ",
 		State:       "  state  ",
 		Additional:  "  additional  ",
-		ChildrenIDs: []string{"1", "0", "-1", "3"},
+		ChildIDs:    "1,0,-1,3",
 	}
-	CleanThing(&thing)
+	thing.CleanThing()
 	assert.Equal(t, "description", thing.Description)
 	assert.Equal(t, "state", thing.State)
 	assert.Equal(t, "additional", thing.Additional)
-	assert.Equal(t, []string{"1", "3"}, thing.ChildrenIDs)
+	assert.Equal(t, "1,3", thing.ChildIDs)
 }
 
 // When given an empty Thing to clean, an empty Thing is returned
 func TestCleanThing___2(t *testing.T) {
 	thing := Thing{}
-	CleanThing(&thing)
+	thing.CleanThing()
 	assert.Equal(t, Thing{}, thing)
 }
 
@@ -35,11 +35,11 @@ func TestCleanThing___3(t *testing.T) {
 		ID:     "1",
 		IsDead: true,
 	}
-	CleanThing(&thing)
+	thing.CleanThing()
 	assert.Equal(t, "", thing.Description)
 	assert.Equal(t, "", thing.State)
 	assert.Equal(t, "", thing.Additional)
-	assert.Empty(t, thing.ChildrenIDs)
+	assert.Empty(t, thing.ChildIDs)
 	assert.Equal(t, "  self  ", thing.Self)
 	assert.Equal(t, "1", thing.ID)
 	assert.Equal(t, true, thing.IsDead)
@@ -48,18 +48,17 @@ func TestCleanThing___3(t *testing.T) {
 // When given a new Thing to clean, its child IDs are cleaned
 func TestCleanThingsChildIDs___1(t *testing.T) {
 	thing := Thing{
-		ChildrenIDs: []string{"1", "0", "-1", "3"},
+		ChildIDs: "1,0,-1,3",
 	}
-	cleanThingsChildIDs(&thing)
-	assert.Equal(t, []string{"1", "3"}, thing.ChildrenIDs)
+	thing.cleanThingsChildIDs()
+	assert.Equal(t, "1,3", thing.ChildIDs)
 }
 
 // When given a new Thing with no child IDs, nothing changes
 func TestCleanThingsChildIDs___2(t *testing.T) {
 	thing := Thing{}
-	cleanThingsChildIDs(&thing)
-	var exp []string
-	assert.Equal(t, exp, thing.ChildrenIDs)
+	thing.cleanThingsChildIDs()
+	assert.Equal(t, "", thing.ChildIDs)
 }
 
 // When given an empty string, the message is appended
@@ -120,9 +119,9 @@ func TestValidateThing___1(t *testing.T) {
 	thing := Thing{
 		Description: "description",
 		State:       "state",
-		ChildrenIDs: []string{"2", "3"},
+		ChildIDs:    "2,3",
 	}
-	act := ValidateThing(&thing, true)
+	act := thing.ValidateThing(true)
 	assert.Empty(t, act)
 }
 
@@ -131,11 +130,11 @@ func TestValidateThing___2(t *testing.T) {
 	thing := Thing{
 		Description: "description",
 		State:       "state",
-		ChildrenIDs: []string{"2", "3"},
+		ChildIDs:    "2,3",
 		ID:          "1",
 		Self:        "/self",
 	}
-	act := ValidateThing(&thing, false)
+	act := thing.ValidateThing(false)
 	assert.Empty(t, act)
 }
 
@@ -148,7 +147,7 @@ func TestValidateThing___3(t *testing.T) {
 		ID:          "1",
 		Self:        "/self",
 	}
-	act := ValidateThing(&thing, false)
+	act := thing.ValidateThing(false)
 	assert.Empty(t, act)
 }
 
@@ -158,9 +157,9 @@ func TestValidateThing___4(t *testing.T) {
 	thing := Thing{
 		Description: "",
 		State:       "",
-		ChildrenIDs: []string{"0", "-9000"},
+		ChildIDs:    "0,-9000",
 	}
-	act := ValidateThing(&thing, true)
+	act := thing.ValidateThing(true)
 	assert.Len(t, act, 4)
 }
 
@@ -170,10 +169,10 @@ func TestValidateThing___5(t *testing.T) {
 	thing := Thing{
 		Description: "",
 		State:       "",
-		ChildrenIDs: []string{"0", "-9000"},
+		ChildIDs:    "0,-9000",
 		ID:          "0",
 		Self:        "",
 	}
-	act := ValidateThing(&thing, false)
+	act := thing.ValidateThing(false)
 	assert.Len(t, act, 6)
 }
