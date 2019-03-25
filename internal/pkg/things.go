@@ -26,52 +26,34 @@ func (t *Thing) SetChildIDs(ids []string) {
 	t.ChildIDs = strings.Join(ids, ",")
 }
 
-// CleanThing cleans up a Things contents, e.g. triming whitespace from its
-// description
-func (t *Thing) CleanThing() {
+// Clean cleans up a Things contents, e.g. triming whitespace from its
+// description, state, etc
+func (t *Thing) Clean() {
 	t.Description = strings.TrimSpace(t.Description)
 	t.Additional = strings.TrimSpace(t.Additional)
 	t.State = strings.TrimSpace(t.State)
-	t.cleanThingsChildIDs()
+	t.ChildIDs = strings.TrimSpace(t.ChildIDs)
 }
 
-// cleanThingsChildIDs cleans the child IDs within a Thing
-func (t *Thing) cleanThingsChildIDs() {
-	if t.ChildIDs != "" {
-		ids := t.SplitChildIDs()
-		for i, l := 0, len(ids); i < l; {
-			c, err := strconv.Atoi(ids[i])
-
-			if err != nil || c < 1 {
-				ids = DeleteStr(ids, i)
-				l--
-			} else {
-				i++
-			}
-		}
-		t.SetChildIDs(ids)
-	}
-}
-
-// ValidateThing validates a Thing contains the required and valid content. The
+// Validate validates a Thing contains the required and valid content. The
 // result will be an slice of strings each being a readable description of a
 // violation. The result may be supplied to the client
-func (t *Thing) ValidateThing(isNew bool) []string {
+func (t *Thing) Validate(isNew bool) []string {
 	var r []string
 
 	r = appendIfEmpty((*t).Description, r, "'Description' must not be empty.")
 	r = appendIfEmpty((*t).State, r, "'State' must not be empty.")
 
 	if (*t).ChildIDs != "" {
-		for _, c := range (*t).SplitChildIDs() {
-			r = appendIfNotPositive(c, r,
-				fmt.Sprintf("'ChildrenIDs:%s' must be defined and a positive integer.", c))
+		for i, c := range (*t).SplitChildIDs() {
+			r = appendIfNotPositiveInt(c, r,
+				fmt.Sprintf("'ChildIDs[%d]:%s' must be a positive integer.", i, c))
 		}
 	}
 
 	if !isNew {
-		r = appendIfNotPositive((*t).ID, r,
-			fmt.Sprintf("The ID '%s' is not allowed to be zero or negative.", (*t).ID))
+		r = appendIfNotPositiveInt((*t).ID, r,
+			fmt.Sprintf("The ID '%s' must be a positive integer.", (*t).ID))
 	}
 
 	return r
@@ -85,8 +67,8 @@ func appendIfEmpty(s string, r []string, m string) []string {
 	return r
 }
 
-// appendIfNotPositive appends 'm' to 'r' if 's' is not a positive integer
-func appendIfNotPositive(s string, r []string, m string) []string {
+// appendIfNotPositiveInt appends 'm' to 'r' if 's' is not a positive integer
+func appendIfNotPositiveInt(s string, r []string, m string) []string {
 	i, err := strconv.Atoi(s)
 	if err != nil || i < 1 {
 		return append(r, m)

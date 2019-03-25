@@ -104,13 +104,13 @@ func TestCheckThing___2(t *testing.T) {
 	exp := Thing{
 		Description: "   description   ",
 		State:       "   state   ",
-		ChildIDs:    "1,0,-1",
+		ChildIDs:    "  2,3   ",
 		IsDead:      false,
 		ID:          "1",
 	}
 
 	act, _ := checkThing(exp, res, req)
-	exp.ChildIDs = "1"
+	exp.ChildIDs = "2,3"
 	exp.Description = "description"
 	exp.State = "state"
 	assert.Equal(t, exp, act)
