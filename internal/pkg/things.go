@@ -32,7 +32,7 @@ func (t *Thing) Clean() {
 	t.Description = strings.TrimSpace(t.Description)
 	t.Additional = strings.TrimSpace(t.Additional)
 	t.State = strings.TrimSpace(t.State)
-	t.ChildIDs = strings.TrimSpace(t.ChildIDs)
+	t.ChildIDs = StripWhitespace(t.ChildIDs)
 }
 
 // Validate validates a Thing contains the required and valid content. The

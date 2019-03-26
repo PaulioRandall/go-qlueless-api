@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"strconv"
-	"strings"
 )
 
 var Things ThingStore = NewThingStore()
@@ -20,6 +18,11 @@ type ReplyMeta struct {
 	Hints   string      `json:"hints,omitempty"`
 }
 
+// LogRequest logs the details of a request such as the URL
+func LogRequest(req *http.Request) {
+	log.Println(req.URL.String())
+}
+
 // RelURL creates the absolute relative URL of the request without any fragment
 func RelURL(req *http.Request) string {
 	r := req.URL.Path
@@ -27,59 +30,6 @@ func RelURL(req *http.Request) string {
 		r += "?" + req.URL.RawQuery
 	}
 	return r
-}
-
-// IsInt returns true if the string contains an integer
-func IsInt(s string) bool {
-	_, err := strconv.Atoi(s)
-	return err == nil
-}
-
-// Str returns a pointer to the passed string, useful for getting the address of
-// a string in one line
-func Str(s string) *string {
-	return &s
-}
-
-// DeleteStr removes a string from a string slice
-func DeleteStr(s []string, i int) []string {
-	l := len(s) - 1
-	s[i] = s[l]
-	s[l] = "" // Set to zero value
-	return s[:l]
-}
-
-// DeleteInt removes an int from an int slice
-func DeleteInt(s []int, i int) []int {
-	l := len(s) - 1
-	s[i] = s[l]
-	s[l] = 0
-	return s[:l]
-}
-
-// IsBlank returns true if the string is empty or only contains whitespace
-func IsBlank(s string) bool {
-	v := strings.TrimSpace(s)
-	if v == "" {
-		return true
-	}
-	return false
-}
-
-// LogRequest logs the details of a request such as the URL
-func LogRequest(req *http.Request) {
-	log.Println(req.URL.String())
-}
-
-// LogIfErr checks if the input err is NOT nil returning true if it is.
-// When true the error is logged so all the calling handler needs to do is
-// clean up then invoke Http_500(*http.ResponseWriter) before returning
-func LogIfErr(err error) bool {
-	if err != nil {
-		log.Println(err)
-		return true
-	}
-	return false
 }
 
 // Reply500 sets up the response with generic 500 error details. This method

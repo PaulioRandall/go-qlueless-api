@@ -2,56 +2,12 @@ package pkg
 
 import (
 	"encoding/json"
-	"errors"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
-
-// When given a valid int string, true is returned
-func TestIsInt___1(t *testing.T) {
-	assert.True(t, IsInt("123"))
-}
-
-// When given an invalid int string, false is returned
-func TestIsInt___2(t *testing.T) {
-	assert.False(t, IsInt("abc"))
-}
-
-// When given an invalid int string, false is returned
-func TestIsInt___3(t *testing.T) {
-	assert.False(t, IsInt("123abc"))
-}
-
-// When given a slice and index, the item is removed but other items remain
-func TestDeleteStr___1(t *testing.T) {
-	s := []string{"0", "1", "2", "3", "4"}
-	act := DeleteStr(s, 2)
-	assert.Contains(t, act, "0")
-	assert.Contains(t, act, "1")
-	assert.Contains(t, act, "3")
-	assert.Contains(t, act, "4")
-}
-
-// When given an empty string, true is returned
-func TestIsBlank___1(t *testing.T) {
-	act := IsBlank("")
-	assert.True(t, act)
-}
-
-// When given a string with whitespace, true is returned
-func TestIsBlank___2(t *testing.T) {
-	act := IsBlank("\r\n \t\f")
-	assert.True(t, act)
-}
-
-// When given a string with no whitespaces, false is returned
-func TestIsBlank___3(t *testing.T) {
-	act := IsBlank("Captain Vimes")
-	assert.False(t, act)
-}
 
 // When given a request, returns the absolute relative URL of the request
 func TestRelURL(t *testing.T) {
@@ -60,23 +16,6 @@ func TestRelURL(t *testing.T) {
 
 	act := RelURL(req)
 	assert.Equal(t, "/character?q=Nobby", act)
-}
-
-// When given nil, returns false and doesn't print anything
-func TestLogIfErr___1(t *testing.T) {
-	act := LogIfErr(nil)
-	assert.False(t, act)
-	// Output:
-	//
-}
-
-// When given an error, returns true and prints the error message
-func TestLogIfErr___2(t *testing.T) {
-	err := errors.New("Computer says no!")
-	act := LogIfErr(err)
-	assert.True(t, act)
-	// Output:
-	// Computer says no!
 }
 
 // When invoked, sets 500 status code
