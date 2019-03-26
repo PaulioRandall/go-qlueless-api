@@ -41,7 +41,7 @@ func get_Spec(res *http.ResponseWriter, req *http.Request) {
 // LoadJson loads the OpenAPI specification from a file
 func LoadSpec() {
 
-	path := "../api/openapi/openapi.json"
+	path := "./openapi.json"
 	bytes, err := ioutil.ReadFile(path)
 	if LogIfErr(err) {
 		spec = nil

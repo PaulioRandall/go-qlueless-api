@@ -5,4 +5,6 @@ SCRIPTS=$(cd `dirname $0` && pwd)
 "${SCRIPTS}/_build-openapi"
 "${SCRIPTS}/_build-app"
 "${SCRIPTS}/_test"
-"${SCRIPTS}/../bin/go-qlueless-assembly-api"
+
+cd "${SCRIPTS}/../bin"
+"./go-qlueless-assembly-api"

@@ -42,7 +42,7 @@ func get_Changelog(res *http.ResponseWriter, req *http.Request) {
 // LoadChangelog loads the changelog from a file
 func LoadChangelog() {
 
-	path := "../api/CHANGELOG.md"
+	path := "./CHANGELOG.md"
 	bytes, err := ioutil.ReadFile(path)
 	if LogIfErr(err) {
 		changelog = nil
