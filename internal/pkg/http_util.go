@@ -20,7 +20,7 @@ type ReplyMeta struct {
 
 // LogRequest logs the details of a request such as the URL
 func LogRequest(req *http.Request) {
-	log.Printf("(%s) %s", req.Method, req.URL.String())
+	log.Printf("(%s) %s\n", req.Method, req.URL.String())
 }
 
 // RelURL creates the absolute relative URL of the request without any fragment

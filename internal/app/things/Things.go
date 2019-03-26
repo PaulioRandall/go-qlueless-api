@@ -2,6 +2,7 @@ package things
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 
 	. "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg"
@@ -43,7 +44,7 @@ func get_OneThing(id string, res *http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	m := fmt.Sprintf("Found Thing with ID %s", id)
+	m := fmt.Sprintf("Found Thing with ID '%s'", id)
 	data := PrepResponseData(req, t, m)
 	WriteJSONReply(res, req, data, "")
 }
@@ -62,7 +63,8 @@ func post_NewThing(res *http.ResponseWriter, req *http.Request) {
 	}
 
 	t = Things.Add(t)
-	m := fmt.Sprintf("New Thing with ID %s created", t.ID)
+	m := fmt.Sprintf("New Thing with ID '%s' created", t.ID)
+	log.Println(m)
 	data := PrepResponseData(req, t, m)
 	WriteJSONReply(res, req, data, "")
 }
@@ -90,7 +92,8 @@ func put_OneThing(res *http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	m := fmt.Sprintf("Thing with ID %s updated", t.ID)
+	m := fmt.Sprintf("Thing with ID '%s' updated", t.ID)
+	log.Println(m)
 	data := PrepResponseData(req, t, m)
 	WriteJSONReply(res, req, data, "")
 }
