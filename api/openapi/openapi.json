@@ -165,6 +165,9 @@
 			    "child_ids": {
 			      "$ref": "#/components/x-hidden/child_ids"
 			    },
+			    "parent_ids": {
+			      "$ref": "#/components/x-hidden/parent_ids"
+			    },
 			    "is_dead": {
 			      "$ref": "#/components/x-hidden/is_dead"
 			    },
@@ -187,6 +190,9 @@
 			    },
 			    "child_ids": {
 			      "$ref": "#/components/x-hidden/child_ids"
+			    },
+			    "parent_ids": {
+			      "$ref": "#/components/x-hidden/parent_ids"
 			    },
 			    "additional": {
 			      "$ref": "#/components/x-hidden/additional"
@@ -275,6 +281,11 @@
 			  "type": "string",
 			  "format": "csv",
 			  "description": "CSV of IDs that identify Things that this Thing is a parent of."
+			},
+			"parent_ids": {
+			  "type": "string",
+			  "format": "csv",
+			  "description": "CSV of IDs that identify Things that this Thing is a child of."
 			},
 			"state": {
 			  "type": "string",

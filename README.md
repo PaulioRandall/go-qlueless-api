@@ -18,8 +18,7 @@ I apologise, it's a poor play on words attempting to combine:
 
 - Go: [https://golang.org/dl/]
 - Git: [https://git-scm.com]
-- https://github.com/gorilla/mux `go get -u github.com/gorilla/mux`
-- https://github.com/stretchr/testify `go get -u github.com/stretchr/testify`
+- https://github.com/stretchr/testify `go get -u github.com/stretchr/te\stify`
 - A decent web browser
 
 ### Installing (Linux/Bash)
@@ -74,7 +73,6 @@ This has not been researched yet. Use `./build-test-run` within the `/scripts` f
 
 - [OpenAPI](https://swagger.io/docs/specification/about/)
 - [Go](https://golang.org)
-- [gorilla/mux](https://github.com/gorilla/mux)
 - [testify](https://github.com/stretchr/testify)
 
 ## Contributing

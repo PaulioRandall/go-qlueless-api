@@ -54,6 +54,11 @@
   "format": "csv",
   "description": "CSV of IDs that identify Things that this Thing is a parent of."
 },
+"parent_ids": {
+  "type": "string",
+  "format": "csv",
+  "description": "CSV of IDs that identify Things that this Thing is a child of."
+},
 "state": {
   "type": "string",
   "description": "State of a thing."

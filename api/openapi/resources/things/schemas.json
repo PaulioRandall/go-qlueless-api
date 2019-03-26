@@ -10,6 +10,9 @@
     "child_ids": {
       "$ref": "#/components/x-hidden/child_ids"
     },
+    "parent_ids": {
+      "$ref": "#/components/x-hidden/parent_ids"
+    },
     "is_dead": {
       "$ref": "#/components/x-hidden/is_dead"
     },
@@ -32,6 +35,9 @@
     },
     "child_ids": {
       "$ref": "#/components/x-hidden/child_ids"
+    },
+    "parent_ids": {
+      "$ref": "#/components/x-hidden/parent_ids"
     },
     "additional": {
       "$ref": "#/components/x-hidden/additional"
