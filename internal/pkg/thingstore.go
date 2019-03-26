@@ -1,6 +1,7 @@
 package pkg
 
 import (
+	"errors"
 	"strconv"
 	"sync"
 )
@@ -56,6 +57,17 @@ func (ts ThingStore) Add(t Thing) Thing {
 
 	ts.things[t.ID] = t
 	return t
+}
+
+// Update updates a Thing in the store
+func (ts ThingStore) Update(t Thing) error {
+	if t.ID == "" {
+		return errors.New("[BUG] Expected Thing to have an ID while updating ThingStore")
+	}
+	ts.mutex.Lock()
+	defer ts.mutex.Unlock()
+	ts.things[t.ID] = t
+	return nil
 }
 
 // genNewID generates a new, unused, Thing ID

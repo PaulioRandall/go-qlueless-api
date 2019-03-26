@@ -1,5 +1,9 @@
 "new_thing": {
   "type": "object",
+  "required": [
+    "description",
+    "state"
+  ],
   "properties": {
     "description": {
       "$ref": "#/components/x-hidden/description"
@@ -23,6 +27,11 @@
 },
 "thing": {
   "type": "object",
+  "required": [
+    "description",
+    "id",
+    "state"
+  ],
   "properties": {
     "description": {
       "$ref": "#/components/x-hidden/description"

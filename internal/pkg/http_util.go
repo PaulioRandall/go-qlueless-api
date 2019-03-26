@@ -20,7 +20,7 @@ type ReplyMeta struct {
 
 // LogRequest logs the details of a request such as the URL
 func LogRequest(req *http.Request) {
-	log.Println(req.URL.String())
+	log.Printf("(%s) %s", req.Method, req.URL.String())
 }
 
 // RelURL creates the absolute relative URL of the request without any fragment
@@ -113,7 +113,7 @@ func PrepResponseData(req *http.Request, data interface{}, msg string) interface
 // ResponseWriters
 func AppendCORSHeaders(res *http.ResponseWriter) {
 	(*res).Header().Set("Access-Control-Allow-Origin", "*")
-	(*res).Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+	(*res).Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, OPTIONS")
 	(*res).Header().Set("Access-Control-Allow-Headers", "*")
 }
 

@@ -66,7 +66,21 @@
 		    },
 		    "responses": {
 		      "201": {
-		        "$ref": "#/components/responses/thing_201"
+		        "$ref": "#/components/responses/thing_200_201"
+		      },
+		      "default": {
+		        "$ref": "#/components/responses/error"
+		      }
+		    }
+		  },
+		  "put": {
+		    "description": "Updates a thing.",
+		    "requestBody": {
+		      "$ref": "#/components/requestBodies/thing"
+		    },
+		    "responses": {
+		      "200": {
+		        "$ref": "#/components/responses/thing_200_201"
 		      },
 		      "default": {
 		        "$ref": "#/components/responses/error"
@@ -105,6 +119,15 @@
 			      }
 			    }
 			  }
+			},
+			"thing": {
+			  "content": {
+			    "application/json": {
+			      "schema": {
+			        "$ref": "#/components/schemas/thing"
+			      }
+			    }
+			  }
 			}
     },
     "responses": {
@@ -131,7 +154,7 @@
 			    }
 			  }
 			},
-			"thing_201": {
+			"thing_200_201": {
 			  "description": "Single thing",
 			  "content": {
 			    "application/json": {
@@ -155,6 +178,10 @@
 		"schemas": {
 			"new_thing": {
 			  "type": "object",
+			  "required": [
+			    "description",
+			    "state"
+			  ],
 			  "properties": {
 			    "description": {
 			      "$ref": "#/components/x-hidden/description"
@@ -178,6 +205,11 @@
 			},
 			"thing": {
 			  "type": "object",
+			  "required": [
+			    "description",
+			    "id",
+			    "state"
+			  ],
 			  "properties": {
 			    "description": {
 			      "$ref": "#/components/x-hidden/description"
@@ -273,9 +305,8 @@
 			  "description": "Presentable and human readable description of the entity instance."
 			},
 			"id": {
-			  "type": "integer",
-			  "format": "int64",
-			  "description": "Unique identifier of the thing."
+			  "type": "string",
+			  "description": "Unique identifier of the Thing."
 			},
 			"child_ids": {
 			  "type": "string",

@@ -100,3 +100,42 @@ func TestThingStore___Add___2(t *testing.T) {
 	assert.True(t, ok)
 	assert.Equal(t, exp, act)
 }
+
+// When given a Thing to update, it is updated
+func TestThingStore___Update___1(t *testing.T) {
+	ts := NewThingStore()
+	a := DummyThing()
+	a.Description = "new"
+	ts.things["1"] = a
+
+	a2 := DummyThing()
+	a2.ID = "1"
+	a2.Description = "updated"
+	err := ts.Update(a2)
+	assert.Nil(t, err)
+
+	act, ok := ts.things["1"]
+	assert.True(t, ok)
+	assert.Equal(t, a.State, act.State)
+	assert.Equal(t, a2.Description, act.Description)
+}
+
+// When given a Thing to update without an ID, an error is returned and no
+// changes are made to the ThingStore
+func TestThingStore___Update___2(t *testing.T) {
+	ts := NewThingStore()
+	a := DummyThing()
+	a.Description = "new"
+	ts.things["1"] = a
+
+	a2 := DummyThing()
+	a2.ID = ""
+	a2.Description = "updated"
+	err := ts.Update(a2)
+	assert.NotNil(t, err)
+
+	act, ok := ts.things["1"]
+	assert.True(t, ok)
+	assert.Equal(t, a.State, act.State)
+	assert.Equal(t, a.Description, act.Description)
+}

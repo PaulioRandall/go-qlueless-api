@@ -25,7 +25,21 @@
     },
     "responses": {
       "201": {
-        "$ref": "#/components/responses/thing_201"
+        "$ref": "#/components/responses/thing_200_201"
+      },
+      "default": {
+        "$ref": "#/components/responses/error"
+      }
+    }
+  },
+  "put": {
+    "description": "Updates a thing.",
+    "requestBody": {
+      "$ref": "#/components/requestBodies/thing"
+    },
+    "responses": {
+      "200": {
+        "$ref": "#/components/responses/thing_200_201"
       },
       "default": {
         "$ref": "#/components/responses/error"

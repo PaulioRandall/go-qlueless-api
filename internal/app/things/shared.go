@@ -14,7 +14,7 @@ func findThing(id string, res *http.ResponseWriter, req *http.Request) (Thing, b
 	t := Things.Get(id)
 	if t.ID == "" || t.IsDead {
 		r := ReplyMeta{
-			Message: fmt.Sprintf("Thing %s not found", id),
+			Message: fmt.Sprintf("Thing '%s' not found", id),
 		}
 		Write4XXReply(res, req, 404, r)
 		return Thing{}, false
@@ -22,7 +22,7 @@ func findThing(id string, res *http.ResponseWriter, req *http.Request) (Thing, b
 	return t, true
 }
 
-// decodeThing decodes a thing from a Request.Body
+// decodeThing decodes a Thing from a Request.Body
 func decodeThing(res *http.ResponseWriter, req *http.Request) (Thing, bool) {
 	var t Thing
 	d := json.NewDecoder(req.Body)

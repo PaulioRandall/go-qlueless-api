@@ -11,26 +11,20 @@ import (
 func ThingsHandler(res http.ResponseWriter, req *http.Request) {
 	LogRequest(req)
 
-	switch req.Method {
-	case "GET":
-		demuxGET(&res, req)
-	case "POST":
+	id := req.FormValue("id")
+	switch {
+	case req.Method == "GET" && id == "":
+		get_AllThings(&res, req)
+	case req.Method == "GET":
+		get_OneThing(id, &res, req)
+	case req.Method == "POST":
 		post_NewThing(&res, req)
-	case "OPTIONS":
+	case req.Method == "PUT":
+		put_OneThing(&res, req)
+	case req.Method == "OPTIONS":
 		WriteEmptyJSONReply(&res, "")
 	default:
 		MethodNotAllowed(&res, req)
-	}
-}
-
-// demuxGET routes the handling of GET requests dependent on the query
-// parameters passed
-func demuxGET(res *http.ResponseWriter, req *http.Request) {
-	id := req.FormValue("id")
-	if id == "" {
-		get_AllThings(res, req)
-	} else {
-		get_OneThing(id, res, req)
 	}
 }
 
@@ -69,6 +63,34 @@ func post_NewThing(res *http.ResponseWriter, req *http.Request) {
 
 	t = Things.Add(t)
 	m := fmt.Sprintf("New Thing with ID %s created", t.ID)
+	data := PrepResponseData(req, t, m)
+	WriteJSONReply(res, req, data, "")
+}
+
+// put_OneThing handles requests to create new things
+func put_OneThing(res *http.ResponseWriter, req *http.Request) {
+	t, ok := decodeThing(res, req)
+	if !ok {
+		return
+	}
+
+	_, ok = findThing(t.ID, res, req)
+	if !ok {
+		return
+	}
+
+	t, ok = checkThing(t, res, req)
+	if !ok {
+		return
+	}
+
+	err := Things.Update(t)
+	if LogIfErr(err) {
+		Write500Reply(res, req)
+		return
+	}
+
+	m := fmt.Sprintf("Thing with ID %s updated", t.ID)
 	data := PrepResponseData(req, t, m)
 	WriteJSONReply(res, req, data, "")
 }
