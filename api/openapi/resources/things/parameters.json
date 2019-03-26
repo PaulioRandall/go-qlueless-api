@@ -1,8 +1,8 @@
 "id": {
   "name": "id",
-  "in": "path",
+  "in": "query",
   "description": "Unique identifier of a thing",
-  "required": true,
+  "required": false,
   "schema": {
     "$ref": "#/components/x-hidden/id"
   }

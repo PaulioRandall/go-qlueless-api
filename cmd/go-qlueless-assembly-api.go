@@ -5,17 +5,13 @@ package main
 import (
 	"log"
 	"net/http"
-
-	"github.com/gorilla/mux"
 )
 
 // Main is the entry point for the web server
 func main() {
 	log.Println("[Go Qlueless Assembly API]: Starting application")
 
-	s := QServer{
-		router: mux.NewRouter(),
-	}
+	s := QServer{}
 
 	s.preload()
 	s.routes()

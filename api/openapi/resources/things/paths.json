@@ -4,6 +4,9 @@
     "parameters": [
       {
         "$ref": "#/components/parameters/wrap"
+      },
+      {
+        "$ref": "#/components/parameters/id"
       }
     ],
     "responses": {
@@ -23,27 +26,6 @@
     "responses": {
       "201": {
         "$ref": "#/components/responses/thing_201"
-      },
-      "default": {
-        "$ref": "#/components/responses/error"
-      }
-    }
-  }
-},
-"/things/{id}": {
-  "get": {
-    "description": "Returns a single thing.",
-    "parameters": [
-      {
-        "$ref": "#/components/parameters/id"
-      },
-      {
-        "$ref": "#/components/parameters/wrap"
-      }
-    ],
-    "responses": {
-      "200": {
-        "$ref": "#/components/responses/thing_200"
       },
       "default": {
         "$ref": "#/components/responses/error"

@@ -1,5 +1,5 @@
 "things_200": {
-  "description": "List of things.",
+  "description": "List of Things or a single Thing.",
   "content": {
     "application/json": {
       "schema": {
@@ -9,18 +9,7 @@
           },
           {
             "$ref": "#/components/x-hidden/things_array"
-          }
-        ]
-      }
-    }
-  }
-},
-"thing_200": {
-  "description": "Single thing",
-  "content": {
-    "application/json": {
-      "schema": {
-        "oneOf": [
+          },
           {
             "$ref": "#/components/x-hidden/thing_wrapped"
           },

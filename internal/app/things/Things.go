@@ -13,7 +13,7 @@ func ThingsHandler(res http.ResponseWriter, req *http.Request) {
 
 	switch req.Method {
 	case "GET":
-		get_AllThings(&res, req)
+		demuxGET(&res, req)
 	case "POST":
 		post_NewThing(&res, req)
 	case "OPTIONS":
@@ -23,10 +23,33 @@ func ThingsHandler(res http.ResponseWriter, req *http.Request) {
 	}
 }
 
+// demuxGET routes the handling of GET requests dependent on the query
+// parameters passed
+func demuxGET(res *http.ResponseWriter, req *http.Request) {
+	id := req.FormValue("id")
+	if id == "" {
+		get_AllThings(res, req)
+	} else {
+		get_OneThing(id, res, req)
+	}
+}
+
 // get_AllThings generates responses for requests for all Things
 func get_AllThings(res *http.ResponseWriter, req *http.Request) {
 	t := Things.GetAllAlive()
 	m := fmt.Sprintf("Found %d Things", len(t))
+	data := PrepResponseData(req, t, m)
+	WriteJSONReply(res, req, data, "")
+}
+
+// get_OneThing generates responses for requests for a single Thing
+func get_OneThing(id string, res *http.ResponseWriter, req *http.Request) {
+	t, ok := findThing(id, res, req)
+	if !ok {
+		return
+	}
+
+	m := fmt.Sprintf("Found Thing with ID %s", id)
 	data := PrepResponseData(req, t, m)
 	WriteJSONReply(res, req, data, "")
 }
