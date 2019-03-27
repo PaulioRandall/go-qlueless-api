@@ -1,0 +1,18 @@
+"batch_create": {
+  "content": {
+    "application/json": {
+      "schema": {
+        "$ref": "#/components/schemas/batch_create"
+      }
+    }
+  }
+},
+"batch_update": {
+  "content": {
+    "application/json": {
+      "schema": {
+        "$ref": "#/components/schemas/batch_update"
+      }
+    }
+  }
+}

@@ -7,11 +7,15 @@
   "tags": [
     {
       "name": "venture",
-      "description": "All available Venture specific actions."
+      "description": "All available Venture specific operations."
     },
     {
       "name": "order",
-      "description": "All available Order specific actions."
+      "description": "All available Order specific operations."
+    },
+    {
+      "name": "batch",
+      "description": "All available Batch specific operations."
     }
   ],
 	"paths": {
@@ -186,6 +190,75 @@
 		      }
 		    }
 		  }
+		},
+		"/batches": {
+		  "get": {
+		    "tags": ["batch"],
+		    "description": "Returns all Batches.",
+		    "parameters": [
+		      {
+		        "$ref": "#/components/parameters/wrap"
+		      },
+		      {
+		        "$ref": "#/components/parameters/batch_id"
+		      }
+		    ],
+		    "responses": {
+		      "200": {
+		        "$ref": "#/components/responses/batches_or_batch_wrappable_200"
+		      },
+		      "default": {
+		        "$ref": "#/components/responses/error"
+		      }
+		    }
+		  },
+		  "post": {
+		    "tags": ["batch"],
+		    "description": "Creates a new Batch.",
+		    "requestBody": {
+		      "$ref": "#/components/requestBodies/batch_create"
+		    },
+		    "responses": {
+		      "201": {
+		        "$ref": "#/components/responses/batch_200"
+		      },
+		      "default": {
+		        "$ref": "#/components/responses/error"
+		      }
+		    }
+		  },
+		  "put": {
+		    "tags": ["batch"],
+		    "description": "Updates a Batch.",
+		    "requestBody": {
+		      "$ref": "#/components/requestBodies/batch_update"
+		    },
+		    "responses": {
+		      "200": {
+		        "$ref": "#/components/responses/batch_200"
+		      },
+		      "default": {
+		        "$ref": "#/components/responses/error"
+		      }
+		    }
+		  },
+		  "delete": {
+		    "tags": ["batch"],
+		    "description": "Deletes a Batch.",
+		    "parameters": [
+		      {
+		        "$ref": "#/components/parameters/batch_id"
+		      }
+		    ],
+		    "responses": {
+		      "200": {
+		        "$ref": "#/components/responses/batch_200"
+		      },
+		      "default": {
+		        "$ref": "#/components/responses/error"
+		      }
+		    }
+		  }
 		}
   },
 	"components": {
@@ -206,6 +279,15 @@
 			  "required": false,
 			  "schema": {
 			    "$ref": "#/components/x-hidden/order_id"
+			  }
+			},
+			"batch_id": {
+			  "name": "batch_id",
+			  "in": "query",
+			  "description": "Unique identifier of a Batch.",
+			  "required": false,
+			  "schema": {
+			    "$ref": "#/components/x-hidden/batch_id"
 			  }
 			},
 			"wrap": {
@@ -251,6 +333,24 @@
 			    "application/json": {
 			      "schema": {
 			        "$ref": "#/components/schemas/order_update"
+			      }
+			    }
+			  }
+			},
+			"batch_create": {
+			  "content": {
+			    "application/json": {
+			      "schema": {
+			        "$ref": "#/components/schemas/batch_create"
+			      }
+			    }
+			  }
+			},
+			"batch_update": {
+			  "content": {
+			    "application/json": {
+			      "schema": {
+			        "$ref": "#/components/schemas/batch_update"
 			      }
 			    }
 			  }
@@ -319,6 +419,39 @@
 			    "application/json": {
 			      "schema": {
 			        "$ref": "#/components/schemas/order"
+			      }
+			    }
+			  }
+			},
+			"batches_or_batch_wrappable_200": {
+			  "description": "List of Batches or a single Batch.",
+			  "content": {
+			    "application/json": {
+			      "schema": {
+			        "oneOf": [
+			          {
+			            "$ref": "#/components/x-hidden/batches_wrapped"
+			          },
+			          {
+			            "$ref": "#/components/x-hidden/batches_array"
+			          },
+			          {
+			            "$ref": "#/components/x-hidden/batch_wrapped"
+			          },
+			          {
+			            "$ref": "#/components/schemas/batch"
+			          }
+			        ]
+			      }
+			    }
+			  }
+			},
+			"batch_200": {
+			  "description": "Single Batch.",
+			  "content": {
+			    "application/json": {
+			      "schema": {
+			        "$ref": "#/components/schemas/batch"
 			      }
 			    }
 			  }
@@ -506,6 +639,96 @@
 			    }
 			  }
 			},
+			"batch_create": {
+			  "type": "object",
+			  "required": [
+			    "description",
+			    "state"
+			  ],
+			  "properties": {
+			    "description": {
+			      "$ref": "#/components/x-hidden/description"
+			    },
+			    "state": {
+			      "$ref": "#/components/x-hidden/state"
+			    },
+			    "order_ids": {
+			      "$ref": "#/components/x-hidden/order_id_csv"
+			    },
+			    "extra": {
+			      "$ref": "#/components/x-hidden/extra"
+			    }
+			  }
+			},
+			"batch_update": {
+			  "type": "object",
+			  "required": [
+			    "batch_id",
+			    "set",
+			    "values"
+			  ],
+			  "properties": {
+			    "batch_id": {
+			      "$ref": "#/components/x-hidden/batch_id"
+			    },
+			    "set": {
+			      "type": "array",
+			      "description": "List of properties to update.",
+			      "items": {
+			        "type": "string"
+			      }
+			    },
+			    "values": {
+			      "type": "object",
+			      "description": "Updated values for the properties.",
+			      "properties": {
+			        "description": {
+			          "$ref": "#/components/x-hidden/description"
+			        },
+			        "state": {
+			          "$ref": "#/components/x-hidden/state"
+			        },
+			        "is_alive": {
+			          "$ref": "#/components/x-hidden/is_alive"
+			        },
+			        "order_ids": {
+			          "$ref": "#/components/x-hidden/order_id_csv"
+			        },
+			        "extra": {
+			          "$ref": "#/components/x-hidden/extra"
+			        }
+			      }
+			    }
+			  }
+			},
+			"batch": {
+			  "type": "object",
+			  "required": [
+			    "batch_id",
+			    "description",
+			    "state"
+			  ],
+			  "properties": {
+			    "batch_id": {
+			      "$ref": "#/components/x-hidden/batch_id"
+			    },
+			    "description": {
+			      "$ref": "#/components/x-hidden/description"
+			    },
+			    "state": {
+			      "$ref": "#/components/x-hidden/state"
+			    },
+			    "is_alive": {
+			      "$ref": "#/components/x-hidden/is_alive"
+			    },
+			    "order_ids": {
+			      "$ref": "#/components/x-hidden/order_id_csv"
+			    },
+			    "extra": {
+			      "$ref": "#/components/x-hidden/extra"
+			    }
+			  }
+			},
 			"error": {
 			  "type": "object",
 			  "required": [
@@ -606,6 +829,40 @@
 			    },
 			    "data": {
 			      "$ref": "#/components/schemas/order"
+			    }
+			  }
+			},
+			"batches_wrapped": {
+			  "type": "object",
+			  "properties": {
+			    "message": {
+			      "$ref": "#/components/x-hidden/message"
+			    },
+			    "self": {
+			      "$ref": "#/components/x-hidden/self"
+			    },
+			    "data": {
+			      "$ref": "#/components/x-hidden/batches_array"
+			    }
+			  }
+			},
+			"batches_array": {
+			  "type": "array",
+			  "items": {
+			    "$ref": "#/components/schemas/batch"
+			  }
+			},
+			"batch_wrapped": {
+			  "type": "object",
+			  "properties": {
+			    "message": {
+			      "$ref": "#/components/x-hidden/message"
+			    },
+			    "self": {
+			      "$ref": "#/components/x-hidden/self"
+			    },
+			    "data": {
+			      "$ref": "#/components/schemas/batch"
 			    }
 			  }
 			},

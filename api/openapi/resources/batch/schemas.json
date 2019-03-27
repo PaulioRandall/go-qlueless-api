@@ -1,0 +1,90 @@
+"batch_create": {
+  "type": "object",
+  "required": [
+    "description",
+    "state"
+  ],
+  "properties": {
+    "description": {
+      "$ref": "#/components/x-hidden/description"
+    },
+    "state": {
+      "$ref": "#/components/x-hidden/state"
+    },
+    "order_ids": {
+      "$ref": "#/components/x-hidden/order_id_csv"
+    },
+    "extra": {
+      "$ref": "#/components/x-hidden/extra"
+    }
+  }
+},
+"batch_update": {
+  "type": "object",
+  "required": [
+    "batch_id",
+    "set",
+    "values"
+  ],
+  "properties": {
+    "batch_id": {
+      "$ref": "#/components/x-hidden/batch_id"
+    },
+    "set": {
+      "type": "array",
+      "description": "List of properties to update.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "values": {
+      "type": "object",
+      "description": "Updated values for the properties.",
+      "properties": {
+        "description": {
+          "$ref": "#/components/x-hidden/description"
+        },
+        "state": {
+          "$ref": "#/components/x-hidden/state"
+        },
+        "is_alive": {
+          "$ref": "#/components/x-hidden/is_alive"
+        },
+        "order_ids": {
+          "$ref": "#/components/x-hidden/order_id_csv"
+        },
+        "extra": {
+          "$ref": "#/components/x-hidden/extra"
+        }
+      }
+    }
+  }
+},
+"batch": {
+  "type": "object",
+  "required": [
+    "batch_id",
+    "description",
+    "state"
+  ],
+  "properties": {
+    "batch_id": {
+      "$ref": "#/components/x-hidden/batch_id"
+    },
+    "description": {
+      "$ref": "#/components/x-hidden/description"
+    },
+    "state": {
+      "$ref": "#/components/x-hidden/state"
+    },
+    "is_alive": {
+      "$ref": "#/components/x-hidden/is_alive"
+    },
+    "order_ids": {
+      "$ref": "#/components/x-hidden/order_id_csv"
+    },
+    "extra": {
+      "$ref": "#/components/x-hidden/extra"
+    }
+  }
+}

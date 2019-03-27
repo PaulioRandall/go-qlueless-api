@@ -1,0 +1,33 @@
+"batches_or_batch_wrappable_200": {
+  "description": "List of Batches or a single Batch.",
+  "content": {
+    "application/json": {
+      "schema": {
+        "oneOf": [
+          {
+            "$ref": "#/components/x-hidden/batches_wrapped"
+          },
+          {
+            "$ref": "#/components/x-hidden/batches_array"
+          },
+          {
+            "$ref": "#/components/x-hidden/batch_wrapped"
+          },
+          {
+            "$ref": "#/components/schemas/batch"
+          }
+        ]
+      }
+    }
+  }
+},
+"batch_200": {
+  "description": "Single Batch.",
+  "content": {
+    "application/json": {
+      "schema": {
+        "$ref": "#/components/schemas/batch"
+      }
+    }
+  }
+}
