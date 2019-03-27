@@ -11,6 +11,9 @@
     "state": {
       "$ref": "#/components/x-hidden/state"
     },
+    "order_ids": {
+      "$ref": "#/components/x-hidden/order_id_csv"
+    },
     "extra": {
       "$ref": "#/components/x-hidden/extra"
     }
@@ -31,7 +34,14 @@
       "type": "array",
       "description": "List of properties to update.",
       "items": {
-        "type": "string"
+        "type": "string",
+        "enum": [
+          "description",
+          "state",
+          "is_alive",
+          "order_ids",
+          "extra"
+        ]
       }
     },
     "values": {
@@ -46,6 +56,9 @@
         },
         "is_alive": {
           "$ref": "#/components/x-hidden/is_alive"
+        },
+        "order_ids": {
+          "$ref": "#/components/x-hidden/order_id_csv"
         },
         "extra": {
           "$ref": "#/components/x-hidden/extra"
@@ -70,6 +83,9 @@
     },
     "state": {
       "$ref": "#/components/x-hidden/state"
+    },
+    "order_ids": {
+      "$ref": "#/components/x-hidden/order_id_csv"
     },
     "is_alive": {
       "$ref": "#/components/x-hidden/is_alive"

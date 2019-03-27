@@ -11,8 +11,8 @@
     "state": {
       "$ref": "#/components/x-hidden/state"
     },
-    "venture_ids": {
-      "$ref": "#/components/x-hidden/venture_id_csv"
+    "batch_ids": {
+      "$ref": "#/components/x-hidden/batch_id_csv"
     },
     "extra": {
       "$ref": "#/components/x-hidden/extra"
@@ -34,7 +34,14 @@
       "type": "array",
       "description": "List of properties to update.",
       "items": {
-        "type": "string"
+        "type": "string",
+        "enum": [
+          "description",
+          "state",
+          "is_alive",
+          "batch_ids",
+          "extra"
+        ]
       }
     },
     "values": {
@@ -50,8 +57,8 @@
         "is_alive": {
           "$ref": "#/components/x-hidden/is_alive"
         },
-        "venture_ids": {
-          "$ref": "#/components/x-hidden/venture_id_csv"
+        "batch_ids": {
+          "$ref": "#/components/x-hidden/batch_id_csv"
         },
         "extra": {
           "$ref": "#/components/x-hidden/extra"
@@ -80,8 +87,8 @@
     "is_alive": {
       "$ref": "#/components/x-hidden/is_alive"
     },
-    "venture_ids": {
-      "$ref": "#/components/x-hidden/venture_id_csv"
+    "batch_ids": {
+      "$ref": "#/components/x-hidden/batch_id_csv"
     },
     "extra": {
       "$ref": "#/components/x-hidden/extra"
