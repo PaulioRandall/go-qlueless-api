@@ -1,0 +1,48 @@
+"message": {
+  "type": "string",
+  "description": "Human readable summary of the response in a form presentable to end users."
+},
+"self": {
+  "type": "string",
+  "description": "Full path of the URL to the Thing or, if wrapped for meta information, the path of the request URL."
+},
+"venture_id": {
+  "type": "string",
+  "description": "Unique identifier of a Venture."
+},
+"venture_id_csv": {
+  "type": "string",
+  "description": "CSV of Venture IDs."
+},
+"order_id": {
+  "type": "string",
+  "description": "Unique identifier of an Order."
+},
+"order_id_csv": {
+  "type": "string",
+  "description": "CSV of Order IDs."
+},
+"batch_id": {
+  "type": "string",
+  "description": "Unique identifier of a Batch."
+},
+"batch_id_csv": {
+  "type": "string",
+  "description": "CSV of Batch IDs."
+},
+"description": {
+  "type": "string",
+  "description": "Presentable and human readable description of the Thing."
+},
+"state": {
+  "type": "string",
+  "description": "State of the Thing."
+},
+"is_alive": {
+  "type": "boolean",
+  "description": "True if the Thing is alive and should be included within search results."
+},
+"extra": {
+  "type": "string",
+  "description": "Additional CLOB data managed by clients."
+}

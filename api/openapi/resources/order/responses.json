@@ -1,0 +1,33 @@
+"orders_or_order_wrappable_200": {
+  "description": "List of Orders or a single Order.",
+  "content": {
+    "application/json": {
+      "schema": {
+        "oneOf": [
+          {
+            "$ref": "#/components/x-hidden/orders_wrapped"
+          },
+          {
+            "$ref": "#/components/x-hidden/orders_array"
+          },
+          {
+            "$ref": "#/components/x-hidden/order_wrapped"
+          },
+          {
+            "$ref": "#/components/schemas/order"
+          }
+        ]
+      }
+    }
+  }
+},
+"order_200": {
+  "description": "Single Order.",
+  "content": {
+    "application/json": {
+      "schema": {
+        "$ref": "#/components/schemas/order"
+      }
+    }
+  }
+}

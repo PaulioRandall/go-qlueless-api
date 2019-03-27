@@ -1,4 +1,4 @@
-"ventures_wrapped": {
+"orders_wrapped": {
   "type": "object",
   "properties": {
     "message": {
@@ -8,17 +8,17 @@
       "$ref": "#/components/x-hidden/self"
     },
     "data": {
-      "$ref": "#/components/x-hidden/ventures_array"
+      "$ref": "#/components/x-hidden/orders_array"
     }
   }
 },
-"ventures_array": {
+"orders_array": {
   "type": "array",
   "items": {
-    "$ref": "#/components/schemas/venture"
+    "$ref": "#/components/schemas/order"
   }
 },
-"venture_wrapped": {
+"order_wrapped": {
   "type": "object",
   "properties": {
     "message": {
@@ -28,7 +28,7 @@
       "$ref": "#/components/x-hidden/self"
     },
     "data": {
-      "$ref": "#/components/schemas/venture"
+      "$ref": "#/components/schemas/order"
     }
   }
 }

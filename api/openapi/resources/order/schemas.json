@@ -1,4 +1,4 @@
-"venture_create": {
+"order_create": {
   "type": "object",
   "required": [
     "description",
@@ -11,21 +11,24 @@
     "state": {
       "$ref": "#/components/x-hidden/state"
     },
+    "venture_ids": {
+      "$ref": "#/components/x-hidden/venture_id_csv"
+    },
     "extra": {
       "$ref": "#/components/x-hidden/extra"
     }
   }
 },
-"venture_update": {
+"order_update": {
   "type": "object",
   "required": [
-    "venture_id",
+    "order_id",
     "set",
     "values"
   ],
   "properties": {
-    "venture_id": {
-      "$ref": "#/components/x-hidden/venture_id"
+    "order_id": {
+      "$ref": "#/components/x-hidden/order_id"
     },
     "set": {
       "type": "array",
@@ -47,6 +50,9 @@
         "is_alive": {
           "$ref": "#/components/x-hidden/is_alive"
         },
+        "venture_ids": {
+          "$ref": "#/components/x-hidden/venture_id_csv"
+        },
         "extra": {
           "$ref": "#/components/x-hidden/extra"
         }
@@ -54,16 +60,16 @@
     }
   }
 },
-"venture": {
+"order": {
   "type": "object",
   "required": [
-    "venture_id",
+    "order_id",
     "description",
     "state"
   ],
   "properties": {
-    "venture_id": {
-      "$ref": "#/components/x-hidden/venture_id"
+    "order_id": {
+      "$ref": "#/components/x-hidden/order_id"
     },
     "description": {
       "$ref": "#/components/x-hidden/description"
@@ -73,6 +79,9 @@
     },
     "is_alive": {
       "$ref": "#/components/x-hidden/is_alive"
+    },
+    "venture_ids": {
+      "$ref": "#/components/x-hidden/venture_id_csv"
     },
     "extra": {
       "$ref": "#/components/x-hidden/extra"

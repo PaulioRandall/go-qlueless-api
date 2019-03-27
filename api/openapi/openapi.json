@@ -7,7 +7,11 @@
   "tags": [
     {
       "name": "venture",
-      "description": "All available venture specific actions."
+      "description": "All available Venture specific actions."
+    },
+    {
+      "name": "order",
+      "description": "All available Order specific actions."
     }
   ],
 	"paths": {
@@ -70,7 +74,7 @@
 		    "tags": ["venture"],
 		    "description": "Creates a new Venture.",
 		    "requestBody": {
-		      "$ref": "#/components/requestBodies/create_venture"
+		      "$ref": "#/components/requestBodies/venture_create"
 		    },
 		    "responses": {
 		      "201": {
@@ -85,7 +89,7 @@
 		    "tags": ["venture"],
 		    "description": "Updates a Venture.",
 		    "requestBody": {
-		      "$ref": "#/components/requestBodies/update_venture"
+		      "$ref": "#/components/requestBodies/venture_update"
 		    },
 		    "responses": {
 		      "200": {
@@ -113,6 +117,75 @@
 		      }
 		    }
 		  }
+		},
+		"/orders": {
+		  "get": {
+		    "tags": ["order"],
+		    "description": "Returns all Orders.",
+		    "parameters": [
+		      {
+		        "$ref": "#/components/parameters/wrap"
+		      },
+		      {
+		        "$ref": "#/components/parameters/order_id"
+		      }
+		    ],
+		    "responses": {
+		      "200": {
+		        "$ref": "#/components/responses/orders_or_order_wrappable_200"
+		      },
+		      "default": {
+		        "$ref": "#/components/responses/error"
+		      }
+		    }
+		  },
+		  "post": {
+		    "tags": ["order"],
+		    "description": "Creates a new Order.",
+		    "requestBody": {
+		      "$ref": "#/components/requestBodies/order_create"
+		    },
+		    "responses": {
+		      "201": {
+		        "$ref": "#/components/responses/order_200"
+		      },
+		      "default": {
+		        "$ref": "#/components/responses/error"
+		      }
+		    }
+		  },
+		  "put": {
+		    "tags": ["order"],
+		    "description": "Updates a Order.",
+		    "requestBody": {
+		      "$ref": "#/components/requestBodies/order_update"
+		    },
+		    "responses": {
+		      "200": {
+		        "$ref": "#/components/responses/order_200"
+		      },
+		      "default": {
+		        "$ref": "#/components/responses/error"
+		      }
+		    }
+		  },
+		  "delete": {
+		    "tags": ["order"],
+		    "description": "Deletes an Order.",
+		    "parameters": [
+		      {
+		        "$ref": "#/components/parameters/order_id"
+		      }
+		    ],
+		    "responses": {
+		      "200": {
+		        "$ref": "#/components/responses/order_200"
+		      },
+		      "default": {
+		        "$ref": "#/components/responses/error"
+		      }
+		    }
+		  }
 		}
   },
 	"components": {
@@ -126,6 +199,15 @@
 			    "$ref": "#/components/x-hidden/venture_id"
 			  }
 			},
+			"order_id": {
+			  "name": "order_id",
+			  "in": "query",
+			  "description": "Unique identifier of an Order.",
+			  "required": false,
+			  "schema": {
+			    "$ref": "#/components/x-hidden/order_id"
+			  }
+			},
 			"wrap": {
 			  "name": "wrap",
 			  "in": "query",
@@ -137,20 +219,38 @@
 			}
     },
     "requestBodies": {
-			"create_venture": {
+			"venture_create": {
 			  "content": {
 			    "application/json": {
 			      "schema": {
-			        "$ref": "#/components/schemas/create_venture"
+			        "$ref": "#/components/schemas/venture_create"
 			      }
 			    }
 			  }
 			},
-			"update_venture": {
+			"venture_update": {
 			  "content": {
 			    "application/json": {
 			      "schema": {
-			        "$ref": "#/components/schemas/update_venture"
+			        "$ref": "#/components/schemas/venture_update"
+			      }
+			    }
+			  }
+			},
+			"order_create": {
+			  "content": {
+			    "application/json": {
+			      "schema": {
+			        "$ref": "#/components/schemas/order_create"
+			      }
+			    }
+			  }
+			},
+			"order_update": {
+			  "content": {
+			    "application/json": {
+			      "schema": {
+			        "$ref": "#/components/schemas/order_update"
 			      }
 			    }
 			  }
@@ -190,6 +290,39 @@
 			    }
 			  }
 			},
+			"orders_or_order_wrappable_200": {
+			  "description": "List of Orders or a single Order.",
+			  "content": {
+			    "application/json": {
+			      "schema": {
+			        "oneOf": [
+			          {
+			            "$ref": "#/components/x-hidden/orders_wrapped"
+			          },
+			          {
+			            "$ref": "#/components/x-hidden/orders_array"
+			          },
+			          {
+			            "$ref": "#/components/x-hidden/order_wrapped"
+			          },
+			          {
+			            "$ref": "#/components/schemas/order"
+			          }
+			        ]
+			      }
+			    }
+			  }
+			},
+			"order_200": {
+			  "description": "Single Order.",
+			  "content": {
+			    "application/json": {
+			      "schema": {
+			        "$ref": "#/components/schemas/order"
+			      }
+			    }
+			  }
+			},
 			"error": {
 			  "description": "Client or service error.",
 			  "content": {
@@ -202,7 +335,7 @@
 			}
     },
 		"schemas": {
-			"create_venture": {
+			"venture_create": {
 			  "type": "object",
 			  "required": [
 			    "description",
@@ -220,7 +353,7 @@
 			    }
 			  }
 			},
-			"update_venture": {
+			"venture_update": {
 			  "type": "object",
 			  "required": [
 			    "venture_id",
@@ -277,6 +410,96 @@
 			    },
 			    "is_alive": {
 			      "$ref": "#/components/x-hidden/is_alive"
+			    },
+			    "extra": {
+			      "$ref": "#/components/x-hidden/extra"
+			    }
+			  }
+			},
+			"order_create": {
+			  "type": "object",
+			  "required": [
+			    "description",
+			    "state"
+			  ],
+			  "properties": {
+			    "description": {
+			      "$ref": "#/components/x-hidden/description"
+			    },
+			    "state": {
+			      "$ref": "#/components/x-hidden/state"
+			    },
+			    "venture_ids": {
+			      "$ref": "#/components/x-hidden/venture_id_csv"
+			    },
+			    "extra": {
+			      "$ref": "#/components/x-hidden/extra"
+			    }
+			  }
+			},
+			"order_update": {
+			  "type": "object",
+			  "required": [
+			    "order_id",
+			    "set",
+			    "values"
+			  ],
+			  "properties": {
+			    "order_id": {
+			      "$ref": "#/components/x-hidden/order_id"
+			    },
+			    "set": {
+			      "type": "array",
+			      "description": "List of properties to update.",
+			      "items": {
+			        "type": "string"
+			      }
+			    },
+			    "values": {
+			      "type": "object",
+			      "description": "Updated values for the properties.",
+			      "properties": {
+			        "description": {
+			          "$ref": "#/components/x-hidden/description"
+			        },
+			        "state": {
+			          "$ref": "#/components/x-hidden/state"
+			        },
+			        "is_alive": {
+			          "$ref": "#/components/x-hidden/is_alive"
+			        },
+			        "venture_ids": {
+			          "$ref": "#/components/x-hidden/venture_id_csv"
+			        },
+			        "extra": {
+			          "$ref": "#/components/x-hidden/extra"
+			        }
+			      }
+			    }
+			  }
+			},
+			"order": {
+			  "type": "object",
+			  "required": [
+			    "order_id",
+			    "description",
+			    "state"
+			  ],
+			  "properties": {
+			    "order_id": {
+			      "$ref": "#/components/x-hidden/order_id"
+			    },
+			    "description": {
+			      "$ref": "#/components/x-hidden/description"
+			    },
+			    "state": {
+			      "$ref": "#/components/x-hidden/state"
+			    },
+			    "is_alive": {
+			      "$ref": "#/components/x-hidden/is_alive"
+			    },
+			    "venture_ids": {
+			      "$ref": "#/components/x-hidden/venture_id_csv"
 			    },
 			    "extra": {
 			      "$ref": "#/components/x-hidden/extra"
@@ -352,6 +575,40 @@
 			    }
 			  }
 			},
+			"orders_wrapped": {
+			  "type": "object",
+			  "properties": {
+			    "message": {
+			      "$ref": "#/components/x-hidden/message"
+			    },
+			    "self": {
+			      "$ref": "#/components/x-hidden/self"
+			    },
+			    "data": {
+			      "$ref": "#/components/x-hidden/orders_array"
+			    }
+			  }
+			},
+			"orders_array": {
+			  "type": "array",
+			  "items": {
+			    "$ref": "#/components/schemas/order"
+			  }
+			},
+			"order_wrapped": {
+			  "type": "object",
+			  "properties": {
+			    "message": {
+			      "$ref": "#/components/x-hidden/message"
+			    },
+			    "self": {
+			      "$ref": "#/components/x-hidden/self"
+			    },
+			    "data": {
+			      "$ref": "#/components/schemas/order"
+			    }
+			  }
+			},
 			"message": {
 			  "type": "string",
 			  "description": "Human readable summary of the response in a form presentable to end users."
@@ -362,7 +619,27 @@
 			},
 			"venture_id": {
 			  "type": "string",
-			  "description": "Unique identifier of the Venture."
+			  "description": "Unique identifier of a Venture."
+			},
+			"venture_id_csv": {
+			  "type": "string",
+			  "description": "CSV of Venture IDs."
+			},
+			"order_id": {
+			  "type": "string",
+			  "description": "Unique identifier of an Order."
+			},
+			"order_id_csv": {
+			  "type": "string",
+			  "description": "CSV of Order IDs."
+			},
+			"batch_id": {
+			  "type": "string",
+			  "description": "Unique identifier of a Batch."
+			},
+			"batch_id_csv": {
+			  "type": "string",
+			  "description": "CSV of Batch IDs."
 			},
 			"description": {
 			  "type": "string",
@@ -378,7 +655,7 @@
 			},
 			"extra": {
 			  "type": "string",
-			  "description": "Semicolon ';' separated list of additional attributes managed by clients. Each property is a key value pair using a colon ':' as the delimiter, i.e. 'key: value'."
+			  "description": "Additional CLOB data managed by clients."
 			}
     }
 	}

@@ -1,17 +1,17 @@
-"venture_create": {
+"order_create": {
   "content": {
     "application/json": {
       "schema": {
-        "$ref": "#/components/schemas/venture_create"
+        "$ref": "#/components/schemas/order_create"
       }
     }
   }
 },
-"venture_update": {
+"order_update": {
   "content": {
     "application/json": {
       "schema": {
-        "$ref": "#/components/schemas/venture_update"
+        "$ref": "#/components/schemas/order_update"
       }
     }
   }

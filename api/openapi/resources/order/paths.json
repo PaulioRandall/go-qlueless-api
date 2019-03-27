@@ -1,18 +1,18 @@
-"/ventures": {
+"/orders": {
   "get": {
-    "tags": ["venture"],
-    "description": "Returns all Ventures.",
+    "tags": ["order"],
+    "description": "Returns all Orders.",
     "parameters": [
       {
         "$ref": "#/components/parameters/wrap"
       },
       {
-        "$ref": "#/components/parameters/venture_id"
+        "$ref": "#/components/parameters/order_id"
       }
     ],
     "responses": {
       "200": {
-        "$ref": "#/components/responses/ventures_or_venture_wrappable_200"
+        "$ref": "#/components/responses/orders_or_order_wrappable_200"
       },
       "default": {
         "$ref": "#/components/responses/error"
@@ -20,14 +20,14 @@
     }
   },
   "post": {
-    "tags": ["venture"],
-    "description": "Creates a new Venture.",
+    "tags": ["order"],
+    "description": "Creates a new Order.",
     "requestBody": {
-      "$ref": "#/components/requestBodies/venture_create"
+      "$ref": "#/components/requestBodies/order_create"
     },
     "responses": {
       "201": {
-        "$ref": "#/components/responses/venture_200"
+        "$ref": "#/components/responses/order_200"
       },
       "default": {
         "$ref": "#/components/responses/error"
@@ -35,14 +35,14 @@
     }
   },
   "put": {
-    "tags": ["venture"],
-    "description": "Updates a Venture.",
+    "tags": ["order"],
+    "description": "Updates a Order.",
     "requestBody": {
-      "$ref": "#/components/requestBodies/venture_update"
+      "$ref": "#/components/requestBodies/order_update"
     },
     "responses": {
       "200": {
-        "$ref": "#/components/responses/venture_200"
+        "$ref": "#/components/responses/order_200"
       },
       "default": {
         "$ref": "#/components/responses/error"
@@ -50,16 +50,16 @@
     }
   },
   "delete": {
-    "tags": ["venture"],
-    "description": "Deletes a Venture.",
+    "tags": ["order"],
+    "description": "Deletes an Order.",
     "parameters": [
       {
-        "$ref": "#/components/parameters/venture_id"
+        "$ref": "#/components/parameters/order_id"
       }
     ],
     "responses": {
       "200": {
-        "$ref": "#/components/responses/venture_200"
+        "$ref": "#/components/responses/order_200"
       },
       "default": {
         "$ref": "#/components/responses/error"
