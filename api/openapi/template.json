@@ -3,30 +3,36 @@
 	"info": {
 		"title": "Go Qlueless Assembly API",
 		"version": "0.0.1"
-	},
+  },
+  "tags": [
+    {
+      "name": "venture",
+      "description": "All available venture specific actions."
+    }
+  ],
 	"paths": {
     {{- "\n"}}{{ .Inject "/openapi/paths.json" 2}},
     {{- "\n"}}{{ .Inject "/changelog/paths.json" 2}},
-    {{- "\n"}}{{ .Inject "/things/paths.json" 2}}
+    {{- "\n"}}{{ .Inject "/venture/paths.json" 2}}
   },
 	"components": {
     "parameters": {
-      {{- "\n"}}{{ .Inject "/things/parameters.json" 3}},
+      {{- "\n"}}{{ .Inject "/venture/parameters.json" 3}},
       {{- "\n"}}{{ .Inject "/shared/parameters.json" 3}}
     },
     "requestBodies": {
-      {{- "\n"}}{{ .Inject "/things/requestBodies.json" 3}}
+      {{- "\n"}}{{ .Inject "/venture/requestBodies.json" 3}}
     },
     "responses": {
-      {{- "\n"}}{{ .Inject "/things/responses.json" 3}},
+      {{- "\n"}}{{ .Inject "/venture/responses.json" 3}},
       {{- "\n"}}{{ .Inject "/shared/responses.json" 3}}
     },
 		"schemas": {
-      {{- "\n"}}{{ .Inject "/things/schemas.json" 3}},
+      {{- "\n"}}{{ .Inject "/venture/schemas.json" 3}},
 			{{- "\n"}}{{ .Inject "/shared/schemas.json" 3}}
     },
     "x-hidden": {
-      {{- "\n"}}{{ .Inject "/things/x-hidden.json" 3}}
+      {{- "\n"}}{{ .Inject "/venture/x-hidden.json" 3}}
     }
 	}
 }

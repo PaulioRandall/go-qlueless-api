@@ -1,4 +1,4 @@
-"things_wrapped": {
+"ventures_wrapped": {
   "type": "object",
   "properties": {
     "message": {
@@ -8,17 +8,17 @@
       "$ref": "#/components/x-hidden/self"
     },
     "data": {
-      "$ref": "#/components/x-hidden/things_array"
+      "$ref": "#/components/x-hidden/ventures_array"
     }
   }
 },
-"things_array": {
+"ventures_array": {
   "type": "array",
   "items": {
-    "$ref": "#/components/schemas/thing"
+    "$ref": "#/components/schemas/venture"
   }
 },
-"thing_wrapped": {
+"venture_wrapped": {
   "type": "object",
   "properties": {
     "message": {
@@ -28,7 +28,7 @@
       "$ref": "#/components/x-hidden/self"
     },
     "data": {
-      "$ref": "#/components/schemas/thing"
+      "$ref": "#/components/schemas/venture"
     }
   }
 },
@@ -38,35 +38,25 @@
 },
 "self": {
   "type": "string",
-  "description": "Full path of the URL to the entity or, if wrapped for meta information, the path of the request URL."
+  "description": "Full path of the URL to the Thing or, if wrapped for meta information, the path of the request URL."
+},
+"venture_id": {
+  "type": "string",
+  "description": "Unique identifier of the Venture."
 },
 "description": {
   "type": "string",
-  "description": "Presentable and human readable description of the entity instance."
-},
-"id": {
-  "type": "string",
-  "description": "Unique identifier of the Thing."
-},
-"child_ids": {
-  "type": "string",
-  "format": "csv",
-  "description": "CSV of IDs that identify Things that this Thing is a parent of."
-},
-"parent_ids": {
-  "type": "string",
-  "format": "csv",
-  "description": "CSV of IDs that identify Things that this Thing is a child of."
+  "description": "Presentable and human readable description of the Thing."
 },
 "state": {
   "type": "string",
-  "description": "State of a thing."
+  "description": "State of the Thing."
 },
-"is_dead": {
+"is_alive": {
   "type": "boolean",
-  "description": "True if the thing is dead and should not show up in searches."
+  "description": "True if the Thing is alive and should be included within search results."
 },
-"additional": {
+"extra": {
   "type": "string",
   "description": "Semicolon ';' separated list of additional attributes managed by clients. Each property is a key value pair using a colon ':' as the delimiter, i.e. 'key: value'."
 }

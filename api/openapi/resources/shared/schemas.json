@@ -1,5 +1,9 @@
 "error": {
   "type": "object",
+  "required": [
+    "message",
+    "self"
+  ],
   "properties": {
     "message": {
       "$ref": "#/components/x-hidden/message"
@@ -11,6 +15,10 @@
 },
 "wrapped_response": {
   "type": "object",
+  "required": [
+    "message",
+    "self"
+  ],
   "properties": {
     "message": {
       "$ref": "#/components/x-hidden/message"
@@ -19,7 +27,7 @@
       "$ref": "#/components/x-hidden/self"
     },
     "data": {
-      "description": "The wrapped response data; should be identical to the response returned by the same request without the `meta` parameter"
+      "description": "The wrapped response data; should be identical to the response returned by the same request without the `wrap` parameter"
     }
   }
 }

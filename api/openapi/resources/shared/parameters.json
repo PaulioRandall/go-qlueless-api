@@ -1,7 +1,7 @@
 "wrap": {
   "name": "wrap",
   "in": "query",
-  "description": "If present wraps the response and includes meta information to it.",
+  "description": "If present wraps the response and adds meta information.",
   "required": false,
   "schema": {
     "type": "string"

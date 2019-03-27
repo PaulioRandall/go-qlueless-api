@@ -1,0 +1,33 @@
+"ventures_or_venture_wrappable_200": {
+  "description": "List of Ventures or a single Venture.",
+  "content": {
+    "application/json": {
+      "schema": {
+        "oneOf": [
+          {
+            "$ref": "#/components/x-hidden/ventures_wrapped"
+          },
+          {
+            "$ref": "#/components/x-hidden/ventures_array"
+          },
+          {
+            "$ref": "#/components/x-hidden/venture_wrapped"
+          },
+          {
+            "$ref": "#/components/schemas/venture"
+          }
+        ]
+      }
+    }
+  }
+},
+"venture_200": {
+  "description": "Single Venture.",
+  "content": {
+    "application/json": {
+      "schema": {
+        "$ref": "#/components/schemas/venture"
+      }
+    }
+  }
+}

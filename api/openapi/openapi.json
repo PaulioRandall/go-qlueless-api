@@ -3,7 +3,13 @@
 	"info": {
 		"title": "Go Qlueless Assembly API",
 		"version": "0.0.1"
-	},
+  },
+  "tags": [
+    {
+      "name": "venture",
+      "description": "All available venture specific actions."
+    }
+  ],
 	"paths": {
 		"/openapi": {
 		  "get": {
@@ -39,20 +45,21 @@
 		    }
 		  }
 		},
-		"/things": {
+		"/ventures": {
 		  "get": {
-		    "description": "Returns all things.",
+		    "tags": ["venture"],
+		    "description": "Returns all Ventures.",
 		    "parameters": [
 		      {
 		        "$ref": "#/components/parameters/wrap"
 		      },
 		      {
-		        "$ref": "#/components/parameters/id"
+		        "$ref": "#/components/parameters/venture_id"
 		      }
 		    ],
 		    "responses": {
 		      "200": {
-		        "$ref": "#/components/responses/things_200"
+		        "$ref": "#/components/responses/ventures_or_venture_wrappable_200"
 		      },
 		      "default": {
 		        "$ref": "#/components/responses/error"
@@ -60,13 +67,14 @@
 		    }
 		  },
 		  "post": {
-		    "description": "Creates a new thing.",
+		    "tags": ["venture"],
+		    "description": "Creates a new Venture.",
 		    "requestBody": {
-		      "$ref": "#/components/requestBodies/new_thing"
+		      "$ref": "#/components/requestBodies/create_venture"
 		    },
 		    "responses": {
 		      "201": {
-		        "$ref": "#/components/responses/thing_200_201"
+		        "$ref": "#/components/responses/venture_200"
 		      },
 		      "default": {
 		        "$ref": "#/components/responses/error"
@@ -74,13 +82,31 @@
 		    }
 		  },
 		  "put": {
-		    "description": "Updates a thing.",
+		    "tags": ["venture"],
+		    "description": "Updates a Venture.",
 		    "requestBody": {
-		      "$ref": "#/components/requestBodies/thing"
+		      "$ref": "#/components/requestBodies/update_venture"
 		    },
 		    "responses": {
 		      "200": {
-		        "$ref": "#/components/responses/thing_200_201"
+		        "$ref": "#/components/responses/venture_200"
+		      },
+		      "default": {
+		        "$ref": "#/components/responses/error"
+		      }
+		    }
+		  },
+		  "delete": {
+		    "tags": ["venture"],
+		    "description": "Deletes a Venture.",
+		    "parameters": [
+		      {
+		        "$ref": "#/components/parameters/venture_id"
+		      }
+		    ],
+		    "responses": {
+		      "200": {
+		        "$ref": "#/components/responses/venture_200"
 		      },
 		      "default": {
 		        "$ref": "#/components/responses/error"
@@ -91,19 +117,19 @@
   },
 	"components": {
     "parameters": {
-			"id": {
-			  "name": "id",
+			"venture_id": {
+			  "name": "venture_id",
 			  "in": "query",
-			  "description": "Unique identifier of a thing",
+			  "description": "Unique identifier of a Venture.",
 			  "required": false,
 			  "schema": {
-			    "$ref": "#/components/x-hidden/id"
+			    "$ref": "#/components/x-hidden/venture_id"
 			  }
 			},
 			"wrap": {
 			  "name": "wrap",
 			  "in": "query",
-			  "description": "If present wraps the response and includes meta information to it.",
+			  "description": "If present wraps the response and adds meta information.",
 			  "required": false,
 			  "schema": {
 			    "type": "string"
@@ -111,55 +137,55 @@
 			}
     },
     "requestBodies": {
-			"new_thing": {
+			"create_venture": {
 			  "content": {
 			    "application/json": {
 			      "schema": {
-			        "$ref": "#/components/schemas/new_thing"
+			        "$ref": "#/components/schemas/create_venture"
 			      }
 			    }
 			  }
 			},
-			"thing": {
+			"update_venture": {
 			  "content": {
 			    "application/json": {
 			      "schema": {
-			        "$ref": "#/components/schemas/thing"
+			        "$ref": "#/components/schemas/update_venture"
 			      }
 			    }
 			  }
 			}
     },
     "responses": {
-			"things_200": {
-			  "description": "List of Things or a single Thing.",
+			"ventures_or_venture_wrappable_200": {
+			  "description": "List of Ventures or a single Venture.",
 			  "content": {
 			    "application/json": {
 			      "schema": {
 			        "oneOf": [
 			          {
-			            "$ref": "#/components/x-hidden/things_wrapped"
+			            "$ref": "#/components/x-hidden/ventures_wrapped"
 			          },
 			          {
-			            "$ref": "#/components/x-hidden/things_array"
+			            "$ref": "#/components/x-hidden/ventures_array"
 			          },
 			          {
-			            "$ref": "#/components/x-hidden/thing_wrapped"
+			            "$ref": "#/components/x-hidden/venture_wrapped"
 			          },
 			          {
-			            "$ref": "#/components/schemas/thing"
+			            "$ref": "#/components/schemas/venture"
 			          }
 			        ]
 			      }
 			    }
 			  }
 			},
-			"thing_200_201": {
-			  "description": "Single thing",
+			"venture_200": {
+			  "description": "Single Venture.",
 			  "content": {
 			    "application/json": {
 			      "schema": {
-			        "$ref": "#/components/schemas/thing"
+			        "$ref": "#/components/schemas/venture"
 			      }
 			    }
 			  }
@@ -176,7 +202,7 @@
 			}
     },
 		"schemas": {
-			"new_thing": {
+			"create_venture": {
 			  "type": "object",
 			  "required": [
 			    "description",
@@ -189,50 +215,80 @@
 			    "state": {
 			      "$ref": "#/components/x-hidden/state"
 			    },
-			    "child_ids": {
-			      "$ref": "#/components/x-hidden/child_ids"
-			    },
-			    "parent_ids": {
-			      "$ref": "#/components/x-hidden/parent_ids"
-			    },
-			    "is_dead": {
-			      "$ref": "#/components/x-hidden/is_dead"
-			    },
-			    "additional": {
-			      "$ref": "#/components/x-hidden/additional"
+			    "extra": {
+			      "$ref": "#/components/x-hidden/extra"
 			    }
 			  }
 			},
-			"thing": {
+			"update_venture": {
 			  "type": "object",
 			  "required": [
+			    "venture_id",
+			    "set",
+			    "values"
+			  ],
+			  "properties": {
+			    "venture_id": {
+			      "$ref": "#/components/x-hidden/venture_id"
+			    },
+			    "set": {
+			      "type": "array",
+			      "description": "List of properties to update.",
+			      "items": {
+			        "type": "string"
+			      }
+			    },
+			    "values": {
+			      "type": "object",
+			      "description": "Updated values for the properties.",
+			      "properties": {
+			        "description": {
+			          "$ref": "#/components/x-hidden/description"
+			        },
+			        "state": {
+			          "$ref": "#/components/x-hidden/state"
+			        },
+			        "is_alive": {
+			          "$ref": "#/components/x-hidden/is_alive"
+			        },
+			        "extra": {
+			          "$ref": "#/components/x-hidden/extra"
+			        }
+			      }
+			    }
+			  }
+			},
+			"venture": {
+			  "type": "object",
+			  "required": [
+			    "venture_id",
 			    "description",
-			    "id",
 			    "state"
 			  ],
 			  "properties": {
+			    "venture_id": {
+			      "$ref": "#/components/x-hidden/venture_id"
+			    },
 			    "description": {
 			      "$ref": "#/components/x-hidden/description"
-			    },
-			    "id": {
-			      "$ref": "#/components/x-hidden/id"
 			    },
 			    "state": {
 			      "$ref": "#/components/x-hidden/state"
 			    },
-			    "child_ids": {
-			      "$ref": "#/components/x-hidden/child_ids"
+			    "is_alive": {
+			      "$ref": "#/components/x-hidden/is_alive"
 			    },
-			    "parent_ids": {
-			      "$ref": "#/components/x-hidden/parent_ids"
-			    },
-			    "additional": {
-			      "$ref": "#/components/x-hidden/additional"
+			    "extra": {
+			      "$ref": "#/components/x-hidden/extra"
 			    }
 			  }
 			},
 			"error": {
 			  "type": "object",
+			  "required": [
+			    "message",
+			    "self"
+			  ],
 			  "properties": {
 			    "message": {
 			      "$ref": "#/components/x-hidden/message"
@@ -244,6 +300,10 @@
 			},
 			"wrapped_response": {
 			  "type": "object",
+			  "required": [
+			    "message",
+			    "self"
+			  ],
 			  "properties": {
 			    "message": {
 			      "$ref": "#/components/x-hidden/message"
@@ -252,13 +312,13 @@
 			      "$ref": "#/components/x-hidden/self"
 			    },
 			    "data": {
-			      "description": "The wrapped response data; should be identical to the response returned by the same request without the `meta` parameter"
+			      "description": "The wrapped response data; should be identical to the response returned by the same request without the `wrap` parameter"
 			    }
 			  }
 			}
     },
     "x-hidden": {
-			"things_wrapped": {
+			"ventures_wrapped": {
 			  "type": "object",
 			  "properties": {
 			    "message": {
@@ -268,17 +328,17 @@
 			      "$ref": "#/components/x-hidden/self"
 			    },
 			    "data": {
-			      "$ref": "#/components/x-hidden/things_array"
+			      "$ref": "#/components/x-hidden/ventures_array"
 			    }
 			  }
 			},
-			"things_array": {
+			"ventures_array": {
 			  "type": "array",
 			  "items": {
-			    "$ref": "#/components/schemas/thing"
+			    "$ref": "#/components/schemas/venture"
 			  }
 			},
-			"thing_wrapped": {
+			"venture_wrapped": {
 			  "type": "object",
 			  "properties": {
 			    "message": {
@@ -288,7 +348,7 @@
 			      "$ref": "#/components/x-hidden/self"
 			    },
 			    "data": {
-			      "$ref": "#/components/schemas/thing"
+			      "$ref": "#/components/schemas/venture"
 			    }
 			  }
 			},
@@ -298,35 +358,25 @@
 			},
 			"self": {
 			  "type": "string",
-			  "description": "Full path of the URL to the entity or, if wrapped for meta information, the path of the request URL."
+			  "description": "Full path of the URL to the Thing or, if wrapped for meta information, the path of the request URL."
+			},
+			"venture_id": {
+			  "type": "string",
+			  "description": "Unique identifier of the Venture."
 			},
 			"description": {
 			  "type": "string",
-			  "description": "Presentable and human readable description of the entity instance."
-			},
-			"id": {
-			  "type": "string",
-			  "description": "Unique identifier of the Thing."
-			},
-			"child_ids": {
-			  "type": "string",
-			  "format": "csv",
-			  "description": "CSV of IDs that identify Things that this Thing is a parent of."
-			},
-			"parent_ids": {
-			  "type": "string",
-			  "format": "csv",
-			  "description": "CSV of IDs that identify Things that this Thing is a child of."
+			  "description": "Presentable and human readable description of the Thing."
 			},
 			"state": {
 			  "type": "string",
-			  "description": "State of a thing."
+			  "description": "State of the Thing."
 			},
-			"is_dead": {
+			"is_alive": {
 			  "type": "boolean",
-			  "description": "True if the thing is dead and should not show up in searches."
+			  "description": "True if the Thing is alive and should be included within search results."
 			},
-			"additional": {
+			"extra": {
 			  "type": "string",
 			  "description": "Semicolon ';' separated list of additional attributes managed by clients. Each property is a key value pair using a colon ':' as the delimiter, i.e. 'key: value'."
 			}

@@ -1,17 +1,17 @@
-"new_thing": {
+"create_venture": {
   "content": {
     "application/json": {
       "schema": {
-        "$ref": "#/components/schemas/new_thing"
+        "$ref": "#/components/schemas/create_venture"
       }
     }
   }
 },
-"thing": {
+"update_venture": {
   "content": {
     "application/json": {
       "schema": {
-        "$ref": "#/components/schemas/thing"
+        "$ref": "#/components/schemas/update_venture"
       }
     }
   }

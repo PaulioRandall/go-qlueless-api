@@ -1,0 +1,69 @@
+"/ventures": {
+  "get": {
+    "tags": ["venture"],
+    "description": "Returns all Ventures.",
+    "parameters": [
+      {
+        "$ref": "#/components/parameters/wrap"
+      },
+      {
+        "$ref": "#/components/parameters/venture_id"
+      }
+    ],
+    "responses": {
+      "200": {
+        "$ref": "#/components/responses/ventures_or_venture_wrappable_200"
+      },
+      "default": {
+        "$ref": "#/components/responses/error"
+      }
+    }
+  },
+  "post": {
+    "tags": ["venture"],
+    "description": "Creates a new Venture.",
+    "requestBody": {
+      "$ref": "#/components/requestBodies/create_venture"
+    },
+    "responses": {
+      "201": {
+        "$ref": "#/components/responses/venture_200"
+      },
+      "default": {
+        "$ref": "#/components/responses/error"
+      }
+    }
+  },
+  "put": {
+    "tags": ["venture"],
+    "description": "Updates a Venture.",
+    "requestBody": {
+      "$ref": "#/components/requestBodies/update_venture"
+    },
+    "responses": {
+      "200": {
+        "$ref": "#/components/responses/venture_200"
+      },
+      "default": {
+        "$ref": "#/components/responses/error"
+      }
+    }
+  },
+  "delete": {
+    "tags": ["venture"],
+    "description": "Deletes a Venture.",
+    "parameters": [
+      {
+        "$ref": "#/components/parameters/venture_id"
+      }
+    ],
+    "responses": {
+      "200": {
+        "$ref": "#/components/responses/venture_200"
+      },
+      "default": {
+        "$ref": "#/components/responses/error"
+      }
+    }
+  }
+}

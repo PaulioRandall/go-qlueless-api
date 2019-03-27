@@ -1,9 +1,0 @@
-"id": {
-  "name": "id",
-  "in": "query",
-  "description": "Unique identifier of a thing",
-  "required": false,
-  "schema": {
-    "$ref": "#/components/x-hidden/id"
-  }
-}

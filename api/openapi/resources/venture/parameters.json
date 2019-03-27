@@ -1,0 +1,9 @@
+"venture_id": {
+  "name": "venture_id",
+  "in": "query",
+  "description": "Unique identifier of a Venture.",
+  "required": false,
+  "schema": {
+    "$ref": "#/components/x-hidden/venture_id"
+  }
+}
