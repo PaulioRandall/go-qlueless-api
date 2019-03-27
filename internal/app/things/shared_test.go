@@ -8,6 +8,7 @@ import (
 
 	. "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 // When given an ID to an existing Thing, it is returned
@@ -17,7 +18,7 @@ func TestFindThing___1(t *testing.T) {
 	Things.Add(exp)
 
 	act, ok := findThing("1", res, req)
-	assert.True(t, ok)
+	require.True(t, ok)
 	assert.Equal(t, exp, act)
 }
 
@@ -28,10 +29,10 @@ func TestFindThing___2(t *testing.T) {
 	Things.Add(exp)
 
 	_, ok := findThing("999", res, req)
-	assert.False(t, ok)
+	require.False(t, ok)
 	assert.Equal(t, 404, rec.Code)
 
-	assert.NotNil(t, rec.Body)
+	require.NotNil(t, rec.Body)
 	var m map[string]interface{}
 	err := json.NewDecoder(rec.Body).Decode(&m)
 	assert.Nil(t, err)
@@ -52,7 +53,7 @@ func TestDecodeThing___1(t *testing.T) {
 
 	req.Body = ioutil.NopCloser(strings.NewReader(json))
 	act, ok := decodeThing(res, req)
-	assert.True(t, ok)
+	require.True(t, ok)
 	assert.Equal(t, "description", act.Description)
 	assert.Equal(t, "state", act.State)
 	assert.Equal(t, "1", act.ID)
@@ -70,7 +71,7 @@ func TestDecodeThing___2(t *testing.T) {
 
 	req.Body = ioutil.NopCloser(strings.NewReader(json))
 	act, ok := decodeThing(res, req)
-	assert.False(t, ok)
+	require.False(t, ok)
 	assert.Equal(t, Thing{}, act)
 }
 
@@ -79,7 +80,7 @@ func TestDecodeThing___3(t *testing.T) {
 	req, res, _ := SetupRequest("/")
 	req.Body = ioutil.NopCloser(strings.NewReader("{}"))
 	act, ok := decodeThing(res, req)
-	assert.True(t, ok)
+	require.True(t, ok)
 	assert.Equal(t, Thing{}, act)
 }
 
@@ -94,7 +95,7 @@ func TestCheckThing___1(t *testing.T) {
 	}
 
 	act, ok := checkThing(exp, res, req)
-	assert.True(t, ok)
+	require.True(t, ok)
 	assert.Equal(t, exp, act)
 }
 
@@ -127,10 +128,10 @@ func TestCheckThing___3(t *testing.T) {
 	}
 
 	_, ok := checkThing(exp, res, req)
-	assert.False(t, ok)
+	require.False(t, ok)
 	assert.Equal(t, 400, rec.Code)
 
-	assert.NotNil(t, rec.Body)
+	require.NotNil(t, rec.Body)
 	var m map[string]interface{}
 	err := json.NewDecoder(rec.Body).Decode(&m)
 	assert.Nil(t, err)

@@ -1,0 +1,5 @@
+#!/bin/bash
+
+echo "...testing API, this may take a few moments..."
+SCRIPTS=$(cd `dirname $0` && pwd)
+go test -count=1 "${SCRIPTS}/../test/api/..."

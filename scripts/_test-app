@@ -1,0 +1,5 @@
+#!/bin/bash
+
+SCRIPTS=$(cd `dirname $0` && pwd)
+go test "${SCRIPTS}/../cmd/..."
+go test "${SCRIPTS}/../internal/..."

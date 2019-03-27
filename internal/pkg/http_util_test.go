@@ -7,12 +7,13 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 // When given a request, returns the absolute relative URL of the request
 func TestRelURL(t *testing.T) {
 	req, err := http.NewRequest("GET", "http://example.com/character?q=Nobby", nil)
-	assert.Nil(t, err)
+	require.Nil(t, err)
 
 	act := RelURL(req)
 	assert.Equal(t, "/character?q=Nobby", act)
@@ -40,13 +41,13 @@ func TestWrite500Reply___3(t *testing.T) {
 
 	Write500Reply(res, req)
 
-	assert.NotNil(t, rec.Body)
+	require.NotNil(t, rec.Body)
 	var m map[string]interface{}
 	err := json.NewDecoder(rec.Body).Decode(&m)
-	assert.Nil(t, err)
+	require.Nil(t, err)
+	require.Len(t, m, 2)
 	assert.Contains(t, m, "message")
 	assert.Contains(t, m, "self")
-	assert.Len(t, m, 2)
 }
 
 // When ReplyMeta.Message is set, returns true
@@ -66,7 +67,7 @@ func TestCheckReplyMetaMessage___2(t *testing.T) {
 	r := ReplyMeta{}
 
 	act := CheckReplyMetaMessage(res, req, r)
-	assert.False(t, act)
+	require.False(t, act)
 	assert.Equal(t, 500, rec.Code)
 }
 
@@ -91,12 +92,12 @@ func TestCheckStatusCode___2(t *testing.T) {
 func TestCheckStatusCode___3(t *testing.T) {
 	req, res, rec := SetupRequest("/")
 	act := CheckStatusBetween(res, req, 300, 400, 499)
-	assert.False(t, act)
+	require.False(t, act)
 	assert.Equal(t, 500, rec.Code)
 
 	req, res, rec = SetupRequest("/")
 	act = CheckStatusBetween(res, req, 500, 400, 499)
-	assert.False(t, act)
+	require.False(t, act)
 	assert.Equal(t, 500, rec.Code)
 }
 
@@ -157,15 +158,15 @@ func TestWrite4XXReply___5(t *testing.T) {
 
 	Write4XXReply(res, req, 400, r)
 
-	assert.NotNil(t, rec.Body)
+	require.NotNil(t, rec.Body)
 	var m map[string]interface{}
 	err := json.NewDecoder(rec.Body).Decode(&m)
 
-	assert.Nil(t, err)
+	require.Nil(t, err)
+	require.Len(t, m, 3)
 	assert.Equal(t, "abc", m["message"])
 	assert.Equal(t, "/search?q=dan+north", m["self"])
 	assert.Equal(t, "xyz", m["hints"])
-	assert.Len(t, m, 3)
 }
 
 // When Reply4XX.Self is not set, Reply4XX.Self is set for us
@@ -178,17 +179,17 @@ func TestWrite4XXReply___6(t *testing.T) {
 
 	Write4XXReply(res, req, 400, r)
 
-	assert.NotNil(t, rec.Body)
+	require.NotNil(t, rec.Body)
 	var m map[string]interface{}
 	err := json.NewDecoder(rec.Body).Decode(&m)
-	assert.Nil(t, err)
+	require.Nil(t, err)
 	assert.Equal(t, "/search?q=dan+north", m["self"])
 }
 
 // When the 'wrap' query param is present in a request, returns true
 func TestWrapReply___1(t *testing.T) {
 	req, err := http.NewRequest("GET", "http://example.com/?wrap=", nil)
-	assert.Nil(t, err)
+	require.Nil(t, err)
 	act := WrapReply(req)
 	assert.True(t, act)
 }
@@ -196,7 +197,7 @@ func TestWrapReply___1(t *testing.T) {
 // When the 'wrap' query param is not present in a request, returns false
 func TestIsMetaReply___2(t *testing.T) {
 	req, err := http.NewRequest("GET", "http://example.com/?q=abc", nil)
-	assert.Nil(t, err)
+	require.Nil(t, err)
 	act := WrapReply(req)
 	assert.False(t, act)
 }
@@ -204,7 +205,7 @@ func TestIsMetaReply___2(t *testing.T) {
 // When 'wrap' not present and data is nil, nil is returned
 func TestPrepResponseData___1(t *testing.T) {
 	req, err := http.NewRequest("GET", "http://example.com/", nil)
-	assert.Nil(t, err)
+	require.Nil(t, err)
 
 	act := PrepResponseData(req, nil, "ignored")
 	assert.Nil(t, act)
@@ -213,19 +214,19 @@ func TestPrepResponseData___1(t *testing.T) {
 // When 'wrap' not present and data is provided, data is returned unchanged
 func TestPrepResponseData___2(t *testing.T) {
 	req, err := http.NewRequest("GET", "http://example.com/", nil)
-	assert.Nil(t, err)
+	require.Nil(t, err)
 	data := make(map[string]interface{})
 	data["album"] = "As Daylight Dies"
 
 	act := PrepResponseData(req, data, "ignored")
-	assert.NotNil(t, act)
+	require.NotNil(t, act)
 	assert.Equal(t, data, act)
 }
 
 // When 'meta' is present and data is provided, wrapped reply is returned
 func TestPrepResponseData___3(t *testing.T) {
 	req, err := http.NewRequest("GET", "http://example.com/?wrap", nil)
-	assert.Nil(t, err)
+	require.Nil(t, err)
 
 	data := make(map[string]interface{})
 	data["album"] = "As Daylight Dies"
@@ -237,7 +238,7 @@ func TestPrepResponseData___3(t *testing.T) {
 	}
 
 	act := PrepResponseData(req, data, "Cheese")
-	assert.NotNil(t, act)
+	require.NotNil(t, act)
 	assert.Equal(t, exp, act)
 }
 
@@ -283,7 +284,7 @@ func TestWriteReply___3(t *testing.T) {
 
 	WriteReply(res, &b, "text/plain")
 
-	assert.NotNil(t, rec.Body)
+	require.NotNil(t, rec.Body)
 	s := string(rec.Body.String())
 	assert.Equal(t, "Ghost in the moon", s)
 }
@@ -339,10 +340,10 @@ func TestWriteJsonReply___3(t *testing.T) {
 
 	WriteJSONReply(res, req, data, "")
 
-	assert.NotNil(t, rec.Body)
+	require.NotNil(t, rec.Body)
 	var m map[string]interface{}
 	err := json.NewDecoder(rec.Body).Decode(&m)
-	assert.Nil(t, err)
+	require.Nil(t, err)
 	assert.Equal(t, data, m)
 }
 

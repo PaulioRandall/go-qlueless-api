@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 // When init with some Things, returns a map of the init Things
@@ -97,7 +98,7 @@ func TestThingStore___Add___2(t *testing.T) {
 	exp := ts.Add(a)
 	act, ok := ts.things["1"]
 
-	assert.True(t, ok)
+	require.True(t, ok)
 	assert.Equal(t, exp, act)
 }
 
@@ -112,10 +113,10 @@ func TestThingStore___Update___1(t *testing.T) {
 	a2.ID = "1"
 	a2.Description = "updated"
 	err := ts.Update(a2)
-	assert.Nil(t, err)
+	require.Nil(t, err)
 
 	act, ok := ts.things["1"]
-	assert.True(t, ok)
+	require.True(t, ok)
 	assert.Equal(t, a.State, act.State)
 	assert.Equal(t, a2.Description, act.Description)
 }
@@ -132,10 +133,10 @@ func TestThingStore___Update___2(t *testing.T) {
 	a2.ID = ""
 	a2.Description = "updated"
 	err := ts.Update(a2)
-	assert.NotNil(t, err)
+	require.NotNil(t, err)
 
 	act, ok := ts.things["1"]
-	assert.True(t, ok)
+	require.True(t, ok)
 	assert.Equal(t, a.State, act.State)
 	assert.Equal(t, a.Description, act.Description)
 }

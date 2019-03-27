@@ -1,5 +1,0 @@
-#!/bin/bash
-
-clear
-SCRIPTS=$(cd `dirname $0` && pwd)
-go test -v "${SCRIPTS}/../..."

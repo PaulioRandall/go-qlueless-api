@@ -1,6 +1,7 @@
 #!/bin/bash
 
 clear
+echo ...Not yet implemented!
 out=$1
 
 #SCRIPTS=$(cd `dirname $0` && pwd)

@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 // When given Thing with mutliple child IDs, they are split from their string
@@ -13,7 +14,7 @@ func TestSplitChildIDs___1(t *testing.T) {
 		ChildIDs: "0,1,2",
 	}
 	act := thing.SplitChildIDs()
-	assert.Len(t, act, 3)
+	require.Len(t, act, 3)
 	assert.Equal(t, "0", act[0])
 	assert.Equal(t, "1", act[1])
 	assert.Equal(t, "2", act[2])
@@ -34,7 +35,7 @@ func TestSplitChildIDs___3(t *testing.T) {
 		ChildIDs: "9",
 	}
 	act := thing.SplitChildIDs()
-	assert.Len(t, act, 1)
+	require.Len(t, act, 1)
 	assert.Equal(t, "9", act[0])
 }
 
@@ -72,7 +73,7 @@ func TestSplitParentIDs___1(t *testing.T) {
 		ParentIDs: "0,1,2",
 	}
 	act := thing.SplitParentIDs()
-	assert.Len(t, act, 3)
+	require.Len(t, act, 3)
 	assert.Equal(t, "0", act[0])
 	assert.Equal(t, "1", act[1])
 	assert.Equal(t, "2", act[2])
@@ -93,7 +94,7 @@ func TestSplitParentIDs___3(t *testing.T) {
 		ParentIDs: "9",
 	}
 	act := thing.SplitParentIDs()
-	assert.Len(t, act, 1)
+	require.Len(t, act, 1)
 	assert.Equal(t, "9", act[0])
 }
 
@@ -167,14 +168,14 @@ func TestClean___3(t *testing.T) {
 // When given an empty string, the message is appended
 func TestAppendIfEmpty___1(t *testing.T) {
 	act := appendIfEmpty("", []string{}, "abc")
-	assert.Len(t, act, 1)
+	require.Len(t, act, 1)
 	assert.Contains(t, act, "abc")
 }
 
 // When given an empty string, the message is appended
 func TestAppendIfEmpty___2(t *testing.T) {
 	act := appendIfEmpty("", []string{"xyz"}, "abc")
-	assert.Len(t, act, 2)
+	require.Len(t, act, 2)
 	assert.Contains(t, act, "xyz")
 	assert.Contains(t, act, "abc")
 }
@@ -194,14 +195,14 @@ func TestAppendIfNotPositiveInt___1(t *testing.T) {
 // When given zero, the message is appended
 func TestAppendIfNotPositiveInt___2(t *testing.T) {
 	act := appendIfNotPositiveInt("0", []string{}, "abc")
-	assert.Len(t, act, 1)
+	require.Len(t, act, 1)
 	assert.Contains(t, act, "abc")
 }
 
 // When given a negative number, the message is appended
 func TestAppendIfNotPositiveInt___3(t *testing.T) {
 	act := appendIfNotPositiveInt("-5", []string{}, "abc")
-	assert.Len(t, act, 1)
+	require.Len(t, act, 1)
 	assert.Contains(t, act, "abc")
 }
 
@@ -211,7 +212,7 @@ func TestAppendIfNotPositiveInt___4(t *testing.T) {
 	act = appendIfNotPositiveInt("-1", act, "abc")
 	act = appendIfNotPositiveInt("-1", act, "efg")
 	act = appendIfNotPositiveInt("-1", act, "hij")
-	assert.Len(t, act, 3)
+	require.Len(t, act, 3)
 	assert.Contains(t, act, "abc")
 	assert.Contains(t, act, "efg")
 	assert.Contains(t, act, "hij")
