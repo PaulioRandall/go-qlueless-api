@@ -1,13 +1,14 @@
 package ventures
 
 import (
+	"fmt"
 	"net/http"
 
 	. "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg"
-	ven "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/ventures"
+	v "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/ventures"
 )
 
-var ventures []ven.Venture = []ven.Venture{}
+var ventures = v.NewVentureStore()
 
 // VenturesHandler handles requests to do with collections of, or individual,
 // Ventures
@@ -33,6 +34,10 @@ func VenturesHandler(res http.ResponseWriter, req *http.Request) {
 	}
 }
 
+// get_AllVentures handles client requests for all living Ventures
 func get_AllVentures(res *http.ResponseWriter, req *http.Request) {
-
+	vens := ventures.GetAllAlive()
+	m := fmt.Sprintf("Found %d Ventures", len(vens))
+	data := PrepResponseData(req, vens, m)
+	WriteJSONReply(res, req, data, "")
 }
