@@ -9,22 +9,21 @@ import (
 	"github.com/stretchr/testify/require"
 
 	. "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/asserts"
-	. "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/ventures"
 )
 
-// Given some Ventures already exist on the server
-// When all Ventures are requested
+// Given a loaded OpenAPI specification
+// When the specification is requested
 // Then ensure the response code is 200
-// And the 'Content-Type' header contains 'application/json'
+// And the 'Content-Type' header contains 'application/vnd.oai.openapi+json'
 // And 'Access-Control-Allow-Origin' is '*'
 // And 'Access-Control-Allow-Headers' is '*'
-// And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, HEAD, and OPTIONS
-// And the body is a JSON array of valid Ventures
+// And 'Access-Control-Allow-Methods' only contains GET, HEAD, and OPTIONS
+// And the body is a valid JSON object
 //
-// TODO: Craft some test data and pre-inject it into a SQLite database
-func TestGET_Ventures(t *testing.T) {
+// TODO: Assert the body is a valid OpenAPI specification
+func TestGET_OpenAPI(t *testing.T) {
 	req := APICall{
-		URL:    "http://localhost:8080/ventures",
+		URL:    "http://localhost:8080/openapi",
 		Method: GET,
 	}
 	res := req.fire()
@@ -36,15 +35,14 @@ func TestGET_Ventures(t *testing.T) {
 		"Access-Control-Allow-Headers": "*",
 	})
 	AssertHeadersContains(t, res.Header, map[string][]string{
-		"Content-Type":                 []string{"application/json"},
-		"Access-Control-Allow-Methods": []string{"GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS"},
+		"Content-Type":                 []string{"application/vnd.oai.openapi+json"},
+		"Access-Control-Allow-Methods": []string{"GET", "HEAD", "OPTIONS"},
 	})
 	AssertHeadersMatches(t, res.Header, map[string]string{
 		"Access-Control-Allow-Methods": CORS_METHODS_PATTERN,
 	})
 
-	var ven []Venture
-	err := json.NewDecoder(res.Body).Decode(&ven)
+	var spec map[string]interface{}
+	err := json.NewDecoder(res.Body).Decode(&spec)
 	require.Nil(t, err)
-	AssertGenericVentures(t, ven)
 }

@@ -25,8 +25,10 @@ func OpenAPIHandler(res http.ResponseWriter, req *http.Request) {
 	case "HEAD":
 		fallthrough
 	case "OPTIONS":
+		AppendCORSHeaders(&res, httpMethods)
 		WriteEmptyJSONReply(&res, "vnd.oai.openapi")
 	default:
+		AppendCORSHeaders(&res, httpMethods)
 		MethodNotAllowed(&res, req)
 	}
 }

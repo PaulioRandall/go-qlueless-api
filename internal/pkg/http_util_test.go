@@ -273,7 +273,6 @@ func TestWriteReply___2(t *testing.T) {
 	b := []byte("Ghost in the moon")
 
 	WriteReply(res, &b, "text/plain")
-	CheckCORSResponseHeaders(t, rec.Header())
 	CheckHeaderValue(t, rec.Header(), "Content-Type", "text/plain")
 }
 

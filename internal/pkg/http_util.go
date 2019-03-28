@@ -132,7 +132,6 @@ func AppendJSONHeader(res *http.ResponseWriter, extensionType string) {
 // WriteReply appends the required headers and then writes the response data
 func WriteReply(res *http.ResponseWriter, data *[]byte, contentType string) {
 	(*res).Header().Set("Content-Type", contentType)
-	AppendCORSHeaders(res, "*")
 	(*res).WriteHeader(http.StatusOK)
 	(*res).Write(*data)
 }

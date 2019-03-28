@@ -8,6 +8,10 @@ import (
 	. "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg"
 )
 
+const (
+	httpMethods = "GET, HEAD, OPTIONS"
+)
+
 const mime_md = "text/markdown; charset=utf-8"
 
 var changelog *[]byte = nil
@@ -20,10 +24,12 @@ func ChangelogHandler(res http.ResponseWriter, req *http.Request) {
 	case "GET":
 		get_Changelog(&res, req)
 	case "HEAD":
-		WriteEmptyReply(&res, mime_md)
+		fallthrough
 	case "OPTIONS":
+		AppendCORSHeaders(&res, httpMethods)
 		WriteEmptyReply(&res, mime_md)
 	default:
+		AppendCORSHeaders(&res, httpMethods)
 		MethodNotAllowed(&res, req)
 	}
 }
@@ -36,6 +42,7 @@ func get_Changelog(res *http.ResponseWriter, req *http.Request) {
 		return
 	}
 
+	AppendCORSHeaders(res, httpMethods)
 	WriteReply(res, changelog, mime_md)
 }
 
