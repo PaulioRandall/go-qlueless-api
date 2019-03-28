@@ -98,3 +98,57 @@ func TestVenture_Validate_4(t *testing.T) {
 	errMsgs := a.Validate()
 	assert.Len(t, errMsgs, 2)
 }
+
+func TestSplitOrderIDs_1(t *testing.T) {
+	a := Venture{
+		OrderIDs: "1,2,3",
+	}
+
+	s := a.SplitOrderIDs()
+
+	assert.Len(t, s, 3)
+	exp := []string{"1", "2", "3"}
+	assert.Equal(t, exp, s)
+}
+
+func TestSplitOrderIDs_2(t *testing.T) {
+	a := Venture{
+		OrderIDs: "1",
+	}
+
+	s := a.SplitOrderIDs()
+
+	assert.Len(t, s, 1)
+	exp := []string{"1"}
+	assert.Equal(t, exp, s)
+}
+
+func TestSplitOrderIDs_3(t *testing.T) {
+	a := Venture{}
+	s := a.SplitOrderIDs()
+	assert.Empty(t, s)
+}
+
+func TestSetOrderIDs_1(t *testing.T) {
+	a := Venture{}
+	ids := []string{"1", "2", "3"}
+	a.SetOrderIDs(ids)
+
+	assert.Equal(t, "1,2,3", a.OrderIDs)
+}
+
+func TestSetOrderIDs_2(t *testing.T) {
+	a := Venture{}
+	ids := []string{"1"}
+	a.SetOrderIDs(ids)
+
+	assert.Equal(t, "1", a.OrderIDs)
+}
+
+func TestSetOrderIDs_3(t *testing.T) {
+	a := Venture{}
+	ids := []string{}
+	a.SetOrderIDs(ids)
+
+	assert.Equal(t, "", a.OrderIDs)
+}

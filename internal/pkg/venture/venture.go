@@ -44,3 +44,16 @@ func (ven *Venture) Validate() []string {
 	errMsgs = AppendIfEmpty(ven.State, errMsgs, "Ventures must have a state")
 	return errMsgs
 }
+
+// SplitOrderIDs returns the IDs of the Orders as a slice
+func (ven *Venture) SplitOrderIDs() []string {
+	if ven.OrderIDs == "" {
+		return []string{}
+	}
+	return strings.Split(ven.OrderIDs, ",")
+}
+
+// SetOrderIDs sets the OrderIDs CSV from a slice of Order IDs
+func (ven *Venture) SetOrderIDs(ids []string) {
+	ven.OrderIDs = strings.Join(ids, ",")
+}
