@@ -9,7 +9,7 @@ import (
 func TestVenture_Clean_1(t *testing.T) {
 	a := Venture{
 		Description: "\n\t\v description \r\f ",
-		VentureID:   "\n\t\v 1 \r\f ",
+		ID:          "\n\t\v 1 \r\f ",
 		OrderIDs:    "\n\t\v 2 \r\f , 3,4,\v 999 \f\t",
 		State:       "\n\t\v state \r\f ",
 		IsAlive:     true,
@@ -19,7 +19,7 @@ func TestVenture_Clean_1(t *testing.T) {
 	a.Clean()
 
 	assert.Equal(t, "description", a.Description)
-	assert.Equal(t, "1", a.VentureID)
+	assert.Equal(t, "1", a.ID)
 	assert.Equal(t, "2,3,4,999", a.OrderIDs)
 	assert.Equal(t, "state", a.State)
 	assert.True(t, a.IsAlive)
@@ -29,7 +29,7 @@ func TestVenture_Clean_1(t *testing.T) {
 func TestVenture_Clean_2(t *testing.T) {
 	a := Venture{
 		Description: "description",
-		VentureID:   "1",
+		ID:          "1",
 		OrderIDs:    "2,3,4,999",
 		State:       "state",
 	}
@@ -37,7 +37,7 @@ func TestVenture_Clean_2(t *testing.T) {
 	a.Clean()
 
 	assert.Equal(t, "description", a.Description)
-	assert.Equal(t, "1", a.VentureID)
+	assert.Equal(t, "1", a.ID)
 	assert.Equal(t, "2,3,4,999", a.OrderIDs)
 	assert.Equal(t, "state", a.State)
 }
@@ -54,7 +54,7 @@ func TestVenture_Clean_3(t *testing.T) {
 func TestVenture_Validate_1(t *testing.T) {
 	a := Venture{
 		Description: "description",
-		VentureID:   "1",
+		ID:          "1",
 		OrderIDs:    "2,3,4,999",
 		State:       "state",
 		IsAlive:     true,
@@ -68,7 +68,7 @@ func TestVenture_Validate_1(t *testing.T) {
 func TestVenture_Validate_2(t *testing.T) {
 	a := Venture{
 		Description: "description",
-		VentureID:   "1",
+		ID:          "1",
 		State:       "state",
 	}
 
@@ -79,7 +79,7 @@ func TestVenture_Validate_2(t *testing.T) {
 func TestVenture_Validate_3(t *testing.T) {
 	a := Venture{
 		Description: "",
-		VentureID:   "",
+		ID:          "",
 		State:       "",
 	}
 
@@ -90,7 +90,7 @@ func TestVenture_Validate_3(t *testing.T) {
 func TestVenture_Validate_4(t *testing.T) {
 	a := Venture{
 		Description: "valid",
-		VentureID:   "invalid",
+		ID:          "invalid",
 		OrderIDs:    "3,invalid,4",
 		State:       "valid",
 	}

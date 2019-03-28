@@ -1,6 +1,9 @@
 package ventures
 
-import "sync"
+import (
+	"strconv"
+	"sync"
+)
 
 type VentureStore struct {
 	mutex *sync.RWMutex
@@ -50,4 +53,31 @@ func (v *VentureStore) Get(id string) (Venture, bool) {
 
 	r, ok := v.items[id]
 	return r, ok
+}
+
+// Add adds a Venture to the data store assigning an unused ID
+func (v *VentureStore) Add(new Venture) Venture {
+	v.mutex.RLock()
+	defer v.mutex.RUnlock()
+
+	new.ID = v.genNewID()
+	v.items[new.ID] = new
+	return new
+}
+
+// genNewID generates a new, unused, Venture ID
+func (v *VentureStore) genNewID() string {
+	ID := 1
+	var r string
+
+	for {
+		r = strconv.Itoa(ID)
+		_, ok := v.items[r]
+		if !ok {
+			break
+		}
+		ID++
+	}
+
+	return r
 }

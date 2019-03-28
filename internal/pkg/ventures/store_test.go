@@ -10,12 +10,12 @@ import (
 func TestVentureStore_GetAll_1(t *testing.T) {
 	store := NewVentureStore()
 	a := Venture{
-		VentureID:   "1",
+		ID:          "1",
 		Description: "1",
 		State:       "1",
 	}
 	b := Venture{
-		VentureID:   "2",
+		ID:          "2",
 		Description: "2",
 		State:       "2",
 	}
@@ -39,13 +39,13 @@ func TestVentureStore_GetAll_2(t *testing.T) {
 func TestVentureStore_GetAllAlive_1(t *testing.T) {
 	store := NewVentureStore()
 	a := Venture{
-		VentureID:   "1",
+		ID:          "1",
 		Description: "1",
 		State:       "1",
 		IsAlive:     true,
 	}
 	b := Venture{
-		VentureID:   "2",
+		ID:          "2",
 		Description: "2",
 		State:       "2",
 		IsAlive:     false,
@@ -69,12 +69,12 @@ func TestVentureStore_GetAllAlive_2(t *testing.T) {
 func TestVentureStore_Get_1(t *testing.T) {
 	store := NewVentureStore()
 	aIn := Venture{
-		VentureID:   "1",
+		ID:          "1",
 		Description: "1",
 		State:       "1",
 	}
 	bIn := Venture{
-		VentureID:   "2",
+		ID:          "2",
 		Description: "2",
 		State:       "2",
 	}
@@ -100,12 +100,12 @@ func TestVentureStore_Get_2(t *testing.T) {
 func TestVentureStore_Get_3(t *testing.T) {
 	store := NewVentureStore()
 	aIn := Venture{
-		VentureID:   "1",
+		ID:          "1",
 		Description: "1",
 		State:       "1",
 	}
 	bIn := Venture{
-		VentureID:   "2",
+		ID:          "2",
 		Description: "2",
 		State:       "2",
 	}
@@ -115,4 +115,76 @@ func TestVentureStore_Get_3(t *testing.T) {
 
 	_, ok := store.Get("3")
 	require.False(t, ok)
+}
+
+func TestVentureStor_Add_1(t *testing.T) {
+	store := NewVentureStore()
+	aIn := Venture{
+		Description: "description",
+		State:       "state",
+	}
+
+	aOut := store.Add(aIn)
+	assert.Len(t, store.items, 1)
+	assert.NotEmpty(t, aOut.ID)
+	assert.Equal(t, "description", aOut.Description)
+	assert.Equal(t, "state", aOut.State)
+}
+
+func TestVentureStor_Add_2(t *testing.T) {
+	store := NewVentureStore()
+	aIn := Venture{
+		Description: "description",
+		State:       "state",
+	}
+	bIn := Venture{
+		Description: "description",
+		State:       "state",
+	}
+
+	aOut := store.Add(aIn)
+	bOut := store.Add(bIn)
+	assert.Len(t, store.items, 2)
+	assert.NotEmpty(t, aOut.ID)
+	assert.NotEmpty(t, bOut.ID)
+	assert.NotEqual(t, aOut.ID, bOut.ID)
+	assert.Equal(t, "description", aOut.Description)
+	assert.Equal(t, "description", bOut.Description)
+	assert.Equal(t, "state", aOut.State)
+	assert.Equal(t, "state", bOut.State)
+}
+
+func TestVentureStore_GenNewID_1(t *testing.T) {
+	store := NewVentureStore()
+	a := store.genNewID()
+	assert.Equal(t, "1", a)
+}
+
+func TestVentureStore_GenNewID_2(t *testing.T) {
+	store := NewVentureStore()
+	aIn := Venture{}
+	store.items["1"] = aIn
+
+	a := store.genNewID()
+	assert.Equal(t, "2", a)
+}
+
+func TestVentureStore_GenNewID_3(t *testing.T) {
+	store := NewVentureStore()
+	aIn := Venture{}
+	store.items["1"] = aIn
+	store.items["2"] = aIn
+	store.items["3"] = aIn
+
+	a := store.genNewID()
+	assert.Equal(t, "4", a)
+}
+
+func TestVentureStore_GenNewID_4(t *testing.T) {
+	store := NewVentureStore()
+	aIn := Venture{}
+	store.items["3"] = aIn
+
+	a := store.genNewID()
+	assert.Equal(t, "1", a)
 }

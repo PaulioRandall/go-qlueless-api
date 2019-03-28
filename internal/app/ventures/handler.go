@@ -11,7 +11,7 @@ import (
 var ventures = v.NewVentureStore()
 
 // VenturesHandler handles requests to do with collections of, or individual,
-// Ventures
+// Ventures.
 func VenturesHandler(res http.ResponseWriter, req *http.Request) {
 	LogRequest(req)
 
@@ -34,10 +34,17 @@ func VenturesHandler(res http.ResponseWriter, req *http.Request) {
 	}
 }
 
-// get_AllVentures handles client requests for all living Ventures
+// get_AllVentures handles client requests for all living Ventures.
 func get_AllVentures(res *http.ResponseWriter, req *http.Request) {
 	vens := ventures.GetAllAlive()
 	m := fmt.Sprintf("Found %d Ventures", len(vens))
 	data := PrepResponseData(req, vens, m)
 	WriteJSONReply(res, req, data, "")
+}
+
+// InjectDummyVentures injects dummy Ventures so the API testing can performed.
+// This function is expected to be removed once a database and formal test data
+// has been crafted
+func InjectDummyVentures() {
+	//ventures
 }

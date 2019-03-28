@@ -9,7 +9,7 @@ import (
 // Venture represents a Venture, aka, project.
 type Venture struct {
 	Description string `json:"description"`
-	VentureID   string `json:"venture_id,omitempty"`
+	ID          string `json:"venture_id,omitempty"`
 	OrderIDs    string `json:"order_ids,omitempty"`
 	State       string `json:"state"`
 	IsAlive     bool   `json:"is_alive"`
@@ -20,7 +20,7 @@ type Venture struct {
 // except where whitespace is allowable.
 func (ven *Venture) Clean() {
 	ven.Description = strings.TrimSpace(ven.Description)
-	ven.VentureID = strings.TrimSpace(ven.VentureID)
+	ven.ID = strings.TrimSpace(ven.ID)
 	ven.OrderIDs = StripWhitespace(ven.OrderIDs)
 	ven.State = strings.TrimSpace(ven.State)
 }
@@ -34,7 +34,7 @@ func (ven *Venture) Validate() []string {
 
 	errMsgs = AppendIfEmpty(ven.Description, errMsgs,
 		"Ventures must have a description")
-	errMsgs = AppendIfNotPositiveInt(ven.VentureID, errMsgs,
+	errMsgs = AppendIfNotPositiveInt(ven.ID, errMsgs,
 		"Ventures must have a positive integer ID")
 
 	if ven.OrderIDs != "" {

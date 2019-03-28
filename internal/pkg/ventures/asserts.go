@@ -8,7 +8,7 @@ import (
 )
 
 func AssertGenericVenture(t *testing.T, ven Venture) {
-	assert.Equal(t, ven.VentureID, "1")
+	assert.Equal(t, ven.ID, "1")
 	assert.NotEmpty(t, ven.Description)
 	assert.NotEmpty(t, ven.State)
 	if ven.OrderIDs != "" {
