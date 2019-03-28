@@ -21,7 +21,7 @@ SCRIPTS=$(cd `dirname $0` && pwd)
 # Start server in the background but store its PID
 "${SCRIPTS}/../bin/go-qlueless-assembly-api" &
 api_pid=$!
-sleep 0.5
+sleep 2
 
 # Open the entry point in the default browser
 "${SCRIPTS}/open-in-browser"
@@ -30,6 +30,6 @@ sleep 0.5
 # specifcation within the default browser
 "${SCRIPTS}/openapi-in-browser"
 
-sleep 0.5
-# Bring the server back to the foreground
-kill -CONT ${api_pid}
+sleep 2
+# Kill the server
+kill ${api_pid}
