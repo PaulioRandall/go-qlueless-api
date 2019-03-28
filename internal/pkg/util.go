@@ -3,8 +3,13 @@ package pkg
 import (
 	"bytes"
 	"log"
+	"regexp"
 	"strconv"
 	"unicode"
+)
+
+const (
+	POSITIVE_INT_CSV_PATTERN = "^([1-9][0-9]*,)*([1-9][0-9]*)$"
 )
 
 // IsInt returns true if the string contains an integer
@@ -43,4 +48,31 @@ func StripWhitespace(s string) string {
 		}
 	}
 	return buf.String()
+}
+
+// AppendIfEmpty appends 'm' to 'r' if 's' is empty
+func AppendIfEmpty(s string, r []string, m string) []string {
+	if s == "" {
+		return append(r, m)
+	}
+	return r
+}
+
+// AppendIfNotPositiveInt appends 'm' to 'r' if 's' is not a positive integer
+func AppendIfNotPositiveInt(s string, r []string, m string) []string {
+	i, err := strconv.Atoi(s)
+	if err != nil || i < 1 {
+		return append(r, m)
+	}
+	return r
+}
+
+// AppendIfNotPositiveIntCSV appends 'm' to 'r' if 's' is not a CSV of
+// positive integers
+func AppendIfNotPositiveIntCSV(s string, r []string, m string) []string {
+	match, _ := regexp.MatchString(POSITIVE_INT_CSV_PATTERN, s)
+	if match {
+		return r
+	}
+	return append(r, m)
 }

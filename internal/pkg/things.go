@@ -2,7 +2,6 @@ package pkg
 
 import (
 	"fmt"
-	"strconv"
 	"strings"
 )
 
@@ -59,45 +58,28 @@ func (t *Thing) Clean() {
 func (t *Thing) Validate(isNew bool) []string {
 	var r []string
 
-	r = appendIfEmpty((*t).Description, r, "'Description' must not be empty.")
-	r = appendIfEmpty((*t).State, r, "'State' must not be empty.")
+	r = AppendIfEmpty((*t).Description, r, "'Description' must not be empty.")
+	r = AppendIfEmpty((*t).State, r, "'State' must not be empty.")
 
 	if (*t).ChildIDs != "" {
 		for i, c := range (*t).SplitChildIDs() {
-			r = appendIfNotPositiveInt(c, r,
+			r = AppendIfNotPositiveInt(c, r,
 				fmt.Sprintf("'ChildIDs[%d]:%s' must be a positive integer.", i, c))
 		}
 	}
 
 	if (*t).ParentIDs != "" {
 		for i, p := range (*t).SplitParentIDs() {
-			r = appendIfNotPositiveInt(p, r,
+			r = AppendIfNotPositiveInt(p, r,
 				fmt.Sprintf("'ParentIDs[%d]:%s' must be a positive integer.", i, p))
 		}
 	}
 
 	if !isNew {
-		r = appendIfNotPositiveInt((*t).ID, r,
+		r = AppendIfNotPositiveInt((*t).ID, r,
 			fmt.Sprintf("The ID '%s' must be a positive integer.", (*t).ID))
 	}
 
-	return r
-}
-
-// appendIfEmpty appends 'm' to 'r' if 's' is empty
-func appendIfEmpty(s string, r []string, m string) []string {
-	if s == "" {
-		return append(r, m)
-	}
-	return r
-}
-
-// appendIfNotPositiveInt appends 'm' to 'r' if 's' is not a positive integer
-func appendIfNotPositiveInt(s string, r []string, m string) []string {
-	i, err := strconv.Atoi(s)
-	if err != nil || i < 1 {
-		return append(r, m)
-	}
 	return r
 }
 

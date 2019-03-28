@@ -50,3 +50,51 @@ func TestVenture_Clean_3(t *testing.T) {
 
 	assert.Equal(t, b, a)
 }
+
+func TestVenture_Validate_1(t *testing.T) {
+	a := Venture{
+		Description: "description",
+		VentureID:   "1",
+		OrderIDs:    "2,3,4,999",
+		State:       "state",
+		IsAlive:     true,
+		Extra:       "\n\t\v extra \r\f",
+	}
+
+	errMsgs := a.Validate()
+	assert.Empty(t, errMsgs)
+}
+
+func TestVenture_Validate_2(t *testing.T) {
+	a := Venture{
+		Description: "description",
+		VentureID:   "1",
+		State:       "state",
+	}
+
+	errMsgs := a.Validate()
+	assert.Empty(t, errMsgs)
+}
+
+func TestVenture_Validate_3(t *testing.T) {
+	a := Venture{
+		Description: "",
+		VentureID:   "",
+		State:       "",
+	}
+
+	errMsgs := a.Validate()
+	assert.Len(t, errMsgs, 3)
+}
+
+func TestVenture_Validate_4(t *testing.T) {
+	a := Venture{
+		Description: "valid",
+		VentureID:   "invalid",
+		OrderIDs:    "3,invalid,4",
+		State:       "valid",
+	}
+
+	errMsgs := a.Validate()
+	assert.Len(t, errMsgs, 2)
+}

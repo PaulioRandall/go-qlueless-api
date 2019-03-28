@@ -165,59 +165,6 @@ func TestClean___3(t *testing.T) {
 	assert.Equal(t, true, thing.IsDead)
 }
 
-// When given an empty string, the message is appended
-func TestAppendIfEmpty___1(t *testing.T) {
-	act := appendIfEmpty("", []string{}, "abc")
-	require.Len(t, act, 1)
-	assert.Contains(t, act, "abc")
-}
-
-// When given an empty string, the message is appended
-func TestAppendIfEmpty___2(t *testing.T) {
-	act := appendIfEmpty("", []string{"xyz"}, "abc")
-	require.Len(t, act, 2)
-	assert.Contains(t, act, "xyz")
-	assert.Contains(t, act, "abc")
-}
-
-// When given a non-empty string, no appending occurs
-func TestAppendIfEmpty___3(t *testing.T) {
-	act := appendIfEmpty("NOT-EMPTY", []string{}, "abc")
-	assert.Len(t, act, 0)
-}
-
-// When given a positive integer, the message is NOT appended
-func TestAppendIfNotPositiveInt___1(t *testing.T) {
-	act := appendIfNotPositiveInt("5", []string{}, "abc")
-	assert.Len(t, act, 0)
-}
-
-// When given zero, the message is appended
-func TestAppendIfNotPositiveInt___2(t *testing.T) {
-	act := appendIfNotPositiveInt("0", []string{}, "abc")
-	require.Len(t, act, 1)
-	assert.Contains(t, act, "abc")
-}
-
-// When given a negative number, the message is appended
-func TestAppendIfNotPositiveInt___3(t *testing.T) {
-	act := appendIfNotPositiveInt("-5", []string{}, "abc")
-	require.Len(t, act, 1)
-	assert.Contains(t, act, "abc")
-}
-
-// When given a multiple non-positive inputs, all messages are appended
-func TestAppendIfNotPositiveInt___4(t *testing.T) {
-	act := []string{}
-	act = appendIfNotPositiveInt("-1", act, "abc")
-	act = appendIfNotPositiveInt("-1", act, "efg")
-	act = appendIfNotPositiveInt("-1", act, "hij")
-	require.Len(t, act, 3)
-	assert.Contains(t, act, "abc")
-	assert.Contains(t, act, "efg")
-	assert.Contains(t, act, "hij")
-}
-
 // When given a new valid Thing, an empty slice is returned
 func TestValidate___1(t *testing.T) {
 	thing := Thing{
