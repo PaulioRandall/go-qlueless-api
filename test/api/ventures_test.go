@@ -16,7 +16,7 @@ import (
 
 type Venture struct {
 	Description string `json:"description"`
-	VentureID   string `json:"id,omitempty"`
+	VentureID   string `json:"venture_id,omitempty"`
 	OrderIDs    string `json:"order_ids,omitempty"`
 	State       string `json:"state"`
 	IsAlive     bool   `json:"is_alive"`
