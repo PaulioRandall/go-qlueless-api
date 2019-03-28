@@ -8,6 +8,7 @@ import (
 	hme "github.com/PaulioRandall/go-qlueless-assembly-api/internal/app/home"
 	oai "github.com/PaulioRandall/go-qlueless-assembly-api/internal/app/openapi"
 	thg "github.com/PaulioRandall/go-qlueless-assembly-api/internal/app/things"
+	v "github.com/PaulioRandall/go-qlueless-assembly-api/internal/app/ventures"
 	. "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg"
 )
 
@@ -22,6 +23,7 @@ func (s *QServer) preload() {
 	s.preloadOnce.Do(func() {
 		chg.LoadChangelog()
 		oai.LoadSpec()
+		v.InjectDummyVentures()
 		CreateDummyThings()
 	})
 }
@@ -33,5 +35,6 @@ func (s *QServer) routes() {
 		http.HandleFunc("/changelog", chg.ChangelogHandler)
 		http.HandleFunc("/openapi", oai.OpenAPIHandler)
 		http.HandleFunc("/things", thg.ThingsHandler)
+		http.HandleFunc("/ventures", v.VenturesHandler)
 	})
 }

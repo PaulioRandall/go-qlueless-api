@@ -8,6 +8,10 @@ import (
 	v "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/ventures"
 )
 
+const (
+	httpMethods = "GET, POST, PUT, DELETE, HEAD, OPTIONS"
+)
+
 var ventures = v.NewVentureStore()
 
 // VenturesHandler handles requests to do with collections of, or individual,
@@ -39,6 +43,9 @@ func get_AllVentures(res *http.ResponseWriter, req *http.Request) {
 	vens := ventures.GetAllAlive()
 	m := fmt.Sprintf("Found %d Ventures", len(vens))
 	data := PrepResponseData(req, vens, m)
+
+	AppendCORSHeaders(res, httpMethods)
+	AppendJSONHeader(res, "")
 	WriteJSONReply(res, req, data, "")
 }
 
@@ -46,5 +53,22 @@ func get_AllVentures(res *http.ResponseWriter, req *http.Request) {
 // This function is expected to be removed once a database and formal test data
 // has been crafted
 func InjectDummyVentures() {
-	//ventures
+	ventures.Add(v.Venture{
+		Description: "White wizard",
+		State:       "Not started",
+		Extra:       "colour: white; power: 9000",
+		IsAlive:     true,
+	})
+	ventures.Add(v.Venture{
+		Description: "Green lizard",
+		State:       "In progress",
+		OrderIDs:    "4,5,6,7,8",
+		IsAlive:     true,
+	})
+	ventures.Add(v.Venture{
+		Description: "Pink gizzard",
+		State:       "Finished",
+		OrderIDs:    "1,2,3",
+		IsAlive:     false,
+	})
 }

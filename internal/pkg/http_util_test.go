@@ -246,7 +246,7 @@ func TestPrepResponseData___3(t *testing.T) {
 func TestAppendCORSHeaders___1(t *testing.T) {
 	rec := httptest.NewRecorder()
 	var res http.ResponseWriter = rec
-	AppendCORSHeaders(&res)
+	AppendCORSHeaders(&res, "*")
 	CheckCORSResponseHeaders(t, rec.Header())
 }
 
@@ -254,7 +254,7 @@ func TestAppendCORSHeaders___1(t *testing.T) {
 func TestAppendJSONHeaders___1(t *testing.T) {
 	rec := httptest.NewRecorder()
 	var res http.ResponseWriter = rec
-	AppendJSONHeaders(&res, "")
+	AppendJSONHeader(&res, "")
 	CheckJSONResponseHeaders(t, rec.Header())
 }
 

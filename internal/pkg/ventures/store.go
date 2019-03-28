@@ -57,12 +57,27 @@ func (v *VentureStore) Get(id string) (Venture, bool) {
 
 // Add adds a Venture to the data store assigning an unused ID
 func (v *VentureStore) Add(new Venture) Venture {
-	v.mutex.RLock()
-	defer v.mutex.RUnlock()
+	v.mutex.Lock()
+	defer v.mutex.Unlock()
 
 	new.ID = v.genNewID()
 	v.items[new.ID] = new
 	return new
+}
+
+// Update updates a Venture within the data store. If false is returned then
+// the item does not currently exist within the data store
+func (v *VentureStore) Update(ven Venture) bool {
+	v.mutex.Lock()
+	defer v.mutex.Unlock()
+
+	_, ok := v.items[ven.ID]
+	if !ok {
+		return false
+	}
+
+	v.items[ven.ID] = ven
+	return true
 }
 
 // genNewID generates a new, unused, Venture ID

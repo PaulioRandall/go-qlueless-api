@@ -154,6 +154,38 @@ func TestVentureStor_Add_2(t *testing.T) {
 	assert.Equal(t, "state", bOut.State)
 }
 
+func TestVentureStore_Update_1(t *testing.T) {
+	store := NewVentureStore()
+	a := Venture{
+		ID:          "1",
+		Description: "original",
+	}
+	store.items["1"] = a
+
+	bIn := Venture{
+		ID:          "1",
+		Description: "new",
+	}
+
+	ok := store.Update(bIn)
+	require.True(t, ok)
+
+	bOut, ok := store.items["1"]
+	require.True(t, ok)
+	assert.Equal(t, bIn, bOut)
+}
+
+func TestVentureStore_Update_2(t *testing.T) {
+	store := NewVentureStore()
+	aIn := Venture{
+		ID:          "1",
+		Description: "original",
+	}
+
+	ok := store.Update(aIn)
+	require.False(t, ok)
+}
+
 func TestVentureStore_GenNewID_1(t *testing.T) {
 	store := NewVentureStore()
 	a := store.genNewID()

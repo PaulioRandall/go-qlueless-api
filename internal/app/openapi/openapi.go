@@ -9,6 +9,10 @@ import (
 	. "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg"
 )
 
+const (
+	httpMethods = "GET, HEAD, OPTIONS"
+)
+
 var spec map[string]interface{} = nil
 
 // OpenAPIHandler handles requests for the services OpenAPI specification
@@ -19,7 +23,7 @@ func OpenAPIHandler(res http.ResponseWriter, req *http.Request) {
 	case "GET":
 		get_Spec(&res, req)
 	case "HEAD":
-		WriteEmptyJSONReply(&res, "vnd.oai.openapi")
+		fallthrough
 	case "OPTIONS":
 		WriteEmptyJSONReply(&res, "vnd.oai.openapi")
 	default:
@@ -35,6 +39,7 @@ func get_Spec(res *http.ResponseWriter, req *http.Request) {
 		return
 	}
 
+	AppendCORSHeaders(res, httpMethods)
 	WriteJSONReply(res, req, spec, "vnd.oai.openapi")
 }
 

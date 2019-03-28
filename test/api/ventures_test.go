@@ -46,10 +46,6 @@ func TestGET_Ventures(t *testing.T) {
 	res := req.fire()
 	defer res.Body.Close()
 
-	if true {
-		return // REMOVE when ready to start development
-	}
-
 	require.Equal(t, 200, res.StatusCode)
 	AssertHeadersEquals(t, res.Header, map[string]string{
 		"Access-Control-Allow-Origin":  "*",
