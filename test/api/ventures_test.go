@@ -5,23 +5,14 @@ package api
 import (
 	"encoding/json"
 	"fmt"
-	"net/http"
 	"os"
-	"regexp"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-)
 
-type Venture struct {
-	Description string `json:"description"`
-	VentureID   string `json:"venture_id,omitempty"`
-	OrderIDs    string `json:"order_ids,omitempty"`
-	State       string `json:"state"`
-	IsAlive     bool   `json:"is_alive"`
-	Extra       string `json:"extra,omitempty"`
-}
+	. "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/asserts"
+	. "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/ventures"
+)
 
 func exit(exitCode *int) {
 	os.Exit(*exitCode)
@@ -37,80 +28,6 @@ func TestMain(m *testing.M) {
 
 	exitCode = m.Run()
 	adminPrint(fmt.Sprintf("Test exit code: %d", exitCode))
-}
-
-func assertGenericVentures(t *testing.T, vens []Venture) {
-	for _, v := range vens {
-		assertGenericVenture(t, v)
-	}
-}
-
-func assertGenericVenture(t *testing.T, ven Venture) {
-	assert.Equal(t, ven.VentureID, "1")
-	assert.NotEmpty(t, ven.Description)
-	assert.NotEmpty(t, ven.State)
-	if ven.OrderIDs != "" {
-		assertGenericIntCSV(t, ven.OrderIDs)
-	}
-}
-
-func assertGenericIntCSV(t *testing.T, csv string) {
-	p := "^((0,)|(-?[1-9][0-9]*,)+)*(-?[1-9][0-9]*)$" // Example: 1,2,999,-123,-6
-	match, _ := regexp.MatchString(p, csv)
-	assert.True(t, match)
-}
-
-func assertExactKeys(t *testing.T, expect []string, actual map[string]interface{}) {
-	for _, k := range expect {
-		assert.Contains(t, actual, k)
-	}
-	assert.Len(t, len(expect), len(actual))
-}
-
-func assertHeadersEquals(t *testing.T, h http.Header, equals map[string]string) {
-	for k, exp := range equals {
-		act := h[k]
-		assert.Equal(t, exp, act)
-	}
-}
-
-func assertHeadersNotEquals(t *testing.T, h http.Header, equals map[string]string) {
-	for k, notExp := range equals {
-		act := h[k]
-		assert.NotEqual(t, notExp, act)
-	}
-}
-
-func assertHeadersContains(t *testing.T, h http.Header, contains map[string][]string) {
-	for k, s := range contains {
-		act := h[k]
-		for exp := range s {
-			assert.Contains(t, act, exp)
-		}
-	}
-}
-
-func assertHeadersNotContains(t *testing.T, h http.Header, contains map[string][]string) {
-	for k, s := range contains {
-		act := h[k]
-		for notExp := range s {
-			assert.NotContains(t, act, notExp)
-		}
-	}
-}
-
-func assertHeadersMatches(t *testing.T, h http.Header, patterns map[string]string) {
-	for k, reg := range patterns {
-		act := h[k]
-		assert.Regexp(t, reg, act)
-	}
-}
-
-func assertHeadersNotMatches(t *testing.T, h http.Header, patterns map[string]string) {
-	for k, reg := range patterns {
-		act := h[k]
-		assert.NotRegexp(t, reg, act)
-	}
 }
 
 // Given some Ventures already exist on the server
@@ -134,20 +51,20 @@ func TestGET_Ventures(t *testing.T) {
 	}
 
 	require.Equal(t, 200, res.StatusCode)
-	assertHeadersEquals(t, res.Header, map[string]string{
+	AssertHeadersEquals(t, res.Header, map[string]string{
 		"Access-Control-Allow-Origin":  "*",
 		"Access-Control-Allow-Headers": "*",
 	})
-	assertHeadersContains(t, res.Header, map[string][]string{
+	AssertHeadersContains(t, res.Header, map[string][]string{
 		"Content-Type":                 []string{"application/json"},
 		"Access-Control-Allow-Methods": []string{"GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS"},
 	})
-	assertHeadersMatches(t, res.Header, map[string]string{
+	AssertHeadersMatches(t, res.Header, map[string]string{
 		"Access-Control-Allow-Methods": "^((\\s*[a-zA-Z]*\\s*,)+)*(\\s*[a-zA-Z]*\\s*)$",
 	})
 
 	var ven []Venture
 	err := json.NewDecoder(res.Body).Decode(&ven)
 	require.Nil(t, err)
-	assertGenericVentures(t, ven)
+	AssertGenericVentures(t, ven)
 }

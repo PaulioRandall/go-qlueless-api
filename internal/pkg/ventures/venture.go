@@ -1,4 +1,4 @@
-package venture
+package ventures
 
 import (
 	"strings"
@@ -6,6 +6,7 @@ import (
 	. "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg"
 )
 
+// Venture represents a Venture, aka, project.
 type Venture struct {
 	Description string `json:"description"`
 	VentureID   string `json:"venture_id,omitempty"`

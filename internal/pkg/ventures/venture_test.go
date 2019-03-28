@@ -1,4 +1,4 @@
-package venture
+package ventures
 
 import (
 	"testing"

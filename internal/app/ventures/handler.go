@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	. "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg"
-	ven "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/venture"
+	ven "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/ventures"
 )
 
 var ventures []ven.Venture = []ven.Venture{}
