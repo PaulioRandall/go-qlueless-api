@@ -8,18 +8,16 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	p "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg"
 	. "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/asserts"
 	. "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/ventures"
 )
 
-var ventureDefaultMethods = []string{"GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS"}
+var ventureHttpMethods = []string{"GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS"}
 
 // TODO: Craft some test data and pre-inject it into a SQLite database
 func TestGET_Ventures(t *testing.T) {
 	t.Log(`Given some Ventures already exist on the server
 		When all Ventures are requested
-		AND the HTTP method is 'GET'
 		Then ensure the response code is 200
 		And the 'Content-Type' header contains 'application/json'
 		And 'Access-Control-Allow-Origin' is '*'
@@ -37,7 +35,7 @@ func TestGET_Ventures(t *testing.T) {
 	defer PrintResponse(t, res.Body)
 
 	require.Equal(t, 200, res.StatusCode)
-	assertDefaultHeaders(t, res, "application/json", ventureDefaultMethods)
+	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
 
 	var ven []Venture
 	err := json.NewDecoder(res.Body).Decode(&ven)
@@ -49,7 +47,6 @@ func TestGET_Ventures(t *testing.T) {
 func TestGET_Venture_1(t *testing.T) {
 	t.Log(`Given some Ventures already exist on the server
 		When a specific existing Venture is requested
-		AND the HTTP method is 'GET'
 		Then ensure the response code is 200
 		And the 'Content-Type' header contains 'application/json'
 		And 'Access-Control-Allow-Origin' is '*'
@@ -67,7 +64,7 @@ func TestGET_Venture_1(t *testing.T) {
 	defer PrintResponse(t, res.Body)
 
 	require.Equal(t, 200, res.StatusCode)
-	assertDefaultHeaders(t, res, "application/json", ventureDefaultMethods)
+	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
 
 	var ven Venture
 	err := json.NewDecoder(res.Body).Decode(&ven)
@@ -78,7 +75,6 @@ func TestGET_Venture_1(t *testing.T) {
 func TestGET_Venture_2(t *testing.T) {
 	t.Log(`Given some Ventures already exist on the server
 		When a specific non-existent Venture is requested
-		AND the HTTP method is 'GET'
 		Then ensure the response code is 404
 		And the 'Content-Type' header contains 'application/json'
 		And 'Access-Control-Allow-Origin' is '*'
@@ -96,18 +92,13 @@ func TestGET_Venture_2(t *testing.T) {
 	defer PrintResponse(t, res.Body)
 
 	require.Equal(t, 404, res.StatusCode)
-	assertDefaultHeaders(t, res, "application/json", ventureDefaultMethods)
-
-	var reply p.WrappedReply
-	err := json.NewDecoder(res.Body).Decode(&reply)
-	require.Nil(t, err)
-	AssertGenericError(t, reply)
+	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
+	assertWrappedErrorBody(t, res)
 }
 
 func TestPOST_Venture_1(t *testing.T) {
 	t.Log(`Given some Ventures already exist on the server
-		When a new valid Venture is posted
-		AND the HTTP method is 'POST'
+		When a new valid Venture is POSTed
 		Then ensure the response code is 201
 		And the 'Content-Type' header contains 'application/json'
 		And 'Access-Control-Allow-Origin' is '*'
@@ -134,7 +125,7 @@ func TestPOST_Venture_1(t *testing.T) {
 	defer PrintResponse(t, res.Body)
 
 	require.Equal(t, 201, res.StatusCode)
-	assertDefaultHeaders(t, res, "application/json", ventureDefaultMethods)
+	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
 
 	var output Venture
 	err := json.NewDecoder(res.Body).Decode(&output)
@@ -148,8 +139,7 @@ func TestPOST_Venture_1(t *testing.T) {
 
 func TestPOST_Venture_2(t *testing.T) {
 	t.Log(`Given some Ventures already exist on the server
-		When a new invalid Venture is posted
-		AND the HTTP method is 'POST'
+		When a new invalid Venture is POSTed
 		Then ensure the response code is 400
 		And the 'Content-Type' header contains 'application/json'
 		And 'Access-Control-Allow-Origin' is '*'
@@ -176,18 +166,13 @@ func TestPOST_Venture_2(t *testing.T) {
 	defer PrintResponse(t, res.Body)
 
 	require.Equal(t, 400, res.StatusCode)
-	assertDefaultHeaders(t, res, "application/json", ventureDefaultMethods)
-
-	var reply p.WrappedReply
-	err := json.NewDecoder(res.Body).Decode(&reply)
-	require.Nil(t, err)
-	AssertGenericError(t, reply)
+	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
+	assertWrappedErrorBody(t, res)
 }
 
 func TestHEAD_Ventures(t *testing.T) {
 	t.Log(`Given some Ventures already exist on the server
-		When all Ventures are requested
-		AND the HTTP method is 'HEAD'
+		When only /ventures HEADers are requested
 		Then ensure the response code is 200
 		And the 'Content-Type' header contains 'application/json'
 		And 'Access-Control-Allow-Origin' is '*'
@@ -205,14 +190,13 @@ func TestHEAD_Ventures(t *testing.T) {
 	defer PrintResponse(t, res.Body)
 
 	require.Equal(t, 200, res.StatusCode)
-	assertDefaultHeaders(t, res, "application/json", ventureDefaultMethods)
+	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
 	assertEmptyBody(t, res)
 }
 
 func TestOPTIONS_Ventures(t *testing.T) {
 	t.Log(`Given some Ventures already exist on the server
-		When all Ventures are requested
-		AND the HTTP method is 'OPTIONS'
+		When /ventures OPTIONS are requested
 		Then ensure the response code is 200
 		And the 'Content-Type' header contains 'application/json'
 		And 'Access-Control-Allow-Origin' is '*'
@@ -230,6 +214,20 @@ func TestOPTIONS_Ventures(t *testing.T) {
 	defer PrintResponse(t, res.Body)
 
 	require.Equal(t, 200, res.StatusCode)
-	assertDefaultHeaders(t, res, "application/json", ventureDefaultMethods)
+	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
 	assertEmptyBody(t, res)
+}
+
+func TestINVALID_Ventures(t *testing.T) {
+	t.Log(`Given some Ventures already exist on the server
+	 	When /ventures is called using invalid methods
+		Then ensure the response code is 200
+		And the 'Content-Type' header contains 'application/json'
+		And 'Access-Control-Allow-Origin' is '*'
+		And 'Access-Control-Allow-Headers' is '*'
+		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, HEAD, and OPTIONS
+		And there is NO response body
+		...`)
+
+	assertNotAllowedMethods(t, "http://localhost:8080/ventures", ventureHttpMethods)
 }
