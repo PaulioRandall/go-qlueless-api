@@ -14,7 +14,7 @@ func HomeHandler(res http.ResponseWriter, req *http.Request) {
 
 // notFound handles requests nothing (404s)
 func notFound(res *http.ResponseWriter, req *http.Request) {
-	r := ReplyMeta{
+	r := WrappedReply{
 		Message: "Resource not found",
 	}
 

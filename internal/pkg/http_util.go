@@ -9,9 +9,9 @@ import (
 
 var Things ThingStore = NewThingStore()
 
-// A ReplyMeta represents the response that should be returned when the
+// A WrappedReply represents the response that should be returned when the
 // client has requested data be wrapped and meta information included
-type ReplyMeta struct {
+type WrappedReply struct {
 	Message string      `json:"message"`
 	Self    string      `json:"self"`
 	Data    interface{} `json:"data,omitempty"`
@@ -35,7 +35,7 @@ func RelURL(req *http.Request) string {
 // Reply500 sets up the response with generic 500 error details. This method
 // should be used when ever a 500 error needs to be returned
 func Write500Reply(res *http.ResponseWriter, req *http.Request) {
-	r := ReplyMeta{
+	r := WrappedReply{
 		Message: "Bummer! Something went wrong on the server.",
 		Self:    (*req).URL.String(),
 	}
@@ -56,7 +56,7 @@ func CheckStatusBetween(res *http.ResponseWriter, req *http.Request, status int,
 }
 
 // CheckReplyMetaMessage validates that the ReplyMeta.Message is not empty
-func CheckReplyMetaMessage(res *http.ResponseWriter, req *http.Request, r ReplyMeta) bool {
+func CheckReplyMetaMessage(res *http.ResponseWriter, req *http.Request, r WrappedReply) bool {
 	if r.Message == "" {
 		log.Println("[BUG] error response message is missing")
 		Write500Reply(res, req)
@@ -66,7 +66,7 @@ func CheckReplyMetaMessage(res *http.ResponseWriter, req *http.Request, r ReplyM
 }
 
 // Write4XXReply writes the response for a 4XX error
-func Write4XXReply(res *http.ResponseWriter, req *http.Request, status int, r ReplyMeta) {
+func Write4XXReply(res *http.ResponseWriter, req *http.Request, status int, r WrappedReply) {
 	if !CheckStatusBetween(res, req, status, 400, 499) {
 		return
 	}
@@ -99,7 +99,7 @@ func WrapReply(req *http.Request) bool {
 // input data is returned unchanged
 func PrepResponseData(req *http.Request, data interface{}, msg string) interface{} {
 	if WrapReply(req) {
-		return ReplyMeta{
+		return WrappedReply{
 			Message: msg,
 			Self:    req.URL.String(),
 			Data:    data,
@@ -160,7 +160,7 @@ func WriteEmptyJSONReply(res *http.ResponseWriter, extensionType string) {
 // methodNotAllowed handles cases where a HTTP method has been used but is not
 // handled by this particular endpoint
 func MethodNotAllowed(res *http.ResponseWriter, req *http.Request) {
-	r := ReplyMeta{
+	r := WrappedReply{
 		Message: fmt.Sprintf("Method not allowed for this endpoint (%s)", req.Method),
 	}
 	Write4XXReply(res, req, 405, r)

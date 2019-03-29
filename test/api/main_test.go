@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	CORS_METHODS_PATTERN = "^((\\s*[A-Z]*\\s*,)+)*(\\s*[A-Z]*\\s*)$" // Example: 'GET, POST   ,OPTIONS'
+	CORS_METHODS_PATTERN = "^((\\s*[A-Z]*\\s*,)+)*(\\s*[A-Z]*\\s*)$" // Example: 'GET,  POST   ,OPTIONS'
 )
 
 func exit(exitCode *int) {

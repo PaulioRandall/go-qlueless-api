@@ -53,7 +53,7 @@ func TestWrite500Reply___3(t *testing.T) {
 // When ReplyMeta.Message is set, returns true
 func TestCheckReplyMetaMessage___1(t *testing.T) {
 	req, res, _ := SetupRequest("/")
-	r := ReplyMeta{
+	r := WrappedReply{
 		Message: "message",
 	}
 
@@ -64,7 +64,7 @@ func TestCheckReplyMetaMessage___1(t *testing.T) {
 // When ReplyMeta.Message not set, sets 500 status code and returns false
 func TestCheckReplyMetaMessage___2(t *testing.T) {
 	req, res, rec := SetupRequest("/")
-	r := ReplyMeta{}
+	r := WrappedReply{}
 
 	act := CheckReplyMetaMessage(res, req, r)
 	require.False(t, act)
@@ -104,7 +104,7 @@ func TestCheckStatusCode___3(t *testing.T) {
 // When not 4XX status code, sets 500 status code
 func TestWrite4XXReply___1(t *testing.T) {
 	req, res, rec := SetupRequest("/")
-	r := ReplyMeta{
+	r := WrappedReply{
 		Message: "message",
 	}
 
@@ -112,10 +112,10 @@ func TestWrite4XXReply___1(t *testing.T) {
 	assert.Equal(t, 500, rec.Code)
 }
 
-// When ReplyMeta.Message not set, sets 500 status code
+// When WrappedReply.Message not set, sets 500 status code
 func TestWrite4XXReply___2(t *testing.T) {
 	req, res, rec := SetupRequest("/")
-	r := ReplyMeta{}
+	r := WrappedReply{}
 
 	Write4XXReply(res, req, 400, r)
 	assert.Equal(t, 500, rec.Code)
@@ -124,7 +124,7 @@ func TestWrite4XXReply___2(t *testing.T) {
 // When complete ReplyMeta passed, sets 200 status code
 func TestWrite4XXReply___3(t *testing.T) {
 	req, res, rec := SetupRequest("/search?q=dan+north")
-	r := ReplyMeta{
+	r := WrappedReply{
 		Message: "abc",
 		Self:    (*req).URL.String(),
 		Hints:   "xyz",
@@ -134,10 +134,10 @@ func TestWrite4XXReply___3(t *testing.T) {
 	assert.Equal(t, 400, rec.Code)
 }
 
-// When complete ReplyMeta passed, JSON headers are set
+// When complete WrappedReply passed, JSON headers are set
 func TestWrite4XXReply___4(t *testing.T) {
 	req, res, rec := SetupRequest("/search?q=dan+north")
-	r := ReplyMeta{
+	r := WrappedReply{
 		Message: "abc",
 		Self:    (*req).URL.String(),
 		Hints:   "xyz",
@@ -150,7 +150,7 @@ func TestWrite4XXReply___4(t *testing.T) {
 // When complete Reply4XX passed, body is set with expected JSON
 func TestWrite4XXReply___5(t *testing.T) {
 	req, res, rec := SetupRequest("/search?q=dan+north")
-	r := ReplyMeta{
+	r := WrappedReply{
 		Message: "abc",
 		Self:    (*req).URL.Path + "?" + (*req).URL.RawQuery,
 		Hints:   "xyz",
@@ -172,7 +172,7 @@ func TestWrite4XXReply___5(t *testing.T) {
 // When Reply4XX.Self is not set, Reply4XX.Self is set for us
 func TestWrite4XXReply___6(t *testing.T) {
 	req, res, rec := SetupRequest("/search?q=dan+north")
-	r := ReplyMeta{
+	r := WrappedReply{
 		Message: "abc",
 		Hints:   "xyz",
 	}
@@ -231,7 +231,7 @@ func TestPrepResponseData___3(t *testing.T) {
 	data := make(map[string]interface{})
 	data["album"] = "As Daylight Dies"
 
-	exp := ReplyMeta{
+	exp := WrappedReply{
 		Message: "Cheese",
 		Self:    req.URL.String(),
 		Data:    data,

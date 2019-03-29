@@ -23,15 +23,16 @@ func VenturesHandler(res http.ResponseWriter, req *http.Request) {
 	switch {
 	case req.Method == "GET" && id == "":
 		get_AllVentures(&res, req)
-	//case req.Method == "GET":
-	//get_OneThing(id, &res, req)
+	case req.Method == "GET":
+		get_OneVenture(id, &res, req)
 	//case req.Method == "POST":
 	//post_NewThing(&res, req)
 	//case req.Method == "PUT":
 	//put_OneThing(&res, req)
-	//case req.Method == "HEAD":
-	//fallthrough
+	case req.Method == "HEAD":
+		fallthrough
 	case req.Method == "OPTIONS":
+		AppendCORSHeaders(&res, httpMethods)
 		WriteEmptyJSONReply(&res, "")
 	default:
 		MethodNotAllowed(&res, req)
@@ -47,6 +48,35 @@ func get_AllVentures(res *http.ResponseWriter, req *http.Request) {
 	AppendCORSHeaders(res, httpMethods)
 	AppendJSONHeader(res, "")
 	WriteJSONReply(res, req, data, "")
+}
+
+// get_OneVenture handles client requests for a specific Venture.
+func get_OneVenture(id string, res *http.ResponseWriter, req *http.Request) {
+	ven, ok := findVenture(id, res, req)
+	if !ok {
+		return
+	}
+
+	m := fmt.Sprintf("Found Venture '%s'", id)
+	data := PrepResponseData(req, ven, m)
+
+	AppendCORSHeaders(res, httpMethods)
+	AppendJSONHeader(res, "")
+	WriteJSONReply(res, req, data, "")
+}
+
+// findVenture finds the Venture with the specified ID
+func findVenture(id string, res *http.ResponseWriter, req *http.Request) (v.Venture, bool) {
+	ven, ok := ventures.Get(id)
+	if !ok || !ven.IsAlive {
+		r := WrappedReply{
+			Message: fmt.Sprintf("Thing '%s' not found", id),
+		}
+		AppendCORSHeaders(res, httpMethods)
+		Write4XXReply(res, req, 404, r)
+		return v.Venture{}, false
+	}
+	return ven, true
 }
 
 // InjectDummyVentures injects dummy Ventures so the API testing can performed.

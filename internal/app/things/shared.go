@@ -13,7 +13,7 @@ import (
 func findThing(id string, res *http.ResponseWriter, req *http.Request) (Thing, bool) {
 	t := Things.Get(id)
 	if t.ID == "" || t.IsDead {
-		r := ReplyMeta{
+		r := WrappedReply{
 			Message: fmt.Sprintf("Thing '%s' not found", id),
 		}
 		Write4XXReply(res, req, 404, r)
@@ -28,7 +28,7 @@ func decodeThing(res *http.ResponseWriter, req *http.Request) (Thing, bool) {
 	d := json.NewDecoder(req.Body)
 	err := d.Decode(&t)
 	if err != nil {
-		r := ReplyMeta{
+		r := WrappedReply{
 			Message: "Unable to decode request body into a Thing",
 		}
 		Write4XXReply(res, req, 400, r)
@@ -42,7 +42,7 @@ func checkThing(t Thing, res *http.ResponseWriter, req *http.Request) (Thing, bo
 	t.Clean()
 	e := t.Validate(true)
 	if e != nil {
-		r := ReplyMeta{
+		r := WrappedReply{
 			Message: strings.Join(e, " "),
 		}
 		Write4XXReply(res, req, 400, r)
