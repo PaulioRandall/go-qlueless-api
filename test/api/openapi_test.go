@@ -23,12 +23,12 @@ func TestGET_OpenAPI(t *testing.T) {
 
 	req := APICall{
 		URL:    "http://localhost:8080/openapi",
-		Method: GET,
+		Method: "GET",
 	}
 	res := req.fire()
 	defer res.Body.Close()
 
-	require.Equal(t, 200, res.StatusCode)
+	RequireStatusCode(t, 200, res)
 	AssertHeadersEquals(t, res.Header, map[string]string{
 		"Access-Control-Allow-Origin":  "*",
 		"Access-Control-Allow-Headers": "*",

@@ -1,8 +1,11 @@
 package ventures
 
 import (
+	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
+	"strings"
 
 	. "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg"
 	v "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/ventures"
@@ -25,7 +28,8 @@ func VenturesHandler(res http.ResponseWriter, req *http.Request) {
 		get_AllVentures(&res, req)
 	case req.Method == "GET":
 		get_OneVenture(id, &res, req)
-	//case req.Method == "POST":
+	case req.Method == "POST":
+		post_NewVenture(&res, req)
 	//post_NewThing(&res, req)
 	//case req.Method == "PUT":
 	//put_OneThing(&res, req)
@@ -33,7 +37,8 @@ func VenturesHandler(res http.ResponseWriter, req *http.Request) {
 		fallthrough
 	case req.Method == "OPTIONS":
 		AppendCORSHeaders(&res, httpMethods)
-		WriteEmptyJSONReply(&res, "")
+		AppendJSONHeader(&res, "")
+		res.WriteHeader(http.StatusOK)
 	default:
 		MethodNotAllowed(&res, req)
 	}
@@ -47,7 +52,8 @@ func get_AllVentures(res *http.ResponseWriter, req *http.Request) {
 
 	AppendCORSHeaders(res, httpMethods)
 	AppendJSONHeader(res, "")
-	WriteJSONReply(res, req, data, "")
+	(*res).WriteHeader(http.StatusOK)
+	json.NewEncoder(*res).Encode(data)
 }
 
 // get_OneVenture handles client requests for a specific Venture.
@@ -62,10 +68,36 @@ func get_OneVenture(id string, res *http.ResponseWriter, req *http.Request) {
 
 	AppendCORSHeaders(res, httpMethods)
 	AppendJSONHeader(res, "")
-	WriteJSONReply(res, req, data, "")
+	(*res).WriteHeader(http.StatusOK)
+	json.NewEncoder(*res).Encode(data)
 }
 
-// findVenture finds the Venture with the specified ID
+// post_NewVenture handles client requests for creating new Ventures.
+func post_NewVenture(res *http.ResponseWriter, req *http.Request) {
+	ven, ok := decodeVenture(res, req)
+	if !ok {
+		return
+	}
+
+	ven.Clean()
+	ven.IsAlive = true
+	ven, ok = validateNewVenture(ven, res, req)
+	if !ok {
+		return
+	}
+
+	ven = ventures.Add(ven)
+	m := fmt.Sprintf("New Venture with ID '%s' created", ven.ID)
+	log.Println(m)
+	data := PrepResponseData(req, ven, m)
+
+	AppendCORSHeaders(res, httpMethods)
+	AppendJSONHeader(res, "")
+	(*res).WriteHeader(http.StatusCreated)
+	json.NewEncoder(*res).Encode(data)
+}
+
+// findVenture finds the Venture with the specified ID.
 func findVenture(id string, res *http.ResponseWriter, req *http.Request) (v.Venture, bool) {
 	ven, ok := ventures.Get(id)
 	if !ok || !ven.IsAlive {
@@ -79,9 +111,37 @@ func findVenture(id string, res *http.ResponseWriter, req *http.Request) (v.Vent
 	return ven, true
 }
 
+// decodeVenture decodes a Venture from a Request.Body.
+func decodeVenture(res *http.ResponseWriter, req *http.Request) (v.Venture, bool) {
+	var ven v.Venture
+	d := json.NewDecoder(req.Body)
+	err := d.Decode(&ven)
+	if err != nil {
+		r := WrappedReply{
+			Message: "Unable to decode request body into a Venture",
+		}
+		Write4XXReply(res, req, 400, r)
+		return v.Venture{}, false
+	}
+	return ven, true
+}
+
+// validateNewVenture validates a new Venture that has yet to be assigned an ID.
+func validateNewVenture(ven v.Venture, res *http.ResponseWriter, req *http.Request) (v.Venture, bool) {
+	errMsgs := ven.Validate(true)
+	if len(errMsgs) != 0 {
+		r := WrappedReply{
+			Message: strings.Join(errMsgs, " "),
+		}
+		Write4XXReply(res, req, 400, r)
+		return v.Venture{}, false
+	}
+	return ven, true
+}
+
 // InjectDummyVentures injects dummy Ventures so the API testing can performed.
 // This function is expected to be removed once a database and formal test data
-// has been crafted
+// has been crafted.
 func InjectDummyVentures() {
 	ventures.Add(v.Venture{
 		Description: "White wizard",

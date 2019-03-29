@@ -4,7 +4,6 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 
 	. "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/asserts"
 )
@@ -23,12 +22,12 @@ func TestGET_Changelog(t *testing.T) {
 
 	req := APICall{
 		URL:    "http://localhost:8080/changelog",
-		Method: GET,
+		Method: "GET",
 	}
 	res := req.fire()
 	defer res.Body.Close()
 
-	require.Equal(t, 200, res.StatusCode)
+	RequireStatusCode(t, 200, res)
 	AssertHeadersEquals(t, res.Header, map[string]string{
 		"Access-Control-Allow-Origin":  "*",
 		"Access-Control-Allow-Headers": "*",

@@ -29,13 +29,16 @@ func (ven *Venture) Clean() {
 // slice of human readable error messages detailing the violations found or an
 // empty slice if all is well. These messages are suitable for returning to
 // clients.
-func (ven *Venture) Validate() []string {
+func (ven *Venture) Validate(isNew bool) []string {
 	errMsgs := []string{}
 
 	errMsgs = AppendIfEmpty(ven.Description, errMsgs,
 		"Ventures must have a description")
-	errMsgs = AppendIfNotPositiveInt(ven.ID, errMsgs,
-		"Ventures must have a positive integer ID")
+
+	if !isNew {
+		errMsgs = AppendIfNotPositiveInt(ven.ID, errMsgs,
+			"Ventures must have a positive integer ID")
+	}
 
 	if ven.OrderIDs != "" {
 		errMsgs = AppendIfNotPositiveIntCSV(ven.OrderIDs, errMsgs,
@@ -46,7 +49,7 @@ func (ven *Venture) Validate() []string {
 	return errMsgs
 }
 
-// SplitOrderIDs returns the IDs of the Orders as a slice
+// SplitOrderIDs returns the IDs of the Orders as a slice.
 func (ven *Venture) SplitOrderIDs() []string {
 	if ven.OrderIDs == "" {
 		return []string{}
@@ -54,7 +57,7 @@ func (ven *Venture) SplitOrderIDs() []string {
 	return strings.Split(ven.OrderIDs, ",")
 }
 
-// SetOrderIDs sets the OrderIDs CSV from a slice of Order IDs
+// SetOrderIDs sets the OrderIDs CSV from a slice of Order IDs.
 func (ven *Venture) SetOrderIDs(ids []string) {
 	ven.OrderIDs = strings.Join(ids, ",")
 }

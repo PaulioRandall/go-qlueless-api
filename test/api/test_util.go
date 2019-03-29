@@ -1,6 +1,7 @@
 package api
 
 import (
+	"io"
 	"log"
 	"net/http"
 	"os"
@@ -8,24 +9,10 @@ import (
 	"time"
 )
 
-type HTTPMethod string
-
-func (m *HTTPMethod) String() string {
-	return (string)(*m)
-}
-
-const (
-	GET     HTTPMethod = "GET"
-	POST    HTTPMethod = "POST"
-	PUT     HTTPMethod = "PUT"
-	DELETE  HTTPMethod = "DELETE"
-	HEAD    HTTPMethod = "HEAD"
-	OPTIONS HTTPMethod = "OPTIONS"
-)
-
 type APICall struct {
 	URL    string
-	Method HTTPMethod
+	Method string
+	Body   io.Reader
 }
 
 func adminPrint(m string) {
@@ -66,15 +53,15 @@ func stopServer(cmd *exec.Cmd) {
 	}
 }
 
-func newRequest(method string, url string) *http.Request {
-	req, err := http.NewRequest(method, url, nil)
+func (c *APICall) newRequest() *http.Request {
+	req, err := http.NewRequest(c.Method, c.URL, c.Body)
 	if err != nil {
 		log.Panic("newRequest(): ", err)
 	}
 	return req
 }
 
-func invokeRequest(req *http.Request) *http.Response {
+func (c *APICall) invokeRequest(req *http.Request) *http.Response {
 	client := &http.Client{
 		Timeout: time.Duration(5 * time.Second),
 	}
@@ -86,7 +73,7 @@ func invokeRequest(req *http.Request) *http.Response {
 }
 
 func (c *APICall) fire() *http.Response {
-	req := newRequest(c.Method.String(), c.URL)
-	res := invokeRequest(req)
+	req := c.newRequest()
+	res := c.invokeRequest(req)
 	return res
 }

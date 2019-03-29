@@ -6,6 +6,9 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+// ****************************************************************************
+// Venture.Clean
+// ****************************************************************************
 func TestVenture_Clean_1(t *testing.T) {
 	a := Venture{
 		Description: "\n\t\v description \r\f ",
@@ -51,6 +54,10 @@ func TestVenture_Clean_3(t *testing.T) {
 	assert.Equal(t, b, a)
 }
 
+// ****************************************************************************
+// Venture.Validate
+// ****************************************************************************
+
 func TestVenture_Validate_1(t *testing.T) {
 	a := Venture{
 		Description: "description",
@@ -61,7 +68,7 @@ func TestVenture_Validate_1(t *testing.T) {
 		Extra:       "\n\t\v extra \r\f",
 	}
 
-	errMsgs := a.Validate()
+	errMsgs := a.Validate(false)
 	assert.Empty(t, errMsgs)
 }
 
@@ -72,7 +79,7 @@ func TestVenture_Validate_2(t *testing.T) {
 		State:       "state",
 	}
 
-	errMsgs := a.Validate()
+	errMsgs := a.Validate(false)
 	assert.Empty(t, errMsgs)
 }
 
@@ -83,7 +90,7 @@ func TestVenture_Validate_3(t *testing.T) {
 		State:       "",
 	}
 
-	errMsgs := a.Validate()
+	errMsgs := a.Validate(false)
 	assert.Len(t, errMsgs, 3)
 }
 
@@ -95,9 +102,34 @@ func TestVenture_Validate_4(t *testing.T) {
 		State:       "valid",
 	}
 
-	errMsgs := a.Validate()
+	errMsgs := a.Validate(false)
 	assert.Len(t, errMsgs, 2)
 }
+
+func TestVenture_Validate_5(t *testing.T) {
+	a := Venture{
+		Description: "description",
+		State:       "state",
+	}
+
+	errMsgs := a.Validate(true)
+	assert.Empty(t, errMsgs)
+}
+
+func TestVenture_Validate_6(t *testing.T) {
+	a := Venture{
+		Description: "",
+		State:       "",
+		OrderIDs:    "3,invalid,4",
+	}
+
+	errMsgs := a.Validate(true)
+	assert.Len(t, errMsgs, 3)
+}
+
+// ****************************************************************************
+// Venture.SplitOrderIDs
+// ****************************************************************************
 
 func TestSplitOrderIDs_1(t *testing.T) {
 	a := Venture{
@@ -128,6 +160,10 @@ func TestSplitOrderIDs_3(t *testing.T) {
 	s := a.SplitOrderIDs()
 	assert.Empty(t, s)
 }
+
+// ****************************************************************************
+// Venture.SetOrderIDs
+// ****************************************************************************
 
 func TestSetOrderIDs_1(t *testing.T) {
 	a := Venture{}

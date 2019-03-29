@@ -26,7 +26,8 @@ func OpenAPIHandler(res http.ResponseWriter, req *http.Request) {
 		fallthrough
 	case "OPTIONS":
 		AppendCORSHeaders(&res, httpMethods)
-		WriteEmptyJSONReply(&res, "vnd.oai.openapi")
+		AppendJSONHeader(&res, "vnd.oai.openapi")
+		res.WriteHeader(http.StatusOK)
 	default:
 		AppendCORSHeaders(&res, httpMethods)
 		MethodNotAllowed(&res, req)
@@ -42,7 +43,9 @@ func get_Spec(res *http.ResponseWriter, req *http.Request) {
 	}
 
 	AppendCORSHeaders(res, httpMethods)
-	WriteJSONReply(res, req, spec, "vnd.oai.openapi")
+	AppendJSONHeader(res, "vnd.oai.openapi")
+	(*res).WriteHeader(http.StatusOK)
+	json.NewEncoder(*res).Encode(spec)
 }
 
 // LoadJson loads the OpenAPI specification from a file

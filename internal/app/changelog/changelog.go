@@ -27,7 +27,8 @@ func ChangelogHandler(res http.ResponseWriter, req *http.Request) {
 		fallthrough
 	case "OPTIONS":
 		AppendCORSHeaders(&res, httpMethods)
-		WriteEmptyReply(&res, mime_md)
+		res.Header().Set("Content-Type", mime_md)
+		res.WriteHeader(http.StatusOK)
 	default:
 		AppendCORSHeaders(&res, httpMethods)
 		MethodNotAllowed(&res, req)
@@ -43,7 +44,9 @@ func get_Changelog(res *http.ResponseWriter, req *http.Request) {
 	}
 
 	AppendCORSHeaders(res, httpMethods)
-	WriteReply(res, changelog, mime_md)
+	(*res).Header().Set("Content-Type", mime_md)
+	(*res).WriteHeader(http.StatusOK)
+	(*res).Write(*changelog)
 }
 
 // LoadChangelog loads the changelog from a file

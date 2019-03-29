@@ -1,19 +1,24 @@
 package asserts
 
 import (
+	"io/ioutil"
 	"net/http"
 	"regexp"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
-func assertHeaderExists(t *testing.T, name string, h []string) bool {
-	if len(h) < 1 {
-		assert.Fail(t, "Expected header: "+name)
-		return false
+func RequireStatusCode(t *testing.T, expected int, res *http.Response) {
+	if expected != res.StatusCode {
+		b, err := ioutil.ReadAll(res.Body)
+		if err != nil {
+			panic(err)
+		}
+		t.Log("Response: " + string(b))
+		require.Equal(t, expected, res.StatusCode)
 	}
-	return true
 }
 
 func AssertGenericIntCSV(t *testing.T, csv string) {
@@ -27,6 +32,14 @@ func AssertExactKeys(t *testing.T, expect []string, actual map[string]interface{
 		assert.Contains(t, actual, k)
 	}
 	assert.Len(t, len(expect), len(actual))
+}
+
+func assertHeaderExists(t *testing.T, name string, h []string) bool {
+	if len(h) < 1 {
+		assert.Fail(t, "Expected header: "+name)
+		return false
+	}
+	return true
 }
 
 func AssertHeadersEquals(t *testing.T, h http.Header, equals map[string]string) {
