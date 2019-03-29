@@ -1,5 +1,3 @@
-//usr/bin/env go run "$0" "$@"; exit "$?"
-
 package api
 
 import (
@@ -11,17 +9,18 @@ import (
 	. "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/asserts"
 )
 
-// Given a loaded changelog
-// When the changelog is requested
-// Then ensure the response code is 200
-// And the 'Content-Type' header contains 'text/markdown'
-// And 'Access-Control-Allow-Origin' is '*'
-// And 'Access-Control-Allow-Headers' is '*'
-// And 'Access-Control-Allow-Methods' only contains GET, HEAD, and OPTIONS
-// And the body contains some data
-//
 // TODO: Assert the body is a valid markdown
 func TestGET_Changelog(t *testing.T) {
+	t.Log(`Given a loaded changelog
+		When the changelog is requested
+		Then ensure the response code is 200
+		And the 'Content-Type' header contains 'text/markdown'
+		And 'Access-Control-Allow-Origin' is '*'
+		And 'Access-Control-Allow-Headers' is '*'
+		And 'Access-Control-Allow-Methods' only contains GET, HEAD, and OPTIONS
+		And the body contains some data
+		...`)
+
 	req := APICall{
 		URL:    "http://localhost:8080/changelog",
 		Method: GET,

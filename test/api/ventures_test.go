@@ -1,5 +1,3 @@
-//usr/bin/env go run "$0" "$@"; exit "$?"
-
 package api
 
 import (
@@ -13,17 +11,18 @@ import (
 	. "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/ventures"
 )
 
-// Given some Ventures already exist on the server
-// When all Ventures are requested
-// Then ensure the response code is 200
-// And the 'Content-Type' header contains 'application/json'
-// And 'Access-Control-Allow-Origin' is '*'
-// And 'Access-Control-Allow-Headers' is '*'
-// And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, HEAD, and OPTIONS
-// And the body is a JSON array of valid Ventures
-//
 // TODO: Craft some test data and pre-inject it into a SQLite database
 func TestGET_Ventures(t *testing.T) {
+	t.Log(`Given some Ventures already exist on the server
+		When all Ventures are requested
+		Then ensure the response code is 200
+		And the 'Content-Type' header contains 'application/json'
+		And 'Access-Control-Allow-Origin' is '*'
+		And 'Access-Control-Allow-Headers' is '*'
+		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, HEAD, and OPTIONS
+		And the body is a JSON array of valid Ventures
+		...`)
+
 	req := APICall{
 		URL:    "http://localhost:8080/ventures",
 		Method: GET,
@@ -50,17 +49,18 @@ func TestGET_Ventures(t *testing.T) {
 	AssertGenericVentures(t, ven)
 }
 
-// Given some Ventures already exist on the server
-// When a specific existing Venture is requested
-// Then ensure the response code is 200
-// And the 'Content-Type' header contains 'application/json'
-// And 'Access-Control-Allow-Origin' is '*'
-// And 'Access-Control-Allow-Headers' is '*'
-// And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, HEAD, and OPTIONS
-// And the body is a JSON object representing a valid Venture
-//
 // TODO: Craft some test data and pre-inject it into a SQLite database
 func TestGET_Venture_1(t *testing.T) {
+	t.Log(`Given some Ventures already exist on the server
+		When a specific existing Venture is requested
+		Then ensure the response code is 200
+		And the 'Content-Type' header contains 'application/json'
+		And 'Access-Control-Allow-Origin' is '*'
+		And 'Access-Control-Allow-Headers' is '*'
+		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, HEAD, and OPTIONS
+		And the body is a JSON object representing a valid Venture
+		...`)
+
 	req := APICall{
 		URL:    "http://localhost:8080/ventures?id=1",
 		Method: GET,
@@ -87,15 +87,17 @@ func TestGET_Venture_1(t *testing.T) {
 	AssertGenericVenture(t, ven)
 }
 
-// Given some Ventures already exist on the server
-// When a specific non-existent Venture is requested
-// Then ensure the response code is 404
-// And the 'Content-Type' header contains 'application/json'
-// And 'Access-Control-Allow-Origin' is '*'
-// And 'Access-Control-Allow-Headers' is '*'
-// And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, HEAD, and OPTIONS
-// And the body is a JSON object representing an error response
 func TestGET_Venture_2(t *testing.T) {
+	t.Log(`Given some Ventures already exist on the server
+		When a specific non-existent Venture is requested
+		Then ensure the response code is 404
+		And the 'Content-Type' header contains 'application/json'
+		And 'Access-Control-Allow-Origin' is '*'
+		And 'Access-Control-Allow-Headers' is '*'
+		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, HEAD, and OPTIONS
+		And the body is a JSON object representing an error response
+		...`)
+
 	req := APICall{
 		URL:    "http://localhost:8080/ventures?id=999999",
 		Method: GET,
