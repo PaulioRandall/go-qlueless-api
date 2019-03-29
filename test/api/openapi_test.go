@@ -2,10 +2,8 @@ package api
 
 import (
 	"encoding/json"
-	"io/ioutil"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
 	. "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/asserts"
@@ -65,10 +63,7 @@ func TestHEAD_OpenAPI(t *testing.T) {
 
 	require.Equal(t, 200, res.StatusCode)
 	assertDefaultHeaders(t, res, openapiMediaType, openapiDefaultMethods)
-
-	body, err := ioutil.ReadAll(res.Body)
-	require.Nil(t, err)
-	assert.Empty(t, body)
+	assertEmptyBody(t, res)
 }
 
 func TestOPTIONS_OpenAPI(t *testing.T) {
@@ -93,8 +88,5 @@ func TestOPTIONS_OpenAPI(t *testing.T) {
 
 	require.Equal(t, 200, res.StatusCode)
 	assertDefaultHeaders(t, res, openapiMediaType, openapiDefaultMethods)
-
-	body, err := ioutil.ReadAll(res.Body)
-	require.Nil(t, err)
-	assert.Empty(t, body)
+	assertEmptyBody(t, res)
 }

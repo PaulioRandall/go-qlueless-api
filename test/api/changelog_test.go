@@ -1,10 +1,8 @@
 package api
 
 import (
-	"io/ioutil"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
 	. "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/asserts"
@@ -36,10 +34,7 @@ func TestGET_Changelog(t *testing.T) {
 
 	require.Equal(t, 200, res.StatusCode)
 	assertDefaultHeaders(t, res, changelogMediaType, changelogDefaultMethods)
-
-	body, err := ioutil.ReadAll(res.Body)
-	require.Nil(t, err)
-	assert.NotEmpty(t, body)
+	assertNotEmptyBody(t, res)
 }
 
 func TestHEAD_Changelog(t *testing.T) {
@@ -64,10 +59,7 @@ func TestHEAD_Changelog(t *testing.T) {
 
 	require.Equal(t, 200, res.StatusCode)
 	assertDefaultHeaders(t, res, changelogMediaType, changelogDefaultMethods)
-
-	body, err := ioutil.ReadAll(res.Body)
-	require.Nil(t, err)
-	assert.Empty(t, body)
+	assertEmptyBody(t, res)
 }
 
 func TestOPTIONS_Changelog(t *testing.T) {
@@ -92,8 +84,5 @@ func TestOPTIONS_Changelog(t *testing.T) {
 
 	require.Equal(t, 200, res.StatusCode)
 	assertDefaultHeaders(t, res, changelogMediaType, changelogDefaultMethods)
-
-	body, err := ioutil.ReadAll(res.Body)
-	require.Nil(t, err)
-	assert.Empty(t, body)
+	assertEmptyBody(t, res)
 }

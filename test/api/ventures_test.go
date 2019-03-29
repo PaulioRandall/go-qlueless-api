@@ -184,5 +184,52 @@ func TestPOST_Venture_2(t *testing.T) {
 	AssertGenericError(t, reply)
 }
 
-// TODO: Write more POST tests
-// TODO: Write HEAD and OPTIONS tests
+func TestHEAD_Ventures(t *testing.T) {
+	t.Log(`Given some Ventures already exist on the server
+		When all Ventures are requested
+		AND the HTTP method is 'HEAD'
+		Then ensure the response code is 200
+		And the 'Content-Type' header contains 'application/json'
+		And 'Access-Control-Allow-Origin' is '*'
+		And 'Access-Control-Allow-Headers' is '*'
+		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, HEAD, and OPTIONS
+		And there is NO response body
+		...`)
+
+	req := APICall{
+		URL:    "http://localhost:8080/ventures",
+		Method: "HEAD",
+	}
+	res := req.fire()
+	defer res.Body.Close()
+	defer PrintResponse(t, res.Body)
+
+	require.Equal(t, 200, res.StatusCode)
+	assertDefaultHeaders(t, res, "application/json", ventureDefaultMethods)
+	assertEmptyBody(t, res)
+}
+
+func TestOPTIONS_Ventures(t *testing.T) {
+	t.Log(`Given some Ventures already exist on the server
+		When all Ventures are requested
+		AND the HTTP method is 'OPTIONS'
+		Then ensure the response code is 200
+		And the 'Content-Type' header contains 'application/json'
+		And 'Access-Control-Allow-Origin' is '*'
+		And 'Access-Control-Allow-Headers' is '*'
+		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, HEAD, and OPTIONS
+		And there is NO response body
+		...`)
+
+	req := APICall{
+		URL:    "http://localhost:8080/ventures",
+		Method: "OPTIONS",
+	}
+	res := req.fire()
+	defer res.Body.Close()
+	defer PrintResponse(t, res.Body)
+
+	require.Equal(t, 200, res.StatusCode)
+	assertDefaultHeaders(t, res, "application/json", ventureDefaultMethods)
+	assertEmptyBody(t, res)
+}
