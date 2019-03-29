@@ -1,19 +1,11 @@
 package api
 
 import (
-	"io"
 	"log"
-	"net/http"
 	"os"
 	"os/exec"
 	"time"
 )
-
-type APICall struct {
-	URL    string
-	Method string
-	Body   io.Reader
-}
 
 func adminPrint(m string) {
 	log.Println("[API-TEST] " + m)
@@ -51,29 +43,4 @@ func stopServer(cmd *exec.Cmd) {
 	if err != nil {
 		log.Fatal("StopServer(): ", err)
 	}
-}
-
-func (c *APICall) newRequest() *http.Request {
-	req, err := http.NewRequest(c.Method, c.URL, c.Body)
-	if err != nil {
-		log.Panic("newRequest(): ", err)
-	}
-	return req
-}
-
-func (c *APICall) invokeRequest(req *http.Request) *http.Response {
-	client := &http.Client{
-		Timeout: time.Duration(5 * time.Second),
-	}
-	res, err := client.Do(req)
-	if err != nil {
-		log.Panic("InvokeRequest(): ", err)
-	}
-	return res
-}
-
-func (c *APICall) fire() *http.Response {
-	req := c.newRequest()
-	res := c.invokeRequest(req)
-	return res
 }

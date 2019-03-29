@@ -188,7 +188,7 @@ func TestVentureStore_Update_2(t *testing.T) {
 
 func TestVentureStore_GenNewID_1(t *testing.T) {
 	store := NewVentureStore()
-	a := store.genNewID()
+	a := store._genNewID()
 	assert.Equal(t, "1", a)
 }
 
@@ -197,7 +197,7 @@ func TestVentureStore_GenNewID_2(t *testing.T) {
 	aIn := Venture{}
 	store.items["1"] = aIn
 
-	a := store.genNewID()
+	a := store._genNewID()
 	assert.Equal(t, "2", a)
 }
 
@@ -208,7 +208,7 @@ func TestVentureStore_GenNewID_3(t *testing.T) {
 	store.items["2"] = aIn
 	store.items["3"] = aIn
 
-	a := store.genNewID()
+	a := store._genNewID()
 	assert.Equal(t, "4", a)
 }
 
@@ -217,6 +217,6 @@ func TestVentureStore_GenNewID_4(t *testing.T) {
 	aIn := Venture{}
 	store.items["3"] = aIn
 
-	a := store.genNewID()
+	a := store._genNewID()
 	assert.Equal(t, "1", a)
 }

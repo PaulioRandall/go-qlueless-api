@@ -31,7 +31,7 @@ var ALL_STD_HTTP_METHODS = []string{
 	"CUSTOM",
 }
 
-func exit(exitCode *int) {
+func _exit(exitCode *int) {
 	os.Exit(*exitCode)
 }
 
@@ -39,7 +39,7 @@ func TestMain(m *testing.M) {
 	var exitCode int = 1
 	cmd := startServer()
 
-	defer exit(&exitCode)
+	defer _exit(&exitCode)
 	defer attemptRecover(&exitCode)
 	defer stopServer(cmd)
 

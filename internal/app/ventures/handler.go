@@ -22,12 +22,11 @@ func VenturesHandler(res http.ResponseWriter, req *http.Request) {
 	id := req.FormValue("id")
 	switch {
 	case req.Method == "GET" && id == "":
-		get_AllVentures(&res, req)
+		_GET_AllVentures(&res, req)
 	case req.Method == "GET":
-		get_OneVenture(id, &res, req)
+		_GET_OneVenture(id, &res, req)
 	case req.Method == "POST":
-		post_NewVenture(&res, req)
-	//post_NewThing(&res, req)
+		_POST_NewVenture(&res, req)
 	//case req.Method == "PUT":
 	//put_OneThing(&res, req)
 	case req.Method == "HEAD":
@@ -40,8 +39,8 @@ func VenturesHandler(res http.ResponseWriter, req *http.Request) {
 	}
 }
 
-// get_AllVentures handles client requests for all living Ventures.
-func get_AllVentures(res *http.ResponseWriter, req *http.Request) {
+// _GET_AllVentures handles client requests for all living Ventures.
+func _GET_AllVentures(res *http.ResponseWriter, req *http.Request) {
 	vens := ventures.GetAllAlive()
 	m := fmt.Sprintf("Found %d Ventures", len(vens))
 	data := PrepResponseData(req, vens, m)
@@ -51,9 +50,9 @@ func get_AllVentures(res *http.ResponseWriter, req *http.Request) {
 	json.NewEncoder(*res).Encode(data)
 }
 
-// get_OneVenture handles client requests for a specific Venture.
-func get_OneVenture(id string, res *http.ResponseWriter, req *http.Request) {
-	ven, ok := findVenture(id, res, req)
+// _GET_OneVenture handles client requests for a specific Venture.
+func _GET_OneVenture(id string, res *http.ResponseWriter, req *http.Request) {
+	ven, ok := _findVenture(id, res, req)
 	if !ok {
 		return
 	}
@@ -66,16 +65,16 @@ func get_OneVenture(id string, res *http.ResponseWriter, req *http.Request) {
 	json.NewEncoder(*res).Encode(data)
 }
 
-// post_NewVenture handles client requests for creating new Ventures.
-func post_NewVenture(res *http.ResponseWriter, req *http.Request) {
-	ven, ok := decodeVenture(res, req)
+// _POST_NewVenture handles client requests for creating new Ventures.
+func _POST_NewVenture(res *http.ResponseWriter, req *http.Request) {
+	ven, ok := _decodeVenture(res, req)
 	if !ok {
 		return
 	}
 
 	ven.Clean()
 	ven.IsAlive = true
-	ven, ok = validateNewVenture(ven, res, req)
+	ven, ok = _validateNewVenture(ven, res, req)
 	if !ok {
 		return
 	}
@@ -90,8 +89,8 @@ func post_NewVenture(res *http.ResponseWriter, req *http.Request) {
 	json.NewEncoder(*res).Encode(data)
 }
 
-// findVenture finds the Venture with the specified ID.
-func findVenture(id string, res *http.ResponseWriter, req *http.Request) (v.Venture, bool) {
+// _findVenture finds the Venture with the specified ID.
+func _findVenture(id string, res *http.ResponseWriter, req *http.Request) (v.Venture, bool) {
 	ven, ok := ventures.Get(id)
 	if !ok || !ven.IsAlive {
 		r := WrappedReply{
@@ -103,8 +102,8 @@ func findVenture(id string, res *http.ResponseWriter, req *http.Request) (v.Vent
 	return ven, true
 }
 
-// decodeVenture decodes a Venture from a Request.Body.
-func decodeVenture(res *http.ResponseWriter, req *http.Request) (v.Venture, bool) {
+// _decodeVenture decodes a Venture from a Request.Body.
+func _decodeVenture(res *http.ResponseWriter, req *http.Request) (v.Venture, bool) {
 	var ven v.Venture
 	d := json.NewDecoder(req.Body)
 	err := d.Decode(&ven)
@@ -118,8 +117,8 @@ func decodeVenture(res *http.ResponseWriter, req *http.Request) (v.Venture, bool
 	return ven, true
 }
 
-// validateNewVenture validates a new Venture that has yet to be assigned an ID.
-func validateNewVenture(ven v.Venture, res *http.ResponseWriter, req *http.Request) (v.Venture, bool) {
+// _validateNewVenture validates a new Venture that has yet to be assigned an ID.
+func _validateNewVenture(ven v.Venture, res *http.ResponseWriter, req *http.Request) (v.Venture, bool) {
 	errMsgs := ven.Validate(true)
 	if len(errMsgs) != 0 {
 		r := WrappedReply{

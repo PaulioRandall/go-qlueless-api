@@ -33,7 +33,7 @@ func AssertExactKeys(t *testing.T, expect []string, actual map[string]interface{
 	assert.Len(t, len(expect), len(actual))
 }
 
-func assertHeaderExists(t *testing.T, name string, h []string) bool {
+func _assertHeaderExists(t *testing.T, name string, h []string) bool {
 	if len(h) < 1 {
 		assert.Fail(t, "Expected header: "+name)
 		return false
@@ -44,7 +44,7 @@ func assertHeaderExists(t *testing.T, name string, h []string) bool {
 func AssertHeadersEquals(t *testing.T, h http.Header, equals map[string]string) {
 	for k, exp := range equals {
 		act := h[k]
-		if assertHeaderExists(t, k, act) {
+		if _assertHeaderExists(t, k, act) {
 			assert.Equal(t, exp, act[0])
 		}
 	}
@@ -53,7 +53,7 @@ func AssertHeadersEquals(t *testing.T, h http.Header, equals map[string]string) 
 func AssertHeadersNotEquals(t *testing.T, h http.Header, equals map[string]string) {
 	for k, notExp := range equals {
 		act := h[k]
-		if assertHeaderExists(t, k, act) {
+		if _assertHeaderExists(t, k, act) {
 			assert.NotEqual(t, notExp, act[0])
 		}
 	}
@@ -62,7 +62,7 @@ func AssertHeadersNotEquals(t *testing.T, h http.Header, equals map[string]strin
 func AssertHeadersContains(t *testing.T, h http.Header, contains map[string][]string) {
 	for k, s := range contains {
 		act := h[k]
-		if assertHeaderExists(t, k, act) {
+		if _assertHeaderExists(t, k, act) {
 			for _, exp := range s {
 				assert.Contains(t, act[0], exp)
 			}
@@ -73,7 +73,7 @@ func AssertHeadersContains(t *testing.T, h http.Header, contains map[string][]st
 func AssertHeadersNotContains(t *testing.T, h http.Header, contains map[string][]string) {
 	for k, s := range contains {
 		act := h[k]
-		if assertHeaderExists(t, k, act) {
+		if _assertHeaderExists(t, k, act) {
 			for notExp := range s {
 				assert.NotContains(t, act[0], notExp)
 			}
@@ -84,7 +84,7 @@ func AssertHeadersNotContains(t *testing.T, h http.Header, contains map[string][
 func AssertHeadersMatches(t *testing.T, h http.Header, patterns map[string]string) {
 	for k, reg := range patterns {
 		act := h[k]
-		if assertHeaderExists(t, k, act) {
+		if _assertHeaderExists(t, k, act) {
 			assert.Regexp(t, reg, act[0])
 		}
 	}
@@ -93,7 +93,7 @@ func AssertHeadersMatches(t *testing.T, h http.Header, patterns map[string]strin
 func AssertHeadersNotMatches(t *testing.T, h http.Header, patterns map[string]string) {
 	for k, reg := range patterns {
 		act := h[k]
-		if assertHeaderExists(t, k, act) {
+		if _assertHeaderExists(t, k, act) {
 			assert.NotRegexp(t, reg, act[0])
 		}
 	}

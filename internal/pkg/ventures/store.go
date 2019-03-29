@@ -60,7 +60,7 @@ func (v *VentureStore) Add(new Venture) Venture {
 	v.mutex.Lock()
 	defer v.mutex.Unlock()
 
-	new.ID = v.genNewID()
+	new.ID = v._genNewID()
 	v.items[new.ID] = new
 	return new
 }
@@ -80,8 +80,8 @@ func (v *VentureStore) Update(ven Venture) bool {
 	return true
 }
 
-// genNewID generates a new, unused, Venture ID
-func (v *VentureStore) genNewID() string {
+// _genNewID generates a new, unused, Venture ID
+func (v *VentureStore) _genNewID() string {
 	ID := 1
 	var r string
 
