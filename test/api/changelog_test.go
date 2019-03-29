@@ -10,6 +10,10 @@ import (
 	. "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/asserts"
 )
 
+const changelogMediaType = "text/markdown"
+
+var changelogDefaultMethods = []string{"GET", "HEAD", "OPTIONS"}
+
 // TODO: Assert the body is a valid markdown
 func TestGET_Changelog(t *testing.T) {
 	t.Log(`Given a loaded changelog
@@ -28,19 +32,10 @@ func TestGET_Changelog(t *testing.T) {
 	}
 	res := req.fire()
 	defer res.Body.Close()
+	defer PrintResponse(t, res.Body)
 
-	RequireStatusCode(t, 200, res)
-	AssertHeadersEquals(t, res.Header, map[string]string{
-		"Access-Control-Allow-Origin":  "*",
-		"Access-Control-Allow-Headers": "*",
-	})
-	AssertHeadersContains(t, res.Header, map[string][]string{
-		"Content-Type":                 []string{"text/markdown"},
-		"Access-Control-Allow-Methods": []string{"GET", "HEAD", "OPTIONS"},
-	})
-	AssertHeadersMatches(t, res.Header, map[string]string{
-		"Access-Control-Allow-Methods": CORS_METHODS_PATTERN,
-	})
+	require.Equal(t, 200, res.StatusCode)
+	assertDefaultHeaders(t, res, changelogMediaType, changelogDefaultMethods)
 
 	body, err := ioutil.ReadAll(res.Body)
 	require.Nil(t, err)
@@ -65,19 +60,10 @@ func TestHEAD_Changelog(t *testing.T) {
 	}
 	res := req.fire()
 	defer res.Body.Close()
+	defer PrintResponse(t, res.Body)
 
-	RequireStatusCode(t, 200, res)
-	AssertHeadersEquals(t, res.Header, map[string]string{
-		"Access-Control-Allow-Origin":  "*",
-		"Access-Control-Allow-Headers": "*",
-	})
-	AssertHeadersContains(t, res.Header, map[string][]string{
-		"Content-Type":                 []string{"text/markdown"},
-		"Access-Control-Allow-Methods": []string{"GET", "HEAD", "OPTIONS"},
-	})
-	AssertHeadersMatches(t, res.Header, map[string]string{
-		"Access-Control-Allow-Methods": CORS_METHODS_PATTERN,
-	})
+	require.Equal(t, 200, res.StatusCode)
+	assertDefaultHeaders(t, res, changelogMediaType, changelogDefaultMethods)
 
 	body, err := ioutil.ReadAll(res.Body)
 	require.Nil(t, err)
@@ -102,19 +88,10 @@ func TestOPTIONS_Changelog(t *testing.T) {
 	}
 	res := req.fire()
 	defer res.Body.Close()
+	defer PrintResponse(t, res.Body)
 
-	RequireStatusCode(t, 200, res)
-	AssertHeadersEquals(t, res.Header, map[string]string{
-		"Access-Control-Allow-Origin":  "*",
-		"Access-Control-Allow-Headers": "*",
-	})
-	AssertHeadersContains(t, res.Header, map[string][]string{
-		"Content-Type":                 []string{"text/markdown"},
-		"Access-Control-Allow-Methods": []string{"GET", "HEAD", "OPTIONS"},
-	})
-	AssertHeadersMatches(t, res.Header, map[string]string{
-		"Access-Control-Allow-Methods": CORS_METHODS_PATTERN,
-	})
+	require.Equal(t, 200, res.StatusCode)
+	assertDefaultHeaders(t, res, changelogMediaType, changelogDefaultMethods)
 
 	body, err := ioutil.ReadAll(res.Body)
 	require.Nil(t, err)

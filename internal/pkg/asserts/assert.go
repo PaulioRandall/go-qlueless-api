@@ -1,23 +1,22 @@
 package asserts
 
 import (
+	"io"
 	"io/ioutil"
 	"net/http"
 	"regexp"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 )
 
-func RequireStatusCode(t *testing.T, expected int, res *http.Response) {
-	if expected != res.StatusCode {
-		b, err := ioutil.ReadAll(res.Body)
-		if err != nil {
-			panic(err)
-		}
-		t.Log("Response: " + string(b))
-		require.Equal(t, expected, res.StatusCode)
+func PrintResponse(t *testing.T, body io.Reader) {
+	b, err := ioutil.ReadAll(body)
+	if err != nil {
+		panic(err)
+	}
+	if len(b) > 0 {
+		t.Log("\n" + string(b))
 	}
 }
 

@@ -139,7 +139,6 @@ func WriteReply(res *http.ResponseWriter, data *[]byte, contentType string) {
 // WriteEmptyReply appends the required headers without writing any data
 func WriteEmptyReply(res *http.ResponseWriter, contentType string) {
 	(*res).Header().Set("Content-Type", contentType)
-	AppendCORSHeaders(res, "*")
 	(*res).WriteHeader(http.StatusOK)
 }
 

@@ -9,15 +9,12 @@ import (
 	. "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg"
 )
 
-const (
-	httpMethods = "GET, HEAD, OPTIONS"
-)
-
 var spec map[string]interface{} = nil
 
 // OpenAPIHandler handles requests for the services OpenAPI specification
 func OpenAPIHandler(res http.ResponseWriter, req *http.Request) {
 	LogRequest(req)
+	AppendCORSHeaders(&res, "GET, HEAD, OPTIONS")
 
 	switch req.Method {
 	case "GET":
@@ -25,11 +22,9 @@ func OpenAPIHandler(res http.ResponseWriter, req *http.Request) {
 	case "HEAD":
 		fallthrough
 	case "OPTIONS":
-		AppendCORSHeaders(&res, httpMethods)
 		AppendJSONHeader(&res, "vnd.oai.openapi")
 		res.WriteHeader(http.StatusOK)
 	default:
-		AppendCORSHeaders(&res, httpMethods)
 		MethodNotAllowed(&res, req)
 	}
 }
@@ -42,7 +37,6 @@ func get_Spec(res *http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	AppendCORSHeaders(res, httpMethods)
 	AppendJSONHeader(res, "vnd.oai.openapi")
 	(*res).WriteHeader(http.StatusOK)
 	json.NewEncoder(*res).Encode(spec)

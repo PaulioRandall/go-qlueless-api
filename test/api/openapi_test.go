@@ -11,6 +11,10 @@ import (
 	. "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/asserts"
 )
 
+const openapiMediaType = "application/vnd.oai.openapi+json"
+
+var openapiDefaultMethods = []string{"GET", "HEAD", "OPTIONS"}
+
 // TODO: Assert the body is a valid OpenAPI specification
 func TestGET_OpenAPI(t *testing.T) {
 	t.Log(`Given a loaded OpenAPI specification
@@ -29,19 +33,10 @@ func TestGET_OpenAPI(t *testing.T) {
 	}
 	res := req.fire()
 	defer res.Body.Close()
+	defer PrintResponse(t, res.Body)
 
-	RequireStatusCode(t, 200, res)
-	AssertHeadersEquals(t, res.Header, map[string]string{
-		"Access-Control-Allow-Origin":  "*",
-		"Access-Control-Allow-Headers": "*",
-	})
-	AssertHeadersContains(t, res.Header, map[string][]string{
-		"Content-Type":                 []string{"application/vnd.oai.openapi+json"},
-		"Access-Control-Allow-Methods": []string{"GET", "HEAD", "OPTIONS"},
-	})
-	AssertHeadersMatches(t, res.Header, map[string]string{
-		"Access-Control-Allow-Methods": CORS_METHODS_PATTERN,
-	})
+	require.Equal(t, 200, res.StatusCode)
+	assertDefaultHeaders(t, res, openapiMediaType, openapiDefaultMethods)
 
 	var spec map[string]interface{}
 	err := json.NewDecoder(res.Body).Decode(&spec)
@@ -66,19 +61,10 @@ func TestHEAD_OpenAPI(t *testing.T) {
 	}
 	res := req.fire()
 	defer res.Body.Close()
+	defer PrintResponse(t, res.Body)
 
-	RequireStatusCode(t, 200, res)
-	AssertHeadersEquals(t, res.Header, map[string]string{
-		"Access-Control-Allow-Origin":  "*",
-		"Access-Control-Allow-Headers": "*",
-	})
-	AssertHeadersContains(t, res.Header, map[string][]string{
-		"Content-Type":                 []string{"application/vnd.oai.openapi+json"},
-		"Access-Control-Allow-Methods": []string{"GET", "HEAD", "OPTIONS"},
-	})
-	AssertHeadersMatches(t, res.Header, map[string]string{
-		"Access-Control-Allow-Methods": CORS_METHODS_PATTERN,
-	})
+	require.Equal(t, 200, res.StatusCode)
+	assertDefaultHeaders(t, res, openapiMediaType, openapiDefaultMethods)
 
 	body, err := ioutil.ReadAll(res.Body)
 	require.Nil(t, err)
@@ -103,19 +89,10 @@ func TestOPTIONS_OpenAPI(t *testing.T) {
 	}
 	res := req.fire()
 	defer res.Body.Close()
+	defer PrintResponse(t, res.Body)
 
-	RequireStatusCode(t, 200, res)
-	AssertHeadersEquals(t, res.Header, map[string]string{
-		"Access-Control-Allow-Origin":  "*",
-		"Access-Control-Allow-Headers": "*",
-	})
-	AssertHeadersContains(t, res.Header, map[string][]string{
-		"Content-Type":                 []string{"application/vnd.oai.openapi+json"},
-		"Access-Control-Allow-Methods": []string{"GET", "HEAD", "OPTIONS"},
-	})
-	AssertHeadersMatches(t, res.Header, map[string]string{
-		"Access-Control-Allow-Methods": CORS_METHODS_PATTERN,
-	})
+	require.Equal(t, 200, res.StatusCode)
+	assertDefaultHeaders(t, res, openapiMediaType, openapiDefaultMethods)
 
 	body, err := ioutil.ReadAll(res.Body)
 	require.Nil(t, err)

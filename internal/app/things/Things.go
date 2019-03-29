@@ -11,6 +11,7 @@ import (
 // ThingsHandler handles requests to do with collections of Things
 func ThingsHandler(res http.ResponseWriter, req *http.Request) {
 	LogRequest(req)
+	AppendCORSHeaders(&res, "GET, POST, PUT, DELETE, HEAD, OPTIONS")
 
 	id := req.FormValue("id")
 	switch {

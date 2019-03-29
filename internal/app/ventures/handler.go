@@ -11,16 +11,13 @@ import (
 	v "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/ventures"
 )
 
-const (
-	httpMethods = "GET, POST, PUT, DELETE, HEAD, OPTIONS"
-)
-
 var ventures = v.NewVentureStore()
 
 // VenturesHandler handles requests to do with collections of, or individual,
 // Ventures.
 func VenturesHandler(res http.ResponseWriter, req *http.Request) {
 	LogRequest(req)
+	AppendCORSHeaders(&res, "GET, POST, PUT, DELETE, HEAD, OPTIONS")
 
 	id := req.FormValue("id")
 	switch {
@@ -36,7 +33,6 @@ func VenturesHandler(res http.ResponseWriter, req *http.Request) {
 	case req.Method == "HEAD":
 		fallthrough
 	case req.Method == "OPTIONS":
-		AppendCORSHeaders(&res, httpMethods)
 		AppendJSONHeader(&res, "")
 		res.WriteHeader(http.StatusOK)
 	default:
@@ -50,7 +46,6 @@ func get_AllVentures(res *http.ResponseWriter, req *http.Request) {
 	m := fmt.Sprintf("Found %d Ventures", len(vens))
 	data := PrepResponseData(req, vens, m)
 
-	AppendCORSHeaders(res, httpMethods)
 	AppendJSONHeader(res, "")
 	(*res).WriteHeader(http.StatusOK)
 	json.NewEncoder(*res).Encode(data)
@@ -66,7 +61,6 @@ func get_OneVenture(id string, res *http.ResponseWriter, req *http.Request) {
 	m := fmt.Sprintf("Found Venture '%s'", id)
 	data := PrepResponseData(req, ven, m)
 
-	AppendCORSHeaders(res, httpMethods)
 	AppendJSONHeader(res, "")
 	(*res).WriteHeader(http.StatusOK)
 	json.NewEncoder(*res).Encode(data)
@@ -91,7 +85,6 @@ func post_NewVenture(res *http.ResponseWriter, req *http.Request) {
 	log.Println(m)
 	data := PrepResponseData(req, ven, m)
 
-	AppendCORSHeaders(res, httpMethods)
 	AppendJSONHeader(res, "")
 	(*res).WriteHeader(http.StatusCreated)
 	json.NewEncoder(*res).Encode(data)
@@ -104,7 +97,6 @@ func findVenture(id string, res *http.ResponseWriter, req *http.Request) (v.Vent
 		r := WrappedReply{
 			Message: fmt.Sprintf("Thing '%s' not found", id),
 		}
-		AppendCORSHeaders(res, httpMethods)
 		Write4XXReply(res, req, 404, r)
 		return v.Venture{}, false
 	}
