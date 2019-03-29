@@ -28,7 +28,7 @@ func VenturesHandler(res http.ResponseWriter, req *http.Request) {
 	case req.Method == "POST":
 		_POST_NewVenture(&res, req)
 	//case req.Method == "PUT":
-	//put_OneThing(&res, req)
+	//_PUT_UpdatedVenture(&res, req)
 	case req.Method == "HEAD":
 		fallthrough
 	case req.Method == "OPTIONS":
@@ -87,6 +87,11 @@ func _POST_NewVenture(res *http.ResponseWriter, req *http.Request) {
 	AppendJSONHeader(res, "")
 	(*res).WriteHeader(http.StatusCreated)
 	json.NewEncoder(*res).Encode(data)
+}
+
+// _PUT_UpdatedVenture handles client requests for updating Ventures.
+func _PUT_UpdatedVenture(res *http.ResponseWriter, req *http.Request) {
+	// UNDER CONSTRUCTION
 }
 
 // _findVenture finds the Venture with the specified ID.

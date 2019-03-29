@@ -22,48 +22,16 @@
 "venture_update": {
   "type": "object",
   "required": [
-    "venture_id",
     "set",
     "values"
   ],
   "properties": {
-    "venture_id": {
-      "$ref": "#/components/x-hidden/venture_id"
-    },
     "set": {
-      "type": "array",
-      "description": "List of properties to update.",
-      "items": {
-        "type": "string",
-        "enum": [
-          "description",
-          "state",
-          "is_alive",
-          "order_ids",
-          "extra"
-        ]
-      }
+      "type": "string",
+      "description": "CSV of properties to update; pick one or many of 'description', 'state', 'is_alive', 'order_ids', and 'extra'"
     },
     "values": {
-      "type": "object",
-      "description": "Updated values for the properties.",
-      "properties": {
-        "description": {
-          "$ref": "#/components/x-hidden/description"
-        },
-        "state": {
-          "$ref": "#/components/x-hidden/state"
-        },
-        "is_alive": {
-          "$ref": "#/components/x-hidden/is_alive"
-        },
-        "order_ids": {
-          "$ref": "#/components/x-hidden/order_id_csv"
-        },
-        "extra": {
-          "$ref": "#/components/x-hidden/extra"
-        }
-      }
+      "$ref": "#/components/schemas/venture"
     }
   }
 },

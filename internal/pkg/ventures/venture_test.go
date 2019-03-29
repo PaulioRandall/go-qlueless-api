@@ -131,31 +131,27 @@ func TestVenture_Validate_6(t *testing.T) {
 // Venture.SplitOrderIDs
 // ****************************************************************************
 
-func TestSplitOrderIDs_1(t *testing.T) {
+func TestVenture_SplitOrderIDs_1(t *testing.T) {
 	a := Venture{
 		OrderIDs: "1,2,3",
 	}
 
 	s := a.SplitOrderIDs()
-
-	assert.Len(t, s, 3)
 	exp := []string{"1", "2", "3"}
 	assert.Equal(t, exp, s)
 }
 
-func TestSplitOrderIDs_2(t *testing.T) {
+func TestVenture_SplitOrderIDs_2(t *testing.T) {
 	a := Venture{
 		OrderIDs: "1",
 	}
 
 	s := a.SplitOrderIDs()
-
-	assert.Len(t, s, 1)
 	exp := []string{"1"}
 	assert.Equal(t, exp, s)
 }
 
-func TestSplitOrderIDs_3(t *testing.T) {
+func TestVenture_SplitOrderIDs_3(t *testing.T) {
 	a := Venture{}
 	s := a.SplitOrderIDs()
 	assert.Empty(t, s)
@@ -165,7 +161,7 @@ func TestSplitOrderIDs_3(t *testing.T) {
 // Venture.SetOrderIDs
 // ****************************************************************************
 
-func TestSetOrderIDs_1(t *testing.T) {
+func TestVenture_SetOrderIDs_1(t *testing.T) {
 	a := Venture{}
 	ids := []string{"1", "2", "3"}
 	a.SetOrderIDs(ids)
@@ -173,7 +169,7 @@ func TestSetOrderIDs_1(t *testing.T) {
 	assert.Equal(t, "1,2,3", a.OrderIDs)
 }
 
-func TestSetOrderIDs_2(t *testing.T) {
+func TestVenture_SetOrderIDs_2(t *testing.T) {
 	a := Venture{}
 	ids := []string{"1"}
 	a.SetOrderIDs(ids)
@@ -181,10 +177,76 @@ func TestSetOrderIDs_2(t *testing.T) {
 	assert.Equal(t, "1", a.OrderIDs)
 }
 
-func TestSetOrderIDs_3(t *testing.T) {
+func TestVenture_SetOrderIDs_3(t *testing.T) {
 	a := Venture{}
 	ids := []string{}
 	a.SetOrderIDs(ids)
 
 	assert.Equal(t, "", a.OrderIDs)
 }
+
+// ****************************************************************************
+// VentureUpdate.SplitProps
+// ****************************************************************************
+
+func TestVentureUpdate_SplitProps_1(t *testing.T) {
+	a := VentureUpdate{
+		Props: "description,state,extra",
+	}
+
+	s := a.SplitProps()
+	exp := []string{"description", "state", "extra"}
+	assert.Equal(t, exp, s)
+}
+
+func TestVentureUpdate_SplitProps_2(t *testing.T) {
+	a := VentureUpdate{
+		Props: "description",
+	}
+
+	s := a.SplitProps()
+	exp := []string{"description"}
+	assert.Equal(t, exp, s)
+}
+
+func TestVentureUpdate_SplitProps_3(t *testing.T) {
+	a := VentureUpdate{}
+	s := a.SplitProps()
+	assert.Empty(t, s)
+}
+
+// ****************************************************************************
+// VentureUpdate.Validate
+// ****************************************************************************
+
+func TestVentureUpdate_Validate_1(t *testing.T) {
+	a := VentureUpdate{
+		Props: "description,state,extra",
+		Values: Venture{
+			ID:          "1",
+			Description: "updated description",
+			OrderIDs:    "66,101,202",
+			State:       "updated state",
+			IsAlive:     false,
+			Extra:       "updated extra",
+		},
+	}
+
+	errMsgs := a.Validate()
+	assert.Empty(t, errMsgs)
+}
+
+func TestVentureUpdate_Validate_2(t *testing.T) {
+	a := VentureUpdate{
+		Props: "description",
+		Values: Venture{
+			ID:          "1",
+			Description: "updated description",
+		},
+	}
+
+	errMsgs := a.Validate()
+	assert.Empty(t, errMsgs)
+}
+
+// TODO: DO more Validate() tests

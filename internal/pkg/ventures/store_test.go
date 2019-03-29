@@ -7,6 +7,10 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+// ****************************************************************************
+// VentureStore.GetAll
+// ****************************************************************************
+
 func TestVentureStore_GetAll_1(t *testing.T) {
 	store := NewVentureStore()
 	a := Venture{
@@ -35,6 +39,10 @@ func TestVentureStore_GetAll_2(t *testing.T) {
 	s := store.GetAll()
 	require.Empty(t, s)
 }
+
+// ****************************************************************************
+// VentureStore.GetAllAlive
+// ****************************************************************************
 
 func TestVentureStore_GetAllAlive_1(t *testing.T) {
 	store := NewVentureStore()
@@ -65,6 +73,10 @@ func TestVentureStore_GetAllAlive_2(t *testing.T) {
 	s := store.GetAllAlive()
 	require.Empty(t, s)
 }
+
+// ****************************************************************************
+// VentureStore.Get
+// ****************************************************************************
 
 func TestVentureStore_Get_1(t *testing.T) {
 	store := NewVentureStore()
@@ -117,6 +129,10 @@ func TestVentureStore_Get_3(t *testing.T) {
 	require.False(t, ok)
 }
 
+// ****************************************************************************
+// VentureStore.Add
+// ****************************************************************************
+
 func TestVentureStor_Add_1(t *testing.T) {
 	store := NewVentureStore()
 	aIn := Venture{
@@ -154,6 +170,10 @@ func TestVentureStor_Add_2(t *testing.T) {
 	assert.Equal(t, "state", bOut.State)
 }
 
+// ****************************************************************************
+// VentureStore.Update
+// ****************************************************************************
+
 func TestVentureStore_Update_1(t *testing.T) {
 	store := NewVentureStore()
 	a := Venture{
@@ -186,13 +206,17 @@ func TestVentureStore_Update_2(t *testing.T) {
 	require.False(t, ok)
 }
 
-func TestVentureStore_GenNewID_1(t *testing.T) {
+// ****************************************************************************
+// VentureStore._genNewId
+// ****************************************************************************
+
+func TestVentureStore__genNewID_1(t *testing.T) {
 	store := NewVentureStore()
 	a := store._genNewID()
 	assert.Equal(t, "1", a)
 }
 
-func TestVentureStore_GenNewID_2(t *testing.T) {
+func TestVentureStore__genNewID_2(t *testing.T) {
 	store := NewVentureStore()
 	aIn := Venture{}
 	store.items["1"] = aIn
@@ -201,7 +225,7 @@ func TestVentureStore_GenNewID_2(t *testing.T) {
 	assert.Equal(t, "2", a)
 }
 
-func TestVentureStore_GenNewID_3(t *testing.T) {
+func TestVentureStore__genNewID_3(t *testing.T) {
 	store := NewVentureStore()
 	aIn := Venture{}
 	store.items["1"] = aIn
@@ -212,7 +236,7 @@ func TestVentureStore_GenNewID_3(t *testing.T) {
 	assert.Equal(t, "4", a)
 }
 
-func TestVentureStore_GenNewID_4(t *testing.T) {
+func TestVentureStore__genNewID_4(t *testing.T) {
 	store := NewVentureStore()
 	aIn := Venture{}
 	store.items["3"] = aIn

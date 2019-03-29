@@ -170,6 +170,49 @@ func TestPOST_Venture_2(t *testing.T) {
 	assertWrappedErrorBody(t, res)
 }
 
+// UNDER CONSTRUCTION
+func _TestPUT_Venture_1(t *testing.T) {
+	t.Log(`Given some Ventures already exist on the server
+		When an existing Venture is modified and PUT to the server
+		Then ensure the response code is 200
+		And the 'Content-Type' header contains 'application/json'
+		And 'Access-Control-Allow-Origin' is '*'
+		And 'Access-Control-Allow-Headers' is '*'
+		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, HEAD, and OPTIONS
+		And the body is a JSON object representing the updated input Venture
+		...`)
+
+	input := Venture{
+		ID:          "1",
+		Description: "Existing Venture",
+		State:       "In progress",
+		OrderIDs:    "1,2,3",
+	}
+	buf := new(bytes.Buffer)
+	json.NewEncoder(buf).Encode(&input)
+
+	req := APICall{
+		URL:    "http://localhost:8080/ventures",
+		Method: "PUT",
+		Body:   buf,
+	}
+	res := req.fire()
+	defer res.Body.Close()
+	defer PrintResponse(t, res.Body)
+
+	require.Equal(t, 201, res.StatusCode)
+	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
+
+	var output Venture
+	err := json.NewDecoder(res.Body).Decode(&output)
+	require.Nil(t, err)
+	AssertGenericVenture(t, output)
+
+	input.ID = output.ID
+	input.IsAlive = true
+	assert.Equal(t, input, output)
+}
+
 func TestHEAD_Ventures(t *testing.T) {
 	t.Log(`Given some Ventures already exist on the server
 		When only /ventures HEADers are requested
