@@ -249,4 +249,78 @@ func TestVentureUpdate_Validate_2(t *testing.T) {
 	assert.Empty(t, errMsgs)
 }
 
-// TODO: DO more Validate() tests
+func TestVentureUpdate_Validate_3(t *testing.T) {
+	a := VentureUpdate{
+		Props: "",
+		Values: Venture{
+			ID: "1",
+		},
+	}
+
+	errMsgs := a.Validate()
+	assert.Len(t, errMsgs, 1)
+}
+
+func TestVentureUpdate_Validate_4(t *testing.T) {
+	a := VentureUpdate{
+		Props: "description",
+		Values: Venture{
+			ID: "1",
+		},
+	}
+
+	errMsgs := a.Validate()
+	assert.Len(t, errMsgs, 1)
+}
+
+func TestVentureUpdate_Validate_5(t *testing.T) {
+	a := VentureUpdate{
+		Props: "INVALID",
+		Values: Venture{
+			ID: "1",
+		},
+	}
+
+	errMsgs := a.Validate()
+	assert.Len(t, errMsgs, 1)
+}
+
+func TestVentureUpdate_Validate_6(t *testing.T) {
+	a := VentureUpdate{
+		Props: "extra",
+		Values: Venture{
+			ID: "1",
+		},
+	}
+
+	errMsgs := a.Validate()
+	assert.Empty(t, errMsgs)
+}
+
+func TestVentureUpdate_Validate_7(t *testing.T) {
+	a := VentureUpdate{
+		Props: "order_ids",
+		Values: Venture{
+			ID:       "1",
+			OrderIDs: "1,2,ILLEGAL,99,100",
+		},
+	}
+
+	errMsgs := a.Validate()
+	assert.Len(t, errMsgs, 1)
+}
+
+func TestVentureUpdate_Validate_8(t *testing.T) {
+	a := VentureUpdate{
+		Props: "description,,state,order_ids,INVALID,extra",
+		Values: Venture{
+			OrderIDs: "ILLEGAL,66,101,202",
+			State:    "updated state",
+			IsAlive:  false,
+			Extra:    "updated extra",
+		},
+	}
+
+	errMsgs := a.Validate()
+	assert.Len(t, errMsgs, 5)
+}

@@ -84,13 +84,16 @@ func (vu *VentureUpdate) SplitProps() []string {
 func (vu *VentureUpdate) _validateProps(errMsgs []string) []string {
 	for _, p := range vu.SplitProps() {
 		switch p {
-		case "order_ids", "is_alive", "extra":
+		case "is_alive", "extra":
 		case "description":
 			errMsgs = AppendIfEmpty(vu.Values.Description, errMsgs,
 				"Ventures must have a description.")
 		case "state":
 			errMsgs = AppendIfEmpty(vu.Values.State, errMsgs,
 				"Ventures must have a state.")
+		case "order_ids":
+			errMsgs = AppendIfNotPositiveIntCSV(vu.Values.OrderIDs, errMsgs,
+				"The list of Order IDs within a Venture must be an integer CSV")
 		default:
 			errMsgs = append(errMsgs,
 				fmt.Sprintf("Can't update unknown or immutable property '%s'.", p))
