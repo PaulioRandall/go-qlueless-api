@@ -216,7 +216,117 @@ func TestPUT_Venture_1(t *testing.T) {
 	assert.Equal(t, input.Values, output)
 }
 
-// TODO: Add more (PUT) /ventures API tests
+func TestPUT_Venture_2(t *testing.T) {
+	t.Log(`Given some Ventures already exist on the server
+		When an non-existent Venture is PUT to the server
+		Then ensure the response code is 400
+		And the 'Content-Type' header contains 'application/json'
+		And 'Access-Control-Allow-Origin' is '*'
+		And 'Access-Control-Allow-Headers' is '*'
+		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, HEAD, and OPTIONS
+		And the body is a JSON object representing an error response
+		...`)
+
+	input := VentureUpdate{
+		Props: "description, state, order_ids, extra",
+		Values: Venture{
+			ID:          "999999",
+			Description: "Black blizzard",
+			State:       "In progress",
+			OrderIDs:    "1,2,3",
+			Extra:       "colour: black; power: 9000",
+		},
+	}
+
+	buf := new(bytes.Buffer)
+	json.NewEncoder(buf).Encode(&input)
+
+	req := APICall{
+		URL:    "http://localhost:8080/ventures",
+		Method: "PUT",
+		Body:   buf,
+	}
+	res := req.fire()
+	defer res.Body.Close()
+	defer PrintResponse(t, res.Body)
+
+	require.Equal(t, 400, res.StatusCode)
+	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
+	assertWrappedErrorBody(t, res)
+}
+
+func TestPUT_Venture_3(t *testing.T) {
+	t.Log(`Given some Ventures already exist on the server
+		When an Venture without an ID is PUT to the server
+		Then ensure the response code is 400
+		And the 'Content-Type' header contains 'application/json'
+		And 'Access-Control-Allow-Origin' is '*'
+		And 'Access-Control-Allow-Headers' is '*'
+		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, HEAD, and OPTIONS
+		And the body is a JSON object representing an error response
+		...`)
+
+	input := VentureUpdate{
+		Props: "description, state, order_ids, extra",
+		Values: Venture{
+			Description: "Black blizzard",
+			State:       "In progress",
+			OrderIDs:    "1,2,3",
+			Extra:       "colour: black; power: 9000",
+		},
+	}
+
+	buf := new(bytes.Buffer)
+	json.NewEncoder(buf).Encode(&input)
+
+	req := APICall{
+		URL:    "http://localhost:8080/ventures",
+		Method: "PUT",
+		Body:   buf,
+	}
+	res := req.fire()
+	defer res.Body.Close()
+	defer PrintResponse(t, res.Body)
+
+	require.Equal(t, 400, res.StatusCode)
+	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
+	assertWrappedErrorBody(t, res)
+}
+
+func TestPUT_Venture_4(t *testing.T) {
+	t.Log(`Given some Ventures already exist on the server
+		When an existent Venture is updated with invalid content and PUT to the server
+		Then ensure the response code is 400
+		And the 'Content-Type' header contains 'application/json'
+		And 'Access-Control-Allow-Origin' is '*'
+		And 'Access-Control-Allow-Headers' is '*'
+		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, HEAD, and OPTIONS
+		And the body is a JSON object representing an error response
+		...`)
+
+	input := VentureUpdate{
+		Props: "description, state, order_ids, extra",
+		Values: Venture{
+			ID: "1",
+		},
+	}
+
+	buf := new(bytes.Buffer)
+	json.NewEncoder(buf).Encode(&input)
+
+	req := APICall{
+		URL:    "http://localhost:8080/ventures",
+		Method: "PUT",
+		Body:   buf,
+	}
+	res := req.fire()
+	defer res.Body.Close()
+	defer PrintResponse(t, res.Body)
+
+	require.Equal(t, 400, res.StatusCode)
+	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
+	assertWrappedErrorBody(t, res)
+}
 
 func TestHEAD_Ventures(t *testing.T) {
 	t.Log(`Given some Ventures already exist on the server
@@ -277,5 +387,5 @@ func TestINVALID_Ventures(t *testing.T) {
 		And there is NO response body
 		...`)
 
-	assertNotAllowedMethods(t, "http://localhost:8080/ventures", ventureHttpMethods)
+	verifyNotAllowedMethods(t, "http://localhost:8080/ventures", ventureHttpMethods)
 }

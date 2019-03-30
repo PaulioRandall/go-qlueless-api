@@ -189,8 +189,10 @@ func _validateVentureUpdate(vu v.VentureUpdate, res *http.ResponseWriter, req *h
 func _updateVenture(vu v.VentureUpdate, res *http.ResponseWriter, req *http.Request) (v.Venture, bool) {
 	ven, ok := ventures.Update(vu)
 	if !ok {
-		log.Printf("[BUG] Failed to update Venture '%s' in data store\n", vu.Values.ID)
-		Write500Reply(res, req)
+		r := WrappedReply{
+			Message: fmt.Sprintf("Venture with ID '%s' could not be found", vu.Values.ID),
+		}
+		Write4XXReply(res, req, 400, r)
 		return v.Venture{}, false
 	}
 	return ven, true

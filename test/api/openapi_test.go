@@ -100,5 +100,5 @@ func TestINVALID_OpenAPI(t *testing.T) {
 		And there is NO response body
 		...`)
 
-	assertNotAllowedMethods(t, "http://localhost:8080/openapi", openapiHttpMethods)
+	verifyNotAllowedMethods(t, "http://localhost:8080/openapi", openapiHttpMethods)
 }

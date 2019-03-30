@@ -84,9 +84,9 @@ func assertWrappedErrorBody(t *testing.T, res *http.Response) {
 	AssertGenericError(t, reply)
 }
 
-// assertNotAllowedMethods asserts that the supplied methods are not allowed
+// verifyNotAllowedMethods asserts that the supplied methods are not allowed
 // for provided endpoint
-func assertNotAllowedMethods(t *testing.T, url string, allowedMethods []string) {
+func verifyNotAllowedMethods(t *testing.T, url string, allowedMethods []string) {
 
 	isAllowed := func(m string) bool {
 		for _, allowed := range allowedMethods {

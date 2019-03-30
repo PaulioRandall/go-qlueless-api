@@ -96,5 +96,5 @@ func TestINVALID_Changelog(t *testing.T) {
 		And there is NO response body
 		...`)
 
-	assertNotAllowedMethods(t, "http://localhost:8080/changelog", changelogHttpMethods)
+	verifyNotAllowedMethods(t, "http://localhost:8080/changelog", changelogHttpMethods)
 }
