@@ -77,6 +77,12 @@ func (vu *VentureUpdate) SplitProps() []string {
 	return strings.Split(vu.Props, ",")
 }
 
+// Clean cleans up the Venture update by removing whitespace where applicable
+func (vu *VentureUpdate) Clean() {
+	vu.Props = StripWhitespace(vu.Props)
+	vu.Values.Clean()
+}
+
 // _validateProps is a private function that checks the properties declared for
 // change are valid and the property value for each is valid. Returned is the
 // input slice of human readable error messages with the violations found

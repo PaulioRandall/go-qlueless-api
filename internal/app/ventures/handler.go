@@ -27,8 +27,8 @@ func VenturesHandler(res http.ResponseWriter, req *http.Request) {
 		_GET_OneVenture(id, &res, req)
 	case req.Method == "POST":
 		_POST_NewVenture(&res, req)
-	//case req.Method == "PUT":
-	//_PUT_UpdatedVenture(&res, req)
+	case req.Method == "PUT":
+		_PUT_UpdatedVenture(&res, req)
 	case req.Method == "HEAD":
 		fallthrough
 	case req.Method == "OPTIONS":
@@ -74,7 +74,7 @@ func _POST_NewVenture(res *http.ResponseWriter, req *http.Request) {
 
 	ven.Clean()
 	ven.IsAlive = true
-	ven, ok = _validateNewVenture(ven, res, req)
+	ok = _validateNewVenture(ven, res, req)
 	if !ok {
 		return
 	}
@@ -91,7 +91,29 @@ func _POST_NewVenture(res *http.ResponseWriter, req *http.Request) {
 
 // _PUT_UpdatedVenture handles client requests for updating Ventures.
 func _PUT_UpdatedVenture(res *http.ResponseWriter, req *http.Request) {
-	// UNDER CONSTRUCTION
+	vu, ok := _decodeVentureUpdate(res, req)
+	if !ok {
+		return
+	}
+
+	vu.Clean()
+	ok = _validateVentureUpdate(vu, res, req)
+	if !ok {
+		return
+	}
+
+	ven, ok := _updateVenture(vu, res, req)
+	if !ok {
+		return
+	}
+
+	m := fmt.Sprintf("Venture with ID '%s' updated", ven.ID)
+	log.Println(m)
+	data := PrepResponseData(req, ven, m)
+
+	AppendJSONHeader(res, "")
+	(*res).WriteHeader(http.StatusOK)
+	json.NewEncoder(*res).Encode(data)
 }
 
 // _findVenture finds the Venture with the specified ID.
@@ -123,13 +145,52 @@ func _decodeVenture(res *http.ResponseWriter, req *http.Request) (v.Venture, boo
 }
 
 // _validateNewVenture validates a new Venture that has yet to be assigned an ID.
-func _validateNewVenture(ven v.Venture, res *http.ResponseWriter, req *http.Request) (v.Venture, bool) {
+func _validateNewVenture(ven v.Venture, res *http.ResponseWriter, req *http.Request) bool {
 	errMsgs := ven.Validate(true)
 	if len(errMsgs) != 0 {
 		r := WrappedReply{
 			Message: strings.Join(errMsgs, " "),
 		}
 		Write4XXReply(res, req, 400, r)
+		return false
+	}
+	return true
+}
+
+// _decodeVentureUpdate decodes an update to a Venture from a Request.Body.
+func _decodeVentureUpdate(res *http.ResponseWriter, req *http.Request) (v.VentureUpdate, bool) {
+	var vu v.VentureUpdate
+	d := json.NewDecoder(req.Body)
+	err := d.Decode(&vu)
+	if err != nil {
+		r := WrappedReply{
+			Message: "Unable to decode request body into a Venture update",
+		}
+		Write4XXReply(res, req, 400, r)
+		return v.VentureUpdate{}, false
+	}
+	return vu, true
+}
+
+// _validateVentureUpdate validates a Venture update.
+func _validateVentureUpdate(vu v.VentureUpdate, res *http.ResponseWriter, req *http.Request) bool {
+	errMsgs := vu.Validate()
+	if len(errMsgs) != 0 {
+		r := WrappedReply{
+			Message: strings.Join(errMsgs, " "),
+		}
+		Write4XXReply(res, req, 400, r)
+		return false
+	}
+	return true
+}
+
+// _updateVenture updates a Venture in the data store.
+func _updateVenture(vu v.VentureUpdate, res *http.ResponseWriter, req *http.Request) (v.Venture, bool) {
+	ven, ok := ventures.Update(vu)
+	if !ok {
+		log.Printf("[BUG] Failed to update Venture '%s' in data store\n", vu.Values.ID)
+		Write500Reply(res, req)
 		return v.Venture{}, false
 	}
 	return ven, true

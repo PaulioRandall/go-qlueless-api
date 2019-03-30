@@ -216,6 +216,48 @@ func TestVentureUpdate_SplitProps_3(t *testing.T) {
 }
 
 // ****************************************************************************
+// VentureUpdate.Clean
+// ****************************************************************************
+
+func TestVentureUpdate_Clean_1(t *testing.T) {
+	a := VentureUpdate{
+		Props: "\n\t\v   \r\f  state,extra,\v    is_alive \f\t",
+		Values: Venture{
+			Description: "\n\t\v description \r\f ",
+			ID:          "\n\t\v 1 \r\f ",
+			OrderIDs:    "\n\t\v 2 \r\f ,    3,4,\v 999 \f\t",
+			State:       "\n\t\v state \r\f ",
+			IsAlive:     true,
+			Extra:       "\n\t\v extra \r\f",
+		},
+	}
+
+	a.Clean()
+
+	assert.Equal(t, "state,extra,is_alive", a.Props)
+	assert.Equal(t, "description", a.Values.Description)
+	assert.Equal(t, "1", a.Values.ID)
+	assert.Equal(t, "2,3,4,999", a.Values.OrderIDs)
+	assert.Equal(t, "state", a.Values.State)
+	assert.True(t, a.Values.IsAlive)
+	assert.Equal(t, "\n\t\v extra \r\f", a.Values.Extra)
+}
+
+func TestVentureUpdate_Clean_2(t *testing.T) {
+	a := VentureUpdate{
+		Props: "description,state,extra",
+	}
+	a.Clean()
+	assert.Equal(t, "description,state,extra", a.Props)
+}
+
+func TestVentureUpdate_Clean_3(t *testing.T) {
+	a := VentureUpdate{}
+	a.Clean()
+	assert.Equal(t, VentureUpdate{}, a)
+}
+
+// ****************************************************************************
 // VentureUpdate.Validate
 // ****************************************************************************
 

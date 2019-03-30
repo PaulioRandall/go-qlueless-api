@@ -177,33 +177,71 @@ func TestVentureStor_Add_2(t *testing.T) {
 func TestVentureStore_Update_1(t *testing.T) {
 	store := NewVentureStore()
 	a := Venture{
-		ID:          "1",
-		Description: "original",
+		ID: "1",
 	}
 	store.items["1"] = a
 
-	bIn := Venture{
-		ID:          "1",
-		Description: "new",
+	au := VentureUpdate{
+		Props: "description,order_ids,state,is_alive,extra",
+		Values: Venture{
+			ID:          "1",
+			Description: "new",
+			OrderIDs:    "new",
+			State:       "new",
+			IsAlive:     true,
+			Extra:       "new",
+		},
 	}
 
-	ok := store.Update(bIn)
+	v, ok := store.Update(au)
 	require.True(t, ok)
+	assert.Equal(t, au.Values, v)
 
 	bOut, ok := store.items["1"]
 	require.True(t, ok)
-	assert.Equal(t, bIn, bOut)
+	assert.Equal(t, au.Values, bOut)
 }
 
 func TestVentureStore_Update_2(t *testing.T) {
 	store := NewVentureStore()
-	aIn := Venture{
-		ID:          "1",
-		Description: "original",
+	au := VentureUpdate{
+		Props: "description",
+		Values: Venture{
+			ID:          "1",
+			Description: "original",
+		},
 	}
 
-	ok := store.Update(aIn)
+	_, ok := store.Update(au)
 	require.False(t, ok)
+}
+
+func TestVentureStore_Update_3(t *testing.T) {
+	store := NewVentureStore()
+	a := Venture{
+		ID: "1",
+	}
+	store.items["1"] = a
+
+	au := VentureUpdate{
+		Props: "IGNORED,SKIPPED",
+		Values: Venture{
+			ID:          "1",
+			Description: "new",
+			OrderIDs:    "new",
+			State:       "new",
+			IsAlive:     true,
+			Extra:       "new",
+		},
+	}
+
+	v, ok := store.Update(au)
+	require.True(t, ok)
+	assert.Equal(t, a, v)
+
+	bOut, ok := store.items["1"]
+	require.True(t, ok)
+	assert.Equal(t, a, bOut)
 }
 
 // ****************************************************************************

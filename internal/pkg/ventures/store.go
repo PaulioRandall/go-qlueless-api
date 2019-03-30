@@ -19,12 +19,12 @@ func NewVentureStore() VentureStore {
 }
 
 // GetAll returns a slice of all Ventures currently held within the data store
-func (v *VentureStore) GetAll() []Venture {
-	v.mutex.RLock()
-	defer v.mutex.RUnlock()
+func (vs *VentureStore) GetAll() []Venture {
+	vs.mutex.RLock()
+	defer vs.mutex.RUnlock()
 
 	r := []Venture{}
-	for _, v := range v.items {
+	for _, v := range vs.items {
 		r = append(r, v)
 	}
 
@@ -32,12 +32,12 @@ func (v *VentureStore) GetAll() []Venture {
 }
 
 // GetAllAlive returns a slice of all Ventures currently held within the data store
-func (v *VentureStore) GetAllAlive() []Venture {
-	v.mutex.RLock()
-	defer v.mutex.RUnlock()
+func (vs *VentureStore) GetAllAlive() []Venture {
+	vs.mutex.RLock()
+	defer vs.mutex.RUnlock()
 
 	r := []Venture{}
-	for _, v := range v.items {
+	for _, v := range vs.items {
 		if v.IsAlive {
 			r = append(r, v)
 		}
@@ -47,47 +47,71 @@ func (v *VentureStore) GetAllAlive() []Venture {
 }
 
 // Get returns a specific Venture if found else the bool result will be false
-func (v *VentureStore) Get(id string) (Venture, bool) {
-	v.mutex.RLock()
-	defer v.mutex.RUnlock()
+func (vs *VentureStore) Get(id string) (Venture, bool) {
+	vs.mutex.RLock()
+	defer vs.mutex.RUnlock()
 
-	r, ok := v.items[id]
+	r, ok := vs.items[id]
 	return r, ok
 }
 
 // Add adds a Venture to the data store assigning an unused ID
-func (v *VentureStore) Add(new Venture) Venture {
-	v.mutex.Lock()
-	defer v.mutex.Unlock()
+func (vs *VentureStore) Add(new Venture) Venture {
+	vs.mutex.Lock()
+	defer vs.mutex.Unlock()
 
-	new.ID = v._genNewID()
-	v.items[new.ID] = new
+	new.ID = vs._genNewID()
+	vs.items[new.ID] = new
 	return new
+}
+
+// _updateVenture is a file private function that updates a Venture with the
+// changes defined within the supplied venture update structure
+func (vs *VentureStore) _updateVenture(v Venture, vu VentureUpdate) Venture {
+	u := vu.Values
+	for _, p := range vu.SplitProps() {
+		switch p {
+		case "description":
+			v.Description = u.Description
+		case "order_ids":
+			v.OrderIDs = u.OrderIDs
+		case "state":
+			v.State = u.State
+		case "is_alive":
+			v.IsAlive = u.IsAlive
+		case "extra":
+			v.Extra = u.Extra
+		}
+	}
+	return v
 }
 
 // Update updates a Venture within the data store. If false is returned then
 // the item does not currently exist within the data store
-func (v *VentureStore) Update(ven Venture) bool {
-	v.mutex.Lock()
-	defer v.mutex.Unlock()
+func (vs *VentureStore) Update(vu VentureUpdate) (Venture, bool) {
 
-	_, ok := v.items[ven.ID]
+	v, ok := vs.Get(vu.Values.ID)
 	if !ok {
-		return false
+		return Venture{}, false
 	}
 
-	v.items[ven.ID] = ven
-	return true
+	v = vs._updateVenture(v, vu)
+
+	vs.mutex.Lock()
+	defer vs.mutex.Unlock()
+
+	vs.items[v.ID] = v
+	return v, true
 }
 
 // _genNewID generates a new, unused, Venture ID
-func (v *VentureStore) _genNewID() string {
+func (vs *VentureStore) _genNewID() string {
 	ID := 1
 	var r string
 
 	for {
 		r = strconv.Itoa(ID)
-		_, ok := v.items[r]
+		_, ok := vs.items[r]
 		if !ok {
 			break
 		}
