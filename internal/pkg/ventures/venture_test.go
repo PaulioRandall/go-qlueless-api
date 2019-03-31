@@ -1,13 +1,68 @@
 package ventures
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 // ****************************************************************************
-// Venture.Clean
+// DecodeVenture()
+// ****************************************************************************
+
+func TestVenture_Decode_1(t *testing.T) {
+	a := strings.NewReader(`{
+		"description": "description",
+		"venture_id": "1",
+		"order_ids": "2,3,4,999",
+		"state": "state",
+		"is_alive": true,
+		"extra": "extra"
+	}`)
+
+	exp := Venture{
+		Description: "description",
+		ID:          "1",
+		OrderIDs:    "2,3,4,999",
+		State:       "state",
+		IsAlive:     true,
+		Extra:       "extra",
+	}
+
+	b, err := DecodeVenture(a)
+	require.Nil(t, err)
+	assert.Equal(t, exp, b)
+}
+
+func TestVenture_Decode_2(t *testing.T) {
+	a := strings.NewReader(`{}`)
+
+	exp := Venture{}
+
+	b, err := DecodeVenture(a)
+	require.Nil(t, err)
+	assert.Empty(t, exp, b)
+}
+
+func TestVenture_Decode_3(t *testing.T) {
+	a := strings.NewReader(``)
+	_, err := DecodeVenture(a)
+	require.NotNil(t, err)
+}
+
+func TestVenture_Decode_4(t *testing.T) {
+	a := strings.NewReader(`{
+		state: "<---INVALID",
+	}`)
+
+	_, err := DecodeVenture(a)
+	require.NotNil(t, err)
+}
+
+// ****************************************************************************
+// Venture.Clean()
 // ****************************************************************************
 func TestVenture_Clean_1(t *testing.T) {
 	a := Venture{
@@ -55,7 +110,7 @@ func TestVenture_Clean_3(t *testing.T) {
 }
 
 // ****************************************************************************
-// Venture.Validate
+// Venture.Validate()
 // ****************************************************************************
 
 func TestVenture_Validate_1(t *testing.T) {
@@ -128,7 +183,7 @@ func TestVenture_Validate_6(t *testing.T) {
 }
 
 // ****************************************************************************
-// Venture.SplitOrderIDs
+// Venture.SplitOrderIDs()
 // ****************************************************************************
 
 func TestVenture_SplitOrderIDs_1(t *testing.T) {
@@ -158,7 +213,7 @@ func TestVenture_SplitOrderIDs_3(t *testing.T) {
 }
 
 // ****************************************************************************
-// Venture.SetOrderIDs
+// Venture.SetOrderIDs()
 // ****************************************************************************
 
 func TestVenture_SetOrderIDs_1(t *testing.T) {
@@ -186,7 +241,7 @@ func TestVenture_SetOrderIDs_3(t *testing.T) {
 }
 
 // ****************************************************************************
-// VentureUpdate.SplitProps
+// VentureUpdate.SplitProps()
 // ****************************************************************************
 
 func TestVentureUpdate_SplitProps_1(t *testing.T) {
@@ -216,7 +271,7 @@ func TestVentureUpdate_SplitProps_3(t *testing.T) {
 }
 
 // ****************************************************************************
-// VentureUpdate.Clean
+// VentureUpdate.Clean()
 // ****************************************************************************
 
 func TestVentureUpdate_Clean_1(t *testing.T) {
@@ -258,7 +313,7 @@ func TestVentureUpdate_Clean_3(t *testing.T) {
 }
 
 // ****************************************************************************
-// VentureUpdate.Validate
+// VentureUpdate.Validate()
 // ****************************************************************************
 
 func TestVentureUpdate_Validate_1(t *testing.T) {

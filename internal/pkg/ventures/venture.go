@@ -1,7 +1,9 @@
 package ventures
 
 import (
+	"encoding/json"
 	"fmt"
+	"io"
 	"strings"
 
 	. "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg"
@@ -15,6 +17,14 @@ type Venture struct {
 	State       string `json:"state"`
 	IsAlive     bool   `json:"is_alive"`
 	Extra       string `json:"extra,omitempty"`
+}
+
+// DecodeVenture decodes a Venture from data obtained via a Reader
+func DecodeVenture(r io.Reader) (Venture, error) {
+	var v Venture
+	d := json.NewDecoder(r)
+	err := d.Decode(&v)
+	return v, err
 }
 
 // Clean removes redundent whitespace from property values within a Venture
