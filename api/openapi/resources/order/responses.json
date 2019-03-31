@@ -19,6 +19,9 @@
         ]
       }
     }
+  },
+  "headers": {
+    "$ref": "#/components/x-hidden/defaultHeaders"
   }
 },
 "order_200": {
@@ -29,5 +32,8 @@
         "$ref": "#/components/schemas/order"
       }
     }
+  },
+  "headers": {
+    "$ref": "#/components/x-hidden/defaultHeaders"
   }
 }

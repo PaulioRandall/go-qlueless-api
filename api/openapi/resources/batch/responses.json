@@ -19,6 +19,9 @@
         ]
       }
     }
+  },
+  "headers": {
+    "$ref": "#/components/x-hidden/defaultHeaders"
   }
 },
 "batch_200": {
@@ -29,5 +32,8 @@
         "$ref": "#/components/schemas/batch"
       }
     }
+  },
+  "headers": {
+    "$ref": "#/components/x-hidden/defaultHeaders"
   }
 }

@@ -7,6 +7,9 @@
         "content": {
           "application/vnd.oai.openapi+json": {
           }
+        },
+        "headers": {
+          "$ref": "#/components/x-hidden/defaultHeaders"
         }
       },
       "default": {

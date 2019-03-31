@@ -28,6 +28,9 @@
 		        "content": {
 		          "application/vnd.oai.openapi+json": {
 		          }
+		        },
+		        "headers": {
+		          "$ref": "#/components/x-hidden/defaultHeaders"
 		        }
 		      },
 		      "default": {
@@ -45,6 +48,9 @@
 		        "content": {
 		          "text/markdown": {
 		          }
+		        },
+		        "headers": {
+		          "$ref": "#/components/x-hidden/defaultHeaders"
 		        }
 		      },
 		      "default": {
@@ -378,6 +384,9 @@
 			        ]
 			      }
 			    }
+			  },
+			  "headers": {
+			    "$ref": "#/components/x-hidden/defaultHeaders"
 			  }
 			},
 			"venture_200": {
@@ -388,6 +397,9 @@
 			        "$ref": "#/components/schemas/venture"
 			      }
 			    }
+			  },
+			  "headers": {
+			    "$ref": "#/components/x-hidden/defaultHeaders"
 			  }
 			},
 			"orders_or_order_wrappable_200": {
@@ -411,6 +423,9 @@
 			        ]
 			      }
 			    }
+			  },
+			  "headers": {
+			    "$ref": "#/components/x-hidden/defaultHeaders"
 			  }
 			},
 			"order_200": {
@@ -421,6 +436,9 @@
 			        "$ref": "#/components/schemas/order"
 			      }
 			    }
+			  },
+			  "headers": {
+			    "$ref": "#/components/x-hidden/defaultHeaders"
 			  }
 			},
 			"batches_or_batch_wrappable_200": {
@@ -444,6 +462,9 @@
 			        ]
 			      }
 			    }
+			  },
+			  "headers": {
+			    "$ref": "#/components/x-hidden/defaultHeaders"
 			  }
 			},
 			"batch_200": {
@@ -454,6 +475,9 @@
 			        "$ref": "#/components/schemas/batch"
 			      }
 			    }
+			  },
+			  "headers": {
+			    "$ref": "#/components/x-hidden/defaultHeaders"
 			  }
 			},
 			"error": {
@@ -464,6 +488,9 @@
 			        "$ref": "#/components/schemas/error"
 			      }
 			    }
+			  },
+			  "headers": {
+			    "$ref": "#/components/x-hidden/defaultHeaders"
 			  }
 			}
     },
@@ -901,6 +928,26 @@
 			"extra": {
 			  "type": "string",
 			  "description": "Additional CLOB data managed by clients."
+			},
+			"defaultHeaders": {
+			  "Access-Control-Allow-Origin": {
+			    "schema": {
+			      "required": true,
+			      "type": "string"
+			    }
+			  },
+			  "Access-Control-Allow-Headers": {
+			    "schema": {
+			      "required": true,
+			      "type": "string"
+			    }
+			  },
+			  "Access-Control-Allow-Methods": {
+			    "schema": {
+			      "required": true,
+			      "type": "string"
+			    }
+			  }
 			}
     }
 	}

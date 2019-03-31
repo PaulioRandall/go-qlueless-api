@@ -6,5 +6,8 @@
         "$ref": "#/components/schemas/error"
       }
     }
+  },
+  "headers": {
+    "$ref": "#/components/x-hidden/defaultHeaders"
   }
 }

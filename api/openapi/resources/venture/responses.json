@@ -19,6 +19,9 @@
         ]
       }
     }
+  },
+  "headers": {
+    "$ref": "#/components/x-hidden/defaultHeaders"
   }
 },
 "venture_200": {
@@ -29,5 +32,8 @@
         "$ref": "#/components/schemas/venture"
       }
     }
+  },
+  "headers": {
+    "$ref": "#/components/x-hidden/defaultHeaders"
   }
 }

@@ -7,6 +7,9 @@
         "content": {
           "text/markdown": {
           }
+        },
+        "headers": {
+          "$ref": "#/components/x-hidden/defaultHeaders"
         }
       },
       "default": {
