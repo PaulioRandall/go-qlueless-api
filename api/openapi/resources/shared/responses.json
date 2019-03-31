@@ -7,7 +7,7 @@
       }
     }
   },
-  "headers": {
-    "$ref": "#/components/x-hidden/defaultHeaders"
-  }
+  "headers": [{
+    "$ref": "#/components/x-hidden/default_headers"
+  }]
 }

@@ -20,9 +20,9 @@
       }
     }
   },
-  "headers": {
-    "$ref": "#/components/x-hidden/defaultHeaders"
-  }
+  "headers": [{
+    "$ref": "#/components/x-hidden/default_headers"
+  }]
 },
 "venture_200": {
   "description": "Single Venture.",
@@ -33,13 +33,13 @@
       }
     }
   },
-  "headers": {
-    "$ref": "#/components/x-hidden/defaultHeaders"
-  }
+  "headers": [{
+    "$ref": "#/components/x-hidden/default_headers"
+  }]
 },
 "venture_200_no_content": {
-  "description": "Single Venture.",
-  "headers": {
-    "$ref": "#/components/x-hidden/defaultHeaders"
-  }
+  "description": "Headers only.",
+  "headers": [{
+    "$ref": "#/components/x-hidden/default_headers"
+  }]
 }

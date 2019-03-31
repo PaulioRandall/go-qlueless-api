@@ -20,9 +20,9 @@
       }
     }
   },
-  "headers": {
-    "$ref": "#/components/x-hidden/defaultHeaders"
-  }
+  "headers": [{
+    "$ref": "#/components/x-hidden/default_headers"
+  }]
 },
 "order_200": {
   "description": "Single Order.",
@@ -33,7 +33,7 @@
       }
     }
   },
-  "headers": {
-    "$ref": "#/components/x-hidden/defaultHeaders"
-  }
+  "headers": [{
+    "$ref": "#/components/x-hidden/default_headers"
+  }]
 }

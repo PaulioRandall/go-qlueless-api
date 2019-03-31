@@ -46,22 +46,25 @@
   "type": "string",
   "description": "Additional CLOB data managed by clients."
 },
-"defaultHeaders": {
+"default_headers": {
   "Access-Control-Allow-Origin": {
+    "required": true,
+    "allowEmptyValue": false,
     "schema": {
-      "required": true,
       "type": "string"
     }
   },
   "Access-Control-Allow-Headers": {
+    "required": true,
+    "allowEmptyValue": false,
     "schema": {
-      "required": true,
       "type": "string"
     }
   },
   "Access-Control-Allow-Methods": {
+    "required": true,
+    "allowEmptyValue": false,
     "schema": {
-      "required": true,
       "type": "string"
     }
   }

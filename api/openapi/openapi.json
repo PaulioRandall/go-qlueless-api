@@ -29,9 +29,9 @@
 		          "application/vnd.oai.openapi+json": {
 		          }
 		        },
-		        "headers": {
-		          "$ref": "#/components/x-hidden/defaultHeaders"
-		        }
+		        "headers": [{
+		          "$ref": "#/components/x-hidden/default_headers"
+		        }]
 		      },
 		      "default": {
 		        "$ref": "#/components/responses/error"
@@ -49,9 +49,9 @@
 		          "text/markdown": {
 		          }
 		        },
-		        "headers": {
-		          "$ref": "#/components/x-hidden/defaultHeaders"
-		        }
+		        "headers": [{
+		          "$ref": "#/components/x-hidden/default_headers"
+		        }]
 		      },
 		      "default": {
 		        "$ref": "#/components/responses/error"
@@ -409,9 +409,9 @@
 			      }
 			    }
 			  },
-			  "headers": {
-			    "$ref": "#/components/x-hidden/defaultHeaders"
-			  }
+			  "headers": [{
+			    "$ref": "#/components/x-hidden/default_headers"
+			  }]
 			},
 			"venture_200": {
 			  "description": "Single Venture.",
@@ -422,15 +422,15 @@
 			      }
 			    }
 			  },
-			  "headers": {
-			    "$ref": "#/components/x-hidden/defaultHeaders"
-			  }
+			  "headers": [{
+			    "$ref": "#/components/x-hidden/default_headers"
+			  }]
 			},
 			"venture_200_no_content": {
-			  "description": "Single Venture.",
-			  "headers": {
-			    "$ref": "#/components/x-hidden/defaultHeaders"
-			  }
+			  "description": "Headers only.",
+			  "headers": [{
+			    "$ref": "#/components/x-hidden/default_headers"
+			  }]
 			},
 			"orders_or_order_wrappable_200": {
 			  "description": "List of Orders or a single Order.",
@@ -454,9 +454,9 @@
 			      }
 			    }
 			  },
-			  "headers": {
-			    "$ref": "#/components/x-hidden/defaultHeaders"
-			  }
+			  "headers": [{
+			    "$ref": "#/components/x-hidden/default_headers"
+			  }]
 			},
 			"order_200": {
 			  "description": "Single Order.",
@@ -467,9 +467,9 @@
 			      }
 			    }
 			  },
-			  "headers": {
-			    "$ref": "#/components/x-hidden/defaultHeaders"
-			  }
+			  "headers": [{
+			    "$ref": "#/components/x-hidden/default_headers"
+			  }]
 			},
 			"batches_or_batch_wrappable_200": {
 			  "description": "List of Batches or a single Batch.",
@@ -493,9 +493,9 @@
 			      }
 			    }
 			  },
-			  "headers": {
-			    "$ref": "#/components/x-hidden/defaultHeaders"
-			  }
+			  "headers": [{
+			    "$ref": "#/components/x-hidden/default_headers"
+			  }]
 			},
 			"batch_200": {
 			  "description": "Single Batch.",
@@ -506,9 +506,9 @@
 			      }
 			    }
 			  },
-			  "headers": {
-			    "$ref": "#/components/x-hidden/defaultHeaders"
-			  }
+			  "headers": [{
+			    "$ref": "#/components/x-hidden/default_headers"
+			  }]
 			},
 			"error": {
 			  "description": "Client or service error.",
@@ -519,9 +519,9 @@
 			      }
 			    }
 			  },
-			  "headers": {
-			    "$ref": "#/components/x-hidden/defaultHeaders"
-			  }
+			  "headers": [{
+			    "$ref": "#/components/x-hidden/default_headers"
+			  }]
 			}
     },
 		"schemas": {
@@ -959,22 +959,25 @@
 			  "type": "string",
 			  "description": "Additional CLOB data managed by clients."
 			},
-			"defaultHeaders": {
+			"default_headers": {
 			  "Access-Control-Allow-Origin": {
+			    "required": true,
+			    "allowEmptyValue": false,
 			    "schema": {
-			      "required": true,
 			      "type": "string"
 			    }
 			  },
 			  "Access-Control-Allow-Headers": {
+			    "required": true,
+			    "allowEmptyValue": false,
 			    "schema": {
-			      "required": true,
 			      "type": "string"
 			    }
 			  },
 			  "Access-Control-Allow-Methods": {
+			    "required": true,
+			    "allowEmptyValue": false,
 			    "schema": {
-			      "required": true,
 			      "type": "string"
 			    }
 			  }

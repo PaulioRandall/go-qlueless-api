@@ -8,9 +8,9 @@
           "text/markdown": {
           }
         },
-        "headers": {
-          "$ref": "#/components/x-hidden/defaultHeaders"
-        }
+        "headers": [{
+          "$ref": "#/components/x-hidden/default_headers"
+        }]
       },
       "default": {
         "$ref": "#/components/responses/error"

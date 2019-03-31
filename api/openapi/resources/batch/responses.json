@@ -20,9 +20,9 @@
       }
     }
   },
-  "headers": {
-    "$ref": "#/components/x-hidden/defaultHeaders"
-  }
+  "headers": [{
+    "$ref": "#/components/x-hidden/default_headers"
+  }]
 },
 "batch_200": {
   "description": "Single Batch.",
@@ -33,7 +33,7 @@
       }
     }
   },
-  "headers": {
-    "$ref": "#/components/x-hidden/defaultHeaders"
-  }
+  "headers": [{
+    "$ref": "#/components/x-hidden/default_headers"
+  }]
 }
