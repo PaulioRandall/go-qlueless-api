@@ -126,6 +126,30 @@
 		        "$ref": "#/components/responses/error"
 		      }
 		    }
+		  },
+		  "head": {
+		    "tags": ["venture"],
+		    "description": "Processes the request as a GET but only returns the headers.",
+		    "responses": {
+		      "200": {
+		        "$ref": "#/components/responses/venture_200_no_content"
+		      },
+		      "default": {
+		        "$ref": "#/components/responses/error"
+		      }
+		    }
+		  },
+		  "options": {
+		    "tags": ["venture"],
+		    "description": "Returns the endpoint options.",
+		    "responses": {
+		      "200": {
+		        "$ref": "#/components/responses/venture_200_no_content"
+		      },
+		      "default": {
+		        "$ref": "#/components/responses/error"
+		      }
+		    }
 		  }
 		},
 		"/orders": {
@@ -398,6 +422,12 @@
 			      }
 			    }
 			  },
+			  "headers": {
+			    "$ref": "#/components/x-hidden/defaultHeaders"
+			  }
+			},
+			"venture_200_no_content": {
+			  "description": "Single Venture.",
 			  "headers": {
 			    "$ref": "#/components/x-hidden/defaultHeaders"
 			  }

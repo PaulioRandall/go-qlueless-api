@@ -36,4 +36,10 @@
   "headers": {
     "$ref": "#/components/x-hidden/defaultHeaders"
   }
+},
+"venture_200_no_content": {
+  "description": "Single Venture.",
+  "headers": {
+    "$ref": "#/components/x-hidden/defaultHeaders"
+  }
 }
