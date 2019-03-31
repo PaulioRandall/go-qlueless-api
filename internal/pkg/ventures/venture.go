@@ -27,6 +27,14 @@ func DecodeVenture(r io.Reader) (Venture, error) {
 	return v, err
 }
 
+// DecodeVentures decodes a slice of Ventures from data obtained via a Reader
+func DecodeVentures(r io.Reader) ([]Venture, error) {
+	var v []Venture
+	d := json.NewDecoder(r)
+	err := d.Decode(&v)
+	return v, err
+}
+
 // Clean removes redundent whitespace from property values within a Venture
 // except where whitespace is allowable.
 func (ven *Venture) Clean() {

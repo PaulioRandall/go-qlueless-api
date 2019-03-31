@@ -53,6 +53,69 @@ func TestDecodeVenture_3(t *testing.T) {
 }
 
 // ****************************************************************************
+// DecodeVentures()
+// ****************************************************************************
+
+func TestDecodeVentures_1(t *testing.T) {
+	a := strings.NewReader(`[
+		{
+			"description": "1",
+			"venture_id": "1",
+			"order_ids": "2,3,4",
+			"state": "1",
+			"is_alive": true,
+			"extra": "1"
+		},
+		{
+			"description": "2",
+			"venture_id": "2",
+			"order_ids": "5,6,7",
+			"state": "2",
+			"is_alive": false,
+			"extra": "2"
+		}
+	]`)
+
+	exp := []Venture{
+		Venture{
+			Description: "1",
+			ID:          "1",
+			OrderIDs:    "2,3,4",
+			State:       "1",
+			IsAlive:     true,
+			Extra:       "1",
+		},
+		Venture{
+			Description: "2",
+			ID:          "2",
+			OrderIDs:    "5,6,7",
+			State:       "2",
+			IsAlive:     false,
+			Extra:       "2",
+		},
+	}
+
+	b, err := DecodeVentures(a)
+	require.Nil(t, err)
+	assert.Equal(t, exp, b)
+}
+
+func TestDecodeVentures_2(t *testing.T) {
+	a := strings.NewReader(`[]`)
+	exp := []Venture{}
+
+	b, err := DecodeVentures(a)
+	require.Nil(t, err)
+	assert.Empty(t, exp, b)
+}
+
+func TestDecodeVentures_3(t *testing.T) {
+	a := strings.NewReader(``)
+	_, err := DecodeVentures(a)
+	require.NotNil(t, err)
+}
+
+// ****************************************************************************
 // Venture.Clean()
 // ****************************************************************************
 func TestVenture_Clean_1(t *testing.T) {
