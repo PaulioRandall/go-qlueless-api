@@ -27,8 +27,9 @@ func DecodeVenture(r io.Reader) (Venture, error) {
 	return v, err
 }
 
-// DecodeVentures decodes a slice of Ventures from data obtained via a Reader
-func DecodeVentures(r io.Reader) ([]Venture, error) {
+// DecodeVentureSlice decodes a slice of Ventures from data obtained via a
+// Reader
+func DecodeVentureSlice(r io.Reader) ([]Venture, error) {
 	var v []Venture
 	d := json.NewDecoder(r)
 	err := d.Decode(&v)

@@ -53,10 +53,10 @@ func TestDecodeVenture_3(t *testing.T) {
 }
 
 // ****************************************************************************
-// DecodeVentures()
+// DecodeVentureSlice()
 // ****************************************************************************
 
-func TestDecodeVentures_1(t *testing.T) {
+func TestDecodeVentureSlice_1(t *testing.T) {
 	a := strings.NewReader(`[
 		{
 			"description": "1",
@@ -95,23 +95,23 @@ func TestDecodeVentures_1(t *testing.T) {
 		},
 	}
 
-	b, err := DecodeVentures(a)
+	b, err := DecodeVentureSlice(a)
 	require.Nil(t, err)
 	assert.Equal(t, exp, b)
 }
 
-func TestDecodeVentures_2(t *testing.T) {
+func TestDecodeVentureSlice_2(t *testing.T) {
 	a := strings.NewReader(`[]`)
 	exp := []Venture{}
 
-	b, err := DecodeVentures(a)
+	b, err := DecodeVentureSlice(a)
 	require.Nil(t, err)
 	assert.Empty(t, exp, b)
 }
 
-func TestDecodeVentures_3(t *testing.T) {
+func TestDecodeVentureSlice_3(t *testing.T) {
 	a := strings.NewReader(``)
-	_, err := DecodeVentures(a)
+	_, err := DecodeVentureSlice(a)
 	require.NotNil(t, err)
 }
 

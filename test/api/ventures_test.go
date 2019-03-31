@@ -37,10 +37,7 @@ func TestGET_Ventures(t *testing.T) {
 	require.Equal(t, 200, res.StatusCode)
 	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
 
-	var ven []Venture
-	err := json.NewDecoder(res.Body).Decode(&ven)
-	require.Nil(t, err)
-	AssertGenericVentures(t, ven)
+	AssertVentureSliceFromReader(t, res.Body)
 }
 
 // TODO: Craft some test data and pre-inject it into a SQLite database
@@ -66,10 +63,7 @@ func TestGET_Venture_1(t *testing.T) {
 	require.Equal(t, 200, res.StatusCode)
 	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
 
-	var ven Venture
-	err := json.NewDecoder(res.Body).Decode(&ven)
-	require.Nil(t, err)
-	AssertGenericVenture(t, ven)
+	AssertVentureFromReader(t, res.Body)
 }
 
 func TestGET_Venture_2(t *testing.T) {
@@ -127,10 +121,7 @@ func TestPOST_Venture_1(t *testing.T) {
 	require.Equal(t, 201, res.StatusCode)
 	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
 
-	var output Venture
-	err := json.NewDecoder(res.Body).Decode(&output)
-	require.Nil(t, err)
-	AssertGenericVenture(t, output)
+	output := AssertVentureFromReader(t, res.Body)
 
 	input.ID = output.ID
 	input.IsAlive = true
@@ -207,10 +198,7 @@ func TestPUT_Venture_1(t *testing.T) {
 	require.Equal(t, 200, res.StatusCode)
 	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
 
-	var output Venture
-	err := json.NewDecoder(res.Body).Decode(&output)
-	require.Nil(t, err)
-	AssertGenericVenture(t, output)
+	output := AssertVentureFromReader(t, res.Body)
 
 	input.Values.IsAlive = true
 	assert.Equal(t, input.Values, output)
