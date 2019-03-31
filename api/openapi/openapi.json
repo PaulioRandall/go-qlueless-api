@@ -270,7 +270,7 @@
 	"components": {
     "parameters": {
 			"venture_id": {
-			  "name": "venture_id",
+			  "name": "id",
 			  "in": "query",
 			  "description": "Unique identifier of a Venture.",
 			  "required": false,
