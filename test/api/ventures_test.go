@@ -433,6 +433,54 @@ func TestPUT_Venture_4(t *testing.T) {
 }
 
 // ****************************************************************************
+// (PUT) /ventures?wrap
+// ****************************************************************************
+
+func TestPUT_Venture_5(t *testing.T) {
+	t.Log(`Given some Ventures already exist on the server
+		When an existing Venture is modified and PUT to the server
+		Then ensure the response code is 200
+		And the 'wrap' query parameter has been specified
+		And the 'Content-Type' header contains 'application/json'
+		And 'Access-Control-Allow-Origin' is '*'
+		And 'Access-Control-Allow-Headers' is '*'
+		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, HEAD, and OPTIONS
+		And the body is a JSON object representing the updated input Venture
+		...`)
+
+	input := VentureUpdate{
+		Props: "description, state, order_ids, extra",
+		Values: Venture{
+			ID:          "1",
+			Description: "Black blizzard",
+			State:       "In progress",
+			OrderIDs:    "1,2,3",
+			Extra:       "colour: black; power: 9000",
+		},
+	}
+
+	buf := new(bytes.Buffer)
+	json.NewEncoder(buf).Encode(&input)
+
+	req := APICall{
+		URL:    "http://localhost:8080/ventures?wrap",
+		Method: "PUT",
+		Body:   buf,
+	}
+	res := req.fire()
+	defer res.Body.Close()
+	defer PrintResponse(t, res.Body)
+
+	require.Equal(t, 200, res.StatusCode)
+	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
+
+	_, output := AssertWrappedVentureFromReader(t, res.Body)
+
+	input.Values.IsAlive = true
+	assert.Equal(t, input.Values, output)
+}
+
+// ****************************************************************************
 // (DELETE) /ventures?id={id}
 // ****************************************************************************
 
