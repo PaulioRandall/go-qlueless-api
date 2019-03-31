@@ -19,7 +19,7 @@ var ventureHttpMethods = []string{"GET", "POST", "PUT", "DELETE", "HEAD", "OPTIO
 // ****************************************************************************
 
 // TODO: Craft some test data and pre-inject it into a SQLite database
-func TestGET_Ventures(t *testing.T) {
+func TestGET_Ventures_1(t *testing.T) {
 	t.Log(`Given some Ventures already exist on the server
 		When all Ventures are requested
 		Then ensure the response code is 200
@@ -41,6 +41,31 @@ func TestGET_Ventures(t *testing.T) {
 	require.Equal(t, 200, res.StatusCode)
 	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
 	AssertVentureSliceFromReader(t, res.Body)
+}
+
+func TestGET_Ventures_2(t *testing.T) {
+	t.Log(`Given some Ventures already exist on the server
+		When all Ventures are requested
+		And the 'wrap' query parameter has been specified
+		Then ensure the response code is 200
+		And the 'Content-Type' header contains 'application/json'
+		And 'Access-Control-Allow-Origin' is '*'
+		And 'Access-Control-Allow-Headers' is '*'
+		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, HEAD, and OPTIONS
+		And the body is a JSON array of valid Ventures wrapped with meta information
+		...`)
+
+	req := APICall{
+		URL:    "http://localhost:8080/ventures?wrap",
+		Method: "GET",
+	}
+	res := req.fire()
+	defer res.Body.Close()
+	defer PrintResponse(t, res.Body)
+
+	require.Equal(t, 200, res.StatusCode)
+	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
+	AssertWrappedVentureSliceFromReader(t, res.Body)
 }
 
 // ****************************************************************************

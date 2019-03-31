@@ -19,13 +19,13 @@ func AssertVentureFromReader(t *testing.T, r io.Reader) Venture {
 }
 
 func AssertGenericVenture(t *testing.T, v Venture) {
-	assert.NotEmpty(t, v.ID)
-	assert.NotEmpty(t, v.Description)
-	assert.NotEmpty(t, v.State)
+	assert.NotEmpty(t, v.ID, "Venture.ID")
+	assert.NotEmpty(t, v.Description, "Venture.Description")
+	assert.NotEmpty(t, v.State, "Venture.State")
 	if v.OrderIDs != "" {
 		ts.AssertGenericIntCSV(t, v.OrderIDs)
 	}
-	assert.True(t, v.IsAlive)
+	assert.True(t, v.IsAlive, "Venture.IsAlive")
 }
 
 func AssertVentureSliceFromReader(t *testing.T, r io.Reader) []Venture {
@@ -46,9 +46,17 @@ func AssertWrappedVentureSliceFromReader(t *testing.T, r io.Reader) p.WrappedRep
 	require.Nil(t, err)
 
 	var v []Venture
-	err = ms.Decode(wr.Data, &v)
-	require.Nil(t, err)
-	AssertGenericVentureSlice(t, v)
+	config := ms.DecoderConfig{
+		TagName: "json",
+		Result:  &v,
+	}
 
+	d, err := ms.NewDecoder(&config)
+	require.Nil(t, err)
+
+	err = d.Decode(wr.Data)
+	require.Nil(t, err)
+
+	AssertGenericVentureSlice(t, v)
 	return wr
 }
