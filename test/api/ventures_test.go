@@ -121,6 +121,31 @@ func TestGET_Venture_2(t *testing.T) {
 	assertWrappedErrorBody(t, res.Body)
 }
 
+func TestGET_Venture_3(t *testing.T) {
+	t.Log(`Given some Ventures already exist on the server
+		When a specific existing Venture is requested
+		And the 'wrap' query parameter has been specified
+		Then ensure the response code is 200
+		And the 'Content-Type' header contains 'application/json'
+		And 'Access-Control-Allow-Origin' is '*'
+		And 'Access-Control-Allow-Headers' is '*'
+		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, HEAD, and OPTIONS
+		And the body is a JSON object representing a valid Venture wrapped with meta information
+		...`)
+
+	req := APICall{
+		URL:    "http://localhost:8080/ventures?wrap&id=1",
+		Method: "GET",
+	}
+	res := req.fire()
+	defer res.Body.Close()
+	defer PrintResponse(t, res.Body)
+
+	require.Equal(t, 200, res.StatusCode)
+	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
+	AssertWrappedVentureFromReader(t, res.Body)
+}
+
 // ****************************************************************************
 // (POST) /ventures
 // ****************************************************************************

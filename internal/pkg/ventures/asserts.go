@@ -60,3 +60,23 @@ func AssertWrappedVentureSliceFromReader(t *testing.T, r io.Reader) p.WrappedRep
 	AssertGenericVentureSlice(t, v)
 	return wr
 }
+
+func AssertWrappedVentureFromReader(t *testing.T, r io.Reader) p.WrappedReply {
+	wr, err := p.DecodeWrappedReplyFromReader(r)
+	require.Nil(t, err)
+
+	var v Venture
+	config := ms.DecoderConfig{
+		TagName: "json",
+		Result:  &v,
+	}
+
+	d, err := ms.NewDecoder(&config)
+	require.Nil(t, err)
+
+	err = d.Decode(wr.Data)
+	require.Nil(t, err)
+
+	AssertGenericVenture(t, v)
+	return wr
+}
