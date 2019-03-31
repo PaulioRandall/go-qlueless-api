@@ -445,7 +445,8 @@ func TestPUT_Venture_5(t *testing.T) {
 		And 'Access-Control-Allow-Origin' is '*'
 		And 'Access-Control-Allow-Headers' is '*'
 		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, HEAD, and OPTIONS
-		And the body is a JSON object representing the updated input Venture
+		And the body is a JSON object representing a WrappedReply
+		And the wrapped data is the updated input Venture
 		...`)
 
 	input := VentureUpdate{
@@ -496,7 +497,7 @@ func TestDELETE_Venture_1(t *testing.T) {
 		...`)
 
 	req := APICall{
-		URL:    "http://localhost:8080/ventures?id=1",
+		URL:    "http://localhost:8080/ventures?id=4",
 		Method: "DELETE",
 	}
 	res := req.fire()
@@ -505,7 +506,8 @@ func TestDELETE_Venture_1(t *testing.T) {
 
 	require.Equal(t, 200, res.StatusCode)
 	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
-	AssertVentureFromReader(t, res.Body)
+	output := AssertVentureFromReader(t, res.Body)
+	assert.Equal(t, "4", output.ID)
 }
 
 func TestDELETE_Venture_2(t *testing.T) {
@@ -530,6 +532,37 @@ func TestDELETE_Venture_2(t *testing.T) {
 	require.Equal(t, 400, res.StatusCode)
 	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
 	assertWrappedErrorBody(t, res.Body)
+}
+
+// ****************************************************************************
+// (DELETE) /ventures?wrap&id={id}
+// ****************************************************************************
+
+func TestDELETE_Venture_3(t *testing.T) {
+	t.Log(`Given some Ventures already exist on the server
+		When a DELETE Venture requested is made for an existent Venture
+		And the 'wrap' query parameter has been specified
+		Then ensure the response code is 200
+		And the 'Content-Type' header contains 'application/json'
+		And 'Access-Control-Allow-Origin' is '*'
+		And 'Access-Control-Allow-Headers' is '*'
+		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, HEAD, and OPTIONS
+		And the body is a JSON object representing a WrappedReply
+		And the wrapped data is the deleted Venture
+		...`)
+
+	req := APICall{
+		URL:    "http://localhost:8080/ventures?wrap&id=5",
+		Method: "DELETE",
+	}
+	res := req.fire()
+	defer res.Body.Close()
+	defer PrintResponse(t, res.Body)
+
+	require.Equal(t, 200, res.StatusCode)
+	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
+	_, output := AssertWrappedVentureFromReader(t, res.Body)
+	assert.Equal(t, "5", output.ID)
 }
 
 // ****************************************************************************

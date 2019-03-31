@@ -2,7 +2,7 @@
 
 A Go implementation of a simple API to store and access Kanban related entities and events.
 
-- This project is undertaken with the audible aid of [Avantasia](https://www.avantasia.net)
+- This project is undertaken with the audible aid of [Avantasia](https://www.avantasia.net) and [Dream Theater](http://dreamtheater.net)
 - This README was structured on a template by [PurpleBooth](https://gist.github.com/PurpleBooth/109311bb0361f32d87a2)
 
 ## Why is the project called 'Qlueless'?

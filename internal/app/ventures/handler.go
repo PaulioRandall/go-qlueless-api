@@ -216,4 +216,16 @@ func InjectDummyVentures() {
 		OrderIDs:    "1,2,3",
 		IsAlive:     false,
 	})
+	ventures.Add(v.Venture{
+		Description: "Eddie Izzard",
+		State:       "In Progress",
+		OrderIDs:    "4,5,6",
+		IsAlive:     true,
+	})
+	ventures.Add(v.Venture{
+		Description: "The Count of Tuscany",
+		State:       "In Progress",
+		OrderIDs:    "4,5,6",
+		IsAlive:     true,
+	})
 }
