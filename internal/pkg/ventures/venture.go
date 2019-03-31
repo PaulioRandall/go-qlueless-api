@@ -79,6 +79,14 @@ type VentureUpdate struct {
 	Values Venture `json:"values"`
 }
 
+// DecodeVentureUpdate decodes a VentureUpdate from data obtained via a Reader
+func DecodeVentureUpdate(r io.Reader) (VentureUpdate, error) {
+	var vu VentureUpdate
+	d := json.NewDecoder(r)
+	err := d.Decode(&vu)
+	return vu, err
+}
+
 // SplitProp returns the property names of the properties to update.
 func (vu *VentureUpdate) SplitProps() []string {
 	if vu.Props == "" {

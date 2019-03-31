@@ -12,7 +12,7 @@ import (
 // DecodeVenture()
 // ****************************************************************************
 
-func TestVenture_Decode_1(t *testing.T) {
+func TestDecodeVenture_1(t *testing.T) {
 	a := strings.NewReader(`{
 		"description": "description",
 		"venture_id": "1",
@@ -36,7 +36,7 @@ func TestVenture_Decode_1(t *testing.T) {
 	assert.Equal(t, exp, b)
 }
 
-func TestVenture_Decode_2(t *testing.T) {
+func TestDecodeVenture_2(t *testing.T) {
 	a := strings.NewReader(`{}`)
 
 	exp := Venture{}
@@ -46,17 +46,8 @@ func TestVenture_Decode_2(t *testing.T) {
 	assert.Empty(t, exp, b)
 }
 
-func TestVenture_Decode_3(t *testing.T) {
+func TestDecodeVenture_3(t *testing.T) {
 	a := strings.NewReader(``)
-	_, err := DecodeVenture(a)
-	require.NotNil(t, err)
-}
-
-func TestVenture_Decode_4(t *testing.T) {
-	a := strings.NewReader(`{
-		state: "<---INVALID",
-	}`)
-
 	_, err := DecodeVenture(a)
 	require.NotNil(t, err)
 }
@@ -238,6 +229,56 @@ func TestVenture_SetOrderIDs_3(t *testing.T) {
 	a.SetOrderIDs(ids)
 
 	assert.Equal(t, "", a.OrderIDs)
+}
+
+// ****************************************************************************
+// DecodeVentureUpdate()
+// ****************************************************************************
+
+func TestDecodeVentureUpdate_1(t *testing.T) {
+	a := strings.NewReader(`{
+		"set": "description,state,order_ids,is_alive,extra",
+		"values": {
+			"description": "description",
+			"venture_id": "1",
+			"order_ids": "2,3,4,999",
+			"state": "state",
+			"is_alive": true,
+			"extra": "extra"
+		}
+	}`)
+
+	exp := VentureUpdate{
+		Props: "description,state,order_ids,is_alive,extra",
+		Values: Venture{
+			Description: "description",
+			ID:          "1",
+			OrderIDs:    "2,3,4,999",
+			State:       "state",
+			IsAlive:     true,
+			Extra:       "extra",
+		},
+	}
+
+	b, err := DecodeVentureUpdate(a)
+	require.Nil(t, err)
+	assert.Equal(t, exp, b)
+}
+
+func TestDecodeVentureUpdate_2(t *testing.T) {
+	a := strings.NewReader(`{}`)
+
+	exp := VentureUpdate{}
+
+	b, err := DecodeVentureUpdate(a)
+	require.Nil(t, err)
+	assert.Empty(t, exp, b)
+}
+
+func TestDecodeVentureUpdate_3(t *testing.T) {
+	a := strings.NewReader(``)
+	_, err := DecodeVentureUpdate(a)
+	require.NotNil(t, err)
 }
 
 // ****************************************************************************

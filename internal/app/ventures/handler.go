@@ -131,9 +131,7 @@ func _findVenture(id string, res *http.ResponseWriter, req *http.Request) (v.Ven
 
 // _decodeVenture decodes a Venture from a Request.Body.
 func _decodeVenture(res *http.ResponseWriter, req *http.Request) (v.Venture, bool) {
-	var ven v.Venture
-	d := json.NewDecoder(req.Body)
-	err := d.Decode(&ven)
+	ven, err := v.DecodeVenture(req.Body)
 	if err != nil {
 		r := WrappedReply{
 			Message: "Unable to decode request body into a Venture",
@@ -159,9 +157,7 @@ func _validateNewVenture(ven v.Venture, res *http.ResponseWriter, req *http.Requ
 
 // _decodeVentureUpdate decodes an update to a Venture from a Request.Body.
 func _decodeVentureUpdate(res *http.ResponseWriter, req *http.Request) (v.VentureUpdate, bool) {
-	var vu v.VentureUpdate
-	d := json.NewDecoder(req.Body)
-	err := d.Decode(&vu)
+	vu, err := v.DecodeVentureUpdate(req.Body)
 	if err != nil {
 		r := WrappedReply{
 			Message: "Unable to decode request body into a Venture update",
