@@ -143,10 +143,7 @@ func _DELETE_Venture(id string, res *http.ResponseWriter, req *http.Request) {
 func _findVenture(id string, res *http.ResponseWriter, req *http.Request) (v.Venture, bool) {
 	ven, ok := ventures.Get(id)
 	if !ok || !ven.IsAlive {
-		r := WrappedReply{
-			Message: fmt.Sprintf("Thing '%s' not found", id),
-		}
-		Write4XXReply(res, req, 400, r)
+		WriteBadRequest(res, req, fmt.Sprintf("Thing '%s' not found", id))
 		return v.Venture{}, false
 	}
 	return ven, true
@@ -156,10 +153,7 @@ func _findVenture(id string, res *http.ResponseWriter, req *http.Request) (v.Ven
 func _decodeVenture(res *http.ResponseWriter, req *http.Request) (v.Venture, bool) {
 	ven, err := v.DecodeVenture(req.Body)
 	if err != nil {
-		r := WrappedReply{
-			Message: "Unable to decode request body into a Venture",
-		}
-		Write4XXReply(res, req, 400, r)
+		WriteBadRequest(res, req, "Unable to decode request body into a Venture")
 		return v.Venture{}, false
 	}
 	return ven, true
@@ -169,10 +163,7 @@ func _decodeVenture(res *http.ResponseWriter, req *http.Request) (v.Venture, boo
 func _validateNewVenture(ven v.Venture, res *http.ResponseWriter, req *http.Request) bool {
 	errMsgs := ven.Validate(true)
 	if len(errMsgs) != 0 {
-		r := WrappedReply{
-			Message: strings.Join(errMsgs, " "),
-		}
-		Write4XXReply(res, req, 400, r)
+		WriteBadRequest(res, req, strings.Join(errMsgs, " "))
 		return false
 	}
 	return true
@@ -182,10 +173,8 @@ func _validateNewVenture(ven v.Venture, res *http.ResponseWriter, req *http.Requ
 func _decodeVentureUpdate(res *http.ResponseWriter, req *http.Request) (v.VentureUpdate, bool) {
 	vu, err := v.DecodeVentureUpdate(req.Body)
 	if err != nil {
-		r := WrappedReply{
-			Message: "Unable to decode request body into a Venture update",
-		}
-		Write4XXReply(res, req, 400, r)
+		WriteBadRequest(res, req,
+			"Unable to decode request body into a Venture update")
 		return v.VentureUpdate{}, false
 	}
 	return vu, true
@@ -195,10 +184,7 @@ func _decodeVentureUpdate(res *http.ResponseWriter, req *http.Request) (v.Ventur
 func _validateVentureUpdate(vu v.VentureUpdate, res *http.ResponseWriter, req *http.Request) bool {
 	errMsgs := vu.Validate()
 	if len(errMsgs) != 0 {
-		r := WrappedReply{
-			Message: strings.Join(errMsgs, " "),
-		}
-		Write4XXReply(res, req, 400, r)
+		WriteBadRequest(res, req, strings.Join(errMsgs, " "))
 		return false
 	}
 	return true
@@ -208,10 +194,8 @@ func _validateVentureUpdate(vu v.VentureUpdate, res *http.ResponseWriter, req *h
 func _updateVenture(vu v.VentureUpdate, res *http.ResponseWriter, req *http.Request) (v.Venture, bool) {
 	ven, ok := ventures.Update(vu)
 	if !ok {
-		r := WrappedReply{
-			Message: fmt.Sprintf("Venture with ID '%s' could not be found", vu.Values.ID),
-		}
-		Write4XXReply(res, req, 400, r)
+		WriteBadRequest(res, req,
+			fmt.Sprintf("Venture with ID '%s' could not be found", vu.Values.ID))
 		return v.Venture{}, false
 	}
 	return ven, true
@@ -221,10 +205,7 @@ func _updateVenture(vu v.VentureUpdate, res *http.ResponseWriter, req *http.Requ
 func _deleteVenture(id string, res *http.ResponseWriter, req *http.Request) (v.Venture, bool) {
 	ven, ok := ventures.Delete(id)
 	if !ok {
-		r := WrappedReply{
-			Message: fmt.Sprintf("Thing '%s' not found", id),
-		}
-		Write4XXReply(res, req, 400, r)
+		WriteBadRequest(res, req, fmt.Sprintf("Thing '%s' not found", id))
 		return v.Venture{}, false
 	}
 	return ven, true

@@ -34,7 +34,7 @@ func ChangelogHandler(res http.ResponseWriter, req *http.Request) {
 func get_Changelog(res *http.ResponseWriter, req *http.Request) {
 	if changelog == nil {
 		log.Println("[BUG] CHANGELOG not loaded")
-		Write500Reply(res, req)
+		WriteServerError(res, req)
 		return
 	}
 

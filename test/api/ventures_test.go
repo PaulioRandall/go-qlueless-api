@@ -331,7 +331,7 @@ func TestPUT_Venture_4(t *testing.T) {
 }
 
 // ****************************************************************************
-// (DELETE) /ventures?id={}
+// (DELETE) /ventures?id={id}
 // ****************************************************************************
 
 func TestDELETE_Venture_1(t *testing.T) {

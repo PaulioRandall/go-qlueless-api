@@ -20,26 +20,26 @@ func TestRelURL(t *testing.T) {
 }
 
 // When invoked, sets 500 status code
-func TestWrite500Reply___1(t *testing.T) {
+func TestWriteServerError___1(t *testing.T) {
 	req, res, rec := SetupRequest("/")
 
-	Write500Reply(res, req)
+	WriteServerError(res, req)
 	assert.Equal(t, 500, rec.Code)
 }
 
 // When invoked, writes JSON headers
-func TestWrite500Reply___2(t *testing.T) {
+func TestWriteServerError___2(t *testing.T) {
 	req, res, rec := SetupRequest("/")
 
-	Write500Reply(res, req)
+	WriteServerError(res, req)
 	CheckJSONResponseHeaders(t, (*rec).Header())
 }
 
 // When invoked, writes JSON headers
-func TestWrite500Reply___3(t *testing.T) {
+func TestWriteServerError___3(t *testing.T) {
 	req, res, rec := SetupRequest("/")
 
-	Write500Reply(res, req)
+	WriteServerError(res, req)
 
 	require.NotNil(t, rec.Body)
 	var m map[string]interface{}
@@ -50,23 +50,17 @@ func TestWrite500Reply___3(t *testing.T) {
 	assert.Contains(t, m, "self")
 }
 
-// When ReplyMeta.Message is set, returns true
-func TestCheckReplyMetaMessage___1(t *testing.T) {
+// When message is not empty, returns true
+func TestCheckReplyMessage___1(t *testing.T) {
 	req, res, _ := SetupRequest("/")
-	r := WrappedReply{
-		Message: "message",
-	}
-
-	act := CheckReplyMetaMessage(res, req, r)
+	act := CheckReplyMessage(res, req, "message")
 	assert.True(t, act)
 }
 
-// When ReplyMeta.Message not set, sets 500 status code and returns false
-func TestCheckReplyMetaMessage___2(t *testing.T) {
+// When message is empty, sets 500 status code and returns false
+func TestCheckReplyMessage___2(t *testing.T) {
 	req, res, rec := SetupRequest("/")
-	r := WrappedReply{}
-
-	act := CheckReplyMetaMessage(res, req, r)
+	act := CheckReplyMessage(res, req, "")
 	require.False(t, act)
 	assert.Equal(t, 500, rec.Code)
 }
@@ -184,6 +178,39 @@ func TestWrite4XXReply___6(t *testing.T) {
 	err := json.NewDecoder(rec.Body).Decode(&m)
 	require.Nil(t, err)
 	assert.Equal(t, "/search?q=dan+north", m["self"])
+}
+
+// When using non-empty message, sets 400 status code
+func TestWriteBadRequest___1(t *testing.T) {
+	req, res, rec := SetupRequest("/")
+	WriteBadRequest(res, req, "message")
+	assert.Equal(t, 400, rec.Code)
+}
+
+// When using non-empty message, creates WrappedReply in response body with the
+// supplied message and self
+func TestWriteBadRequest___2(t *testing.T) {
+	req, res, rec := SetupRequest("/")
+
+	WriteBadRequest(res, req, "message")
+	exp := WrappedReply{
+		Message: "message",
+		Self:    "/",
+	}
+
+	require.NotNil(t, rec.Body)
+	var a WrappedReply
+	err := json.NewDecoder(rec.Body).Decode(&a)
+
+	require.Nil(t, err)
+	assert.Equal(t, exp, a)
+}
+
+// When using empty message, sets 500 status code
+func TestWriteBadRequest___3(t *testing.T) {
+	req, res, rec := SetupRequest("/")
+	WriteBadRequest(res, req, "")
+	assert.Equal(t, 500, rec.Code)
 }
 
 // When the 'wrap' query param is present in a request, returns true

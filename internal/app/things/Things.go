@@ -89,7 +89,7 @@ func put_OneThing(res *http.ResponseWriter, req *http.Request) {
 
 	err := Things.Update(t)
 	if LogIfErr(err) {
-		Write500Reply(res, req)
+		WriteServerError(res, req)
 		return
 	}
 

@@ -32,9 +32,9 @@ func RelURL(req *http.Request) string {
 	return r
 }
 
-// Reply500 sets up the response with generic 500 error details. This method
-// should be used when ever a 500 error needs to be returned
-func Write500Reply(res *http.ResponseWriter, req *http.Request) {
+// WriteServerError sets up the response with generic 500 error details. This
+// method should be used when ever a 500 error needs to be returned
+func WriteServerError(res *http.ResponseWriter, req *http.Request) {
 	r := WrappedReply{
 		Message: "Bummer! Something went wrong on the server.",
 		Self:    (*req).URL.String(),
@@ -49,29 +49,30 @@ func Write500Reply(res *http.ResponseWriter, req *http.Request) {
 func CheckStatusBetween(res *http.ResponseWriter, req *http.Request, status int, minInc int, maxInc int) bool {
 	if status < minInc || status > maxInc {
 		log.Printf("[BUG] Status code must be between %d and %d\n", minInc, maxInc)
-		Write500Reply(res, req)
+		WriteServerError(res, req)
 		return false
 	}
 	return true
 }
 
-// CheckReplyMetaMessage validates that the ReplyMeta.Message is not empty
-func CheckReplyMetaMessage(res *http.ResponseWriter, req *http.Request, r WrappedReply) bool {
-	if r.Message == "" {
+// CheckReplyMessage validates that a response message is not empty
+func CheckReplyMessage(res *http.ResponseWriter, req *http.Request, m string) bool {
+	if m == "" {
 		log.Println("[BUG] error response message is missing")
-		Write500Reply(res, req)
+		WriteServerError(res, req)
 		return false
 	}
 	return true
 }
 
 // Write4XXReply writes the response for a 4XX error
+// @REMOVE
 func Write4XXReply(res *http.ResponseWriter, req *http.Request, status int, r WrappedReply) {
 	if !CheckStatusBetween(res, req, status, 400, 499) {
 		return
 	}
 
-	if !CheckReplyMetaMessage(res, req, r) {
+	if !CheckReplyMessage(res, req, r.Message) {
 		return
 	}
 
@@ -81,6 +82,22 @@ func Write4XXReply(res *http.ResponseWriter, req *http.Request, status int, r Wr
 
 	AppendJSONHeader(res, "")
 	(*res).WriteHeader(status)
+	json.NewEncoder(*res).Encode(r)
+}
+
+// WriteBadRequest writes the response for a 400 error
+func WriteBadRequest(res *http.ResponseWriter, req *http.Request, m string) {
+	if !CheckReplyMessage(res, req, m) {
+		return
+	}
+
+	r := WrappedReply{
+		Message: m,
+		Self:    RelURL(req),
+	}
+
+	AppendJSONHeader(res, "")
+	(*res).WriteHeader(http.StatusBadRequest)
 	json.NewEncoder(*res).Encode(r)
 }
 

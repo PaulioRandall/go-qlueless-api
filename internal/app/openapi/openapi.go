@@ -33,7 +33,7 @@ func OpenAPIHandler(res http.ResponseWriter, req *http.Request) {
 func get_Spec(res *http.ResponseWriter, req *http.Request) {
 	if spec == nil {
 		log.Println("[BUG] OpenAPI specification not loaded")
-		Write500Reply(res, req)
+		WriteServerError(res, req)
 		return
 	}
 
