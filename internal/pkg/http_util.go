@@ -3,6 +3,7 @@ package pkg
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 )
@@ -16,6 +17,14 @@ type WrappedReply struct {
 	Self    string      `json:"self"`
 	Data    interface{} `json:"data,omitempty"`
 	Hints   string      `json:"hints,omitempty"`
+}
+
+// DecodeWrappedReplyFromReader decodes JSON from a Reader into a
+// WrappedReply
+func DecodeWrappedReplyFromReader(r io.Reader) (WrappedReply, error) {
+	var wr WrappedReply
+	err := json.NewDecoder(r).Decode(&wr)
+	return wr, err
 }
 
 // LogRequest logs the details of a request such as the URL
