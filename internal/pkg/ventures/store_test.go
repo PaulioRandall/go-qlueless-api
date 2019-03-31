@@ -245,6 +245,40 @@ func TestVentureStore_Update_3(t *testing.T) {
 }
 
 // ****************************************************************************
+// VentureStore.Delete()
+// ****************************************************************************
+
+func TestVentureStore_Delete_1(t *testing.T) {
+	store := NewVentureStore()
+	aIn := Venture{
+		ID: "1",
+	}
+	bIn := Venture{
+		ID: "2",
+	}
+
+	store.items["1"] = aIn
+	store.items["2"] = bIn
+
+	aOut, ok := store.Delete("1")
+	require.True(t, ok)
+	assert.Len(t, store.items, 1)
+	assert.Equal(t, aIn, aOut)
+}
+
+func TestVentureStore_Delete_2(t *testing.T) {
+	store := NewVentureStore()
+	a := Venture{
+		ID: "1",
+	}
+	store.items["1"] = a
+
+	_, ok := store.Delete("99999")
+	require.False(t, ok)
+	assert.Len(t, store.items, 1)
+}
+
+// ****************************************************************************
 // VentureStore._genNewId()
 // ****************************************************************************
 

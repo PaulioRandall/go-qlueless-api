@@ -10,7 +10,7 @@ type VentureStore struct {
 	items map[string]Venture
 }
 
-// NewVentureStore creates a new VentureStore
+// NewVentureStore creates a new VentureStore.
 func NewVentureStore() VentureStore {
 	return VentureStore{
 		mutex: &sync.RWMutex{},
@@ -18,7 +18,7 @@ func NewVentureStore() VentureStore {
 	}
 }
 
-// GetAll returns a slice of all Ventures currently held within the data store
+// GetAll returns a slice of all Ventures currently held within the data store.
 func (vs *VentureStore) GetAll() []Venture {
 	vs.mutex.RLock()
 	defer vs.mutex.RUnlock()
@@ -31,7 +31,8 @@ func (vs *VentureStore) GetAll() []Venture {
 	return r
 }
 
-// GetAllAlive returns a slice of all Ventures currently held within the data store
+// GetAllAlive returns a slice of all Ventures currently held within the data
+// store.
 func (vs *VentureStore) GetAllAlive() []Venture {
 	vs.mutex.RLock()
 	defer vs.mutex.RUnlock()
@@ -46,7 +47,7 @@ func (vs *VentureStore) GetAllAlive() []Venture {
 	return r
 }
 
-// Get returns a specific Venture if found else the bool result will be false
+// Get returns a specific Venture if found else the bool result will be false.
 func (vs *VentureStore) Get(id string) (Venture, bool) {
 	vs.mutex.RLock()
 	defer vs.mutex.RUnlock()
@@ -55,7 +56,7 @@ func (vs *VentureStore) Get(id string) (Venture, bool) {
 	return r, ok
 }
 
-// Add adds a Venture to the data store assigning an unused ID
+// Add adds a Venture to the data store assigning an unused ID.
 func (vs *VentureStore) Add(new Venture) Venture {
 	vs.mutex.Lock()
 	defer vs.mutex.Unlock()
@@ -66,7 +67,7 @@ func (vs *VentureStore) Add(new Venture) Venture {
 }
 
 // _updateVenture is a file private function that updates a Venture with the
-// changes defined within the supplied venture update structure
+// changes defined within the supplied venture update structure.
 func (vs *VentureStore) _updateVenture(v Venture, vu VentureUpdate) Venture {
 	u := vu.Values
 	for _, p := range vu.SplitProps() {
@@ -87,7 +88,7 @@ func (vs *VentureStore) _updateVenture(v Venture, vu VentureUpdate) Venture {
 }
 
 // Update updates a Venture within the data store. If false is returned then
-// the item does not currently exist within the data store
+// the item does not currently exist within the data store.
 func (vs *VentureStore) Update(vu VentureUpdate) (Venture, bool) {
 
 	v, ok := vs.Get(vu.Values.ID)
@@ -102,6 +103,21 @@ func (vs *VentureStore) Update(vu VentureUpdate) (Venture, bool) {
 
 	vs.items[v.ID] = v
 	return v, true
+}
+
+// Delete removes a Venture from within the data store. If false is returned
+// then the item does not currently exist.
+func (vs *VentureStore) Delete(id string) (Venture, bool) {
+	vs.mutex.Lock()
+	defer vs.mutex.Unlock()
+
+	v, ok := vs.items[id]
+	if ok {
+		delete(vs.items, id)
+		return v, true
+	}
+
+	return Venture{}, false
 }
 
 // _genNewID generates a new, unused, Venture ID

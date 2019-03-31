@@ -24,11 +24,13 @@ func VenturesHandler(res http.ResponseWriter, req *http.Request) {
 	case req.Method == "GET" && id == "":
 		_GET_AllVentures(&res, req)
 	case req.Method == "GET":
-		_GET_OneVenture(id, &res, req)
+		_GET_Venture(id, &res, req)
 	case req.Method == "POST":
 		_POST_NewVenture(&res, req)
 	case req.Method == "PUT":
 		_PUT_UpdatedVenture(&res, req)
+	case req.Method == "DELETE":
+		_DELETE_Venture(id, &res, req)
 	case req.Method == "HEAD":
 		fallthrough
 	case req.Method == "OPTIONS":
@@ -43,25 +45,27 @@ func VenturesHandler(res http.ResponseWriter, req *http.Request) {
 func _GET_AllVentures(res *http.ResponseWriter, req *http.Request) {
 	vens := ventures.GetAllAlive()
 	m := fmt.Sprintf("Found %d Ventures", len(vens))
-	data := PrepResponseData(req, vens, m)
 
 	AppendJSONHeader(res, "")
 	(*res).WriteHeader(http.StatusOK)
+
+	data := PrepResponseData(req, vens, m)
 	json.NewEncoder(*res).Encode(data)
 }
 
-// _GET_OneVenture handles client requests for a specific Venture.
-func _GET_OneVenture(id string, res *http.ResponseWriter, req *http.Request) {
+// _GET_Venture handles client requests for a specific Venture.
+func _GET_Venture(id string, res *http.ResponseWriter, req *http.Request) {
 	ven, ok := _findVenture(id, res, req)
 	if !ok {
 		return
 	}
 
 	m := fmt.Sprintf("Found Venture '%s'", id)
-	data := PrepResponseData(req, ven, m)
 
 	AppendJSONHeader(res, "")
 	(*res).WriteHeader(http.StatusOK)
+
+	data := PrepResponseData(req, ven, m)
 	json.NewEncoder(*res).Encode(data)
 }
 
@@ -82,10 +86,11 @@ func _POST_NewVenture(res *http.ResponseWriter, req *http.Request) {
 	ven = ventures.Add(ven)
 	m := fmt.Sprintf("New Venture with ID '%s' created", ven.ID)
 	log.Println(m)
-	data := PrepResponseData(req, ven, m)
 
 	AppendJSONHeader(res, "")
 	(*res).WriteHeader(http.StatusCreated)
+
+	data := PrepResponseData(req, ven, m)
 	json.NewEncoder(*res).Encode(data)
 }
 
@@ -109,10 +114,28 @@ func _PUT_UpdatedVenture(res *http.ResponseWriter, req *http.Request) {
 
 	m := fmt.Sprintf("Venture with ID '%s' updated", ven.ID)
 	log.Println(m)
-	data := PrepResponseData(req, ven, m)
 
 	AppendJSONHeader(res, "")
 	(*res).WriteHeader(http.StatusOK)
+
+	data := PrepResponseData(req, ven, m)
+	json.NewEncoder(*res).Encode(data)
+}
+
+// _DELETE_Venture handles client requests for deleting a specific Venture.
+func _DELETE_Venture(id string, res *http.ResponseWriter, req *http.Request) {
+	ven, ok := _deleteVenture(id, res, req)
+	if !ok {
+		return
+	}
+
+	m := fmt.Sprintf("Venture with ID '%s' deleted", ven.ID)
+	log.Println(m)
+
+	AppendJSONHeader(res, "")
+	(*res).WriteHeader(http.StatusOK)
+
+	data := PrepResponseData(req, ven, m)
 	json.NewEncoder(*res).Encode(data)
 }
 
@@ -123,7 +146,7 @@ func _findVenture(id string, res *http.ResponseWriter, req *http.Request) (v.Ven
 		r := WrappedReply{
 			Message: fmt.Sprintf("Thing '%s' not found", id),
 		}
-		Write4XXReply(res, req, 404, r)
+		Write4XXReply(res, req, 400, r)
 		return v.Venture{}, false
 	}
 	return ven, true
@@ -187,6 +210,19 @@ func _updateVenture(vu v.VentureUpdate, res *http.ResponseWriter, req *http.Requ
 	if !ok {
 		r := WrappedReply{
 			Message: fmt.Sprintf("Venture with ID '%s' could not be found", vu.Values.ID),
+		}
+		Write4XXReply(res, req, 400, r)
+		return v.Venture{}, false
+	}
+	return ven, true
+}
+
+// _deleteVenture deletes a Venture from the data store.
+func _deleteVenture(id string, res *http.ResponseWriter, req *http.Request) (v.Venture, bool) {
+	ven, ok := ventures.Delete(id)
+	if !ok {
+		r := WrappedReply{
+			Message: fmt.Sprintf("Thing '%s' not found", id),
 		}
 		Write4XXReply(res, req, 400, r)
 		return v.Venture{}, false
