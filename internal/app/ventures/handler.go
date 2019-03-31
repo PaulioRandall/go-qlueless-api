@@ -45,12 +45,7 @@ func VenturesHandler(res http.ResponseWriter, req *http.Request) {
 func _GET_AllVentures(res *http.ResponseWriter, req *http.Request) {
 	vens := ventures.GetAllAlive()
 	m := fmt.Sprintf("Found %d Ventures", len(vens))
-
-	AppendJSONHeader(res, "")
-	(*res).WriteHeader(http.StatusOK)
-
-	data := PrepResponseData(req, vens, m)
-	json.NewEncoder(*res).Encode(data)
+	_writeSuccessReply(res, req, http.StatusOK, vens, m)
 }
 
 // _GET_Venture handles client requests for a specific Venture.
@@ -61,12 +56,7 @@ func _GET_Venture(id string, res *http.ResponseWriter, req *http.Request) {
 	}
 
 	m := fmt.Sprintf("Found Venture '%s'", id)
-
-	AppendJSONHeader(res, "")
-	(*res).WriteHeader(http.StatusOK)
-
-	data := PrepResponseData(req, ven, m)
-	json.NewEncoder(*res).Encode(data)
+	_writeSuccessReply(res, req, http.StatusOK, ven, m)
 }
 
 // _POST_NewVenture handles client requests for creating new Ventures.
@@ -86,12 +76,7 @@ func _POST_NewVenture(res *http.ResponseWriter, req *http.Request) {
 	ven = ventures.Add(ven)
 	m := fmt.Sprintf("New Venture with ID '%s' created", ven.ID)
 	log.Println(m)
-
-	AppendJSONHeader(res, "")
-	(*res).WriteHeader(http.StatusCreated)
-
-	data := PrepResponseData(req, ven, m)
-	json.NewEncoder(*res).Encode(data)
+	_writeSuccessReply(res, req, http.StatusCreated, ven, m)
 }
 
 // _PUT_UpdatedVenture handles client requests for updating Ventures.
@@ -114,12 +99,7 @@ func _PUT_UpdatedVenture(res *http.ResponseWriter, req *http.Request) {
 
 	m := fmt.Sprintf("Venture with ID '%s' updated", ven.ID)
 	log.Println(m)
-
-	AppendJSONHeader(res, "")
-	(*res).WriteHeader(http.StatusOK)
-
-	data := PrepResponseData(req, ven, m)
-	json.NewEncoder(*res).Encode(data)
+	_writeSuccessReply(res, req, http.StatusOK, ven, m)
 }
 
 // _DELETE_Venture handles client requests for deleting a specific Venture.
@@ -131,12 +111,15 @@ func _DELETE_Venture(id string, res *http.ResponseWriter, req *http.Request) {
 
 	m := fmt.Sprintf("Venture with ID '%s' deleted", ven.ID)
 	log.Println(m)
+	_writeSuccessReply(res, req, http.StatusOK, ven, m)
+}
 
+// _writeSuccessReply writes a success response.
+func _writeSuccessReply(res *http.ResponseWriter, req *http.Request, code int, data interface{}, msg string) {
 	AppendJSONHeader(res, "")
-	(*res).WriteHeader(http.StatusOK)
-
-	data := PrepResponseData(req, ven, m)
-	json.NewEncoder(*res).Encode(data)
+	(*res).WriteHeader(code)
+	reply := PrepResponseData(req, data, msg)
+	json.NewEncoder(*res).Encode(reply)
 }
 
 // _findVenture finds the Venture with the specified ID.
