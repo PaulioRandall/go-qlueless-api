@@ -43,6 +43,10 @@ func TestGET_Ventures_1(t *testing.T) {
 	AssertVentureSliceFromReader(t, res.Body)
 }
 
+// ****************************************************************************
+// (GET) /ventures?wrap
+// ****************************************************************************
+
 func TestGET_Ventures_2(t *testing.T) {
 	t.Log(`Given some Ventures already exist on the server
 		When all Ventures are requested
@@ -120,6 +124,10 @@ func TestGET_Venture_2(t *testing.T) {
 	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
 	assertWrappedErrorBody(t, res.Body)
 }
+
+// ****************************************************************************
+// (GET) /ventures?wrap&id={id}
+// ****************************************************************************
 
 func TestGET_Venture_3(t *testing.T) {
 	t.Log(`Given some Ventures already exist on the server
@@ -219,6 +227,50 @@ func TestPOST_Venture_2(t *testing.T) {
 	require.Equal(t, 400, res.StatusCode)
 	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
 	assertWrappedErrorBody(t, res.Body)
+}
+
+// ****************************************************************************
+// (POST) /ventures?wrap
+// ****************************************************************************
+
+func TestPOST_Venture_3(t *testing.T) {
+	t.Log(`Given some Ventures already exist on the server
+		When a new valid Venture is POSTed
+		And the 'wrap' query parameter has been specified
+		Then ensure the response code is 201
+		And the 'Content-Type' header contains 'application/json'
+		And 'Access-Control-Allow-Origin' is '*'
+		And 'Access-Control-Allow-Headers' is '*'
+		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, HEAD, and OPTIONS
+		And the body is a JSON object representing a WrappedReply
+		And that the wrapped data is the living input Venture with a new assigned ID
+		...`)
+
+	input := Venture{
+		Description: "A new Venture",
+		State:       "Not started",
+		OrderIDs:    "1,2,3",
+	}
+	buf := new(bytes.Buffer)
+	json.NewEncoder(buf).Encode(&input)
+
+	req := APICall{
+		URL:    "http://localhost:8080/ventures?wrap",
+		Method: "POST",
+		Body:   buf,
+	}
+	res := req.fire()
+	defer res.Body.Close()
+	defer PrintResponse(t, res.Body)
+
+	require.Equal(t, 201, res.StatusCode)
+	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
+
+	_, output := AssertWrappedVentureFromReader(t, res.Body)
+
+	input.ID = output.ID
+	input.IsAlive = true
+	assert.Equal(t, input, output)
 }
 
 // ****************************************************************************
