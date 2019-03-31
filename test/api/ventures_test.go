@@ -36,7 +36,6 @@ func TestGET_Ventures(t *testing.T) {
 
 	require.Equal(t, 200, res.StatusCode)
 	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
-
 	AssertVentureSliceFromReader(t, res.Body)
 }
 
@@ -62,7 +61,6 @@ func TestGET_Venture_1(t *testing.T) {
 
 	require.Equal(t, 200, res.StatusCode)
 	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
-
 	AssertVentureFromReader(t, res.Body)
 }
 
@@ -87,7 +85,7 @@ func TestGET_Venture_2(t *testing.T) {
 
 	require.Equal(t, 404, res.StatusCode)
 	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
-	assertWrappedErrorBody(t, res)
+	assertWrappedErrorBody(t, res.Body)
 }
 
 func TestPOST_Venture_1(t *testing.T) {
@@ -158,7 +156,7 @@ func TestPOST_Venture_2(t *testing.T) {
 
 	require.Equal(t, 400, res.StatusCode)
 	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
-	assertWrappedErrorBody(t, res)
+	assertWrappedErrorBody(t, res.Body)
 }
 
 func TestPUT_Venture_1(t *testing.T) {
@@ -240,7 +238,7 @@ func TestPUT_Venture_2(t *testing.T) {
 
 	require.Equal(t, 400, res.StatusCode)
 	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
-	assertWrappedErrorBody(t, res)
+	assertWrappedErrorBody(t, res.Body)
 }
 
 func TestPUT_Venture_3(t *testing.T) {
@@ -278,7 +276,7 @@ func TestPUT_Venture_3(t *testing.T) {
 
 	require.Equal(t, 400, res.StatusCode)
 	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
-	assertWrappedErrorBody(t, res)
+	assertWrappedErrorBody(t, res.Body)
 }
 
 func TestPUT_Venture_4(t *testing.T) {
@@ -313,7 +311,7 @@ func TestPUT_Venture_4(t *testing.T) {
 
 	require.Equal(t, 400, res.StatusCode)
 	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
-	assertWrappedErrorBody(t, res)
+	assertWrappedErrorBody(t, res.Body)
 }
 
 func TestHEAD_Ventures(t *testing.T) {
@@ -337,7 +335,7 @@ func TestHEAD_Ventures(t *testing.T) {
 
 	require.Equal(t, 200, res.StatusCode)
 	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
-	assertEmptyBody(t, res)
+	assertEmptyBody(t, res.Body)
 }
 
 func TestOPTIONS_Ventures(t *testing.T) {
@@ -361,7 +359,7 @@ func TestOPTIONS_Ventures(t *testing.T) {
 
 	require.Equal(t, 200, res.StatusCode)
 	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
-	assertEmptyBody(t, res)
+	assertEmptyBody(t, res.Body)
 }
 
 func TestINVALID_Ventures(t *testing.T) {

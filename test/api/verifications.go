@@ -6,6 +6,7 @@ import (
 	. "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/asserts"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 const (
@@ -56,6 +57,16 @@ func verifyNotAllowedMethods(t *testing.T, url string, allowedMethods []string) 
 			continue
 		}
 		assertDefaultHeaders(t, res, "application/json", allowedMethods)
-		assertWrappedErrorBody(t, res)
+		assertWrappedErrorBody(t, res.Body)
 	}
+}
+
+// verifyDefaultHeaders asserts that the default headers were provided
+func verifyDefaultHeaders(t *testing.T, c APICall, expCode int, allowedMethods []string) {
+	res := c.fire()
+	defer res.Body.Close()
+	defer PrintResponse(t, res.Body)
+
+	require.Equal(t, expCode, res.StatusCode)
+	assertDefaultHeaders(t, res, "application/json", allowedMethods)
 }

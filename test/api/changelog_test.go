@@ -34,7 +34,7 @@ func TestGET_Changelog(t *testing.T) {
 
 	require.Equal(t, 200, res.StatusCode)
 	assertDefaultHeaders(t, res, changelogMediaType, changelogHttpMethods)
-	assertNotEmptyBody(t, res)
+	assertNotEmptyBody(t, res.Body)
 }
 
 func TestHEAD_Changelog(t *testing.T) {
@@ -58,7 +58,7 @@ func TestHEAD_Changelog(t *testing.T) {
 
 	require.Equal(t, 200, res.StatusCode)
 	assertDefaultHeaders(t, res, changelogMediaType, changelogHttpMethods)
-	assertEmptyBody(t, res)
+	assertEmptyBody(t, res.Body)
 }
 
 func TestOPTIONS_Changelog(t *testing.T) {
@@ -82,7 +82,7 @@ func TestOPTIONS_Changelog(t *testing.T) {
 
 	require.Equal(t, 200, res.StatusCode)
 	assertDefaultHeaders(t, res, changelogMediaType, changelogHttpMethods)
-	assertEmptyBody(t, res)
+	assertEmptyBody(t, res.Body)
 }
 
 func TestINVALID_Changelog(t *testing.T) {

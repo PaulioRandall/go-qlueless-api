@@ -62,7 +62,7 @@ func TestHEAD_OpenAPI(t *testing.T) {
 
 	require.Equal(t, 200, res.StatusCode)
 	assertDefaultHeaders(t, res, openapiMediaType, openapiHttpMethods)
-	assertEmptyBody(t, res)
+	assertEmptyBody(t, res.Body)
 }
 
 func TestOPTIONS_OpenAPI(t *testing.T) {
@@ -86,7 +86,7 @@ func TestOPTIONS_OpenAPI(t *testing.T) {
 
 	require.Equal(t, 200, res.StatusCode)
 	assertDefaultHeaders(t, res, openapiMediaType, openapiHttpMethods)
-	assertEmptyBody(t, res)
+	assertEmptyBody(t, res.Body)
 }
 
 func TestINVALID_OpenAPI(t *testing.T) {

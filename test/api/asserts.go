@@ -2,6 +2,7 @@ package api
 
 import (
 	"encoding/json"
+	"io"
 	"io/ioutil"
 	"net/http"
 	"testing"
@@ -29,23 +30,25 @@ func assertDefaultHeaders(t *testing.T, res *http.Response, contentType string, 
 }
 
 // assertEmptyBody asserts that a response body is empty
-func assertEmptyBody(t *testing.T, res *http.Response) {
-	body, err := ioutil.ReadAll(res.Body)
+func assertEmptyBody(t *testing.T, r io.Reader) {
+	body, err := ioutil.ReadAll(r)
 	require.Nil(t, err)
 	assert.Empty(t, body)
 }
 
 // assertNotEmptyBody asserts that a response body is NOT empty
-func assertNotEmptyBody(t *testing.T, res *http.Response) {
-	body, err := ioutil.ReadAll(res.Body)
+func assertNotEmptyBody(t *testing.T, r io.Reader) []byte {
+	body, err := ioutil.ReadAll(r)
 	require.Nil(t, err)
 	assert.NotEmpty(t, body)
+	return body
 }
 
 // assertWrappedErrorBody assert that a response body is a generic error
-func assertWrappedErrorBody(t *testing.T, res *http.Response) {
+func assertWrappedErrorBody(t *testing.T, r io.Reader) p.WrappedReply {
 	var reply p.WrappedReply
-	err := json.NewDecoder(res.Body).Decode(&reply)
+	err := json.NewDecoder(r).Decode(&reply)
 	require.Nil(t, err)
 	AssertGenericError(t, reply)
+	return reply
 }
