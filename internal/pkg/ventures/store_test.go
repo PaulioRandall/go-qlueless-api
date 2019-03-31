@@ -8,7 +8,7 @@ import (
 )
 
 // ****************************************************************************
-// VentureStore.GetAll
+// VentureStore.GetAll()
 // ****************************************************************************
 
 func TestVentureStore_GetAll_1(t *testing.T) {
@@ -41,7 +41,7 @@ func TestVentureStore_GetAll_2(t *testing.T) {
 }
 
 // ****************************************************************************
-// VentureStore.GetAllAlive
+// VentureStore.GetAllAlive()
 // ****************************************************************************
 
 func TestVentureStore_GetAllAlive_1(t *testing.T) {
@@ -75,7 +75,7 @@ func TestVentureStore_GetAllAlive_2(t *testing.T) {
 }
 
 // ****************************************************************************
-// VentureStore.Get
+// VentureStore.Get()
 // ****************************************************************************
 
 func TestVentureStore_Get_1(t *testing.T) {
@@ -130,7 +130,7 @@ func TestVentureStore_Get_3(t *testing.T) {
 }
 
 // ****************************************************************************
-// VentureStore.Add
+// VentureStore.Add()
 // ****************************************************************************
 
 func TestVentureStor_Add_1(t *testing.T) {
@@ -171,7 +171,7 @@ func TestVentureStor_Add_2(t *testing.T) {
 }
 
 // ****************************************************************************
-// VentureStore.Update
+// VentureStore.Update()
 // ****************************************************************************
 
 func TestVentureStore_Update_1(t *testing.T) {
@@ -245,7 +245,7 @@ func TestVentureStore_Update_3(t *testing.T) {
 }
 
 // ****************************************************************************
-// VentureStore._genNewId
+// VentureStore._genNewId()
 // ****************************************************************************
 
 func TestVentureStore__genNewID_1(t *testing.T) {

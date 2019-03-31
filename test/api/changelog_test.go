@@ -12,6 +12,10 @@ const changelogMediaType = "text/markdown"
 
 var changelogHttpMethods = []string{"GET", "HEAD", "OPTIONS"}
 
+// ****************************************************************************
+// (GET) /changelog
+// ****************************************************************************
+
 // TODO: Assert the body is a valid markdown
 func TestGET_Changelog(t *testing.T) {
 	t.Log(`Given a loaded changelog
@@ -37,6 +41,10 @@ func TestGET_Changelog(t *testing.T) {
 	assertNotEmptyBody(t, res.Body)
 }
 
+// ****************************************************************************
+// (HEAD) /changelog
+// ****************************************************************************
+
 func TestHEAD_Changelog(t *testing.T) {
 	t.Log(`Given a loaded changelog
 		When only /changelog HEADers are requested
@@ -61,6 +69,10 @@ func TestHEAD_Changelog(t *testing.T) {
 	assertEmptyBody(t, res.Body)
 }
 
+// ****************************************************************************
+// (OPTIONS) /changelog
+// ****************************************************************************
+
 func TestOPTIONS_Changelog(t *testing.T) {
 	t.Log(`Given a loaded changelog
 		When only /changelog OPTIONS are requested
@@ -84,6 +96,10 @@ func TestOPTIONS_Changelog(t *testing.T) {
 	assertDefaultHeaders(t, res, changelogMediaType, changelogHttpMethods)
 	assertEmptyBody(t, res.Body)
 }
+
+// ****************************************************************************
+// (?) /changelog
+// ****************************************************************************
 
 func TestINVALID_Changelog(t *testing.T) {
 	t.Log(`Given a loaded changelog

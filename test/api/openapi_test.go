@@ -13,6 +13,10 @@ const openapiMediaType = "application/vnd.oai.openapi+json"
 
 var openapiHttpMethods = []string{"GET", "HEAD", "OPTIONS"}
 
+// ****************************************************************************
+// (GET) /openapi
+// ****************************************************************************
+
 // TODO: Assert the body is a valid OpenAPI specification
 func TestGET_OpenAPI(t *testing.T) {
 	t.Log(`Given a loaded OpenAPI specification
@@ -41,6 +45,10 @@ func TestGET_OpenAPI(t *testing.T) {
 	require.Nil(t, err)
 }
 
+// ****************************************************************************
+// (HEAD) /openapi
+// ****************************************************************************
+
 func TestHEAD_OpenAPI(t *testing.T) {
 	t.Log(`Given a loaded OpenAPI specification
 		When only /openapi HEADers are requested
@@ -65,6 +73,10 @@ func TestHEAD_OpenAPI(t *testing.T) {
 	assertEmptyBody(t, res.Body)
 }
 
+// ****************************************************************************
+// (OPTIONS) /openapi
+// ****************************************************************************
+
 func TestOPTIONS_OpenAPI(t *testing.T) {
 	t.Log(`Given a loaded OpenAPI specification
 		When only /openapi OPTIONS are requested
@@ -88,6 +100,10 @@ func TestOPTIONS_OpenAPI(t *testing.T) {
 	assertDefaultHeaders(t, res, openapiMediaType, openapiHttpMethods)
 	assertEmptyBody(t, res.Body)
 }
+
+// ****************************************************************************
+// (?) /openapi
+// ****************************************************************************
 
 func TestINVALID_OpenAPI(t *testing.T) {
 	t.Log(`Given a loaded OpenAPI specification

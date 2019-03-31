@@ -14,6 +14,10 @@ import (
 
 var ventureHttpMethods = []string{"GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS"}
 
+// ****************************************************************************
+// (GET) /ventures
+// ****************************************************************************
+
 // TODO: Craft some test data and pre-inject it into a SQLite database
 func TestGET_Ventures(t *testing.T) {
 	t.Log(`Given some Ventures already exist on the server
@@ -38,6 +42,10 @@ func TestGET_Ventures(t *testing.T) {
 	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
 	AssertVentureSliceFromReader(t, res.Body)
 }
+
+// ****************************************************************************
+// (GET) /ventures/{id}
+// ****************************************************************************
 
 // TODO: Craft some test data and pre-inject it into a SQLite database
 func TestGET_Venture_1(t *testing.T) {
@@ -87,6 +95,10 @@ func TestGET_Venture_2(t *testing.T) {
 	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
 	assertWrappedErrorBody(t, res.Body)
 }
+
+// ****************************************************************************
+// (POST) /ventures
+// ****************************************************************************
 
 func TestPOST_Venture_1(t *testing.T) {
 	t.Log(`Given some Ventures already exist on the server
@@ -158,6 +170,10 @@ func TestPOST_Venture_2(t *testing.T) {
 	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
 	assertWrappedErrorBody(t, res.Body)
 }
+
+// ****************************************************************************
+// (PUT) /ventures
+// ****************************************************************************
 
 func TestPUT_Venture_1(t *testing.T) {
 	t.Log(`Given some Ventures already exist on the server
@@ -314,6 +330,10 @@ func TestPUT_Venture_4(t *testing.T) {
 	assertWrappedErrorBody(t, res.Body)
 }
 
+// ****************************************************************************
+// (HEAD) /ventures
+// ****************************************************************************
+
 func TestHEAD_Ventures(t *testing.T) {
 	t.Log(`Given some Ventures already exist on the server
 		When only /ventures HEADers are requested
@@ -338,6 +358,10 @@ func TestHEAD_Ventures(t *testing.T) {
 	assertEmptyBody(t, res.Body)
 }
 
+// ****************************************************************************
+// (OPTIONS) /ventures
+// ****************************************************************************
+
 func TestOPTIONS_Ventures(t *testing.T) {
 	t.Log(`Given some Ventures already exist on the server
 		When /ventures OPTIONS are requested
@@ -361,6 +385,10 @@ func TestOPTIONS_Ventures(t *testing.T) {
 	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
 	assertEmptyBody(t, res.Body)
 }
+
+// ****************************************************************************
+// (?) /ventures
+// ****************************************************************************
 
 func TestINVALID_Ventures(t *testing.T) {
 	t.Log(`Given some Ventures already exist on the server
