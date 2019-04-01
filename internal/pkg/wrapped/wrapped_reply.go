@@ -14,8 +14,7 @@ type WrappedReply struct {
 	Hints   string      `json:"hints,omitempty"`
 }
 
-// DecodeWrappedReplyFromReader decodes JSON from a Reader into a
-// WrappedReply
+// DecodeWrappedReplyFromReader decodes JSON from a Reader into a WrappedReply
 func DecodeWrappedReplyFromReader(r io.Reader) (WrappedReply, error) {
 	var wr WrappedReply
 	err := json.NewDecoder(r).Decode(&wr)

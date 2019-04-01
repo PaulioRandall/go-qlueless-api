@@ -66,6 +66,6 @@ func assertWrappedErrorBody(t *testing.T, r io.Reader) w.WrappedReply {
 	var reply w.WrappedReply
 	err := json.NewDecoder(r).Decode(&reply)
 	require.Nil(t, err)
-	a.AssertGenericError(t, reply)
+	w.AssertGenericError(t, reply)
 	return reply
 }

@@ -7,7 +7,6 @@ import (
 	"regexp"
 	"testing"
 
-	w "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/wrapped"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -98,16 +97,4 @@ func AssertHeadersNotMatches(t *testing.T, h http.Header, patterns map[string]st
 			assert.NotRegexp(t, reg, act[0])
 		}
 	}
-}
-
-func AssertGenericError(t *testing.T, r w.WrappedReply) {
-	assert.NotEmpty(t, r.Message)
-	assert.NotEmpty(t, r.Self)
-	assert.Empty(t, r.Data)
-}
-
-func AssertWrappedReply(t *testing.T, r w.WrappedReply) {
-	assert.NotEmpty(t, r.Message)
-	assert.NotEmpty(t, r.Self)
-	assert.NotEmpty(t, r.Data)
 }
