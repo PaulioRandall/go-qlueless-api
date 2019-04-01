@@ -1,0 +1,21 @@
+"cors_origin": {
+  "required": true,
+  "allowEmptyValue": false,
+  "schema": {
+    "type": "string"
+  }
+},
+"cors_headers": {
+  "required": true,
+  "allowEmptyValue": false,
+  "schema": {
+    "type": "string"
+  }
+},
+"cors_methods": {
+  "required": true,
+  "allowEmptyValue": false,
+  "schema": {
+    "type": "string"
+  }
+}

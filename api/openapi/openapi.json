@@ -29,9 +29,17 @@
 		          "application/vnd.oai.openapi+json": {
 		          }
 		        },
-		        "headers": [{
-		          "$ref": "#/components/x-hidden/default_headers"
-		        }]
+		        "headers": {
+		          "Access-Control-Allow-Origin": {
+		            "$ref": "#/components/headers/cors_origin"
+		          },
+		          "Access-Control-Allow-Headers": {
+		            "$ref": "#/components/headers/cors_headers"
+		          },
+		          "Access-Control-Allow-Methods": {
+		            "$ref": "#/components/headers/cors_methods"
+		          }
+		        }
 		      },
 		      "default": {
 		        "$ref": "#/components/responses/error"
@@ -49,9 +57,17 @@
 		          "text/markdown": {
 		          }
 		        },
-		        "headers": [{
-		          "$ref": "#/components/x-hidden/default_headers"
-		        }]
+		        "headers": {
+		          "Access-Control-Allow-Origin": {
+		            "$ref": "#/components/headers/cors_origin"
+		          },
+		          "Access-Control-Allow-Headers": {
+		            "$ref": "#/components/headers/cors_headers"
+		          },
+		          "Access-Control-Allow-Methods": {
+		            "$ref": "#/components/headers/cors_methods"
+		          }
+		        }
 		      },
 		      "default": {
 		        "$ref": "#/components/responses/error"
@@ -154,6 +170,29 @@
 		}
   },
 	"components": {
+    "headers": {
+			"cors_origin": {
+			  "required": true,
+			  "allowEmptyValue": false,
+			  "schema": {
+			    "type": "string"
+			  }
+			},
+			"cors_headers": {
+			  "required": true,
+			  "allowEmptyValue": false,
+			  "schema": {
+			    "type": "string"
+			  }
+			},
+			"cors_methods": {
+			  "required": true,
+			  "allowEmptyValue": false,
+			  "schema": {
+			    "type": "string"
+			  }
+			}
+    },
     "parameters": {
 			"venture_id": {
 			  "name": "id",
@@ -226,9 +265,17 @@
 			      }
 			    }
 			  },
-			  "headers": [{
-			    "$ref": "#/components/x-hidden/default_headers"
-			  }]
+			  "headers": {
+			    "Access-Control-Allow-Origin": {
+			      "$ref": "#/components/headers/cors_origin"
+			    },
+			    "Access-Control-Allow-Headers": {
+			      "$ref": "#/components/headers/cors_headers"
+			    },
+			    "Access-Control-Allow-Methods": {
+			      "$ref": "#/components/headers/cors_methods"
+			    }
+			  }
 			},
 			"venture_200": {
 			  "description": "Single Venture.",
@@ -239,15 +286,31 @@
 			      }
 			    }
 			  },
-			  "headers": [{
-			    "$ref": "#/components/x-hidden/default_headers"
-			  }]
+			  "headers": {
+			    "Access-Control-Allow-Origin": {
+			      "$ref": "#/components/headers/cors_origin"
+			    },
+			    "Access-Control-Allow-Headers": {
+			      "$ref": "#/components/headers/cors_headers"
+			    },
+			    "Access-Control-Allow-Methods": {
+			      "$ref": "#/components/headers/cors_methods"
+			    }
+			  }
 			},
 			"venture_200_no_content": {
 			  "description": "Headers only.",
-			  "headers": [{
-			    "$ref": "#/components/x-hidden/default_headers"
-			  }]
+			  "headers": {
+			    "Access-Control-Allow-Origin": {
+			      "$ref": "#/components/headers/cors_origin"
+			    },
+			    "Access-Control-Allow-Headers": {
+			      "$ref": "#/components/headers/cors_headers"
+			    },
+			    "Access-Control-Allow-Methods": {
+			      "$ref": "#/components/headers/cors_methods"
+			    }
+			  }
 			},
 			"error": {
 			  "description": "Client or service error.",
@@ -258,9 +321,17 @@
 			      }
 			    }
 			  },
-			  "headers": [{
-			    "$ref": "#/components/x-hidden/default_headers"
-			  }]
+			  "headers": {
+			    "Access-Control-Allow-Origin": {
+			      "$ref": "#/components/headers/cors_origin"
+			    },
+			    "Access-Control-Allow-Headers": {
+			      "$ref": "#/components/headers/cors_headers"
+			    },
+			    "Access-Control-Allow-Methods": {
+			      "$ref": "#/components/headers/cors_methods"
+			    }
+			  }
 			}
     },
 		"schemas": {
@@ -445,29 +516,6 @@
 			"extra": {
 			  "type": "string",
 			  "description": "Additional CLOB data managed by clients."
-			},
-			"default_headers": {
-			  "Access-Control-Allow-Origin": {
-			    "required": true,
-			    "allowEmptyValue": false,
-			    "schema": {
-			      "type": "string"
-			    }
-			  },
-			  "Access-Control-Allow-Headers": {
-			    "required": true,
-			    "allowEmptyValue": false,
-			    "schema": {
-			      "type": "string"
-			    }
-			  },
-			  "Access-Control-Allow-Methods": {
-			    "required": true,
-			    "allowEmptyValue": false,
-			    "schema": {
-			      "type": "string"
-			    }
-			  }
 			}
     }
 	}

@@ -24,6 +24,9 @@
     {{- "\n"}}{{ .Inject "/venture/paths.json" 2}}
   },
 	"components": {
+    "headers": {
+      {{- "\n"}}{{ .Inject "/shared/headers.json" 3}}
+    },
     "parameters": {
       {{- "\n"}}{{ .Inject "/venture/parameters.json" 3}},
       {{- "\n"}}{{ .Inject "/shared/parameters.json" 3}}
