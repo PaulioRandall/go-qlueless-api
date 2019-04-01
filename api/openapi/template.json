@@ -21,38 +21,26 @@
 	"paths": {
     {{- "\n"}}{{ .Inject "/openapi/paths.json" 2}},
     {{- "\n"}}{{ .Inject "/changelog/paths.json" 2}},
-    {{- "\n"}}{{ .Inject "/venture/paths.json" 2}},
-    {{- "\n"}}{{ .Inject "/order/paths.json" 2}},
-    {{- "\n"}}{{ .Inject "/batch/paths.json" 2}}
+    {{- "\n"}}{{ .Inject "/venture/paths.json" 2}}
   },
 	"components": {
     "parameters": {
       {{- "\n"}}{{ .Inject "/venture/parameters.json" 3}},
-      {{- "\n"}}{{ .Inject "/order/parameters.json" 3}},
-      {{- "\n"}}{{ .Inject "/batch/parameters.json" 3}},
       {{- "\n"}}{{ .Inject "/shared/parameters.json" 3}}
     },
     "requestBodies": {
-      {{- "\n"}}{{ .Inject "/venture/requestBodies.json" 3}},
-      {{- "\n"}}{{ .Inject "/order/requestBodies.json" 3}},
-      {{- "\n"}}{{ .Inject "/batch/requestBodies.json" 3}}
+      {{- "\n"}}{{ .Inject "/venture/requestBodies.json" 3}}
     },
     "responses": {
       {{- "\n"}}{{ .Inject "/venture/responses.json" 3}},
-      {{- "\n"}}{{ .Inject "/order/responses.json" 3}},
-      {{- "\n"}}{{ .Inject "/batch/responses.json" 3}},
       {{- "\n"}}{{ .Inject "/shared/responses.json" 3}}
     },
 		"schemas": {
       {{- "\n"}}{{ .Inject "/venture/schemas.json" 3}},
-      {{- "\n"}}{{ .Inject "/order/schemas.json" 3}},
-      {{- "\n"}}{{ .Inject "/batch/schemas.json" 3}},
 			{{- "\n"}}{{ .Inject "/shared/schemas.json" 3}}
     },
     "x-hidden": {
       {{- "\n"}}{{ .Inject "/venture/x-hidden.json" 3}},
-      {{- "\n"}}{{ .Inject "/order/x-hidden.json" 3}},
-      {{- "\n"}}{{ .Inject "/batch/x-hidden.json" 3}},
       {{- "\n"}}{{ .Inject "/shared/x-hidden.json" 3}}
     }
 	}
