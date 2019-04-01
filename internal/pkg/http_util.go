@@ -116,6 +116,14 @@ func PrepResponseData(req *http.Request, data interface{}, msg string) interface
 	}
 }
 
+// AppendCORSHeaders appends the CORS response headers for requests to
+// ResponseWriters
+func AppendCORSHeaders(res *http.ResponseWriter, httpMethods string) {
+	(*res).Header().Set("Access-Control-Allow-Origin", "*")
+	(*res).Header().Set("Access-Control-Allow-Methods", httpMethods)
+	(*res).Header().Set("Access-Control-Allow-Headers", "*")
+}
+
 // AppendJSONHeader appends the response headers for JSON requests to
 // ResponseWriters
 func AppendJSONHeader(res *http.ResponseWriter, extensionType string) {

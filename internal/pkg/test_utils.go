@@ -37,14 +37,6 @@ func CheckHeaderValue(t *testing.T, h http.Header, k string, exp string) {
 	assert.Equal(t, exp, h.Get(k))
 }
 
-/*
-func CheckCORSResponseHeaders(t *testing.T, h http.Header) {
-	CheckHeaderValue(t, h, "Access-Control-Allow-Origin", "*")
-	CheckHeaderExists(t, h, "Access-Control-Allow-Methods")
-	CheckHeaderExists(t, h, "Access-Control-Allow-Headers")
-}
-*/
-
 func SetupRequest(path string) (*http.Request, *http.ResponseWriter, *httptest.ResponseRecorder) {
 	req, err := http.NewRequest("GET", "http://example.com"+path, nil)
 	if err != nil {
