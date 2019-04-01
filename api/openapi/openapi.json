@@ -115,7 +115,7 @@
 		    "description": "Deletes a Venture.",
 		    "parameters": [
 		      {
-		        "$ref": "#/components/parameters/venture_id"
+		        "$ref": "#/components/parameters/venture_id_required"
 		      }
 		    ],
 		    "responses": {
@@ -160,6 +160,15 @@
 			  "in": "query",
 			  "description": "Unique identifier of a Venture.",
 			  "required": false,
+			  "schema": {
+			    "$ref": "#/components/x-hidden/venture_id"
+			  }
+			},
+			"venture_id_required": {
+			  "name": "id",
+			  "in": "query",
+			  "description": "Unique identifier of a Venture.",
+			  "required": true,
 			  "schema": {
 			    "$ref": "#/components/x-hidden/venture_id"
 			  }

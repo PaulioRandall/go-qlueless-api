@@ -57,7 +57,7 @@ func writeSuccessReply(res *http.ResponseWriter, req *http.Request, code int, da
 // findVenture finds the Venture with the specified ID.
 func findVenture(id string, res *http.ResponseWriter, req *http.Request) (v.Venture, bool) {
 	ven, ok := ventures.Get(id)
-	if !ok || !ven.IsAlive {
+	if !ok {
 		p.WriteBadRequest(res, req, fmt.Sprintf("Thing '%s' not found", id))
 		return v.Venture{}, false
 	}

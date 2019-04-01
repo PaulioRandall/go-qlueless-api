@@ -25,7 +25,6 @@ func AssertGenericVenture(t *testing.T, v Venture) {
 	if v.OrderIDs != "" {
 		ts.AssertGenericIntCSV(t, v.OrderIDs)
 	}
-	assert.True(t, v.IsAlive, "Venture.IsAlive")
 }
 
 func AssertVentureSliceFromReader(t *testing.T, r io.Reader) []Venture {

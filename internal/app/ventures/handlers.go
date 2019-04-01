@@ -41,7 +41,7 @@ func VenturesHandler(res http.ResponseWriter, req *http.Request) {
 
 // _GET_AllVentures handles client requests for all living Ventures.
 func _GET_AllVentures(res *http.ResponseWriter, req *http.Request) {
-	vens := ventures.GetAllAlive()
+	vens := ventures.GetAll()
 	m := fmt.Sprintf("Found %d Ventures", len(vens))
 	writeSuccessReply(res, req, http.StatusOK, vens, m)
 }

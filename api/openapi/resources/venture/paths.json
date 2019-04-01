@@ -54,7 +54,7 @@
     "description": "Deletes a Venture.",
     "parameters": [
       {
-        "$ref": "#/components/parameters/venture_id"
+        "$ref": "#/components/parameters/venture_id_required"
       }
     ],
     "responses": {
