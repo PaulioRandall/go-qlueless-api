@@ -1,7 +1,6 @@
 package pkg
 
 import (
-	"encoding/json"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -13,7 +12,10 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-// When given a request, returns the absolute relative URL of the request
+// ****************************************************************************
+// RelURL()
+// ****************************************************************************
+
 func TestRelURL(t *testing.T) {
 	req, err := http.NewRequest("GET", "http://example.com/character?q=Nobby", nil)
 	require.Nil(t, err)
@@ -22,47 +24,16 @@ func TestRelURL(t *testing.T) {
 	assert.Equal(t, "/character?q=Nobby", act)
 }
 
-// When invoked, sets 500 status code
-func TestWriteServerError___1(t *testing.T) {
-	req, res, rec := SetupRequest("/")
+// ****************************************************************************
+// CheckReplyMessage()
+// ****************************************************************************
 
-	WriteServerError(res, req)
-	assert.Equal(t, 500, rec.Code)
-}
-
-// When invoked, writes JSON headers
-func TestWriteServerError___2(t *testing.T) {
-	req, res, rec := SetupRequest("/")
-
-	WriteServerError(res, req)
-	a.AssertHeadersEquals(t, (*rec).Header(), map[string]string{
-		"Content-Type": "application/json; charset=utf-8",
-	})
-}
-
-// When invoked, writes JSON headers
-func TestWriteServerError___3(t *testing.T) {
-	req, res, rec := SetupRequest("/")
-
-	WriteServerError(res, req)
-
-	require.NotNil(t, rec.Body)
-	var m map[string]interface{}
-	err := json.NewDecoder(rec.Body).Decode(&m)
-	require.Nil(t, err)
-	require.Len(t, m, 2)
-	assert.Contains(t, m, "message")
-	assert.Contains(t, m, "self")
-}
-
-// When message is not empty, returns true
 func TestCheckReplyMessage___1(t *testing.T) {
 	req, res, _ := SetupRequest("/")
 	act := CheckReplyMessage(res, req, "message")
 	assert.True(t, act)
 }
 
-// When message is empty, sets 500 status code and returns false
 func TestCheckReplyMessage___2(t *testing.T) {
 	req, res, rec := SetupRequest("/")
 	act := CheckReplyMessage(res, req, "")
@@ -70,15 +41,17 @@ func TestCheckReplyMessage___2(t *testing.T) {
 	assert.Equal(t, 500, rec.Code)
 }
 
-// When given a status between max and min, true is returned
+// ****************************************************************************
+// CheckStatusBetween()
+// ****************************************************************************
+
 func TestCheckStatusBetween___1(t *testing.T) {
 	req, res, _ := SetupRequest("/")
 	act := CheckStatusBetween(res, req, 404, 400, 499)
 	assert.True(t, act)
 }
 
-// When given a status equal to max or min, true is returned
-func TestCheckStatusCode___2(t *testing.T) {
+func TestCheckStatusBetween___2(t *testing.T) {
 	req, res, _ := SetupRequest("/")
 	act := CheckStatusBetween(res, req, 400, 400, 499)
 	assert.True(t, act)
@@ -86,9 +59,7 @@ func TestCheckStatusCode___2(t *testing.T) {
 	assert.True(t, act)
 }
 
-// When given a status less than min or greater than max, false is returned and
-// 500 status set in response
-func TestCheckStatusCode___3(t *testing.T) {
+func TestCheckStatusBetween___3(t *testing.T) {
 	req, res, rec := SetupRequest("/")
 	act := CheckStatusBetween(res, req, 300, 400, 499)
 	require.False(t, act)
@@ -100,143 +71,10 @@ func TestCheckStatusCode___3(t *testing.T) {
 	assert.Equal(t, 500, rec.Code)
 }
 
-// When not 4XX status code, sets 500 status code
-func TestWrite4XXReply___1(t *testing.T) {
-	req, res, rec := SetupRequest("/")
-	r := w.WrappedReply{
-		Message: "message",
-	}
+// ****************************************************************************
+// PrepResponseData()
+// ****************************************************************************
 
-	Write4XXReply(res, req, 300, r)
-	assert.Equal(t, 500, rec.Code)
-}
-
-// When WrappedReply.Message not set, sets 500 status code
-func TestWrite4XXReply___2(t *testing.T) {
-	req, res, rec := SetupRequest("/")
-	r := w.WrappedReply{}
-
-	Write4XXReply(res, req, 400, r)
-	assert.Equal(t, 500, rec.Code)
-}
-
-// When complete ReplyMeta passed, sets 200 status code
-func TestWrite4XXReply___3(t *testing.T) {
-	req, res, rec := SetupRequest("/search?q=dan+north")
-	r := w.WrappedReply{
-		Message: "abc",
-		Self:    (*req).URL.String(),
-		Hints:   "xyz",
-	}
-
-	Write4XXReply(res, req, 400, r)
-	assert.Equal(t, 400, rec.Code)
-}
-
-// When complete WrappedReply passed, JSON headers are set
-func TestWrite4XXReply___4(t *testing.T) {
-	req, res, rec := SetupRequest("/search?q=dan+north")
-	r := w.WrappedReply{
-		Message: "abc",
-		Self:    (*req).URL.String(),
-		Hints:   "xyz",
-	}
-
-	Write4XXReply(res, req, 400, r)
-	a.AssertHeadersEquals(t, (*rec).Header(), map[string]string{
-		"Content-Type": "application/json; charset=utf-8",
-	})
-}
-
-// When complete Reply4XX passed, body is set with expected JSON
-func TestWrite4XXReply___5(t *testing.T) {
-	req, res, rec := SetupRequest("/search?q=dan+north")
-	r := w.WrappedReply{
-		Message: "abc",
-		Self:    (*req).URL.Path + "?" + (*req).URL.RawQuery,
-		Hints:   "xyz",
-	}
-
-	Write4XXReply(res, req, 400, r)
-
-	require.NotNil(t, rec.Body)
-	var m map[string]interface{}
-	err := json.NewDecoder(rec.Body).Decode(&m)
-
-	require.Nil(t, err)
-	require.Len(t, m, 3)
-	assert.Equal(t, "abc", m["message"])
-	assert.Equal(t, "/search?q=dan+north", m["self"])
-	assert.Equal(t, "xyz", m["hints"])
-}
-
-// When Reply4XX.Self is not set, Reply4XX.Self is set for us
-func TestWrite4XXReply___6(t *testing.T) {
-	req, res, rec := SetupRequest("/search?q=dan+north")
-	r := w.WrappedReply{
-		Message: "abc",
-		Hints:   "xyz",
-	}
-
-	Write4XXReply(res, req, 400, r)
-
-	require.NotNil(t, rec.Body)
-	var m map[string]interface{}
-	err := json.NewDecoder(rec.Body).Decode(&m)
-	require.Nil(t, err)
-	assert.Equal(t, "/search?q=dan+north", m["self"])
-}
-
-// When using non-empty message, sets 400 status code
-func TestWriteBadRequest___1(t *testing.T) {
-	req, res, rec := SetupRequest("/")
-	WriteBadRequest(res, req, "message")
-	assert.Equal(t, 400, rec.Code)
-}
-
-// When using non-empty message, creates WrappedReply in response body with the
-// supplied message and self
-func TestWriteBadRequest___2(t *testing.T) {
-	req, res, rec := SetupRequest("/")
-
-	WriteBadRequest(res, req, "message")
-	exp := w.WrappedReply{
-		Message: "message",
-		Self:    "/",
-	}
-
-	require.NotNil(t, rec.Body)
-	var a w.WrappedReply
-	err := json.NewDecoder(rec.Body).Decode(&a)
-
-	require.Nil(t, err)
-	assert.Equal(t, exp, a)
-}
-
-// When using empty message, sets 500 status code
-func TestWriteBadRequest___3(t *testing.T) {
-	req, res, rec := SetupRequest("/")
-	WriteBadRequest(res, req, "")
-	assert.Equal(t, 500, rec.Code)
-}
-
-// When the 'wrap' query param is present in a request, returns true
-func TestWrapReply___1(t *testing.T) {
-	req, err := http.NewRequest("GET", "http://example.com/?wrap=", nil)
-	require.Nil(t, err)
-	act := WrapReply(req)
-	assert.True(t, act)
-}
-
-// When the 'wrap' query param is not present in a request, returns false
-func TestIsMetaReply___2(t *testing.T) {
-	req, err := http.NewRequest("GET", "http://example.com/?q=abc", nil)
-	require.Nil(t, err)
-	act := WrapReply(req)
-	assert.False(t, act)
-}
-
-// When 'wrap' not present and data is nil, nil is returned
 func TestPrepResponseData___1(t *testing.T) {
 	req, err := http.NewRequest("GET", "http://example.com/", nil)
 	require.Nil(t, err)
@@ -245,7 +83,6 @@ func TestPrepResponseData___1(t *testing.T) {
 	assert.Nil(t, act)
 }
 
-// When 'wrap' not present and data is provided, data is returned unchanged
 func TestPrepResponseData___2(t *testing.T) {
 	req, err := http.NewRequest("GET", "http://example.com/", nil)
 	require.Nil(t, err)
@@ -257,7 +94,6 @@ func TestPrepResponseData___2(t *testing.T) {
 	assert.Equal(t, data, act)
 }
 
-// When 'meta' is present and data is provided, wrapped reply is returned
 func TestPrepResponseData___3(t *testing.T) {
 	req, err := http.NewRequest("GET", "http://example.com/?wrap", nil)
 	require.Nil(t, err)
@@ -276,7 +112,10 @@ func TestPrepResponseData___3(t *testing.T) {
 	assert.Equal(t, exp, act)
 }
 
-// When invoked, the CORS response headers are set
+// ****************************************************************************
+// AppendCORSHeaders()
+// ****************************************************************************
+
 func TestAppendCORSHeaders___1(t *testing.T) {
 	rec := httptest.NewRecorder()
 	var res http.ResponseWriter = rec
@@ -288,7 +127,10 @@ func TestAppendCORSHeaders___1(t *testing.T) {
 	})
 }
 
-// When invoked, the JSON response headers are set
+// ****************************************************************************
+// AppendJSONHeader()
+// ****************************************************************************
+
 func TestAppendJSONHeaders___1(t *testing.T) {
 	rec := httptest.NewRecorder()
 	var res http.ResponseWriter = rec
@@ -296,119 +138,4 @@ func TestAppendJSONHeaders___1(t *testing.T) {
 	a.AssertHeadersEquals(t, (*rec).Header(), map[string]string{
 		"Content-Type": "application/json; charset=utf-8",
 	})
-}
-
-// When given valid inputs, 200 status code is set
-func TestWriteReply___1(t *testing.T) {
-	_, res, rec := SetupRequest("/")
-	b := []byte("Ghost in the moon")
-
-	WriteReply(res, &b, "text/plain")
-	assert.Equal(t, 200, rec.Code)
-}
-
-// When given valid inputs, the response headers are set
-func TestWriteReply___2(t *testing.T) {
-	_, res, rec := SetupRequest("/")
-	b := []byte("Ghost in the moon")
-
-	WriteReply(res, &b, "text/plain")
-	CheckHeaderValue(t, rec.Header(), "Content-Type", "text/plain")
-}
-
-// When given valid inputs, the data is written to the response body
-func TestWriteReply___3(t *testing.T) {
-	_, res, rec := SetupRequest("/")
-	b := []byte("Ghost in the moon")
-
-	WriteReply(res, &b, "text/plain")
-
-	require.NotNil(t, rec.Body)
-	s := string(rec.Body.String())
-	assert.Equal(t, "Ghost in the moon", s)
-}
-
-// When given valid inputs, 200 status code is set
-func TestWriteEmptyReply___1(t *testing.T) {
-	_, res, rec := SetupRequest("/")
-	WriteEmptyReply(res, "text/plain")
-	assert.Equal(t, 200, rec.Code)
-}
-
-// When given valid inputs, the response headers are set
-func TestWriteEmptyReply___2(t *testing.T) {
-	_, res, rec := SetupRequest("/")
-	WriteEmptyReply(res, "text/plain")
-	CheckHeaderValue(t, rec.Header(), "Content-Type", "text/plain")
-}
-
-// When given valid inputs, no data is written to the response body
-func TestWriteEmptyReply___3(t *testing.T) {
-	_, res, rec := SetupRequest("/")
-	WriteEmptyReply(res, "text/plain")
-	assert.Empty(t, rec.Body)
-}
-
-// When given valid inputs, 200 status code is set
-func TestWriteJsonReply___1(t *testing.T) {
-	req, res, rec := SetupRequest("/")
-	m := make(map[string]interface{})
-	m["killswitch"] = "engage"
-
-	WriteJSONReply(res, req, m, "")
-	assert.Equal(t, 200, rec.Code)
-}
-
-// When given valid inputs, the JSON response headers are set
-func TestWriteJsonReply___2(t *testing.T) {
-	req, res, rec := SetupRequest("/")
-	m := make(map[string]interface{})
-	m["killswitch"] = "engage"
-
-	WriteJSONReply(res, req, m, "")
-	a.AssertHeadersEquals(t, (*rec).Header(), map[string]string{
-		"Content-Type": "application/json; charset=utf-8",
-	})
-}
-
-// When given valid inputs, the data is serialised into JSON the response body
-// is set
-func TestWriteJsonReply___3(t *testing.T) {
-	req, res, rec := SetupRequest("/")
-	data := make(map[string]interface{})
-	data["killswitch"] = "engage"
-
-	WriteJSONReply(res, req, data, "")
-
-	require.NotNil(t, rec.Body)
-	var m map[string]interface{}
-	err := json.NewDecoder(rec.Body).Decode(&m)
-	require.Nil(t, err)
-	assert.Equal(t, data, m)
-}
-
-// When given valid inputs, 200 status code is set
-func TestWriteEmptyJSONReply___1(t *testing.T) {
-	rec := httptest.NewRecorder()
-	var res http.ResponseWriter = rec
-	WriteEmptyJSONReply(&res, "")
-	assert.Equal(t, 200, rec.Code)
-}
-
-// When given valid inputs, the JSON response headers are set
-func TestWriteEmptyJSONReply___2(t *testing.T) {
-	rec := httptest.NewRecorder()
-	var res http.ResponseWriter = rec
-	WriteEmptyJSONReply(&res, "")
-	a.AssertHeadersEquals(t, (*rec).Header(), map[string]string{
-		"Content-Type": "application/json; charset=utf-8",
-	})
-}
-
-// When given valid inputs, no response body is set
-func TestWriteEmptyJSONReply___3(t *testing.T) {
-	rec := httptest.NewRecorder()
-	var res http.ResponseWriter = rec
-	WriteEmptyJSONReply(&res, "")
-	assert.Empty(t, rec.Body)
 }
