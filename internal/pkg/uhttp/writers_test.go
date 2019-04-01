@@ -181,7 +181,7 @@ func TestWriteReply___2(t *testing.T) {
 	b := []byte("Ghost in the moon")
 
 	WriteReply(res, &b, "text/plain")
-	CheckHeaderValue(t, rec.Header(), "Content-Type", "text/plain")
+	AssertHeaderValue(t, rec.Header(), "Content-Type", "text/plain")
 }
 
 func TestWriteReply___3(t *testing.T) {
@@ -208,7 +208,7 @@ func TestWriteEmptyReply___1(t *testing.T) {
 func TestWriteEmptyReply___2(t *testing.T) {
 	_, res, rec := SetupRequest("/")
 	WriteEmptyReply(res, "text/plain")
-	CheckHeaderValue(t, rec.Header(), "Content-Type", "text/plain")
+	AssertHeaderValue(t, rec.Header(), "Content-Type", "text/plain")
 }
 
 func TestWriteEmptyReply___3(t *testing.T) {
