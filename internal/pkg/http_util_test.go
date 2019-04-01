@@ -281,7 +281,11 @@ func TestAppendCORSHeaders___1(t *testing.T) {
 	rec := httptest.NewRecorder()
 	var res http.ResponseWriter = rec
 	AppendCORSHeaders(&res, "*")
-	CheckCORSResponseHeaders(t, rec.Header())
+	a.AssertHeadersEquals(t, (*rec).Header(), map[string]string{
+		"Access-Control-Allow-Origin":  "*",
+		"Access-Control-Allow-Headers": "*",
+		"Access-Control-Allow-Methods": "*",
+	})
 }
 
 // When invoked, the JSON response headers are set

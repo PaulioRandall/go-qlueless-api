@@ -57,7 +57,6 @@ func CheckReplyMessage(res *http.ResponseWriter, req *http.Request, m string) bo
 }
 
 // Write4XXReply writes the response for a 4XX error
-// @REMOVE
 func Write4XXReply(res *http.ResponseWriter, req *http.Request, status int, r w.WrappedReply) {
 	if !CheckStatusBetween(res, req, status, 400, 499) {
 		return
@@ -115,14 +114,6 @@ func PrepResponseData(req *http.Request, data interface{}, msg string) interface
 	} else {
 		return data
 	}
-}
-
-// AppendCORSHeaders appends the CORS response headers for requests to
-// ResponseWriters
-func AppendCORSHeaders(res *http.ResponseWriter, httpMethods string) {
-	(*res).Header().Set("Access-Control-Allow-Origin", "*")
-	(*res).Header().Set("Access-Control-Allow-Methods", httpMethods)
-	(*res).Header().Set("Access-Control-Allow-Headers", "*")
 }
 
 // AppendJSONHeader appends the response headers for JSON requests to
