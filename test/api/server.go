@@ -7,10 +7,14 @@ import (
 	"time"
 )
 
+// adminPrint prints a general test message distinguishable from ordinary test
+// log messages
 func adminPrint(m string) {
 	log.Println("[API-TEST] " + m)
 }
 
+// attemptRecover attempts to recover from a panic setting the exit code to 1
+// if recovery from a panic was made
 func attemptRecover(exitCode *int) {
 	if r := recover(); r != nil {
 		adminPrint("Recovered from panic, exiting a little more gracefully")
@@ -18,6 +22,7 @@ func attemptRecover(exitCode *int) {
 	}
 }
 
+// startServer starts the application server
 func startServer() *exec.Cmd {
 	cmd := &exec.Cmd{
 		Path:   "./go-qlueless-assembly-api",
@@ -37,6 +42,7 @@ func startServer() *exec.Cmd {
 	return cmd
 }
 
+// stopServer stops the application server
 func stopServer(cmd *exec.Cmd) {
 	adminPrint("Killing server: " + cmd.Path)
 	err := cmd.Process.Kill()
