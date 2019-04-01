@@ -1,11 +1,11 @@
-package api
+package test
 
 import (
 	"testing"
 
-	"github.com/stretchr/testify/require"
+	a "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/asserts"
 
-	. "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/asserts"
+	"github.com/stretchr/testify/require"
 )
 
 const changelogMediaType = "text/markdown"
@@ -34,7 +34,7 @@ func TestGET_Changelog(t *testing.T) {
 	}
 	res := req.fire()
 	defer res.Body.Close()
-	defer PrintResponse(t, res.Body)
+	defer a.PrintResponse(t, res.Body)
 
 	require.Equal(t, 200, res.StatusCode)
 	assertDefaultHeaders(t, res, changelogMediaType, changelogHttpMethods)
@@ -62,7 +62,7 @@ func TestHEAD_Changelog(t *testing.T) {
 	}
 	res := req.fire()
 	defer res.Body.Close()
-	defer PrintResponse(t, res.Body)
+	defer a.PrintResponse(t, res.Body)
 
 	require.Equal(t, 200, res.StatusCode)
 	assertDefaultHeaders(t, res, changelogMediaType, changelogHttpMethods)
@@ -90,7 +90,7 @@ func TestOPTIONS_Changelog(t *testing.T) {
 	}
 	res := req.fire()
 	defer res.Body.Close()
-	defer PrintResponse(t, res.Body)
+	defer a.PrintResponse(t, res.Body)
 
 	require.Equal(t, 200, res.StatusCode)
 	assertDefaultHeaders(t, res, changelogMediaType, changelogHttpMethods)

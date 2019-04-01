@@ -1,4 +1,4 @@
-package api
+package test
 
 import (
 	"encoding/json"
@@ -13,6 +13,23 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
+
+const (
+	CORS_METHODS_PATTERN = "^((\\s*[A-Z]*\\s*,)+)*(\\s*[A-Z]*\\s*)$" // Example: 'GET,  POST   ,OPTIONS'
+)
+
+var ALL_STD_HTTP_METHODS = []string{
+	"GET",
+	"POST",
+	"PUT",
+	"DELETE",
+	"HEAD",
+	"OPTIONS",
+	"CONNECT",
+	"TRACE",
+	"PATCH",
+	"CUSTOM",
+}
 
 // assertDefaultHeaders asserts that the services default headers were applied
 func assertDefaultHeaders(t *testing.T, res *http.Response, contentType string, allowedMethods []string) {

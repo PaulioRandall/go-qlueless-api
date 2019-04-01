@@ -1,4 +1,4 @@
-package api
+package test
 
 import (
 	"log"
@@ -26,7 +26,7 @@ func attemptRecover(exitCode *int) {
 func startServer() *exec.Cmd {
 	cmd := &exec.Cmd{
 		Path:   "./go-qlueless-assembly-api",
-		Dir:    "../../bin",
+		Dir:    "../bin",
 		Stdout: os.Stdout,
 		Stderr: os.Stderr,
 	}

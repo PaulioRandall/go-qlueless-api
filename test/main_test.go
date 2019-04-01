@@ -1,4 +1,4 @@
-package api
+package test
 
 import (
 	"fmt"
@@ -10,23 +10,6 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
-
-const (
-	CORS_METHODS_PATTERN = "^((\\s*[A-Z]*\\s*,)+)*(\\s*[A-Z]*\\s*)$" // Example: 'GET,  POST   ,OPTIONS'
-)
-
-var ALL_STD_HTTP_METHODS = []string{
-	"GET",
-	"POST",
-	"PUT",
-	"DELETE",
-	"HEAD",
-	"OPTIONS",
-	"CONNECT",
-	"TRACE",
-	"PATCH",
-	"CUSTOM",
-}
 
 // _exit is file private function that accepts a referenced integer instead of
 // an actual one

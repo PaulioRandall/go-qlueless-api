@@ -1,4 +1,4 @@
-package api
+package test
 
 import (
 	"encoding/json"
@@ -6,7 +6,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	. "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/asserts"
+	a "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/asserts"
 )
 
 const openapiMediaType = "application/vnd.oai.openapi+json"
@@ -35,7 +35,7 @@ func TestGET_OpenAPI(t *testing.T) {
 	}
 	res := req.fire()
 	defer res.Body.Close()
-	defer PrintResponse(t, res.Body)
+	defer a.PrintResponse(t, res.Body)
 
 	require.Equal(t, 200, res.StatusCode)
 	assertDefaultHeaders(t, res, openapiMediaType, openapiHttpMethods)
@@ -66,7 +66,7 @@ func TestHEAD_OpenAPI(t *testing.T) {
 	}
 	res := req.fire()
 	defer res.Body.Close()
-	defer PrintResponse(t, res.Body)
+	defer a.PrintResponse(t, res.Body)
 
 	require.Equal(t, 200, res.StatusCode)
 	assertDefaultHeaders(t, res, openapiMediaType, openapiHttpMethods)
@@ -94,7 +94,7 @@ func TestOPTIONS_OpenAPI(t *testing.T) {
 	}
 	res := req.fire()
 	defer res.Body.Close()
-	defer PrintResponse(t, res.Body)
+	defer a.PrintResponse(t, res.Body)
 
 	require.Equal(t, 200, res.StatusCode)
 	assertDefaultHeaders(t, res, openapiMediaType, openapiHttpMethods)

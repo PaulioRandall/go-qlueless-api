@@ -1,4 +1,4 @@
-package api
+package test
 
 import (
 	"bytes"
@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	. "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/asserts"
+	a "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/asserts"
 	. "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/ventures"
 )
 
@@ -36,7 +36,7 @@ func TestGET_Ventures_1(t *testing.T) {
 	}
 	res := req.fire()
 	defer res.Body.Close()
-	defer PrintResponse(t, res.Body)
+	defer a.PrintResponse(t, res.Body)
 
 	require.Equal(t, 200, res.StatusCode)
 	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
@@ -65,7 +65,7 @@ func TestGET_Ventures_2(t *testing.T) {
 	}
 	res := req.fire()
 	defer res.Body.Close()
-	defer PrintResponse(t, res.Body)
+	defer a.PrintResponse(t, res.Body)
 
 	require.Equal(t, 200, res.StatusCode)
 	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
@@ -94,7 +94,7 @@ func TestGET_Venture_1(t *testing.T) {
 	}
 	res := req.fire()
 	defer res.Body.Close()
-	defer PrintResponse(t, res.Body)
+	defer a.PrintResponse(t, res.Body)
 
 	require.Equal(t, 200, res.StatusCode)
 	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
@@ -118,7 +118,7 @@ func TestGET_Venture_2(t *testing.T) {
 	}
 	res := req.fire()
 	defer res.Body.Close()
-	defer PrintResponse(t, res.Body)
+	defer a.PrintResponse(t, res.Body)
 
 	require.Equal(t, 400, res.StatusCode)
 	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
@@ -147,7 +147,7 @@ func TestGET_Venture_3(t *testing.T) {
 	}
 	res := req.fire()
 	defer res.Body.Close()
-	defer PrintResponse(t, res.Body)
+	defer a.PrintResponse(t, res.Body)
 
 	require.Equal(t, 200, res.StatusCode)
 	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
@@ -184,7 +184,7 @@ func TestPOST_Venture_1(t *testing.T) {
 	}
 	res := req.fire()
 	defer res.Body.Close()
-	defer PrintResponse(t, res.Body)
+	defer a.PrintResponse(t, res.Body)
 
 	require.Equal(t, 201, res.StatusCode)
 	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
@@ -222,7 +222,7 @@ func TestPOST_Venture_2(t *testing.T) {
 	}
 	res := req.fire()
 	defer res.Body.Close()
-	defer PrintResponse(t, res.Body)
+	defer a.PrintResponse(t, res.Body)
 
 	require.Equal(t, 400, res.StatusCode)
 	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
@@ -261,7 +261,7 @@ func TestPOST_Venture_3(t *testing.T) {
 	}
 	res := req.fire()
 	defer res.Body.Close()
-	defer PrintResponse(t, res.Body)
+	defer a.PrintResponse(t, res.Body)
 
 	require.Equal(t, 201, res.StatusCode)
 	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
@@ -309,7 +309,7 @@ func TestPUT_Venture_1(t *testing.T) {
 	}
 	res := req.fire()
 	defer res.Body.Close()
-	defer PrintResponse(t, res.Body)
+	defer a.PrintResponse(t, res.Body)
 
 	require.Equal(t, 200, res.StatusCode)
 	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
@@ -352,7 +352,7 @@ func TestPUT_Venture_2(t *testing.T) {
 	}
 	res := req.fire()
 	defer res.Body.Close()
-	defer PrintResponse(t, res.Body)
+	defer a.PrintResponse(t, res.Body)
 
 	require.Equal(t, 400, res.StatusCode)
 	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
@@ -390,7 +390,7 @@ func TestPUT_Venture_3(t *testing.T) {
 	}
 	res := req.fire()
 	defer res.Body.Close()
-	defer PrintResponse(t, res.Body)
+	defer a.PrintResponse(t, res.Body)
 
 	require.Equal(t, 400, res.StatusCode)
 	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
@@ -425,7 +425,7 @@ func TestPUT_Venture_4(t *testing.T) {
 	}
 	res := req.fire()
 	defer res.Body.Close()
-	defer PrintResponse(t, res.Body)
+	defer a.PrintResponse(t, res.Body)
 
 	require.Equal(t, 400, res.StatusCode)
 	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
@@ -470,7 +470,7 @@ func TestPUT_Venture_5(t *testing.T) {
 	}
 	res := req.fire()
 	defer res.Body.Close()
-	defer PrintResponse(t, res.Body)
+	defer a.PrintResponse(t, res.Body)
 
 	require.Equal(t, 200, res.StatusCode)
 	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
@@ -502,7 +502,7 @@ func TestDELETE_Venture_1(t *testing.T) {
 	}
 	res := req.fire()
 	defer res.Body.Close()
-	defer PrintResponse(t, res.Body)
+	defer a.PrintResponse(t, res.Body)
 
 	require.Equal(t, 200, res.StatusCode)
 	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
@@ -527,7 +527,7 @@ func TestDELETE_Venture_2(t *testing.T) {
 	}
 	res := req.fire()
 	defer res.Body.Close()
-	defer PrintResponse(t, res.Body)
+	defer a.PrintResponse(t, res.Body)
 
 	require.Equal(t, 400, res.StatusCode)
 	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
@@ -557,7 +557,7 @@ func TestDELETE_Venture_3(t *testing.T) {
 	}
 	res := req.fire()
 	defer res.Body.Close()
-	defer PrintResponse(t, res.Body)
+	defer a.PrintResponse(t, res.Body)
 
 	require.Equal(t, 200, res.StatusCode)
 	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
@@ -586,7 +586,7 @@ func TestHEAD_Ventures(t *testing.T) {
 	}
 	res := req.fire()
 	defer res.Body.Close()
-	defer PrintResponse(t, res.Body)
+	defer a.PrintResponse(t, res.Body)
 
 	require.Equal(t, 200, res.StatusCode)
 	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
@@ -614,7 +614,7 @@ func TestOPTIONS_Ventures(t *testing.T) {
 	}
 	res := req.fire()
 	defer res.Body.Close()
-	defer PrintResponse(t, res.Body)
+	defer a.PrintResponse(t, res.Body)
 
 	require.Equal(t, 200, res.StatusCode)
 	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
