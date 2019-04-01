@@ -3,20 +3,21 @@ package home
 import (
 	"net/http"
 
-	. "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg"
+	p "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg"
+	w "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/wrapped"
 )
 
 // HomeHandler handles requests to the root path and requests to nothing (404s)
 func HomeHandler(res http.ResponseWriter, req *http.Request) {
-	LogRequest(req)
+	p.LogRequest(req)
 	notFound(&res, req)
 }
 
 // notFound handles requests nothing (404s)
 func notFound(res *http.ResponseWriter, req *http.Request) {
-	r := WrappedReply{
+	r := w.WrappedReply{
 		Message: "Resource not found",
 	}
 
-	Write4XXReply(res, req, 404, r)
+	p.Write4XXReply(res, req, 404, r)
 }

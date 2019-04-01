@@ -6,6 +6,9 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	a "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/asserts"
+	w "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/wrapped"
+
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -32,7 +35,9 @@ func TestWriteServerError___2(t *testing.T) {
 	req, res, rec := SetupRequest("/")
 
 	WriteServerError(res, req)
-	CheckJSONResponseHeaders(t, (*rec).Header())
+	a.AssertHeadersEquals(t, (*rec).Header(), map[string]string{
+		"Content-Type": "application/json; charset=utf-8",
+	})
 }
 
 // When invoked, writes JSON headers
@@ -98,7 +103,7 @@ func TestCheckStatusCode___3(t *testing.T) {
 // When not 4XX status code, sets 500 status code
 func TestWrite4XXReply___1(t *testing.T) {
 	req, res, rec := SetupRequest("/")
-	r := WrappedReply{
+	r := w.WrappedReply{
 		Message: "message",
 	}
 
@@ -109,7 +114,7 @@ func TestWrite4XXReply___1(t *testing.T) {
 // When WrappedReply.Message not set, sets 500 status code
 func TestWrite4XXReply___2(t *testing.T) {
 	req, res, rec := SetupRequest("/")
-	r := WrappedReply{}
+	r := w.WrappedReply{}
 
 	Write4XXReply(res, req, 400, r)
 	assert.Equal(t, 500, rec.Code)
@@ -118,7 +123,7 @@ func TestWrite4XXReply___2(t *testing.T) {
 // When complete ReplyMeta passed, sets 200 status code
 func TestWrite4XXReply___3(t *testing.T) {
 	req, res, rec := SetupRequest("/search?q=dan+north")
-	r := WrappedReply{
+	r := w.WrappedReply{
 		Message: "abc",
 		Self:    (*req).URL.String(),
 		Hints:   "xyz",
@@ -131,20 +136,22 @@ func TestWrite4XXReply___3(t *testing.T) {
 // When complete WrappedReply passed, JSON headers are set
 func TestWrite4XXReply___4(t *testing.T) {
 	req, res, rec := SetupRequest("/search?q=dan+north")
-	r := WrappedReply{
+	r := w.WrappedReply{
 		Message: "abc",
 		Self:    (*req).URL.String(),
 		Hints:   "xyz",
 	}
 
 	Write4XXReply(res, req, 400, r)
-	CheckJSONResponseHeaders(t, (*rec).Header())
+	a.AssertHeadersEquals(t, (*rec).Header(), map[string]string{
+		"Content-Type": "application/json; charset=utf-8",
+	})
 }
 
 // When complete Reply4XX passed, body is set with expected JSON
 func TestWrite4XXReply___5(t *testing.T) {
 	req, res, rec := SetupRequest("/search?q=dan+north")
-	r := WrappedReply{
+	r := w.WrappedReply{
 		Message: "abc",
 		Self:    (*req).URL.Path + "?" + (*req).URL.RawQuery,
 		Hints:   "xyz",
@@ -166,7 +173,7 @@ func TestWrite4XXReply___5(t *testing.T) {
 // When Reply4XX.Self is not set, Reply4XX.Self is set for us
 func TestWrite4XXReply___6(t *testing.T) {
 	req, res, rec := SetupRequest("/search?q=dan+north")
-	r := WrappedReply{
+	r := w.WrappedReply{
 		Message: "abc",
 		Hints:   "xyz",
 	}
@@ -193,13 +200,13 @@ func TestWriteBadRequest___2(t *testing.T) {
 	req, res, rec := SetupRequest("/")
 
 	WriteBadRequest(res, req, "message")
-	exp := WrappedReply{
+	exp := w.WrappedReply{
 		Message: "message",
 		Self:    "/",
 	}
 
 	require.NotNil(t, rec.Body)
-	var a WrappedReply
+	var a w.WrappedReply
 	err := json.NewDecoder(rec.Body).Decode(&a)
 
 	require.Nil(t, err)
@@ -258,7 +265,7 @@ func TestPrepResponseData___3(t *testing.T) {
 	data := make(map[string]interface{})
 	data["album"] = "As Daylight Dies"
 
-	exp := WrappedReply{
+	exp := w.WrappedReply{
 		Message: "Cheese",
 		Self:    req.URL.String(),
 		Data:    data,
@@ -282,7 +289,9 @@ func TestAppendJSONHeaders___1(t *testing.T) {
 	rec := httptest.NewRecorder()
 	var res http.ResponseWriter = rec
 	AppendJSONHeader(&res, "")
-	CheckJSONResponseHeaders(t, rec.Header())
+	a.AssertHeadersEquals(t, (*rec).Header(), map[string]string{
+		"Content-Type": "application/json; charset=utf-8",
+	})
 }
 
 // When given valid inputs, 200 status code is set
@@ -353,7 +362,9 @@ func TestWriteJsonReply___2(t *testing.T) {
 	m["killswitch"] = "engage"
 
 	WriteJSONReply(res, req, m, "")
-	CheckJSONResponseHeaders(t, rec.Header())
+	a.AssertHeadersEquals(t, (*rec).Header(), map[string]string{
+		"Content-Type": "application/json; charset=utf-8",
+	})
 }
 
 // When given valid inputs, the data is serialised into JSON the response body
@@ -385,7 +396,9 @@ func TestWriteEmptyJSONReply___2(t *testing.T) {
 	rec := httptest.NewRecorder()
 	var res http.ResponseWriter = rec
 	WriteEmptyJSONReply(&res, "")
-	CheckJSONResponseHeaders(t, rec.Header())
+	a.AssertHeadersEquals(t, (*rec).Header(), map[string]string{
+		"Content-Type": "application/json; charset=utf-8",
+	})
 }
 
 // When given valid inputs, no response body is set

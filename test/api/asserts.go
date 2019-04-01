@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"testing"
 
-	p "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg"
-	. "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/asserts"
+	a "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/asserts"
+	w "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/wrapped"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -16,15 +16,15 @@ import (
 
 // assertDefaultHeaders asserts that the services default headers were applied
 func assertDefaultHeaders(t *testing.T, res *http.Response, contentType string, allowedMethods []string) {
-	AssertHeadersEquals(t, res.Header, map[string]string{
+	a.AssertHeadersEquals(t, res.Header, map[string]string{
 		"Access-Control-Allow-Origin":  "*",
 		"Access-Control-Allow-Headers": "*",
 		"Content-Type":                 contentType + "; charset=utf-8",
 	})
-	AssertHeadersContains(t, res.Header, map[string][]string{
+	a.AssertHeadersContains(t, res.Header, map[string][]string{
 		"Access-Control-Allow-Methods": allowedMethods,
 	})
-	AssertHeadersMatches(t, res.Header, map[string]string{
+	a.AssertHeadersMatches(t, res.Header, map[string]string{
 		"Access-Control-Allow-Methods": CORS_METHODS_PATTERN,
 	})
 }
@@ -45,10 +45,10 @@ func assertNotEmptyBody(t *testing.T, r io.Reader) []byte {
 }
 
 // assertWrappedErrorBody assert that a response body is a generic error
-func assertWrappedErrorBody(t *testing.T, r io.Reader) p.WrappedReply {
-	var reply p.WrappedReply
+func assertWrappedErrorBody(t *testing.T, r io.Reader) w.WrappedReply {
+	var reply w.WrappedReply
 	err := json.NewDecoder(r).Decode(&reply)
 	require.Nil(t, err)
-	AssertGenericError(t, reply)
+	a.AssertGenericError(t, reply)
 	return reply
 }

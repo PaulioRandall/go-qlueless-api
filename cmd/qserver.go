@@ -7,9 +7,7 @@ import (
 	chg "github.com/PaulioRandall/go-qlueless-assembly-api/internal/app/changelog"
 	hme "github.com/PaulioRandall/go-qlueless-assembly-api/internal/app/home"
 	oai "github.com/PaulioRandall/go-qlueless-assembly-api/internal/app/openapi"
-	thg "github.com/PaulioRandall/go-qlueless-assembly-api/internal/app/things"
 	v "github.com/PaulioRandall/go-qlueless-assembly-api/internal/app/ventures"
-	. "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg"
 )
 
 // QServer represents the... err... server
@@ -24,7 +22,6 @@ func (s *QServer) preload() {
 		chg.LoadChangelog()
 		oai.LoadSpec()
 		v.InjectDummyVentures()
-		CreateDummyThings()
 	})
 }
 
@@ -34,7 +31,6 @@ func (s *QServer) routes() {
 		http.HandleFunc("/", hme.HomeHandler)
 		http.HandleFunc("/changelog", chg.ChangelogHandler)
 		http.HandleFunc("/openapi", oai.OpenAPIHandler)
-		http.HandleFunc("/things", thg.ThingsHandler)
 		http.HandleFunc("/ventures", v.VenturesHandler)
 	})
 }

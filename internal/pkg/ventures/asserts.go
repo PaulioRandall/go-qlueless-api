@@ -4,8 +4,8 @@ import (
 	"io"
 	"testing"
 
-	p "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg"
 	ts "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/asserts"
+	w "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/wrapped"
 	ms "github.com/mitchellh/mapstructure"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -41,8 +41,8 @@ func AssertGenericVentureSlice(t *testing.T, vens []Venture) {
 	}
 }
 
-func AssertWrappedVentureSliceFromReader(t *testing.T, r io.Reader) (p.WrappedReply, []Venture) {
-	wr, err := p.DecodeWrappedReplyFromReader(r)
+func AssertWrappedVentureSliceFromReader(t *testing.T, r io.Reader) (w.WrappedReply, []Venture) {
+	wr, err := w.DecodeWrappedReplyFromReader(r)
 	require.Nil(t, err)
 
 	var v []Venture
@@ -61,8 +61,8 @@ func AssertWrappedVentureSliceFromReader(t *testing.T, r io.Reader) (p.WrappedRe
 	return wr, v
 }
 
-func AssertWrappedVentureFromReader(t *testing.T, r io.Reader) (p.WrappedReply, Venture) {
-	wr, err := p.DecodeWrappedReplyFromReader(r)
+func AssertWrappedVentureFromReader(t *testing.T, r io.Reader) (w.WrappedReply, Venture) {
+	wr, err := w.DecodeWrappedReplyFromReader(r)
 	require.Nil(t, err)
 
 	var v Venture
