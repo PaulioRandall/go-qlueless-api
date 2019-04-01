@@ -7,7 +7,7 @@ import (
 	"net/http"
 
 	h "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/uhttp"
-	u "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/util"
+	u "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/utils"
 )
 
 var spec map[string]interface{} = nil

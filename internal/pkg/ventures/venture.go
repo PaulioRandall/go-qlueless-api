@@ -6,7 +6,7 @@ import (
 	"io"
 	"strings"
 
-	u "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/util"
+	u "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/utils"
 )
 
 // Venture represents a Venture, aka, project.
