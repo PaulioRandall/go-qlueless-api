@@ -5,7 +5,7 @@ import (
 
 	a "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/asserts"
 
-	"github.com/stretchr/testify/require"
+	require "github.com/stretchr/testify/require"
 )
 
 const changelogMediaType = "text/markdown"

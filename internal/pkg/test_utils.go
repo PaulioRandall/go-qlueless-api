@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	assert "github.com/stretchr/testify/assert"
 )
 
 func CheckIsPositive(t *testing.T, i int, m ...interface{}) {

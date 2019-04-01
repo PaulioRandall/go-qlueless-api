@@ -7,8 +7,8 @@ import (
 
 	a "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/asserts"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
+	assert "github.com/stretchr/testify/assert"
+	require "github.com/stretchr/testify/require"
 )
 
 // _exit is file private function that accepts a referenced integer instead of

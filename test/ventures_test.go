@@ -5,11 +5,11 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
+	assert "github.com/stretchr/testify/assert"
+	require "github.com/stretchr/testify/require"
 
 	a "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/asserts"
-	. "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/ventures"
+	v "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/ventures"
 )
 
 var ventureHttpMethods = []string{"GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS"}
@@ -40,7 +40,7 @@ func TestGET_Ventures_1(t *testing.T) {
 
 	require.Equal(t, 200, res.StatusCode)
 	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
-	AssertVentureSliceFromReader(t, res.Body)
+	v.AssertVentureSliceFromReader(t, res.Body)
 }
 
 // ****************************************************************************
@@ -69,7 +69,7 @@ func TestGET_Ventures_2(t *testing.T) {
 
 	require.Equal(t, 200, res.StatusCode)
 	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
-	AssertWrappedVentureSliceFromReader(t, res.Body)
+	v.AssertWrappedVentureSliceFromReader(t, res.Body)
 }
 
 // ****************************************************************************
@@ -98,7 +98,7 @@ func TestGET_Venture_1(t *testing.T) {
 
 	require.Equal(t, 200, res.StatusCode)
 	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
-	AssertVentureFromReader(t, res.Body)
+	v.AssertVentureFromReader(t, res.Body)
 }
 
 func TestGET_Venture_2(t *testing.T) {
@@ -151,7 +151,7 @@ func TestGET_Venture_3(t *testing.T) {
 
 	require.Equal(t, 200, res.StatusCode)
 	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
-	AssertWrappedVentureFromReader(t, res.Body)
+	v.AssertWrappedVentureFromReader(t, res.Body)
 }
 
 // ****************************************************************************
@@ -169,7 +169,7 @@ func TestPOST_Venture_1(t *testing.T) {
 		And the body is a JSON object representing the living input Venture with a new assigned ID
 		...`)
 
-	input := Venture{
+	input := v.Venture{
 		Description: "A new Venture",
 		State:       "Not started",
 		OrderIDs:    "1,2,3",
@@ -189,7 +189,7 @@ func TestPOST_Venture_1(t *testing.T) {
 	require.Equal(t, 201, res.StatusCode)
 	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
 
-	output := AssertVentureFromReader(t, res.Body)
+	output := v.AssertVentureFromReader(t, res.Body)
 
 	input.ID = output.ID
 	input.IsAlive = true
@@ -207,7 +207,7 @@ func TestPOST_Venture_2(t *testing.T) {
 		And the body is a JSON object representing an error response
 		...`)
 
-	input := Venture{
+	input := v.Venture{
 		Description: "",
 		State:       "",
 		OrderIDs:    "invalid",
@@ -246,7 +246,7 @@ func TestPOST_Venture_3(t *testing.T) {
 		And that the wrapped data is the living input Venture with a new assigned ID
 		...`)
 
-	input := Venture{
+	input := v.Venture{
 		Description: "A new Venture",
 		State:       "Not started",
 		OrderIDs:    "1,2,3",
@@ -266,7 +266,7 @@ func TestPOST_Venture_3(t *testing.T) {
 	require.Equal(t, 201, res.StatusCode)
 	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
 
-	_, output := AssertWrappedVentureFromReader(t, res.Body)
+	_, output := v.AssertWrappedVentureFromReader(t, res.Body)
 
 	input.ID = output.ID
 	input.IsAlive = true
@@ -288,9 +288,9 @@ func TestPUT_Venture_1(t *testing.T) {
 		And the body is a JSON object representing the updated input Venture
 		...`)
 
-	input := VentureUpdate{
+	input := v.VentureUpdate{
 		Props: "description, state, order_ids, extra",
-		Values: Venture{
+		Values: v.Venture{
 			ID:          "1",
 			Description: "Black blizzard",
 			State:       "In progress",
@@ -314,7 +314,7 @@ func TestPUT_Venture_1(t *testing.T) {
 	require.Equal(t, 200, res.StatusCode)
 	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
 
-	output := AssertVentureFromReader(t, res.Body)
+	output := v.AssertVentureFromReader(t, res.Body)
 
 	input.Values.IsAlive = true
 	assert.Equal(t, input.Values, output)
@@ -331,9 +331,9 @@ func TestPUT_Venture_2(t *testing.T) {
 		And the body is a JSON object representing an error response
 		...`)
 
-	input := VentureUpdate{
+	input := v.VentureUpdate{
 		Props: "description, state, order_ids, extra",
-		Values: Venture{
+		Values: v.Venture{
 			ID:          "999999",
 			Description: "Black blizzard",
 			State:       "In progress",
@@ -370,9 +370,9 @@ func TestPUT_Venture_3(t *testing.T) {
 		And the body is a JSON object representing an error response
 		...`)
 
-	input := VentureUpdate{
+	input := v.VentureUpdate{
 		Props: "description, state, order_ids, extra",
-		Values: Venture{
+		Values: v.Venture{
 			Description: "Black blizzard",
 			State:       "In progress",
 			OrderIDs:    "1,2,3",
@@ -408,9 +408,9 @@ func TestPUT_Venture_4(t *testing.T) {
 		And the body is a JSON object representing an error response
 		...`)
 
-	input := VentureUpdate{
+	input := v.VentureUpdate{
 		Props: "description, state, order_ids, extra",
-		Values: Venture{
+		Values: v.Venture{
 			ID: "1",
 		},
 	}
@@ -449,9 +449,9 @@ func TestPUT_Venture_5(t *testing.T) {
 		And the wrapped data is the updated input Venture
 		...`)
 
-	input := VentureUpdate{
+	input := v.VentureUpdate{
 		Props: "description, state, order_ids, extra",
-		Values: Venture{
+		Values: v.Venture{
 			ID:          "1",
 			Description: "Black blizzard",
 			State:       "In progress",
@@ -475,7 +475,7 @@ func TestPUT_Venture_5(t *testing.T) {
 	require.Equal(t, 200, res.StatusCode)
 	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
 
-	_, output := AssertWrappedVentureFromReader(t, res.Body)
+	_, output := v.AssertWrappedVentureFromReader(t, res.Body)
 
 	input.Values.IsAlive = true
 	assert.Equal(t, input.Values, output)
@@ -506,7 +506,7 @@ func TestDELETE_Venture_1(t *testing.T) {
 
 	require.Equal(t, 200, res.StatusCode)
 	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
-	output := AssertVentureFromReader(t, res.Body)
+	output := v.AssertVentureFromReader(t, res.Body)
 	assert.Equal(t, "4", output.ID)
 }
 
@@ -561,7 +561,7 @@ func TestDELETE_Venture_3(t *testing.T) {
 
 	require.Equal(t, 200, res.StatusCode)
 	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
-	_, output := AssertWrappedVentureFromReader(t, res.Body)
+	_, output := v.AssertWrappedVentureFromReader(t, res.Body)
 	assert.Equal(t, "5", output.ID)
 }
 

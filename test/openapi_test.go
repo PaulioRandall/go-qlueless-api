@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/stretchr/testify/require"
+	require "github.com/stretchr/testify/require"
 
 	a "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/asserts"
 )

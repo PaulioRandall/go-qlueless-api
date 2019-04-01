@@ -7,7 +7,7 @@ import (
 	"regexp"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	assert "github.com/stretchr/testify/assert"
 )
 
 func PrintResponse(t *testing.T, body io.Reader) {

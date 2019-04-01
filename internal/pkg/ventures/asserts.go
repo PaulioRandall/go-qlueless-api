@@ -7,8 +7,8 @@ import (
 	ts "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/asserts"
 	w "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/wrapped"
 	ms "github.com/mitchellh/mapstructure"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
+	assert "github.com/stretchr/testify/assert"
+	require "github.com/stretchr/testify/require"
 )
 
 // AssertVentureFromReader asserts that a Venture decoded from an io.Reader
