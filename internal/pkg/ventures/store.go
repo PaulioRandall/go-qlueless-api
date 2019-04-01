@@ -5,6 +5,7 @@ import (
 	"sync"
 )
 
+// VentureStore represents a data store of Ventures
 type VentureStore struct {
 	mutex *sync.RWMutex
 	items map[string]Venture

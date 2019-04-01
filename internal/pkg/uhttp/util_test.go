@@ -1,4 +1,4 @@
-package pkg
+package uhttp
 
 import (
 	"net/http"

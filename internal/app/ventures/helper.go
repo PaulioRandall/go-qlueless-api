@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"strings"
 
-	p "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg"
+	h "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/uhttp"
 	v "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/ventures"
 )
 
@@ -48,9 +48,9 @@ func InjectDummyVentures() {
 
 // writeSuccessReply writes a success response.
 func writeSuccessReply(res *http.ResponseWriter, req *http.Request, code int, data interface{}, msg string) {
-	p.AppendJSONHeader(res, "")
+	h.AppendJSONHeader(res, "")
 	(*res).WriteHeader(code)
-	reply := p.PrepResponseData(req, data, msg)
+	reply := h.PrepResponseData(req, data, msg)
 	json.NewEncoder(*res).Encode(reply)
 }
 
@@ -58,7 +58,7 @@ func writeSuccessReply(res *http.ResponseWriter, req *http.Request, code int, da
 func findVenture(id string, res *http.ResponseWriter, req *http.Request) (v.Venture, bool) {
 	ven, ok := ventures.Get(id)
 	if !ok {
-		p.WriteBadRequest(res, req, fmt.Sprintf("Thing '%s' not found", id))
+		h.WriteBadRequest(res, req, fmt.Sprintf("Thing '%s' not found", id))
 		return v.Venture{}, false
 	}
 	return ven, true
@@ -68,7 +68,7 @@ func findVenture(id string, res *http.ResponseWriter, req *http.Request) (v.Vent
 func decodeVenture(res *http.ResponseWriter, req *http.Request) (v.Venture, bool) {
 	ven, err := v.DecodeVenture(req.Body)
 	if err != nil {
-		p.WriteBadRequest(res, req, "Unable to decode request body into a Venture")
+		h.WriteBadRequest(res, req, "Unable to decode request body into a Venture")
 		return v.Venture{}, false
 	}
 	return ven, true
@@ -78,7 +78,7 @@ func decodeVenture(res *http.ResponseWriter, req *http.Request) (v.Venture, bool
 func validateNewVenture(ven v.Venture, res *http.ResponseWriter, req *http.Request) bool {
 	errMsgs := ven.Validate(true)
 	if len(errMsgs) != 0 {
-		p.WriteBadRequest(res, req, strings.Join(errMsgs, " "))
+		h.WriteBadRequest(res, req, strings.Join(errMsgs, " "))
 		return false
 	}
 	return true
@@ -88,7 +88,7 @@ func validateNewVenture(ven v.Venture, res *http.ResponseWriter, req *http.Reque
 func decodeVentureUpdate(res *http.ResponseWriter, req *http.Request) (v.VentureUpdate, bool) {
 	vu, err := v.DecodeVentureUpdate(req.Body)
 	if err != nil {
-		p.WriteBadRequest(res, req,
+		h.WriteBadRequest(res, req,
 			"Unable to decode request body into a Venture update")
 		return v.VentureUpdate{}, false
 	}
@@ -99,7 +99,7 @@ func decodeVentureUpdate(res *http.ResponseWriter, req *http.Request) (v.Venture
 func validateVentureUpdate(vu v.VentureUpdate, res *http.ResponseWriter, req *http.Request) bool {
 	errMsgs := vu.Validate()
 	if len(errMsgs) != 0 {
-		p.WriteBadRequest(res, req, strings.Join(errMsgs, " "))
+		h.WriteBadRequest(res, req, strings.Join(errMsgs, " "))
 		return false
 	}
 	return true
@@ -109,7 +109,7 @@ func validateVentureUpdate(vu v.VentureUpdate, res *http.ResponseWriter, req *ht
 func updateVenture(vu v.VentureUpdate, res *http.ResponseWriter, req *http.Request) (v.Venture, bool) {
 	ven, ok := ventures.Update(vu)
 	if !ok {
-		p.WriteBadRequest(res, req,
+		h.WriteBadRequest(res, req,
 			fmt.Sprintf("Venture with ID '%s' could not be found", vu.Values.ID))
 		return v.Venture{}, false
 	}
@@ -120,7 +120,7 @@ func updateVenture(vu v.VentureUpdate, res *http.ResponseWriter, req *http.Reque
 func deleteVenture(id string, res *http.ResponseWriter, req *http.Request) (v.Venture, bool) {
 	ven, ok := ventures.Delete(id)
 	if !ok {
-		p.WriteBadRequest(res, req, fmt.Sprintf("Thing '%s' not found", id))
+		h.WriteBadRequest(res, req, fmt.Sprintf("Thing '%s' not found", id))
 		return v.Venture{}, false
 	}
 	return ven, true

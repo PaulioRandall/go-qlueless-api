@@ -6,7 +6,7 @@ import (
 	"io"
 	"strings"
 
-	p "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg"
+	u "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/util"
 )
 
 // Venture represents a Venture, aka, project.
@@ -41,7 +41,7 @@ func DecodeVentureSlice(r io.Reader) ([]Venture, error) {
 func (ven *Venture) Clean() {
 	ven.Description = strings.TrimSpace(ven.Description)
 	ven.ID = strings.TrimSpace(ven.ID)
-	ven.OrderIDs = p.StripWhitespace(ven.OrderIDs)
+	ven.OrderIDs = u.StripWhitespace(ven.OrderIDs)
 	ven.State = strings.TrimSpace(ven.State)
 }
 
@@ -52,20 +52,20 @@ func (ven *Venture) Clean() {
 func (ven *Venture) Validate(isNew bool) []string {
 	errMsgs := []string{}
 
-	errMsgs = p.AppendIfEmpty(ven.Description, errMsgs,
+	errMsgs = u.AppendIfEmpty(ven.Description, errMsgs,
 		"Ventures must have a description.")
 
 	if !isNew {
-		errMsgs = p.AppendIfNotPositiveInt(ven.ID, errMsgs,
+		errMsgs = u.AppendIfNotPositiveInt(ven.ID, errMsgs,
 			"Ventures must have a positive integer ID.")
 	}
 
 	if ven.OrderIDs != "" {
-		errMsgs = p.AppendIfNotPositiveIntCSV(ven.OrderIDs, errMsgs,
+		errMsgs = u.AppendIfNotPositiveIntCSV(ven.OrderIDs, errMsgs,
 			"Child OrderIDs within a Venture must all be positive integers.")
 	}
 
-	errMsgs = p.AppendIfEmpty(ven.State, errMsgs, "Ventures must have a state.")
+	errMsgs = u.AppendIfEmpty(ven.State, errMsgs, "Ventures must have a state.")
 	return errMsgs
 }
 
@@ -106,7 +106,7 @@ func (vu *VentureUpdate) SplitProps() []string {
 
 // Clean cleans up the Venture update by removing whitespace where applicable
 func (vu *VentureUpdate) Clean() {
-	vu.Props = p.StripWhitespace(vu.Props)
+	vu.Props = u.StripWhitespace(vu.Props)
 	vu.Values.Clean()
 }
 
@@ -119,13 +119,13 @@ func (vu *VentureUpdate) _validateProps(errMsgs []string) []string {
 		switch prop {
 		case "is_alive", "extra":
 		case "description":
-			errMsgs = p.AppendIfEmpty(vu.Values.Description, errMsgs,
+			errMsgs = u.AppendIfEmpty(vu.Values.Description, errMsgs,
 				"Ventures must have a description.")
 		case "state":
-			errMsgs = p.AppendIfEmpty(vu.Values.State, errMsgs,
+			errMsgs = u.AppendIfEmpty(vu.Values.State, errMsgs,
 				"Ventures must have a state.")
 		case "order_ids":
-			errMsgs = p.AppendIfNotPositiveIntCSV(vu.Values.OrderIDs, errMsgs,
+			errMsgs = u.AppendIfNotPositiveIntCSV(vu.Values.OrderIDs, errMsgs,
 				"The list of Order IDs within a Venture must be an integer CSV")
 		default:
 			errMsgs = append(errMsgs,
@@ -143,10 +143,10 @@ func (vu *VentureUpdate) _validateProps(errMsgs []string) []string {
 func (vu *VentureUpdate) Validate() []string {
 	errMsgs := []string{}
 
-	errMsgs = p.AppendIfEmpty(vu.Values.ID, errMsgs,
+	errMsgs = u.AppendIfEmpty(vu.Values.ID, errMsgs,
 		"'values.venture_id' must be supplied so I know which Venture to update.")
 
-	errMsgs = p.AppendIfEmpty(vu.Props, errMsgs,
+	errMsgs = u.AppendIfEmpty(vu.Props, errMsgs,
 		"Some properties must be 'set' for any updating to take place.")
 
 	errMsgs = vu._validateProps(errMsgs)

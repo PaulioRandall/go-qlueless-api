@@ -5,7 +5,8 @@ import (
 	"log"
 	"net/http"
 
-	p "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg"
+	h "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/uhttp"
+	u "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/util"
 )
 
 const mime_md = "text/markdown; charset=utf-8"
@@ -14,8 +15,8 @@ var changelog *[]byte = nil
 
 // ChangelogHandler handles requests for the APIs changelog
 func ChangelogHandler(res http.ResponseWriter, req *http.Request) {
-	p.LogRequest(req)
-	p.AppendCORSHeaders(&res, "GET, HEAD, OPTIONS")
+	h.LogRequest(req)
+	h.AppendCORSHeaders(&res, "GET, HEAD, OPTIONS")
 
 	switch req.Method {
 	case "GET":
@@ -26,7 +27,7 @@ func ChangelogHandler(res http.ResponseWriter, req *http.Request) {
 		res.Header().Set("Content-Type", mime_md)
 		res.WriteHeader(http.StatusOK)
 	default:
-		p.MethodNotAllowed(&res, req)
+		h.MethodNotAllowed(&res, req)
 	}
 }
 
@@ -34,7 +35,7 @@ func ChangelogHandler(res http.ResponseWriter, req *http.Request) {
 func _GET_Changelog(res *http.ResponseWriter, req *http.Request) {
 	if changelog == nil {
 		log.Println("[BUG] CHANGELOG not loaded")
-		p.WriteServerError(res, req)
+		h.WriteServerError(res, req)
 		return
 	}
 
@@ -48,7 +49,7 @@ func LoadChangelog() {
 
 	path := "./CHANGELOG.md"
 	bytes, err := ioutil.ReadFile(path)
-	if p.LogIfErr(err) {
+	if u.LogIfErr(err) {
 		changelog = nil
 		return
 	}

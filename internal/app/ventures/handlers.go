@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 
-	p "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg"
+	h "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/uhttp"
 	v "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/ventures"
 )
 
@@ -14,8 +14,8 @@ var ventures = v.NewVentureStore()
 // VenturesHandler handles requests to do with collections of, or individual,
 // Ventures.
 func VenturesHandler(res http.ResponseWriter, req *http.Request) {
-	p.LogRequest(req)
-	p.AppendCORSHeaders(&res, "GET, POST, PUT, DELETE, HEAD, OPTIONS")
+	h.LogRequest(req)
+	h.AppendCORSHeaders(&res, "GET, POST, PUT, DELETE, HEAD, OPTIONS")
 
 	id := req.FormValue("id")
 	switch {
@@ -32,10 +32,10 @@ func VenturesHandler(res http.ResponseWriter, req *http.Request) {
 	case req.Method == "HEAD":
 		fallthrough
 	case req.Method == "OPTIONS":
-		p.AppendJSONHeader(&res, "")
+		h.AppendJSONHeader(&res, "")
 		res.WriteHeader(http.StatusOK)
 	default:
-		p.MethodNotAllowed(&res, req)
+		h.MethodNotAllowed(&res, req)
 	}
 }
 
