@@ -99,6 +99,11 @@
 		  "post": {
 		    "tags": ["venture"],
 		    "description": "Creates a new Venture.",
+		    "parameters": [
+		      {
+		        "$ref": "#/components/parameters/wrap"
+		      }
+		    ],
 		    "requestBody": {
 		      "$ref": "#/components/requestBodies/venture_create"
 		    },
@@ -114,6 +119,11 @@
 		  "put": {
 		    "tags": ["venture"],
 		    "description": "Updates a Venture.",
+		    "parameters": [
+		      {
+		        "$ref": "#/components/parameters/wrap"
+		      }
+		    ],
 		    "requestBody": {
 		      "$ref": "#/components/requestBodies/venture_update"
 		    },
@@ -130,6 +140,9 @@
 		    "tags": ["venture"],
 		    "description": "Deletes a Venture.",
 		    "parameters": [
+		      {
+		        "$ref": "#/components/parameters/wrap"
+		      },
 		      {
 		        "$ref": "#/components/parameters/venture_id_required"
 		      }
@@ -368,7 +381,30 @@
 			      "description": "CSV of properties to update; pick one or many of 'description', 'state', 'is_alive', 'order_ids', and 'extra'"
 			    },
 			    "values": {
-			      "$ref": "#/components/schemas/venture"
+			      "type": "object",
+			      "required": [
+			        "venture_id"
+			      ],
+			      "properties": {
+			        "venture_id": {
+			          "$ref": "#/components/x-hidden/venture_id"
+			        },
+			        "description": {
+			          "$ref": "#/components/x-hidden/description"
+			        },
+			        "state": {
+			          "$ref": "#/components/x-hidden/state"
+			        },
+			        "order_ids": {
+			          "$ref": "#/components/x-hidden/order_id_csv"
+			        },
+			        "is_alive": {
+			          "$ref": "#/components/x-hidden/is_alive"
+			        },
+			        "extra": {
+			          "$ref": "#/components/x-hidden/extra"
+			        }
+			      }
 			    }
 			  }
 			},
@@ -377,7 +413,8 @@
 			  "required": [
 			    "venture_id",
 			    "description",
-			    "state"
+			    "state",
+			    "is_alive"
 			  ],
 			  "properties": {
 			    "venture_id": {

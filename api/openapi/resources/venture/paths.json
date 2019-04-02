@@ -22,6 +22,11 @@
   "post": {
     "tags": ["venture"],
     "description": "Creates a new Venture.",
+    "parameters": [
+      {
+        "$ref": "#/components/parameters/wrap"
+      }
+    ],
     "requestBody": {
       "$ref": "#/components/requestBodies/venture_create"
     },
@@ -37,6 +42,11 @@
   "put": {
     "tags": ["venture"],
     "description": "Updates a Venture.",
+    "parameters": [
+      {
+        "$ref": "#/components/parameters/wrap"
+      }
+    ],
     "requestBody": {
       "$ref": "#/components/requestBodies/venture_update"
     },
@@ -53,6 +63,9 @@
     "tags": ["venture"],
     "description": "Deletes a Venture.",
     "parameters": [
+      {
+        "$ref": "#/components/parameters/wrap"
+      },
       {
         "$ref": "#/components/parameters/venture_id_required"
       }
