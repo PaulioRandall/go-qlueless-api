@@ -21,7 +21,6 @@ func OpenAPIHandler(res http.ResponseWriter, req *http.Request) {
 	case "GET":
 		_GET_Spec(&res, req)
 	case "OPTIONS":
-		h.AppendJSONHeader(&res, "vnd.oai.openapi")
 		res.WriteHeader(http.StatusOK)
 	default:
 		res.WriteHeader(http.StatusMethodNotAllowed)

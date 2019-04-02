@@ -31,7 +31,7 @@
     "description": "Returns the options for this endpoint.",
     "responses": {
       "200": {
-        "description": "OpenAPI specification.",
+        "description": "OpenAPI options.",
         "headers": {
           "Access-Control-Allow-Origin": {
             "$ref": "#/components/headers/cors_origin"
@@ -43,9 +43,6 @@
             "$ref": "#/components/headers/cors_methods"
           }
         }
-      },
-      "default": {
-        "$ref": "#/components/responses/error"
       }
     }
   }

@@ -16,15 +16,12 @@ var changelog *[]byte = nil
 // ChangelogHandler handles requests for the APIs changelog
 func ChangelogHandler(res http.ResponseWriter, req *http.Request) {
 	h.LogRequest(req)
-	h.AppendCORSHeaders(&res, "GET, HEAD, OPTIONS")
+	h.AppendCORSHeaders(&res, "GET, OPTIONS")
 
 	switch req.Method {
 	case "GET":
 		_GET_Changelog(&res, req)
-	case "HEAD":
-		fallthrough
 	case "OPTIONS":
-		res.Header().Set("Content-Type", mime_md)
 		res.WriteHeader(http.StatusOK)
 	default:
 		res.WriteHeader(http.StatusMethodNotAllowed)

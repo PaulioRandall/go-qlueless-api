@@ -10,7 +10,7 @@ import (
 
 const changelogMediaType = "text/markdown"
 
-var changelogHttpMethods = []string{"GET", "HEAD", "OPTIONS"}
+var changelogHttpMethods = []string{"GET", "OPTIONS"}
 
 // ****************************************************************************
 // (GET) /changelog
@@ -24,7 +24,7 @@ func TestGET_Changelog(t *testing.T) {
 		And the 'Content-Type' header contains 'text/markdown'
 		And 'Access-Control-Allow-Origin' is '*'
 		And 'Access-Control-Allow-Headers' is '*'
-		And 'Access-Control-Allow-Methods' only contains GET, HEAD, and OPTIONS
+		And 'Access-Control-Allow-Methods' only contains GET and OPTIONS
 		And the body contains some data
 		...`)
 
@@ -42,34 +42,6 @@ func TestGET_Changelog(t *testing.T) {
 }
 
 // ****************************************************************************
-// (HEAD) /changelog
-// ****************************************************************************
-
-func TestHEAD_Changelog(t *testing.T) {
-	t.Log(`Given a loaded changelog
-		When only /changelog HEADers are requested
-		Then ensure the response code is 200
-		And the 'Content-Type' header contains 'text/markdown'
-		And 'Access-Control-Allow-Origin' is '*'
-		And 'Access-Control-Allow-Headers' is '*'
-		And 'Access-Control-Allow-Methods' only contains GET, HEAD, and OPTIONS
-		And there is NO response body
-		...`)
-
-	req := APICall{
-		URL:    "http://localhost:8080/changelog",
-		Method: "HEAD",
-	}
-	res := req.fire()
-	defer res.Body.Close()
-	defer a.PrintResponse(t, res.Body)
-
-	require.Equal(t, 200, res.StatusCode)
-	assertDefaultHeaders(t, res, changelogMediaType, changelogHttpMethods)
-	assertEmptyBody(t, res.Body)
-}
-
-// ****************************************************************************
 // (OPTIONS) /changelog
 // ****************************************************************************
 
@@ -80,7 +52,7 @@ func TestOPTIONS_Changelog(t *testing.T) {
 		And the 'Content-Type' header contains 'text/markdown'
 		And 'Access-Control-Allow-Origin' is '*'
 		And 'Access-Control-Allow-Headers' is '*'
-		And 'Access-Control-Allow-Methods' only contains GET, HEAD, and OPTIONS
+		And 'Access-Control-Allow-Methods' only contains GET and OPTIONS
 		And there is NO response body
 		...`)
 
@@ -93,7 +65,7 @@ func TestOPTIONS_Changelog(t *testing.T) {
 	defer a.PrintResponse(t, res.Body)
 
 	require.Equal(t, 200, res.StatusCode)
-	assertDefaultHeaders(t, res, changelogMediaType, changelogHttpMethods)
+	assertNoContentHeaders(t, res, changelogHttpMethods)
 	assertEmptyBody(t, res.Body)
 }
 
@@ -104,11 +76,11 @@ func TestOPTIONS_Changelog(t *testing.T) {
 func TestINVALID_Changelog(t *testing.T) {
 	t.Log(`Given a loaded changelog
 	  When /changelog is called using invalid methods
-		Then ensure the response code is 200
+		Then ensure the response code is 405
 		And the 'Content-Type' header contains 'application/vnd.oai.openapi+json'
 		And 'Access-Control-Allow-Origin' is '*'
 		And 'Access-Control-Allow-Headers' is '*'
-		And 'Access-Control-Allow-Methods' only contains GET, HEAD, and OPTIONS
+		And 'Access-Control-Allow-Methods' only contains GET and OPTIONS
 		And there is NO response body
 		...`)
 

@@ -69,7 +69,7 @@ func TestOPTIONS_OpenAPI(t *testing.T) {
 	defer a.PrintResponse(t, res.Body)
 
 	require.Equal(t, 200, res.StatusCode)
-	assertDefaultHeaders(t, res, openapiMediaType, openapiHttpMethods)
+	assertNoContentHeaders(t, res, openapiHttpMethods)
 	assertEmptyBody(t, res.Body)
 }
 
