@@ -85,6 +85,20 @@ func goTestApi(root string) {
 	goExe(".", []string{"test", "-count=1", root + "/test/..."})
 }
 
+// goRun runs the compiled application from the /bin directory
+func goRun(root string) {
+	fmt.Println("...running application...")
+	cmd := exec.Command("./go-qlueless-assembly-api")
+	cmd.Dir = root + "/bin"
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+
+	err := cmd.Run()
+	if err != nil {
+		panic(err)
+	}
+}
+
 // goExe runs a Go command
 func goExe(dir string, args []string) {
 	cmd := exec.Command("go", args...)

@@ -6,9 +6,10 @@ import (
 	"fmt"
 )
 
-// main is the entry point for the application
+// main is the entry point for the script
 func main() {
 	fmt.Println("[BUILD -> TEST -> API]")
+
 	root := findProjectRoot()
 	makeBinDir(root)
 

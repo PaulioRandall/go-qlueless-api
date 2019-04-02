@@ -8,7 +8,7 @@ import (
 
 // main is the entry point for the script
 func main() {
-	fmt.Println("[BUILD -> TEST]")
+	fmt.Println("[BUILD -> TEST -> API -> RUN]")
 
 	root := findProjectRoot()
 	makeBinDir(root)
@@ -16,6 +16,8 @@ func main() {
 	goOpenAPI(root)
 	goBuild(root)
 	goTest(root)
+	goTestApi(root)
+	goRun(root)
 
 	return
 }
