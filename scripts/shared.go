@@ -56,13 +56,18 @@ func goOpenAPI(root string) {
 
 	api := root + "/api"
 	oai := api + "/openapi"
-	goExe(oai, []string{"run", oai + "/injector.go"})
 
-	oaiOut := oai + "/openapi.json"
-	fmt.Println("ok\t" + oaiOut + "\t(created)")
+	t := Template{
+		Template:  oai + "/template.json",
+		Resources: oai + "/resources",
+		Output:    oai + "/openapi.json",
+	}
+
+	compileOpenAPI(t)
+	fmt.Println("ok\t" + t.Output + "\t(created)")
 
 	oaiBin := root + "/bin/openapi.json"
-	copyFile(oaiOut, oaiBin)
+	copyFile(t.Output, oaiBin)
 	fmt.Println("ok\t" + oaiBin + "\t(copied)")
 
 	cl := api + "/CHANGELOG.md"

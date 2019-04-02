@@ -1,4 +1,4 @@
-//usr/bin/env go run "$0" "$@" "shared.go"; exit "$?"
+//usr/bin/env go run "$0" "$@" "shared.go" "injector.go"; exit "$?"
 
 package main
 
