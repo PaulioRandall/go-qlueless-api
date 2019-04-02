@@ -18,66 +18,61 @@ I apologise, it's a poor play on words attempting to combine:
 
 - Go: [https://golang.org/dl/]
 - Git: [https://git-scm.com]
-- https://github.com/stretchr/testify `go get -u github.com/stretchr/te\stify`
+- An internet connection
 - A decent web browser
 
-### Installing (Linux/Bash)
+### Running
 
 Navigate to a suitable directory, open a terminal, and copy+paste the following:
 
 ```
 git clone https://github.com/PaulioRandall/go-qlueless-assembly-api.git
 cd go-qlueless-assembly-api/scripts
-./new-dev-session
+./build-test-api-run.go
 ```
 
 In order, this will:
 
 1. Clone the source code repository
 2. Navigate to the user `scripts` directory
-3. Execute script to build the OpenAPI script
-4. Execute script to build the application
-5. Execute script to test the application
-6. Start the application
-7. Execute script to open a tab to the entry endpoint in your browser
-8. Execute script to open a tab to an OpenAPI specification viewer in your browser
-9. Log server output it's terminated
+3. Execute a build of the OpenAPI specification
+4. Execute a build of the application
+5. Execute unit tests within the application
+6. Execute black box API tests on the application
+7. Starts the application
 
-Many different scripts are available under `/scripts` but those prefixed with an underscore `_` are designed to be called by the other scripts.
-
-### Running unit tests (Linux/Bash)
+### Running unit tests
 
 Open a terminal at the project root:
 
 ```
 cd /scripts
-./build-test
+./build-test.go
 ```
 
-If you would like detailed test information:
+### Running API tests
+
+Open a terminal at the project root:
 
 ```
-./build
-./test-verbose
+cd /scripts
+./build-test-api.go
 ```
 
-### Running API tests (Linux/Bash)
+### Deployment 
 
-Coming soon!
-
-### Deployment
-
-This has not been researched yet. Use `./build-test-run` within the `/scripts` folder to run.
+> Coming soon! See **Running** in the meantime.
 
 ## Built With
 
 - [OpenAPI](https://swagger.io/docs/specification/about/)
 - [Go](https://golang.org)
 - [testify](https://github.com/stretchr/testify)
+- [mapstructure](https://github.com/mitchellh/mapstructure)
 
 ## Contributing
 
-I don't think this is applicable, at least not within the foreseeable future.
+> Not applicable.
 
 ## Versioning
 
