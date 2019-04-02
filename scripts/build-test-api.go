@@ -8,6 +8,7 @@ import (
 
 // main is the entry point for the script
 func main() {
+	clearTerminal()
 	fmt.Println("[BUILD -> TEST -> API]")
 
 	root := findProjectRoot()

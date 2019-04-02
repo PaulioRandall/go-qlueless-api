@@ -1,6 +1,0 @@
-#!/bin/bash
-
-clear
-SCRIPTS=$(cd `dirname $0` && pwd)
-cd "${SCRIPTS}/../bin"
-"./go-qlueless-assembly-api.go"

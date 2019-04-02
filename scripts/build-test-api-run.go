@@ -8,6 +8,7 @@ import (
 
 // main is the entry point for the script
 func main() {
+	clearTerminal()
 	fmt.Println("[BUILD -> TEST -> API -> RUN]")
 
 	root := findProjectRoot()
@@ -17,7 +18,7 @@ func main() {
 	goBuild(root)
 	goTest(root)
 	goTestApi(root)
-	goRun(root)
+	goRunApp(root)
 
 	return
 }

@@ -6,8 +6,26 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"runtime"
 	"strings"
 )
+
+// clearTerminal clears the terminal
+func clearTerminal() {
+	p := runtime.GOOS
+	switch p {
+	case "linux":
+		cmd := exec.Command("clear") //Linux example, its tested
+		cmd.Stdout = os.Stdout
+		cmd.Run()
+	case "windows":
+		cmd := exec.Command("cmd", "/c", "cls") //Windows example, its tested
+		cmd.Stdout = os.Stdout
+		cmd.Run()
+	default:
+		panic("Platform '" + p + "' not currently supported")
+	}
+}
 
 // makeBinDir makes a bin directory in the project root directory if it isn't
 // already there
@@ -85,8 +103,8 @@ func goTestApi(root string) {
 	goExe(".", []string{"test", "-count=1", root + "/test/..."})
 }
 
-// goRun runs the compiled application from the /bin directory
-func goRun(root string) {
+// goRunApp runs the compiled application from the /bin directory
+func goRunApp(root string) {
 	fmt.Println("...running application...")
 	cmd := exec.Command("./go-qlueless-assembly-api")
 	cmd.Dir = root + "/bin"

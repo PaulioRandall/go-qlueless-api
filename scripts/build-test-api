@@ -1,8 +1,0 @@
-#!/bin/bash
-
-clear
-SCRIPTS=$(cd `dirname $0` && pwd)
-"${SCRIPTS}/_build-openapi"
-"${SCRIPTS}/_build-app"
-"${SCRIPTS}/_test-app"
-"${SCRIPTS}/_test-api"
