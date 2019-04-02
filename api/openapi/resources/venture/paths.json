@@ -79,27 +79,23 @@
       }
     }
   },
-  "head": {
-    "tags": ["venture"],
-    "description": "Processes the request as a GET but only returns the headers.",
-    "responses": {
-      "200": {
-        "$ref": "#/components/responses/venture_200_no_content"
-      },
-      "default": {
-        "$ref": "#/components/responses/error"
-      }
-    }
-  },
   "options": {
     "tags": ["venture"],
     "description": "Returns the endpoint options.",
     "responses": {
       "200": {
-        "$ref": "#/components/responses/venture_200_no_content"
-      },
-      "default": {
-        "$ref": "#/components/responses/error"
+        "description": "Ventures options.",
+        "headers": {
+          "Access-Control-Allow-Origin": {
+            "$ref": "#/components/headers/cors_origin"
+          },
+          "Access-Control-Allow-Headers": {
+            "$ref": "#/components/headers/cors_headers"
+          },
+          "Access-Control-Allow-Methods": {
+            "$ref": "#/components/headers/cors_methods"
+          }
+        }
       }
     }
   }

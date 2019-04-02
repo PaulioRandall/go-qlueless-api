@@ -12,7 +12,7 @@ import (
 	v "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/ventures"
 )
 
-var ventureHttpMethods = []string{"GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS"}
+var ventureHttpMethods = []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}
 
 // ****************************************************************************
 // (GET) /ventures
@@ -26,7 +26,7 @@ func TestGET_Ventures_1(t *testing.T) {
 		And the 'Content-Type' header contains 'application/json'
 		And 'Access-Control-Allow-Origin' is '*'
 		And 'Access-Control-Allow-Headers' is '*'
-		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, HEAD, and OPTIONS
+		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, and OPTIONS
 		And the body is a JSON array of valid Ventures
 		...`)
 
@@ -55,7 +55,7 @@ func TestGET_Ventures_2(t *testing.T) {
 		And the 'Content-Type' header contains 'application/json'
 		And 'Access-Control-Allow-Origin' is '*'
 		And 'Access-Control-Allow-Headers' is '*'
-		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, HEAD, and OPTIONS
+		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, and OPTIONS
 		And the body is a JSON array of valid Ventures wrapped with meta information
 		...`)
 
@@ -84,7 +84,7 @@ func TestGET_Venture_1(t *testing.T) {
 		And the 'Content-Type' header contains 'application/json'
 		And 'Access-Control-Allow-Origin' is '*'
 		And 'Access-Control-Allow-Headers' is '*'
-		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, HEAD, and OPTIONS
+		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, and OPTIONS
 		And the body is a JSON object representing a valid Venture
 		...`)
 
@@ -108,7 +108,7 @@ func TestGET_Venture_2(t *testing.T) {
 		And the 'Content-Type' header contains 'application/json'
 		And 'Access-Control-Allow-Origin' is '*'
 		And 'Access-Control-Allow-Headers' is '*'
-		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, HEAD, and OPTIONS
+		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, and OPTIONS
 		And the body is a JSON object representing an error response
 		...`)
 
@@ -137,7 +137,7 @@ func TestGET_Venture_3(t *testing.T) {
 		And the 'Content-Type' header contains 'application/json'
 		And 'Access-Control-Allow-Origin' is '*'
 		And 'Access-Control-Allow-Headers' is '*'
-		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, HEAD, and OPTIONS
+		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, and OPTIONS
 		And the body is a JSON object representing a valid Venture wrapped with meta information
 		...`)
 
@@ -165,7 +165,7 @@ func TestPOST_Venture_1(t *testing.T) {
 		And the 'Content-Type' header contains 'application/json'
 		And 'Access-Control-Allow-Origin' is '*'
 		And 'Access-Control-Allow-Headers' is '*'
-		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, HEAD, and OPTIONS
+		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, and OPTIONS
 		And the body is a JSON object representing the living input Venture with a new assigned ID
 		...`)
 
@@ -203,7 +203,7 @@ func TestPOST_Venture_2(t *testing.T) {
 		And the 'Content-Type' header contains 'application/json'
 		And 'Access-Control-Allow-Origin' is '*'
 		And 'Access-Control-Allow-Headers' is '*'
-		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, HEAD, and OPTIONS
+		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, and OPTIONS
 		And the body is a JSON object representing an error response
 		...`)
 
@@ -241,7 +241,7 @@ func TestPOST_Venture_3(t *testing.T) {
 		And the 'Content-Type' header contains 'application/json'
 		And 'Access-Control-Allow-Origin' is '*'
 		And 'Access-Control-Allow-Headers' is '*'
-		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, HEAD, and OPTIONS
+		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, and OPTIONS
 		And the body is a JSON object representing a WrappedReply
 		And that the wrapped data is the living input Venture with a new assigned ID
 		...`)
@@ -284,7 +284,7 @@ func TestPUT_Venture_1(t *testing.T) {
 		And the 'Content-Type' header contains 'application/json'
 		And 'Access-Control-Allow-Origin' is '*'
 		And 'Access-Control-Allow-Headers' is '*'
-		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, HEAD, and OPTIONS
+		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, and OPTIONS
 		And the body is a JSON object representing the updated input Venture
 		...`)
 
@@ -327,7 +327,7 @@ func TestPUT_Venture_2(t *testing.T) {
 		And the 'Content-Type' header contains 'application/json'
 		And 'Access-Control-Allow-Origin' is '*'
 		And 'Access-Control-Allow-Headers' is '*'
-		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, HEAD, and OPTIONS
+		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, and OPTIONS
 		And the body is a JSON object representing an error response
 		...`)
 
@@ -366,7 +366,7 @@ func TestPUT_Venture_3(t *testing.T) {
 		And the 'Content-Type' header contains 'application/json'
 		And 'Access-Control-Allow-Origin' is '*'
 		And 'Access-Control-Allow-Headers' is '*'
-		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, HEAD, and OPTIONS
+		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, and OPTIONS
 		And the body is a JSON object representing an error response
 		...`)
 
@@ -404,7 +404,7 @@ func TestPUT_Venture_4(t *testing.T) {
 		And the 'Content-Type' header contains 'application/json'
 		And 'Access-Control-Allow-Origin' is '*'
 		And 'Access-Control-Allow-Headers' is '*'
-		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, HEAD, and OPTIONS
+		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, and OPTIONS
 		And the body is a JSON object representing an error response
 		...`)
 
@@ -444,7 +444,7 @@ func TestPUT_Venture_5(t *testing.T) {
 		And the 'Content-Type' header contains 'application/json'
 		And 'Access-Control-Allow-Origin' is '*'
 		And 'Access-Control-Allow-Headers' is '*'
-		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, HEAD, and OPTIONS
+		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, and OPTIONS
 		And the body is a JSON object representing a WrappedReply
 		And the wrapped data is the updated input Venture
 		...`)
@@ -492,7 +492,7 @@ func TestDELETE_Venture_1(t *testing.T) {
 		And the 'Content-Type' header contains 'application/json'
 		And 'Access-Control-Allow-Origin' is '*'
 		And 'Access-Control-Allow-Headers' is '*'
-		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, HEAD, and OPTIONS
+		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, and OPTIONS
 		And the body is a JSON object representing the deleted Venture
 		...`)
 
@@ -517,7 +517,7 @@ func TestDELETE_Venture_2(t *testing.T) {
 		And the 'Content-Type' header contains 'application/json'
 		And 'Access-Control-Allow-Origin' is '*'
 		And 'Access-Control-Allow-Headers' is '*'
-		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, HEAD, and OPTIONS
+		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, and OPTIONS
 		And the body is a JSON object representing an error response
 		...`)
 
@@ -546,7 +546,7 @@ func TestDELETE_Venture_3(t *testing.T) {
 		And the 'Content-Type' header contains 'application/json'
 		And 'Access-Control-Allow-Origin' is '*'
 		And 'Access-Control-Allow-Headers' is '*'
-		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, HEAD, and OPTIONS
+		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, and OPTIONS
 		And the body is a JSON object representing a WrappedReply
 		And the wrapped data is the deleted Venture
 		...`)
@@ -566,34 +566,6 @@ func TestDELETE_Venture_3(t *testing.T) {
 }
 
 // ****************************************************************************
-// (HEAD) /ventures
-// ****************************************************************************
-
-func TestHEAD_Ventures(t *testing.T) {
-	t.Log(`Given some Ventures already exist on the server
-		When only /ventures HEADers are requested
-		Then ensure the response code is 200
-		And the 'Content-Type' header contains 'application/json'
-		And 'Access-Control-Allow-Origin' is '*'
-		And 'Access-Control-Allow-Headers' is '*'
-		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, HEAD, and OPTIONS
-		And there is NO response body
-		...`)
-
-	req := APICall{
-		URL:    "http://localhost:8080/ventures",
-		Method: "HEAD",
-	}
-	res := req.fire()
-	defer res.Body.Close()
-	defer a.PrintResponse(t, res.Body)
-
-	require.Equal(t, 200, res.StatusCode)
-	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
-	assertEmptyBody(t, res.Body)
-}
-
-// ****************************************************************************
 // (OPTIONS) /ventures
 // ****************************************************************************
 
@@ -604,7 +576,7 @@ func TestOPTIONS_Ventures(t *testing.T) {
 		And the 'Content-Type' header contains 'application/json'
 		And 'Access-Control-Allow-Origin' is '*'
 		And 'Access-Control-Allow-Headers' is '*'
-		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, HEAD, and OPTIONS
+		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, and OPTIONS
 		And there is NO response body
 		...`)
 
@@ -617,7 +589,7 @@ func TestOPTIONS_Ventures(t *testing.T) {
 	defer a.PrintResponse(t, res.Body)
 
 	require.Equal(t, 200, res.StatusCode)
-	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
+	assertNoContentHeaders(t, res, ventureHttpMethods)
 	assertEmptyBody(t, res.Body)
 }
 
@@ -632,7 +604,7 @@ func TestINVALID_Ventures(t *testing.T) {
 		And the 'Content-Type' header contains 'application/json'
 		And 'Access-Control-Allow-Origin' is '*'
 		And 'Access-Control-Allow-Headers' is '*'
-		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, HEAD, and OPTIONS
+		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, and OPTIONS
 		And there is NO response body
 		...`)
 

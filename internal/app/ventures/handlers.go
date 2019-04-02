@@ -15,7 +15,7 @@ var ventures = v.NewVentureStore()
 // Ventures.
 func VenturesHandler(res http.ResponseWriter, req *http.Request) {
 	h.LogRequest(req)
-	h.AppendCORSHeaders(&res, "GET, POST, PUT, DELETE, HEAD, OPTIONS")
+	h.AppendCORSHeaders(&res, "GET, POST, PUT, DELETE, OPTIONS")
 
 	id := req.FormValue("id")
 	switch {
@@ -29,10 +29,7 @@ func VenturesHandler(res http.ResponseWriter, req *http.Request) {
 		_PUT_UpdatedVenture(&res, req)
 	case req.Method == "DELETE":
 		_DELETE_Venture(id, &res, req)
-	case req.Method == "HEAD":
-		fallthrough
 	case req.Method == "OPTIONS":
-		h.AppendJSONHeader(&res, "")
 		res.WriteHeader(http.StatusOK)
 	default:
 		res.WriteHeader(http.StatusMethodNotAllowed)
