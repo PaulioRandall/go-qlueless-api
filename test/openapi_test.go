@@ -11,7 +11,7 @@ import (
 
 const openapiMediaType = "application/vnd.oai.openapi+json"
 
-var openapiHttpMethods = []string{"GET", "HEAD", "OPTIONS"}
+var openapiHttpMethods = []string{"GET", "OPTIONS"}
 
 // ****************************************************************************
 // (GET) /openapi
@@ -25,7 +25,7 @@ func TestGET_OpenAPI(t *testing.T) {
 		And the 'Content-Type' header contains 'application/vnd.oai.openapi+json'
 		And 'Access-Control-Allow-Origin' is '*'
 		And 'Access-Control-Allow-Headers' is '*'
-		And 'Access-Control-Allow-Methods' only contains GET, HEAD, and OPTIONS
+		And 'Access-Control-Allow-Methods' only contains GET and OPTIONS
 		And the body is a valid JSON object
 		...`)
 
@@ -46,34 +46,6 @@ func TestGET_OpenAPI(t *testing.T) {
 }
 
 // ****************************************************************************
-// (HEAD) /openapi
-// ****************************************************************************
-
-func TestHEAD_OpenAPI(t *testing.T) {
-	t.Log(`Given a loaded OpenAPI specification
-		When only /openapi HEADers are requested
-		Then ensure the response code is 200
-		And the 'Content-Type' header contains 'application/vnd.oai.openapi+json'
-		And 'Access-Control-Allow-Origin' is '*'
-		And 'Access-Control-Allow-Headers' is '*'
-		And 'Access-Control-Allow-Methods' only contains GET, HEAD, and OPTIONS
-		And there is NO response body
-		...`)
-
-	req := APICall{
-		URL:    "http://localhost:8080/openapi",
-		Method: "HEAD",
-	}
-	res := req.fire()
-	defer res.Body.Close()
-	defer a.PrintResponse(t, res.Body)
-
-	require.Equal(t, 200, res.StatusCode)
-	assertDefaultHeaders(t, res, openapiMediaType, openapiHttpMethods)
-	assertEmptyBody(t, res.Body)
-}
-
-// ****************************************************************************
 // (OPTIONS) /openapi
 // ****************************************************************************
 
@@ -84,7 +56,7 @@ func TestOPTIONS_OpenAPI(t *testing.T) {
 		And the 'Content-Type' header contains 'application/vnd.oai.openapi+json'
 		And 'Access-Control-Allow-Origin' is '*'
 		And 'Access-Control-Allow-Headers' is '*'
-		And 'Access-Control-Allow-Methods' only contains GET, HEAD, and OPTIONS
+		And 'Access-Control-Allow-Methods' only contains GET and OPTIONS
 		And there is NO response body
 		...`)
 
@@ -108,11 +80,11 @@ func TestOPTIONS_OpenAPI(t *testing.T) {
 func TestINVALID_OpenAPI(t *testing.T) {
 	t.Log(`Given a loaded OpenAPI specification
 	  When /openapi is called using invalid methods
-		Then ensure the response code is 200
+		Then ensure the response code is 405
 		And the 'Content-Type' header contains 'application/vnd.oai.openapi+json'
 		And 'Access-Control-Allow-Origin' is '*'
 		And 'Access-Control-Allow-Headers' is '*'
-		And 'Access-Control-Allow-Methods' only contains GET, HEAD, and OPTIONS
+		And 'Access-Control-Allow-Methods' only contains GET and OPTIONS
 		And there is NO response body
 		...`)
 

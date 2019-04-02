@@ -628,7 +628,7 @@ func TestOPTIONS_Ventures(t *testing.T) {
 func TestINVALID_Ventures(t *testing.T) {
 	t.Log(`Given some Ventures already exist on the server
 	 	When /ventures is called using invalid methods
-		Then ensure the response code is 200
+		Then ensure the response code is 405
 		And the 'Content-Type' header contains 'application/json'
 		And 'Access-Control-Allow-Origin' is '*'
 		And 'Access-Control-Allow-Headers' is '*'

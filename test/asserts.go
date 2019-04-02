@@ -31,18 +31,26 @@ var ALL_STD_HTTP_METHODS = []string{
 	"CUSTOM",
 }
 
-// assertDefaultHeaders asserts that the services default headers were applied
-func assertDefaultHeaders(t *testing.T, res *http.Response, contentType string, allowedMethods []string) {
+// assertNoContentHeaders asserts that the services default headers were applied
+// except the 'Content-Type' which should have been omitted
+func assertNoContentHeaders(t *testing.T, res *http.Response, allowedMethods []string) {
 	a.AssertHeadersEquals(t, res.Header, map[string]string{
 		"Access-Control-Allow-Origin":  "*",
 		"Access-Control-Allow-Headers": "*",
-		"Content-Type":                 contentType + "; charset=utf-8",
 	})
 	a.AssertHeadersContains(t, res.Header, map[string][]string{
 		"Access-Control-Allow-Methods": allowedMethods,
 	})
 	a.AssertHeadersMatches(t, res.Header, map[string]string{
 		"Access-Control-Allow-Methods": CORS_METHODS_PATTERN,
+	})
+}
+
+// assertDefaultHeaders asserts that the services default headers were applied
+func assertDefaultHeaders(t *testing.T, res *http.Response, contentType string, allowedMethods []string) {
+	assertNoContentHeaders(t, res, allowedMethods)
+	a.AssertHeadersEquals(t, res.Header, map[string]string{
+		"Content-Type": contentType + "; charset=utf-8",
 	})
 }
 

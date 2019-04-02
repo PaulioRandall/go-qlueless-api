@@ -60,8 +60,8 @@ func verifyNotAllowedMethods(t *testing.T, url string, allowedMethods []string) 
 		if !ok {
 			continue
 		}
-		assertDefaultHeaders(t, res, "application/json", allowedMethods)
-		assertWrappedErrorBody(t, res.Body)
+		assertNoContentHeaders(t, res, allowedMethods)
+		assertEmptyBody(t, res.Body)
 	}
 }
 

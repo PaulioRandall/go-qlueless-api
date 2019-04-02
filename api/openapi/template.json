@@ -6,6 +6,14 @@
   },
   "tags": [
     {
+      "name": "openapi",
+      "description": "All available OpenAPI specific operations."
+    },
+    {
+      "name": "changelog",
+      "description": "All available changelog specific operations."
+    },
+    {
       "name": "venture",
       "description": "All available Venture specific operations."
     },

@@ -32,10 +32,10 @@ func CheckStatusBetween(res *http.ResponseWriter, req *http.Request, status int,
 	return true
 }
 
-// CheckReplyMessage validates that a response message is not empty
-func CheckReplyMessage(res *http.ResponseWriter, req *http.Request, m string) bool {
+// CheckNotEmpty validates that a require string is not empty
+func CheckNotEmpty(res *http.ResponseWriter, req *http.Request, name string, m string) bool {
 	if m == "" {
-		log.Println("[BUG] error response message is missing")
+		log.Println("[BUG] error missing '" + name + "'")
 		WriteServerError(res, req)
 		return false
 	}
@@ -75,13 +75,4 @@ func AppendJSONHeader(res *http.ResponseWriter, extensionType string) {
 		ct = "application/json; charset=utf-8"
 	}
 	(*res).Header().Set("Content-Type", ct)
-}
-
-// methodNotAllowed handles cases where a HTTP method has been used but is not
-// handled by this particular endpoint
-func MethodNotAllowed(res *http.ResponseWriter, req *http.Request) {
-	r := w.WrappedReply{
-		Message: fmt.Sprintf("Method not allowed for this endpoint (%s)", req.Method),
-	}
-	Write4XXReply(res, req, 405, r)
 }

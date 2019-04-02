@@ -28,15 +28,15 @@ func TestRelURL(t *testing.T) {
 // CheckReplyMessage()
 // ****************************************************************************
 
-func TestCheckReplyMessage___1(t *testing.T) {
+func TestCheckNotEmpty___1(t *testing.T) {
 	req, res, _ := SetupRequest("/")
-	act := CheckReplyMessage(res, req, "message")
+	act := CheckNotEmpty(res, req, "message", "message")
 	assert.True(t, act)
 }
 
 func TestCheckReplyMessage___2(t *testing.T) {
 	req, res, rec := SetupRequest("/")
-	act := CheckReplyMessage(res, req, "")
+	act := CheckNotEmpty(res, req, "message", "")
 	require.False(t, act)
 	assert.Equal(t, 500, rec.Code)
 }

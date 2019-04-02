@@ -6,6 +6,14 @@
   },
   "tags": [
     {
+      "name": "openapi",
+      "description": "All available OpenAPI specific operations."
+    },
+    {
+      "name": "changelog",
+      "description": "All available changelog specific operations."
+    },
+    {
       "name": "venture",
       "description": "All available Venture specific operations."
     },
@@ -21,6 +29,7 @@
 	"paths": {
 		"/openapi": {
 		  "get": {
+		    "tags": ["openapi"],
 		    "description": "Returns this OpenAPI specification.",
 		    "responses": {
 		      "200": {
@@ -29,6 +38,29 @@
 		          "application/vnd.oai.openapi+json": {
 		          }
 		        },
+		        "headers": {
+		          "Access-Control-Allow-Origin": {
+		            "$ref": "#/components/headers/cors_origin"
+		          },
+		          "Access-Control-Allow-Headers": {
+		            "$ref": "#/components/headers/cors_headers"
+		          },
+		          "Access-Control-Allow-Methods": {
+		            "$ref": "#/components/headers/cors_methods"
+		          }
+		        }
+		      },
+		      "default": {
+		        "$ref": "#/components/responses/error"
+		      }
+		    }
+		  },
+		  "options": {
+		    "tags": ["openapi"],
+		    "description": "Returns the options for this endpoint.",
+		    "responses": {
+		      "200": {
+		        "description": "OpenAPI specification.",
 		        "headers": {
 		          "Access-Control-Allow-Origin": {
 		            "$ref": "#/components/headers/cors_origin"

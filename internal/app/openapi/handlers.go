@@ -15,18 +15,16 @@ var spec map[string]interface{} = nil
 // OpenAPIHandler handles requests for the services OpenAPI specification
 func OpenAPIHandler(res http.ResponseWriter, req *http.Request) {
 	h.LogRequest(req)
-	h.AppendCORSHeaders(&res, "GET, HEAD, OPTIONS")
+	h.AppendCORSHeaders(&res, "GET, OPTIONS")
 
 	switch req.Method {
 	case "GET":
 		_GET_Spec(&res, req)
-	case "HEAD":
-		fallthrough
 	case "OPTIONS":
 		h.AppendJSONHeader(&res, "vnd.oai.openapi")
 		res.WriteHeader(http.StatusOK)
 	default:
-		h.MethodNotAllowed(&res, req)
+		res.WriteHeader(http.StatusMethodNotAllowed)
 	}
 }
 

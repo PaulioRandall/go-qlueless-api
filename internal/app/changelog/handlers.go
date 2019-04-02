@@ -27,7 +27,7 @@ func ChangelogHandler(res http.ResponseWriter, req *http.Request) {
 		res.Header().Set("Content-Type", mime_md)
 		res.WriteHeader(http.StatusOK)
 	default:
-		h.MethodNotAllowed(&res, req)
+		res.WriteHeader(http.StatusMethodNotAllowed)
 	}
 }
 

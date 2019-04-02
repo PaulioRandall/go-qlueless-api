@@ -35,7 +35,7 @@ func VenturesHandler(res http.ResponseWriter, req *http.Request) {
 		h.AppendJSONHeader(&res, "")
 		res.WriteHeader(http.StatusOK)
 	default:
-		h.MethodNotAllowed(&res, req)
+		res.WriteHeader(http.StatusMethodNotAllowed)
 	}
 }
 

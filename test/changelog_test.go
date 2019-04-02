@@ -20,7 +20,7 @@ var changelogHttpMethods = []string{"GET", "HEAD", "OPTIONS"}
 func TestGET_Changelog(t *testing.T) {
 	t.Log(`Given a loaded changelog
 		When the changelog is requested
-		Then ensure the response code is 200
+		Then ensure the response code is 405
 		And the 'Content-Type' header contains 'text/markdown'
 		And 'Access-Control-Allow-Origin' is '*'
 		And 'Access-Control-Allow-Headers' is '*'

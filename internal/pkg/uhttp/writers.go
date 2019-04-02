@@ -22,7 +22,7 @@ func WriteServerError(res *http.ResponseWriter, req *http.Request) {
 
 // WriteBadRequest writes the response for a 400 error
 func WriteBadRequest(res *http.ResponseWriter, req *http.Request, m string) {
-	if !CheckReplyMessage(res, req, m) {
+	if !CheckNotEmpty(res, req, "response message", m) {
 		return
 	}
 
@@ -42,7 +42,7 @@ func Write4XXReply(res *http.ResponseWriter, req *http.Request, status int, r w.
 		return
 	}
 
-	if !CheckReplyMessage(res, req, r.Message) {
+	if !CheckNotEmpty(res, req, "response message", r.Message) {
 		return
 	}
 
