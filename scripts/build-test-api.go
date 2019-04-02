@@ -12,8 +12,10 @@ func main() {
 	root := findProjectRoot()
 	makeBinDir(root)
 
+	goOpenAPI(root)
 	goBuild(root)
 	goTest(root)
 	goTestApi(root)
+
 	return
 }

@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -30,6 +31,28 @@ func findProjectRoot() string {
 	return root
 }
 
+// goOpenAPI builds the OpenAPI specification and places a copy of the
+// resultant file in '{project-root}/bin'
+func goOpenAPI(root string) {
+	fmt.Println("...compiling OpenAPI specification...")
+
+	api := root + "/api"
+	oai := api + "/openapi"
+	goExe(oai, []string{"run", oai + "/injector.go"})
+
+	oaiOut := oai + "/openapi.json"
+	fmt.Println("ok\t" + oaiOut + "\t(created)")
+
+	oaiBin := root + "/bin/openapi.json"
+	copyFile(oaiOut, oaiBin)
+	fmt.Println("ok\t" + oaiBin + "\t(copied)")
+
+	cl := api + "/CHANGELOG.md"
+	clBin := root + "/bin/CHANGELOG.md"
+	copyFile(cl, clBin)
+	fmt.Println("ok\t" + clBin + "\t(copied)")
+}
+
 // goBuild builds the application and places the result binary in
 // '{project-root}/bin'
 func goBuild(root string) {
@@ -46,7 +69,7 @@ func goBuild(root string) {
 	args = append(args, goFiles...)
 	goExe(cmd, args)
 
-	fmt.Println("ok\t" + output)
+	fmt.Println("ok\t" + output + "\t(created)")
 }
 
 // goTest runs the application unit tests
@@ -70,6 +93,19 @@ func goExe(dir string, args []string) {
 	cmd.Stderr = os.Stderr
 
 	err := cmd.Run()
+	if err != nil {
+		panic(err)
+	}
+}
+
+// copyFile copies a file from one location to another
+func copyFile(src string, dst string) {
+	in, err := ioutil.ReadFile(src)
+	if err != nil {
+		panic(err)
+	}
+
+	err = ioutil.WriteFile(dst, in, os.ModePerm)
 	if err != nil {
 		panic(err)
 	}

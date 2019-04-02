@@ -5,7 +5,6 @@ package main
 
 import (
 	"io/ioutil"
-	"log"
 	"os"
 	"strings"
 	"text/template"
@@ -45,8 +44,6 @@ func (o OpenAPI) Inject(filename string, indent int) string {
 
 // Main is the entry point for the OpenAPI specification generator
 func main() {
-	log.Println("[Injector]: Compiling OpenAPI specification")
-
 	var err error
 
 	o := OpenAPI{
