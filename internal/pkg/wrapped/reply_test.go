@@ -19,8 +19,7 @@ func TestDecodeWrappedReplyFromReader_1(t *testing.T) {
 		"data": {
 			"k1": "v1",
 			"k2": "v2"
-		},
-		"hints": "hints"
+		}
 	}`)
 
 	exp := WrappedReply{
@@ -30,7 +29,6 @@ func TestDecodeWrappedReplyFromReader_1(t *testing.T) {
 			"k1": "v1",
 			"k2": "v2",
 		},
-		Hints: "hints",
 	}
 
 	aOut, err := DecodeWrappedReplyFromReader(aIn)

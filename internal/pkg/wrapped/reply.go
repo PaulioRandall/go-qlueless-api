@@ -11,7 +11,6 @@ type WrappedReply struct {
 	Message string      `json:"message"`
 	Self    string      `json:"self"`
 	Data    interface{} `json:"data,omitempty"`
-	Hints   string      `json:"hints,omitempty"`
 }
 
 // DecodeWrappedReplyFromReader decodes JSON from a Reader into a WrappedReply

@@ -106,7 +106,6 @@ func TestWrite4XXReply___3(t *testing.T) {
 	r := w.WrappedReply{
 		Message: "abc",
 		Self:    (*req).URL.String(),
-		Hints:   "xyz",
 	}
 
 	Write4XXReply(res, req, 400, r)
@@ -118,7 +117,6 @@ func TestWrite4XXReply___4(t *testing.T) {
 	r := w.WrappedReply{
 		Message: "abc",
 		Self:    (*req).URL.String(),
-		Hints:   "xyz",
 	}
 
 	Write4XXReply(res, req, 400, r)
@@ -132,7 +130,6 @@ func TestWrite4XXReply___5(t *testing.T) {
 	r := w.WrappedReply{
 		Message: "abc",
 		Self:    (*req).URL.Path + "?" + (*req).URL.RawQuery,
-		Hints:   "xyz",
 	}
 
 	Write4XXReply(res, req, 400, r)
@@ -142,17 +139,15 @@ func TestWrite4XXReply___5(t *testing.T) {
 	err := json.NewDecoder(rec.Body).Decode(&m)
 
 	require.Nil(t, err)
-	require.Len(t, m, 3)
+	require.Len(t, m, 2)
 	assert.Equal(t, "abc", m["message"])
 	assert.Equal(t, "/search?q=dan+north", m["self"])
-	assert.Equal(t, "xyz", m["hints"])
 }
 
 func TestWrite4XXReply___6(t *testing.T) {
 	req, res, rec := SetupRequest("/search?q=dan+north")
 	r := w.WrappedReply{
 		Message: "abc",
-		Hints:   "xyz",
 	}
 
 	Write4XXReply(res, req, 400, r)
