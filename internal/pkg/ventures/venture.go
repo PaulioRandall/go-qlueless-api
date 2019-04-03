@@ -1,12 +1,38 @@
 package ventures
 
 import (
+	"database/sql"
 	"encoding/json"
 	"io"
 	"strings"
 
 	u "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/utils"
 )
+
+// CreateVentureTable creates a Venture table within the supplied database
+//
+// @UNTESTED
+func CreateVentureTable(db *sql.DB) error {
+	stmt, err := db.Prepare(`CREATE TABLE venture (
+		id INTEGER PRIMARY KEY AUTOINCREMENT,
+		description TEXT NOT NULL,
+		order_ids TEXT NOT NULL,
+		state TEXT NOT NULL,
+		is_alive BOOL DEFAULT TRUE,
+		extra TEXT DEFAULT NULL
+	);`)
+
+	if stmt != nil {
+		defer stmt.Close()
+	}
+
+	if err != nil {
+		return err
+	}
+
+	_, err = stmt.Exec()
+	return err
+}
 
 // Venture represents a Venture, aka, project.
 type Venture struct {

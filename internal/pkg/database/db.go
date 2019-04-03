@@ -15,17 +15,7 @@ func OpenDatabase(path string) *sql.DB {
 	db, err := sql.Open("sqlite3", path)
 	_fatalClose(db, err)
 
-	stmt, err := db.Prepare(`CREATE TABLE venture (
-		id INTEGER PRIMARY KEY AUTOINCREMENT,
-		description TEXT NOT NULL,
-		order_ids TEXT NOT NULL,
-		state TEXT NOT NULL,
-		is_alive BOOL DEFAULT TRUE,
-		extra TEXT DEFAULT NULL
-	);`)
-	_fatalClose(db, err)
-
-	_, err = stmt.Exec()
+	err = v.CreateVentureTable(db)
 	_fatalClose(db, err)
 
 	return db
