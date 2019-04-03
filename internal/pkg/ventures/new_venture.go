@@ -1,8 +1,10 @@
 package ventures
 
 import (
+	"database/sql"
 	"encoding/json"
 	"io"
+	"strconv"
 	"strings"
 
 	u "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/utils"
@@ -49,4 +51,49 @@ func (ven *NewVenture) Validate() []string {
 
 	errMsgs = u.AppendIfEmpty(ven.State, errMsgs, "Ventures must have a state.")
 	return errMsgs
+}
+
+// Insert inserts the NewVenture into the database
+//
+// @UNTESTED
+func (nv *NewVenture) Insert(db *sql.DB) (*Venture, error) {
+	stmt, err := db.Prepare(`INSERT INTO venture (
+		description, order_ids, state, is_alive, extra
+	) VALUES (
+		?, ?, ?, ?, ?
+	);`)
+
+	if stmt != nil {
+		defer stmt.Close()
+	}
+
+	if err != nil {
+		return nil, err
+	}
+
+	ven := Venture{
+		Description: nv.Description,
+		OrderIDs:    nv.OrderIDs,
+		State:       nv.State,
+		IsAlive:     true,
+		Extra:       nv.Extra,
+	}
+
+	res, err := stmt.Exec(ven.Description,
+		ven.OrderIDs,
+		ven.State,
+		ven.IsAlive,
+		ven.Extra)
+
+	if err != nil {
+		return nil, err
+	}
+
+	id, err := res.LastInsertId()
+	if err != nil {
+		return nil, err
+	}
+
+	ven.ID = strconv.FormatInt(id, 10)
+	return &ven, nil
 }

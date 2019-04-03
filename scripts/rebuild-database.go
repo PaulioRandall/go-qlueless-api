@@ -14,14 +14,14 @@ import (
 	v "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/ventures"
 )
 
-var data []v.Venture = []v.Venture{
-	v.Venture{
+var input []v.NewVenture = []v.NewVenture{
+	v.NewVenture{
 		Description: "Sunshine, lollipops and rainbows" +
 			"\nEverything that's wonderful is what I feel when we're together",
 		OrderIDs: "1,2,3,4",
 		State:    "In Progress",
 	},
-	v.Venture{
+	v.NewVenture{
 		Description: "description",
 		State:       "state",
 		Extra:       "extra",
@@ -36,15 +36,22 @@ func main() {
 	db := d.OpenDatabase(path)
 	defer db.Close()
 
-	for i, ven := range data {
-		ven.Clean()
-		errMsgs := ven.Validate(true)
+	output := []v.Venture{}
+
+	for _, nv := range input {
+		nv.Clean()
+		errMsgs := nv.Validate()
 		if len(errMsgs) > 0 {
 			m := strings.Join(errMsgs, " ")
 			log.Fatal(m)
 		}
 
-		data[i] = d.InsertVenture(db, ven)
+		ven, err := nv.Insert(db)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		output = append(output, *ven)
 	}
 
 	vens := d.QueryVentures(db)

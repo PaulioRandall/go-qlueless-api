@@ -3,7 +3,6 @@ package database
 import (
 	"database/sql"
 	"log"
-	"strconv"
 
 	_ "github.com/mattn/go-sqlite3"
 
@@ -19,25 +18,6 @@ func OpenDatabase(path string) *sql.DB {
 	_fatalClose(db, err)
 
 	return db
-}
-
-// InsertVenture inserts a new Venture into the database
-func InsertVenture(db *sql.DB, ven v.Venture) v.Venture {
-	stmt, err := db.Prepare(`INSERT INTO venture (
-		description, order_ids, state, extra
-	) VALUES (
-		?, ?, ?, ?
-	);`)
-	_fatalClose(db, err)
-
-	res, err := stmt.Exec(ven.Description, ven.OrderIDs, ven.State, ven.Extra)
-	_fatalClose(db, err)
-
-	id, err := res.LastInsertId()
-	_fatalClose(db, err)
-
-	ven.ID = strconv.FormatInt(id, 10)
-	return ven
 }
 
 // QueryVentures queries the database for all Ventures
