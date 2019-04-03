@@ -24,4 +24,4 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Added `(DELETE) /ventures` which handles the deletion of existing `Ventures`
 - Added `(OPTIONS) /ventures` which handles requests for the endpoints capabilities
 - Added `wrap` query parameter to all endpoints, except `/openapi` and `/changelog`, that will wrap the response data to include meta information
-- Updated `wrap` parameterised responses with the properties `message`, `data`, `self` and `hints`
+- Updated `wrap` parameterised responses with the properties `message`, `data`, and `self`
