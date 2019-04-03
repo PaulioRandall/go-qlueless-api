@@ -7,8 +7,6 @@ import (
 	"log"
 	"strings"
 
-	_ "github.com/mattn/go-sqlite3"
-
 	d "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/database"
 	u "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/utils"
 	v "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/ventures"
@@ -33,8 +31,17 @@ func main() {
 	path := "../bin/qlueless.db"
 
 	u.DeleteIfExists(path)
-	db := d.OpenDatabase(path)
+	db, err := d.OpenSQLiteDatabase(path)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	defer db.Close()
+
+	err = v.CreateTable(db)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	output := []v.Venture{}
 

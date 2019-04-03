@@ -19,7 +19,7 @@ type Venture struct {
 	Extra       string `json:"extra,omitempty"`
 }
 
-// DecodeVenture decodes a Venture from data obtained via a Reader
+// DecodeVenture decodes a Venture from data obtained via a Reader.
 func DecodeVenture(r io.Reader) (Venture, error) {
 	var v Venture
 	d := json.NewDecoder(r)
@@ -28,7 +28,7 @@ func DecodeVenture(r io.Reader) (Venture, error) {
 }
 
 // DecodeVentureSlice decodes a slice of Ventures from data obtained via a
-// Reader
+// Reader.
 func DecodeVentureSlice(r io.Reader) ([]Venture, error) {
 	var v []Venture
 	d := json.NewDecoder(r)
@@ -82,7 +82,7 @@ func (ven *Venture) SetOrderIDs(ids []string) {
 	ven.OrderIDs = strings.Join(ids, ",")
 }
 
-// CreateTable creates a Venture table within the supplied database
+// CreateTable creates a Venture table within the supplied database.
 //
 // @UNTESTED
 func CreateTable(db *sql.DB) error {
@@ -107,7 +107,7 @@ func CreateTable(db *sql.DB) error {
 	return err
 }
 
-// QueryAll queries the database for all Ventures
+// QueryAll queries the database for all Ventures.
 //
 // @UNTESTED
 func QueryAll(db *sql.DB) ([]Venture, error) {
@@ -132,7 +132,7 @@ func QueryAll(db *sql.DB) ([]Venture, error) {
 }
 
 // _mapRows is a file private function that maps rows from a database query into
-// a slice of Ventures
+// a slice of Ventures.
 func _mapRows(rows *sql.Rows) ([]Venture, error) {
 	vens := []Venture{}
 
