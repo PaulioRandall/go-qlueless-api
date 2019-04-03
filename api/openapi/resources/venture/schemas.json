@@ -64,7 +64,8 @@
     "venture_id",
     "description",
     "state",
-    "is_alive"
+    "is_alive",
+    "last_modified"
   ],
   "properties": {
     "venture_id": {
@@ -81,6 +82,9 @@
     },
     "is_alive": {
       "$ref": "#/components/x-hidden/is_alive"
+    },
+    "last_modified": {
+      "$ref": "#/components/x-hidden/last_modified"
     },
     "extra": {
       "$ref": "#/components/x-hidden/extra"

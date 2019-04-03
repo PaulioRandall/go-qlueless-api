@@ -42,6 +42,10 @@
   "type": "boolean",
   "description": "True if the Thing is alive and should be included within search results."
 },
+"last_modified": {
+  "type": "date-time",
+  "description": "Datetime when the specific Venture was created or last modified."
+},
 "extra": {
   "type": "string",
   "description": "Additional CLOB data managed by clients."
