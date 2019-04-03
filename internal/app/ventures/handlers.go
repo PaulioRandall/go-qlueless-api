@@ -75,18 +75,18 @@ func _POST_NewVenture(res *http.ResponseWriter, req *http.Request) {
 
 // _PUT_UpdatedVenture handles client requests for updating Ventures.
 func _PUT_UpdatedVenture(res *http.ResponseWriter, req *http.Request) {
-	vu, ok := decodeVentureUpdate(res, req)
+	mv, ok := decodeModVenture(res, req)
 	if !ok {
 		return
 	}
 
-	vu.Clean()
-	ok = validateVentureUpdate(vu, res, req)
+	mv.Clean()
+	ok = validateModVenture(mv, res, req)
 	if !ok {
 		return
 	}
 
-	ven, ok := updateVenture(vu, res, req)
+	ven, ok := updateVenture(mv, res, req)
 	if !ok {
 		return
 	}

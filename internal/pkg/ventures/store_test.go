@@ -181,7 +181,7 @@ func TestVentureStore_Update_1(t *testing.T) {
 	}
 	store.items["1"] = a
 
-	au := VentureUpdate{
+	au := ModVenture{
 		Props: "description,order_ids,state,is_alive,extra",
 		Values: Venture{
 			ID:          "1",
@@ -204,7 +204,7 @@ func TestVentureStore_Update_1(t *testing.T) {
 
 func TestVentureStore_Update_2(t *testing.T) {
 	store := NewVentureStore()
-	au := VentureUpdate{
+	au := ModVenture{
 		Props: "description",
 		Values: Venture{
 			ID:          "1",
@@ -223,7 +223,7 @@ func TestVentureStore_Update_3(t *testing.T) {
 	}
 	store.items["1"] = a
 
-	au := VentureUpdate{
+	au := ModVenture{
 		Props: "IGNORED,SKIPPED",
 		Values: Venture{
 			ID:          "1",

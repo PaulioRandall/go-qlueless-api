@@ -288,7 +288,7 @@ func TestPUT_Venture_1(t *testing.T) {
 		And the body is a JSON object representing the updated input Venture
 		...`)
 
-	input := v.VentureUpdate{
+	input := v.ModVenture{
 		Props: "description, state, order_ids, extra",
 		Values: v.Venture{
 			ID:          "1",
@@ -331,7 +331,7 @@ func TestPUT_Venture_2(t *testing.T) {
 		And the body is a JSON object representing an error response
 		...`)
 
-	input := v.VentureUpdate{
+	input := v.ModVenture{
 		Props: "description, state, order_ids, extra",
 		Values: v.Venture{
 			ID:          "999999",
@@ -370,7 +370,7 @@ func TestPUT_Venture_3(t *testing.T) {
 		And the body is a JSON object representing an error response
 		...`)
 
-	input := v.VentureUpdate{
+	input := v.ModVenture{
 		Props: "description, state, order_ids, extra",
 		Values: v.Venture{
 			Description: "Black blizzard",
@@ -408,7 +408,7 @@ func TestPUT_Venture_4(t *testing.T) {
 		And the body is a JSON object representing an error response
 		...`)
 
-	input := v.VentureUpdate{
+	input := v.ModVenture{
 		Props: "description, state, order_ids, extra",
 		Values: v.Venture{
 			ID: "1",
@@ -449,7 +449,7 @@ func TestPUT_Venture_5(t *testing.T) {
 		And the wrapped data is the updated input Venture
 		...`)
 
-	input := v.VentureUpdate{
+	input := v.ModVenture{
 		Props: "description, state, order_ids, extra",
 		Values: v.Venture{
 			ID:          "1",

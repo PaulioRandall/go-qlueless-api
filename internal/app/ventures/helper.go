@@ -39,7 +39,7 @@ func InjectDummyVentures() {
 		State:       "In Progress",
 		OrderIDs:    "4,5,6",
 	})
-	ventures.Update(v.VentureUpdate{
+	ventures.Update(v.ModVenture{
 		Props: "is_alive",
 		Values: v.Venture{
 			IsAlive: false,
@@ -85,20 +85,20 @@ func validateNewVenture(ven v.NewVenture, res *http.ResponseWriter, req *http.Re
 	return true
 }
 
-// decodeVentureUpdate decodes an update to a Venture from a Request.Body.
-func decodeVentureUpdate(res *http.ResponseWriter, req *http.Request) (v.VentureUpdate, bool) {
-	vu, err := v.DecodeVentureUpdate(req.Body)
+// decodeModVenture decodes an update to a Venture from a Request.Body.
+func decodeModVenture(res *http.ResponseWriter, req *http.Request) (v.ModVenture, bool) {
+	vu, err := v.DecodeModVenture(req.Body)
 	if err != nil {
 		h.WriteBadRequest(res, req,
 			"Unable to decode request body into a Venture update")
-		return v.VentureUpdate{}, false
+		return v.ModVenture{}, false
 	}
 	return vu, true
 }
 
-// validateVentureUpdate validates a Venture update.
-func validateVentureUpdate(vu v.VentureUpdate, res *http.ResponseWriter, req *http.Request) bool {
-	errMsgs := vu.Validate()
+// validateModVenture validates a Venture update.
+func validateModVenture(mv v.ModVenture, res *http.ResponseWriter, req *http.Request) bool {
+	errMsgs := mv.Validate()
 	if len(errMsgs) != 0 {
 		h.WriteBadRequest(res, req, strings.Join(errMsgs, " "))
 		return false
@@ -107,11 +107,11 @@ func validateVentureUpdate(vu v.VentureUpdate, res *http.ResponseWriter, req *ht
 }
 
 // updateVenture updates a Venture in the data store.
-func updateVenture(vu v.VentureUpdate, res *http.ResponseWriter, req *http.Request) (v.Venture, bool) {
-	ven, ok := ventures.Update(vu)
+func updateVenture(mv v.ModVenture, res *http.ResponseWriter, req *http.Request) (v.Venture, bool) {
+	ven, ok := ventures.Update(mv)
 	if !ok {
 		h.WriteBadRequest(res, req,
-			fmt.Sprintf("Venture with ID '%s' could not be found", vu.Values.ID))
+			fmt.Sprintf("Venture with ID '%s' could not be found", mv.Values.ID))
 		return v.Venture{}, false
 	}
 	return ven, true

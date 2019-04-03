@@ -9,10 +9,10 @@ import (
 )
 
 // ****************************************************************************
-// DecodeVentureUpdate()
+// DecodeModVenture()
 // ****************************************************************************
 
-func TestDecodeVentureUpdate_1(t *testing.T) {
+func TestDecodeModVenture_1(t *testing.T) {
 	a := strings.NewReader(`{
 		"set": "description,state,order_ids,is_alive,extra",
 		"values": {
@@ -25,7 +25,7 @@ func TestDecodeVentureUpdate_1(t *testing.T) {
 		}
 	}`)
 
-	exp := VentureUpdate{
+	exp := ModVenture{
 		Props: "description,state,order_ids,is_alive,extra",
 		Values: Venture{
 			Description: "description",
@@ -37,33 +37,33 @@ func TestDecodeVentureUpdate_1(t *testing.T) {
 		},
 	}
 
-	b, err := DecodeVentureUpdate(a)
+	b, err := DecodeModVenture(a)
 	require.Nil(t, err)
 	assert.Equal(t, exp, b)
 }
 
-func TestDecodeVentureUpdate_2(t *testing.T) {
+func TestDecodeModVenture_2(t *testing.T) {
 	a := strings.NewReader(`{}`)
 
-	exp := VentureUpdate{}
+	exp := ModVenture{}
 
-	b, err := DecodeVentureUpdate(a)
+	b, err := DecodeModVenture(a)
 	require.Nil(t, err)
 	assert.Empty(t, exp, b)
 }
 
-func TestDecodeVentureUpdate_3(t *testing.T) {
+func TestDecodeModVenture_3(t *testing.T) {
 	a := strings.NewReader(``)
-	_, err := DecodeVentureUpdate(a)
+	_, err := DecodeModVenture(a)
 	require.NotNil(t, err)
 }
 
 // ****************************************************************************
-// VentureUpdate.SplitProps()
+// ModVenture.SplitProps()
 // ****************************************************************************
 
-func TestVentureUpdate_SplitProps_1(t *testing.T) {
-	a := VentureUpdate{
+func TestModVenture_SplitProps_1(t *testing.T) {
+	a := ModVenture{
 		Props: "description,state,extra",
 	}
 
@@ -72,8 +72,8 @@ func TestVentureUpdate_SplitProps_1(t *testing.T) {
 	assert.Equal(t, exp, s)
 }
 
-func TestVentureUpdate_SplitProps_2(t *testing.T) {
-	a := VentureUpdate{
+func TestModVenture_SplitProps_2(t *testing.T) {
+	a := ModVenture{
 		Props: "description",
 	}
 
@@ -82,18 +82,18 @@ func TestVentureUpdate_SplitProps_2(t *testing.T) {
 	assert.Equal(t, exp, s)
 }
 
-func TestVentureUpdate_SplitProps_3(t *testing.T) {
-	a := VentureUpdate{}
+func TestModVenture_SplitProps_3(t *testing.T) {
+	a := ModVenture{}
 	s := a.SplitProps()
 	assert.Empty(t, s)
 }
 
 // ****************************************************************************
-// VentureUpdate.Clean()
+// ModVenture.Clean()
 // ****************************************************************************
 
-func TestVentureUpdate_Clean_1(t *testing.T) {
-	a := VentureUpdate{
+func TestModVenture_Clean_1(t *testing.T) {
+	a := ModVenture{
 		Props: "\n\t\v   \r\f  state,extra,\v    is_alive \f\t",
 		Values: Venture{
 			Description: "\n\t\v description \r\f ",
@@ -116,26 +116,26 @@ func TestVentureUpdate_Clean_1(t *testing.T) {
 	assert.Equal(t, "\n\t\v extra \r\f", a.Values.Extra)
 }
 
-func TestVentureUpdate_Clean_2(t *testing.T) {
-	a := VentureUpdate{
+func TestModVenture_Clean_2(t *testing.T) {
+	a := ModVenture{
 		Props: "description,state,extra",
 	}
 	a.Clean()
 	assert.Equal(t, "description,state,extra", a.Props)
 }
 
-func TestVentureUpdate_Clean_3(t *testing.T) {
-	a := VentureUpdate{}
+func TestModVenture_Clean_3(t *testing.T) {
+	a := ModVenture{}
 	a.Clean()
-	assert.Equal(t, VentureUpdate{}, a)
+	assert.Equal(t, ModVenture{}, a)
 }
 
 // ****************************************************************************
-// VentureUpdate.Validate()
+// ModVenture.Validate()
 // ****************************************************************************
 
-func TestVentureUpdate_Validate_1(t *testing.T) {
-	a := VentureUpdate{
+func TestModVenture_Validate_1(t *testing.T) {
+	a := ModVenture{
 		Props: "description,state,extra",
 		Values: Venture{
 			ID:          "1",
@@ -151,8 +151,8 @@ func TestVentureUpdate_Validate_1(t *testing.T) {
 	assert.Empty(t, errMsgs)
 }
 
-func TestVentureUpdate_Validate_2(t *testing.T) {
-	a := VentureUpdate{
+func TestModVenture_Validate_2(t *testing.T) {
+	a := ModVenture{
 		Props: "description",
 		Values: Venture{
 			ID:          "1",
@@ -164,8 +164,8 @@ func TestVentureUpdate_Validate_2(t *testing.T) {
 	assert.Empty(t, errMsgs)
 }
 
-func TestVentureUpdate_Validate_3(t *testing.T) {
-	a := VentureUpdate{
+func TestModVenture_Validate_3(t *testing.T) {
+	a := ModVenture{
 		Props: "",
 		Values: Venture{
 			ID: "1",
@@ -176,8 +176,8 @@ func TestVentureUpdate_Validate_3(t *testing.T) {
 	assert.Len(t, errMsgs, 1)
 }
 
-func TestVentureUpdate_Validate_4(t *testing.T) {
-	a := VentureUpdate{
+func TestModVenture_Validate_4(t *testing.T) {
+	a := ModVenture{
 		Props: "description",
 		Values: Venture{
 			ID: "1",
@@ -188,8 +188,8 @@ func TestVentureUpdate_Validate_4(t *testing.T) {
 	assert.Len(t, errMsgs, 1)
 }
 
-func TestVentureUpdate_Validate_5(t *testing.T) {
-	a := VentureUpdate{
+func TestModVenture_Validate_5(t *testing.T) {
+	a := ModVenture{
 		Props: "INVALID",
 		Values: Venture{
 			ID: "1",
@@ -200,8 +200,8 @@ func TestVentureUpdate_Validate_5(t *testing.T) {
 	assert.Len(t, errMsgs, 1)
 }
 
-func TestVentureUpdate_Validate_6(t *testing.T) {
-	a := VentureUpdate{
+func TestModVenture_Validate_6(t *testing.T) {
+	a := ModVenture{
 		Props: "extra",
 		Values: Venture{
 			ID: "1",
@@ -212,8 +212,8 @@ func TestVentureUpdate_Validate_6(t *testing.T) {
 	assert.Empty(t, errMsgs)
 }
 
-func TestVentureUpdate_Validate_7(t *testing.T) {
-	a := VentureUpdate{
+func TestModVenture_Validate_7(t *testing.T) {
+	a := ModVenture{
 		Props: "order_ids",
 		Values: Venture{
 			ID:       "1",
@@ -225,8 +225,8 @@ func TestVentureUpdate_Validate_7(t *testing.T) {
 	assert.Len(t, errMsgs, 1)
 }
 
-func TestVentureUpdate_Validate_8(t *testing.T) {
-	a := VentureUpdate{
+func TestModVenture_Validate_8(t *testing.T) {
+	a := ModVenture{
 		Props: "description,,state,order_ids,INVALID,extra",
 		Values: Venture{
 			OrderIDs: "ILLEGAL,66,101,202",

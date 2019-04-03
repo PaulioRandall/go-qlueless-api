@@ -76,10 +76,10 @@ func (vs *VentureStore) Add(new NewVenture) Venture {
 }
 
 // _updateVenture is a file private function that updates a Venture with the
-// changes defined within the supplied venture update structure.
-func (vs *VentureStore) _updateVenture(v Venture, vu VentureUpdate) Venture {
-	u := vu.Values
-	for _, p := range vu.SplitProps() {
+// changes defined within the supplied ModVenture structure.
+func (vs *VentureStore) _updateVenture(v Venture, mv ModVenture) Venture {
+	u := mv.Values
+	for _, p := range mv.SplitProps() {
 		switch p {
 		case "description":
 			v.Description = u.Description
@@ -98,14 +98,14 @@ func (vs *VentureStore) _updateVenture(v Venture, vu VentureUpdate) Venture {
 
 // Update updates a Venture within the data store. If false is returned then
 // the item does not currently exist within the data store.
-func (vs *VentureStore) Update(vu VentureUpdate) (Venture, bool) {
+func (vs *VentureStore) Update(mv ModVenture) (Venture, bool) {
 
-	v, ok := vs.Get(vu.Values.ID)
+	v, ok := vs.Get(mv.Values.ID)
 	if !ok {
 		return Venture{}, false
 	}
 
-	v = vs._updateVenture(v, vu)
+	v = vs._updateVenture(v, mv)
 
 	vs.mutex.Lock()
 	defer vs.mutex.Unlock()
