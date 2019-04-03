@@ -14,35 +14,36 @@ import (
 // This function is expected to be removed once a database and formal test data
 // has been crafted.
 func InjectDummyVentures() {
-	ventures.Add(v.Venture{
+	ventures.Add(v.NewVenture{
 		Description: "White wizard",
 		State:       "Not started",
 		Extra:       "colour: white; power: 9000",
-		IsAlive:     true,
 	})
-	ventures.Add(v.Venture{
+	ventures.Add(v.NewVenture{
 		Description: "Green lizard",
 		State:       "In progress",
 		OrderIDs:    "4,5,6,7,8",
-		IsAlive:     true,
 	})
-	ventures.Add(v.Venture{
+	ventures.Add(v.NewVenture{
 		Description: "Pink gizzard",
 		State:       "Finished",
 		OrderIDs:    "1,2,3",
-		IsAlive:     false,
 	})
-	ventures.Add(v.Venture{
+	ventures.Add(v.NewVenture{
 		Description: "Eddie Izzard",
 		State:       "In Progress",
 		OrderIDs:    "4,5,6",
-		IsAlive:     true,
 	})
-	ventures.Add(v.Venture{
+	ventures.Add(v.NewVenture{
 		Description: "The Count of Tuscany",
 		State:       "In Progress",
 		OrderIDs:    "4,5,6",
-		IsAlive:     true,
+	})
+	ventures.Update(v.VentureUpdate{
+		Props: "is_alive",
+		Values: v.Venture{
+			IsAlive: false,
+		},
 	})
 }
 
@@ -64,19 +65,19 @@ func findVenture(id string, res *http.ResponseWriter, req *http.Request) (v.Vent
 	return ven, true
 }
 
-// decodeVenture decodes a Venture from a Request.Body.
-func decodeVenture(res *http.ResponseWriter, req *http.Request) (v.Venture, bool) {
-	ven, err := v.DecodeVenture(req.Body)
+// decodeNewVenture decodes a NewVenture from a Request.Body.
+func decodeNewVenture(res *http.ResponseWriter, req *http.Request) (v.NewVenture, bool) {
+	ven, err := v.DecodeNewVenture(req.Body)
 	if err != nil {
 		h.WriteBadRequest(res, req, "Unable to decode request body into a Venture")
-		return v.Venture{}, false
+		return v.NewVenture{}, false
 	}
 	return ven, true
 }
 
-// validateNewVenture validates a new Venture that has yet to be assigned an ID.
-func validateNewVenture(ven v.Venture, res *http.ResponseWriter, req *http.Request) bool {
-	errMsgs := ven.Validate(true)
+// validateNewVenture validates a NewVenture that has yet to be assigned an ID.
+func validateNewVenture(ven v.NewVenture, res *http.ResponseWriter, req *http.Request) bool {
+	errMsgs := ven.Validate()
 	if len(errMsgs) != 0 {
 		h.WriteBadRequest(res, req, strings.Join(errMsgs, " "))
 		return false

@@ -135,7 +135,7 @@ func TestVentureStore_Get_3(t *testing.T) {
 
 func TestVentureStor_Add_1(t *testing.T) {
 	store := NewVentureStore()
-	aIn := Venture{
+	aIn := NewVenture{
 		Description: "description",
 		State:       "state",
 	}
@@ -149,11 +149,11 @@ func TestVentureStor_Add_1(t *testing.T) {
 
 func TestVentureStor_Add_2(t *testing.T) {
 	store := NewVentureStore()
-	aIn := Venture{
+	aIn := NewVenture{
 		Description: "description",
 		State:       "state",
 	}
-	bIn := Venture{
+	bIn := NewVenture{
 		Description: "description",
 		State:       "state",
 	}

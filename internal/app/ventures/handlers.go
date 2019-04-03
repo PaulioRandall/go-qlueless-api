@@ -56,19 +56,18 @@ func _GET_Venture(id string, res *http.ResponseWriter, req *http.Request) {
 
 // _POST_NewVenture handles client requests for creating new Ventures.
 func _POST_NewVenture(res *http.ResponseWriter, req *http.Request) {
-	ven, ok := decodeVenture(res, req)
+	new, ok := decodeNewVenture(res, req)
 	if !ok {
 		return
 	}
 
-	ven.Clean()
-	ven.IsAlive = true
-	ok = validateNewVenture(ven, res, req)
+	new.Clean()
+	ok = validateNewVenture(new, res, req)
 	if !ok {
 		return
 	}
 
-	ven = ventures.Add(ven)
+	ven := ventures.Add(new)
 	m := fmt.Sprintf("New Venture with ID '%s' created", ven.ID)
 	log.Println(m)
 	writeSuccessReply(res, req, http.StatusCreated, ven, m)

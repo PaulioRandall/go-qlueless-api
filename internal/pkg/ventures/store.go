@@ -58,13 +58,21 @@ func (vs *VentureStore) Get(id string) (Venture, bool) {
 }
 
 // Add adds a Venture to the data store assigning an unused ID.
-func (vs *VentureStore) Add(new Venture) Venture {
+func (vs *VentureStore) Add(new NewVenture) Venture {
 	vs.mutex.Lock()
 	defer vs.mutex.Unlock()
 
-	new.ID = vs._genNewID()
-	vs.items[new.ID] = new
-	return new
+	ven := Venture{
+		ID:          vs._genNewID(),
+		Description: new.Description,
+		OrderIDs:    new.OrderIDs,
+		State:       new.State,
+		IsAlive:     true,
+		Extra:       new.Extra,
+	}
+
+	vs.items[ven.ID] = ven
+	return ven
 }
 
 // _updateVenture is a file private function that updates a Venture with the
