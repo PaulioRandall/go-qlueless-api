@@ -14,40 +14,10 @@ func OpenDatabase(path string) *sql.DB {
 	db, err := sql.Open("sqlite3", path)
 	_fatalClose(db, err)
 
-	err = v.CreateVentureTable(db)
+	err = v.CreateTable(db)
 	_fatalClose(db, err)
 
 	return db
-}
-
-// QueryVentures queries the database for all Ventures
-func QueryVentures(db *sql.DB) []v.Venture {
-	rows, err := db.Query(`SELECT
-		id,
-		description,
-		order_ids,
-		state,
-		is_alive,
-		extra
-	FROM venture`)
-	_fatalClose(db, err)
-
-	r := []v.Venture{}
-
-	for rows.Next() {
-		ven := v.Venture{}
-		err = rows.Scan(&ven.ID,
-			&ven.Description,
-			&ven.OrderIDs,
-			&ven.State,
-			&ven.IsAlive,
-			&ven.Extra)
-		_fatalClose(db, err)
-
-		r = append(r, ven)
-	}
-
-	return r
 }
 
 // _fatalClose is a file private function that performs log.Fatal(err) after

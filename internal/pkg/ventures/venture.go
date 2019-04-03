@@ -9,31 +9,6 @@ import (
 	u "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/utils"
 )
 
-// CreateVentureTable creates a Venture table within the supplied database
-//
-// @UNTESTED
-func CreateVentureTable(db *sql.DB) error {
-	stmt, err := db.Prepare(`CREATE TABLE venture (
-		id INTEGER PRIMARY KEY AUTOINCREMENT,
-		description TEXT NOT NULL,
-		order_ids TEXT NOT NULL,
-		state TEXT NOT NULL,
-		is_alive BOOL DEFAULT TRUE,
-		extra TEXT DEFAULT NULL
-	);`)
-
-	if stmt != nil {
-		defer stmt.Close()
-	}
-
-	if err != nil {
-		return err
-	}
-
-	_, err = stmt.Exec()
-	return err
-}
-
 // Venture represents a Venture, aka, project.
 type Venture struct {
 	Description string `json:"description"`
@@ -105,4 +80,77 @@ func (ven *Venture) SplitOrderIDs() []string {
 // SetOrderIDs sets the OrderIDs CSV from a slice of Order IDs.
 func (ven *Venture) SetOrderIDs(ids []string) {
 	ven.OrderIDs = strings.Join(ids, ",")
+}
+
+// CreateTable creates a Venture table within the supplied database
+//
+// @UNTESTED
+func CreateTable(db *sql.DB) error {
+	stmt, err := db.Prepare(`CREATE TABLE venture (
+		id INTEGER PRIMARY KEY AUTOINCREMENT,
+		description TEXT NOT NULL,
+		order_ids TEXT NOT NULL,
+		state TEXT NOT NULL,
+		is_alive BOOL DEFAULT TRUE,
+		extra TEXT DEFAULT NULL
+	);`)
+
+	if stmt != nil {
+		defer stmt.Close()
+	}
+
+	if err != nil {
+		return err
+	}
+
+	_, err = stmt.Exec()
+	return err
+}
+
+// QueryAll queries the database for all Ventures
+//
+// @UNTESTED
+func QueryAll(db *sql.DB) ([]Venture, error) {
+	rows, err := db.Query(`SELECT
+		id,
+		description,
+		order_ids,
+		state,
+		is_alive,
+		extra
+	FROM venture`)
+
+	if rows != nil {
+		defer rows.Close()
+	}
+
+	if err != nil {
+		return nil, err
+	}
+
+	return _mapRows(rows)
+}
+
+// _mapRows is a file private function that maps rows from a database query into
+// a slice of Ventures
+func _mapRows(rows *sql.Rows) ([]Venture, error) {
+	vens := []Venture{}
+
+	for rows.Next() {
+		ven := Venture{}
+		err := rows.Scan(&ven.ID,
+			&ven.Description,
+			&ven.OrderIDs,
+			&ven.State,
+			&ven.IsAlive,
+			&ven.Extra)
+
+		if err != nil {
+			return nil, err
+		}
+
+		vens = append(vens, ven)
+	}
+
+	return vens, nil
 }

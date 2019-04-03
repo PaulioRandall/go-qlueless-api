@@ -54,7 +54,11 @@ func main() {
 		output = append(output, *ven)
 	}
 
-	vens := d.QueryVentures(db)
+	vens, err := v.QueryAll(db)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	for i, ven := range vens {
 		fmt.Printf("%d: %v\n", i, ven)
 	}
