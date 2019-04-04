@@ -75,27 +75,6 @@ func (vs *VentureStore) Add(new NewVenture) Venture {
 	return ven
 }
 
-// _updateVenture is a file private function that updates a Venture with the
-// changes defined within the supplied ModVenture structure.
-func (vs *VentureStore) _updateVenture(v Venture, mv ModVenture) Venture {
-	u := mv.Values
-	for _, p := range mv.SplitProps() {
-		switch p {
-		case "description":
-			v.Description = u.Description
-		case "order_ids":
-			v.OrderIDs = u.OrderIDs
-		case "state":
-			v.State = u.State
-		case "is_alive":
-			v.IsAlive = u.IsAlive
-		case "extra":
-			v.Extra = u.Extra
-		}
-	}
-	return v
-}
-
 // Update updates Ventures within the data store. Only the Ventures in the slice
 // returned were actually updated.
 func (vs *VentureStore) Update(mv *ModVenture) []Venture {
@@ -113,6 +92,25 @@ func (vs *VentureStore) Update(mv *ModVenture) []Venture {
 		mv.ApplyMod(&v)
 		vs.items[id] = v
 		r = append(r, v)
+	}
+
+	return r
+}
+
+// Delete removes Ventures from within the data store. Only deleted Ventures
+// will be returned
+func (vs *VentureStore) Delete_NEW(ids []string) []Venture {
+	vs.mutex.Lock()
+	defer vs.mutex.Unlock()
+
+	r := []Venture{}
+
+	for _, id := range ids {
+		v, ok := vs.items[id]
+		if ok {
+			delete(vs.items, id)
+			r = append(r, v)
+		}
 	}
 
 	return r
