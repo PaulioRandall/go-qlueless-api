@@ -109,6 +109,35 @@ func TestAppendIfEmpty___3(t *testing.T) {
 }
 
 // ****************************************************************************
+// IsPositiveInt()
+// ****************************************************************************
+
+func TestIsPositiveIntCSV_1(t *testing.T) {
+	act := IsPositiveIntCSV("5")
+	assert.True(t, act)
+}
+
+func TestIsPositiveIntCSV_2(t *testing.T) {
+	act := IsPositiveIntCSV("1,2,3,4")
+	assert.True(t, act)
+}
+
+func TestIsPositiveIntCSV_3(t *testing.T) {
+	act := IsPositiveIntCSV("")
+	assert.False(t, act)
+}
+
+func TestIsPositiveIntCSV_4(t *testing.T) {
+	act := IsPositiveIntCSV("abc")
+	assert.False(t, act)
+}
+
+func TestIsPositiveIntCSV_5(t *testing.T) {
+	act := IsPositiveIntCSV("abc,efg,xyz")
+	assert.False(t, act)
+}
+
+// ****************************************************************************
 // AppendIfNotPositiveInt()
 // ****************************************************************************
 

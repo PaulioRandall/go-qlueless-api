@@ -71,11 +71,16 @@ func AppendIfNotPositiveInt(s string, r []string, m string) []string {
 // AppendIfNotPositiveIntCSV appends 'm' to 'r' if 's' is not a CSV of
 // positive integers
 func AppendIfNotPositiveIntCSV(s string, r []string, m string) []string {
-	match, _ := regexp.MatchString(POSITIVE_INT_CSV_PATTERN, s)
-	if match {
+	if IsPositiveIntCSV(s) {
 		return r
 	}
 	return append(r, m)
+}
+
+// IsPositiveIntCSV returns true if the input is a CSV of positive integers
+func IsPositiveIntCSV(s string) bool {
+	match, _ := regexp.MatchString(POSITIVE_INT_CSV_PATTERN, s)
+	return match
 }
 
 // DeleteIfExists deletes the file at the path specified if it exists
