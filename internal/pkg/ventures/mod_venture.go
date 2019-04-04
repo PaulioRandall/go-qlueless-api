@@ -24,7 +24,15 @@ func DecodeModVenture(r io.Reader) (ModVenture, error) {
 	return mv, err
 }
 
-// SplitProp returns the property names of the properties to update.
+// SplitIDs returns the IDs of the Ventures to update.
+func (mv *ModVenture) SplitIDs() []string {
+	if mv.IDs == "" {
+		return []string{}
+	}
+	return strings.Split(mv.IDs, ",")
+}
+
+// SplitProps returns the property names of the properties to update.
 func (mv *ModVenture) SplitProps() []string {
 	if mv.Props == "" {
 		return []string{}

@@ -59,6 +59,36 @@ func TestDecodeModVenture_3(t *testing.T) {
 }
 
 // ****************************************************************************
+// ModVenture.SplitIDs()
+// ****************************************************************************
+
+func TestModVenture_SplitIDs_1(t *testing.T) {
+	a := ModVenture{
+		IDs: "1,2,3",
+	}
+
+	s := a.SplitIDs()
+	exp := []string{"1", "2", "3"}
+	assert.Equal(t, exp, s)
+}
+
+func TestModVenture_SplitIDs_2(t *testing.T) {
+	a := ModVenture{
+		IDs: "1",
+	}
+
+	s := a.SplitIDs()
+	exp := []string{"1"}
+	assert.Equal(t, exp, s)
+}
+
+func TestModVenture_SplitIDs_3(t *testing.T) {
+	a := ModVenture{}
+	s := a.SplitIDs()
+	assert.Empty(t, s)
+}
+
+// ****************************************************************************
 // ModVenture.SplitProps()
 // ****************************************************************************
 
