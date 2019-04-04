@@ -42,6 +42,7 @@ func (mv *ModVenture) SplitProps() []string {
 
 // Clean cleans up the ModVenture by removing whitespace where applicable.
 func (mv *ModVenture) Clean() {
+	mv.IDs = u.StripWhitespace(mv.IDs)
 	mv.Props = u.StripWhitespace(mv.Props)
 	mv.Values.Clean()
 }
