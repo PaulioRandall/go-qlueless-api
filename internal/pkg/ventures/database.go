@@ -4,10 +4,26 @@ import (
 	"database/sql"
 )
 
-// CreateTable creates a Venture table within the supplied database.
+// CreateTables creates all the Venture tables, views and triggers within the
+// supplied database.
 //
 // @UNTESTED
-func CreateTable(db *sql.DB) error {
+func CreateTables(db *sql.DB) error {
+	err := _create_venture_Table(db)
+	if err != nil {
+		return err
+	}
+
+	err = _create_ql_venture_Table(db)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// _create_venture_Table creates the Venture table within the supplied database.
+func _create_venture_Table(db *sql.DB) error {
 	stmt, err := db.Prepare(`CREATE TABLE venture (
 		id INTEGER NOT NULL,
 		vid INTEGER,
@@ -17,6 +33,31 @@ func CreateTable(db *sql.DB) error {
 		is_alive BOOL DEFAULT TRUE,
 		extra TEXT DEFAULT NULL,
 		PRIMARY KEY(id, vid)
+	);`)
+
+	if stmt != nil {
+		defer stmt.Close()
+	}
+
+	if err != nil {
+		return err
+	}
+
+	_, err = stmt.Exec()
+	return err
+}
+
+// _create_ql_venture_Table creates the query layer Venture table within the
+// supplied database.
+func _create_ql_venture_Table(db *sql.DB) error {
+	stmt, err := db.Prepare(`CREATE TABLE ql_venture (
+		id INTEGER NOT NULL PRIMARY KEY,
+		vid INTEGER NOT NULL,
+		description TEXT NOT NULL,
+		order_ids TEXT NOT NULL,
+		state TEXT NOT NULL,
+		is_alive BOOL DEFAULT TRUE,
+		extra TEXT DEFAULT NULL
 	);`)
 
 	if stmt != nil {

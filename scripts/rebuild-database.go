@@ -38,7 +38,7 @@ func main() {
 
 	defer db.Close()
 
-	err = v.CreateTable(db)
+	err = v.CreateTables(db)
 	if err != nil {
 		log.Fatal(err)
 	}
