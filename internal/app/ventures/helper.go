@@ -118,7 +118,7 @@ func deleteVenture(id string, res *http.ResponseWriter, req *http.Request) (v.Ve
 	return ven, true
 }
 
-// ventureIdCsvToSlice validates then parses a CSV string of IDs into a slice
+// ventureIdCsvToSlice validates then parses a CSV string of IDs into a slice.
 func ventureIdCsvToSlice(idCsv string, res *http.ResponseWriter, req *http.Request) ([]string, bool) {
 	idCsv = u.StripWhitespace(idCsv)
 
@@ -135,4 +135,19 @@ func ventureIdCsvToSlice(idCsv string, res *http.ResponseWriter, req *http.Reque
 
 	ids := strings.Split(idCsv, ",")
 	return ids, true
+}
+
+// ventureIDsToCSV returns a CSV string of all Venture IDs within the given
+// slice.
+func ventureIDsToCSV(vens []v.Venture) string {
+	ids := ""
+	for i, ven := range vens {
+		switch i {
+		case 0:
+			ids = ven.ID
+		default:
+			ids += ", " + ven.ID
+		}
+	}
+	return ids
 }

@@ -87,18 +87,9 @@ func _PUT_UpdatedVenture(res *http.ResponseWriter, req *http.Request) {
 	}
 
 	vens := ventures.Update(mv)
+	ids := ventureIDsToCSV(vens)
 
-	ids := ""
-	for i, ven := range vens {
-		switch i {
-		case 0:
-			ids = ven.ID
-		default:
-			ids += ", " + ven.ID
-		}
-	}
-
-	m := fmt.Sprintf("Update Ventures with the following IDs '%s'", ids)
+	m := fmt.Sprintf("Updated Ventures with the following IDs '%s'", ids)
 	log.Println(m)
 	writeSuccessReply(res, req, http.StatusOK, vens, m)
 }
@@ -113,4 +104,22 @@ func _DELETE_Venture(id string, res *http.ResponseWriter, req *http.Request) {
 	m := fmt.Sprintf("Venture with ID '%s' deleted", ven.ID)
 	log.Println(m)
 	writeSuccessReply(res, req, http.StatusOK, ven, m)
+}
+
+// _DELETE_Venture handles client requests for deleting a specific Venture.
+func _DELETE_Venture_NEW(res *http.ResponseWriter, req *http.Request) {
+
+	ids := req.FormValue("ids")
+	idSlice, ok := ventureIdCsvToSlice(ids, res, req)
+
+	if !ok {
+		return
+	}
+
+	vens := ventures.Delete_NEW(idSlice)
+	ids = ventureIDsToCSV(vens)
+
+	m := fmt.Sprintf("Deleted Ventures with the following IDs '%s'", ids)
+	log.Println(m)
+	writeSuccessReply(res, req, http.StatusOK, vens, m)
 }
