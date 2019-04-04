@@ -45,7 +45,7 @@ func _create_venture_Table(db *sql.DB) error {
 		description TEXT NOT NULL,
 		order_ids TEXT NOT NULL,
 		state TEXT NOT NULL,
-		is_alive BOOL DEFAULT TRUE,
+		is_alive BOOL NOT NULL DEFAULT TRUE,
 		extra TEXT NOT NULL DEFAULT "",
 		PRIMARY KEY(id, vid)
 	);`)
@@ -60,8 +60,8 @@ func _create_ql_venture_Table(db *sql.DB) error {
 		description TEXT NOT NULL,
 		order_ids TEXT NOT NULL,
 		state TEXT NOT NULL,
-		is_alive BOOL DEFAULT TRUE,
-		extra TEXT NOT NULL DEFAULT ""
+		is_alive BOOL NOT NULL,
+		extra TEXT NOT NULL
 	);`)
 }
 
@@ -73,19 +73,11 @@ func _create_insert_on_venture_Trigger(db *sql.DB) error {
 		AFTER INSERT ON venture
 		FOR EACH ROW
 		BEGIN
-			INSERT OR REPLACE INTO ql_venture (
+			REPLACE INTO ql_venture (
 				id, vid, description, order_ids, state, is_alive, extra
 			) VALUES (
 				NEW.id, NEW.vid, NEW.description, NEW.order_ids, NEW.state, NEW.is_alive, NEW.extra
-			)
-			ON CONFLICT (id)
-			DO UPDATE SET 
-				vid = NEW.vid,
-				description = NEW.description,
-				order_ids = NEW.order_ids,
-				state = NEW.state,
-				is_alive = NEW.is_alive,
-				extra = NEW.extra;
+			);
 		END;`)
 }
 
@@ -95,7 +87,7 @@ func _create_update_on_venture_Trigger(db *sql.DB) error {
 	return _execStmt(db, `CREATE TRIGGER update_on_venture
 		BEFORE UPDATE ON venture
 		BEGIN
-			SELECT RAISE(FAIL, "Immutable table, updates not allowed!");
+			SELECT RAISE(FAIL, "Updates not allowed, insert with the same Venture ID!");
 		END;`)
 }
 
@@ -105,7 +97,7 @@ func _create_delete_on_venture_Trigger(db *sql.DB) error {
 	return _execStmt(db, `CREATE TRIGGER delete_on_venture
 		BEFORE DELETE ON venture
 		BEGIN
-			SELECT RAISE(FAIL, "Immutable table, deletions not allowed!");
+			SELECT RAISE(FAIL, "Deletions not allowed!");
 		END;`)
 }
 
