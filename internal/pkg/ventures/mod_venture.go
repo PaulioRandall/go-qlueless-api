@@ -79,3 +79,25 @@ func (mv *ModVenture) Validate() []string {
 	errMsgs = mv._validateProps(errMsgs)
 	return errMsgs
 }
+
+// ApplyMod applies the modifications to the supplied Venture only touching
+// those properties the user has specified
+//
+// @UNTESTED
+func (mv *ModVenture) ApplyMod(ven *Venture) {
+	mod := mv.Values
+	for _, p := range mv.SplitProps() {
+		switch p {
+		case "description":
+			ven.Description = mod.Description
+		case "order_ids":
+			ven.OrderIDs = mod.OrderIDs
+		case "state":
+			ven.State = mod.State
+		case "is_alive":
+			ven.IsAlive = mod.IsAlive
+		case "extra":
+			ven.Extra = mod.Extra
+		}
+	}
+}
