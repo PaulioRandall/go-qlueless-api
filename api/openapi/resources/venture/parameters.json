@@ -7,12 +7,12 @@
     "$ref": "#/components/x-hidden/venture_id"
   }
 },
-"venture_id_required": {
-  "name": "id",
+"venture_id_csv": {
+  "name": "ids",
   "in": "query",
-  "description": "Unique identifier of a Venture.",
+  "description": "CSV of Venture unique identifiers.",
   "required": true,
   "schema": {
-    "$ref": "#/components/x-hidden/venture_id"
+    "$ref": "#/components/x-hidden/venture_id_csv"
   }
 }

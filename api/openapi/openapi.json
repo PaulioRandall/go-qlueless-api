@@ -168,7 +168,7 @@
 		  },
 		  "put": {
 		    "tags": ["venture"],
-		    "description": "Updates a Venture.",
+		    "description": "Updates Ventures.",
 		    "parameters": [
 		      {
 		        "$ref": "#/components/parameters/wrap"
@@ -188,18 +188,18 @@
 		  },
 		  "delete": {
 		    "tags": ["venture"],
-		    "description": "Deletes a Venture.",
+		    "description": "Deletes Ventures.",
 		    "parameters": [
 		      {
 		        "$ref": "#/components/parameters/wrap"
 		      },
 		      {
-		        "$ref": "#/components/parameters/venture_id_required"
+		        "$ref": "#/components/parameters/venture_id_csv"
 		      }
 		    ],
 		    "responses": {
 		      "200": {
-		        "$ref": "#/components/responses/venture_200"
+		        "$ref": "#/components/responses/ventures_200"
 		      },
 		      "default": {
 		        "$ref": "#/components/responses/error"
@@ -262,13 +262,13 @@
 			    "$ref": "#/components/x-hidden/venture_id"
 			  }
 			},
-			"venture_id_required": {
-			  "name": "id",
+			"venture_id_csv": {
+			  "name": "ids",
 			  "in": "query",
-			  "description": "Unique identifier of a Venture.",
+			  "description": "CSV of Venture unique identifiers.",
 			  "required": true,
 			  "schema": {
-			    "$ref": "#/components/x-hidden/venture_id"
+			    "$ref": "#/components/x-hidden/venture_id_csv"
 			  }
 			},
 			"wrap": {
