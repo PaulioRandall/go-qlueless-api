@@ -19,6 +19,11 @@ func CreateTables(db *sql.DB) error {
 		return err
 	}
 
+	err = _create_insert_venture_Trigger(db)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
@@ -52,13 +57,48 @@ func _create_venture_Table(db *sql.DB) error {
 func _create_ql_venture_Table(db *sql.DB) error {
 	stmt, err := db.Prepare(`CREATE TABLE ql_venture (
 		id INTEGER NOT NULL PRIMARY KEY,
-		vid INTEGER NOT NULL,
+		vid INTEGER,
 		description TEXT NOT NULL,
 		order_ids TEXT NOT NULL,
 		state TEXT NOT NULL,
 		is_alive BOOL DEFAULT TRUE,
 		extra TEXT DEFAULT NULL
 	);`)
+
+	if stmt != nil {
+		defer stmt.Close()
+	}
+
+	if err != nil {
+		return err
+	}
+
+	_, err = stmt.Exec()
+	return err
+}
+
+// _create_insert_venture_Trigger creates a trigger within the supplied
+// database that updates the ql_venture table when ever a new record is inserted
+// into the venture table.
+func _create_insert_venture_Trigger(db *sql.DB) error {
+	stmt, err := db.Prepare(`CREATE TRIGGER new_venture
+		AFTER INSERT ON venture
+		FOR EACH ROW
+		BEGIN
+			INSERT OR REPLACE INTO ql_venture (
+				id, vid, description, order_ids, state, is_alive, extra
+			) VALUES (
+				NEW.id, NEW.vid, NEW.description, NEW.order_ids, NEW.state, NEW.is_alive, NEW.extra
+			)
+			ON CONFLICT (id)
+			DO UPDATE SET 
+				vid = NEW.vid,
+				description = NEW.description,
+				order_ids = NEW.order_ids,
+				state = NEW.state,
+				is_alive = NEW.is_alive,
+				extra = NEW.extra;
+		END;`)
 
 	if stmt != nil {
 		defer stmt.Close()
@@ -84,7 +124,7 @@ func QueryFor(db *sql.DB, id string) (*Venture, error) {
 		state,
 		is_alive,
 		extra
-	FROM venture
+	FROM ql_venture
 	WHERE id = ?`, id).Scan(&ven.ID,
 		&ven.Description,
 		&ven.OrderIDs,
@@ -110,7 +150,7 @@ func QueryAll(db *sql.DB) ([]Venture, error) {
 		state,
 		is_alive,
 		extra
-	FROM venture`)
+	FROM ql_venture`)
 
 	if rows != nil {
 		defer rows.Close()
