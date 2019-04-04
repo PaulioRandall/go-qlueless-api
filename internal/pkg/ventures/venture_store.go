@@ -98,7 +98,7 @@ func (vs *VentureStore) _updateVenture(v Venture, mv ModVenture) Venture {
 
 // Update updates Ventures within the data store. Only the Ventures in the slice
 // returned were actually updated.
-func (vs *VentureStore) Update_NEW(mv *ModVenture) []Venture {
+func (vs *VentureStore) Update(mv *ModVenture) []Venture {
 	vs.mutex.Lock()
 	defer vs.mutex.Unlock()
 

@@ -86,7 +86,7 @@ func _PUT_UpdatedVenture(res *http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	vens := ventures.Update_NEW(mv)
+	vens := ventures.Update(mv)
 
 	ids := ""
 	for i, ven := range vens {

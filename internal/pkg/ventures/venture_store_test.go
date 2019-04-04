@@ -171,10 +171,10 @@ func TestVentureStor_Add_2(t *testing.T) {
 }
 
 // ****************************************************************************
-// VentureStore.Update_NEW()
+// VentureStore.Update()
 // ****************************************************************************
 
-func TestVentureStore_Update_NEW_1(t *testing.T) {
+func TestVentureStore_Update_1(t *testing.T) {
 	store := NewVentureStore()
 	a := Venture{
 		ID: "1",
@@ -197,7 +197,7 @@ func TestVentureStore_Update_NEW_1(t *testing.T) {
 		},
 	}
 
-	v := store.Update_NEW(&u)
+	v := store.Update(&u)
 	require.Len(t, v, 2)
 
 	u.Values.ID = "1"
@@ -213,7 +213,7 @@ func TestVentureStore_Update_NEW_1(t *testing.T) {
 	assert.Equal(t, u.Values, bOut)
 }
 
-func TestVentureStore_Update_NEW_2(t *testing.T) {
+func TestVentureStore_Update_2(t *testing.T) {
 	store := NewVentureStore()
 	au := ModVenture{
 		IDs:   "1",
@@ -223,11 +223,11 @@ func TestVentureStore_Update_NEW_2(t *testing.T) {
 		},
 	}
 
-	v := store.Update_NEW(&au)
+	v := store.Update(&au)
 	require.Empty(t, v)
 }
 
-func TestVentureStore_Update_NEW_3(t *testing.T) {
+func TestVentureStore_Update_3(t *testing.T) {
 	store := NewVentureStore()
 	a := Venture{
 		ID: "1",
@@ -250,7 +250,7 @@ func TestVentureStore_Update_NEW_3(t *testing.T) {
 		},
 	}
 
-	v := store.Update_NEW(&au)
+	v := store.Update(&au)
 	require.Len(t, v, 2)
 	assert.Equal(t, a, v[0])
 	assert.Equal(t, b, v[1])

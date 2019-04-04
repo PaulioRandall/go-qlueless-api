@@ -39,7 +39,7 @@ func InjectDummyVentures() {
 		State:       "In Progress",
 		OrderIDs:    "4,5,6",
 	})
-	ventures.Update_NEW(&v.ModVenture{
+	ventures.Update(&v.ModVenture{
 		IDs:   "3",
 		Props: "is_alive",
 		Values: v.Venture{
@@ -99,7 +99,7 @@ func decodeModVentures(res *http.ResponseWriter, req *http.Request) (*v.ModVentu
 
 // validateModVentures validates a Venture update.
 func validateModVentures(mv *v.ModVenture, res *http.ResponseWriter, req *http.Request) bool {
-	errMsgs := mv.Validate_NEW()
+	errMsgs := mv.Validate()
 	if len(errMsgs) != 0 {
 		h.WriteBadRequest(res, req, strings.Join(errMsgs, " "))
 		return false
