@@ -19,7 +19,12 @@ func CreateTables(db *sql.DB) error {
 		return err
 	}
 
-	err = _create_insert_on_venture_Trigger(db)
+	err = _create_insert_on_living_venture_Trigger(db)
+	if err != nil {
+		return err
+	}
+
+	err = _create_insert_on_dead_venture_Trigger(db)
 	if err != nil {
 		return err
 	}
@@ -65,19 +70,34 @@ func _create_ql_venture_Table(db *sql.DB) error {
 	);`)
 }
 
-// _create_insert_on_venture_Trigger creates a trigger within the supplied
-// database that updates the ql_venture table when ever a new record is inserted
-// into the venture table.
-func _create_insert_on_venture_Trigger(db *sql.DB) error {
-	return _execStmt(db, `CREATE TRIGGER insert_on_venture
+// _create_insert_on_living_venture_Trigger creates a trigger within the
+// supplied database that updates the ql_venture table when ever a new, and
+// living, Venture is inserted into the venture table.
+func _create_insert_on_living_venture_Trigger(db *sql.DB) error {
+	return _execStmt(db, `CREATE TRIGGER insert_on_living_venture
 		AFTER INSERT ON venture
 		FOR EACH ROW
+		WHEN (NEW.is_alive = true)
 		BEGIN
 			REPLACE INTO ql_venture (
 				id, vid, description, order_ids, state, is_alive, extra
 			) VALUES (
 				NEW.id, NEW.vid, NEW.description, NEW.order_ids, NEW.state, NEW.is_alive, NEW.extra
 			);
+		END;`)
+}
+
+// _create_insert_on_dead_venture_Trigger creates a trigger within the supplied
+// database that removes from the ql_venture table the dead Venture inserted
+// into the venture table.
+func _create_insert_on_dead_venture_Trigger(db *sql.DB) error {
+	return _execStmt(db, `CREATE TRIGGER insert_on_dead_venture
+		AFTER INSERT ON venture
+		FOR EACH ROW
+		WHEN (NEW.is_alive = false)
+		BEGIN
+			DELETE FROM ql_venture 
+			WHERE id = NEW.id;
 		END;`)
 }
 
