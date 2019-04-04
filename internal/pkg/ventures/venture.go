@@ -107,6 +107,33 @@ func CreateTable(db *sql.DB) error {
 	return err
 }
 
+// QueryFor queries the database for a single Venture.
+//
+// @UNTESTED
+func QueryFor(db *sql.DB, id string) (*Venture, error) {
+	ven := Venture{}
+	err := db.QueryRow(`SELECT
+		id,
+		description,
+		order_ids,
+		state,
+		is_alive,
+		extra
+	FROM venture
+	WHERE id = ?`, id).Scan(&ven.ID,
+		&ven.Description,
+		&ven.OrderIDs,
+		&ven.State,
+		&ven.IsAlive,
+		&ven.Extra)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &ven, nil
+}
+
 // QueryAll queries the database for all Ventures.
 //
 // @UNTESTED
@@ -137,20 +164,29 @@ func _mapRows(rows *sql.Rows) ([]Venture, error) {
 	vens := []Venture{}
 
 	for rows.Next() {
-		ven := Venture{}
-		err := rows.Scan(&ven.ID,
-			&ven.Description,
-			&ven.OrderIDs,
-			&ven.State,
-			&ven.IsAlive,
-			&ven.Extra)
-
+		ven, err := _mapRow(rows)
 		if err != nil {
 			return nil, err
 		}
-
-		vens = append(vens, ven)
+		vens = append(vens, *ven)
 	}
 
 	return vens, nil
+}
+
+// _mapRow is a file private function that maps a single row from a database
+// query into a Venture.
+func _mapRow(rows *sql.Rows) (*Venture, error) {
+	ven := Venture{}
+	err := rows.Scan(&ven.ID,
+		&ven.Description,
+		&ven.OrderIDs,
+		&ven.State,
+		&ven.IsAlive,
+		&ven.Extra)
+
+	if err != nil {
+		return nil, err
+	}
+	return &ven, err
 }

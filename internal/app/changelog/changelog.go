@@ -1,5 +1,6 @@
 // Package changelog provides handlers for fetching the API changelog for the
-// API.
+// API. Functionality in this package is primarily tested using API tests
+// within the /tests directory of this project.
 //
 // Changelogs for an API provide a way for consumers to see what changes have
 // been made to it over time. Particularly useful for client developers during

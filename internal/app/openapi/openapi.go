@@ -1,5 +1,6 @@
 // Package openapi provides handlers for fetching the OpenAPI specification for
-// the service.
+// the service. Functionality in this package is primarily tested using API
+// tests within the /tests directory of this project.
 //
 // OpenAPI specifications (formerly Swagger) provide a way of documenting REST
 // APIs in a machine readable manner. Due to the nature and variety of services,

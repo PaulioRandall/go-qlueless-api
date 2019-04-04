@@ -1,5 +1,6 @@
 // Package ventures collects together the handling of all Venture specific
-// requests.
+// requests. Functionality in this package is primarily tested using API tests
+// within the /tests directory of this project.
 //
 // A Venture is an abstract concept synonymous with projects. The word was
 // selected as a comprimise between the strict professional perpective of
