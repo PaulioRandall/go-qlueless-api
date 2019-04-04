@@ -11,6 +11,7 @@ import (
 
 // ModVenture represents an update to a Venture.
 type ModVenture struct {
+	IDs    string  `json:"ids"`
 	Props  string  `json:"set"`
 	Values Venture `json:"values"`
 }

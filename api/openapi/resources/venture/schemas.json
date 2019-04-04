@@ -22,23 +22,22 @@
 "venture_update": {
   "type": "object",
   "required": [
+    "ids",
     "set",
     "values"
   ],
   "properties": {
+    "ids": {
+      "type": "string",
+      "description": "CSV of IDs to update"
+    },
     "set": {
       "type": "string",
       "description": "CSV of properties to update; pick one or many of 'description', 'state', 'is_alive', 'order_ids', and 'extra'"
     },
     "values": {
       "type": "object",
-      "required": [
-        "venture_id"
-      ],
       "properties": {
-        "venture_id": {
-          "$ref": "#/components/x-hidden/venture_id"
-        },
         "description": {
           "$ref": "#/components/x-hidden/description"
         },
