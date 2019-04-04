@@ -28,28 +28,28 @@ func DecodeNewVenture(r io.Reader) (NewVenture, error) {
 
 // Clean removes redundent whitespace from property values within a Venture
 // except where whitespace is allowable.
-func (ven *NewVenture) Clean() {
-	ven.Description = strings.TrimSpace(ven.Description)
-	ven.OrderIDs = u.StripWhitespace(ven.OrderIDs)
-	ven.State = strings.TrimSpace(ven.State)
+func (nv *NewVenture) Clean() {
+	nv.Description = strings.TrimSpace(nv.Description)
+	nv.OrderIDs = u.StripWhitespace(nv.OrderIDs)
+	nv.State = strings.TrimSpace(nv.State)
 }
 
 // Validate checks each field contains valid content returning a non-empty
 // slice of human readable error messages detailing the violations found or an
 // empty slice if all is well. These messages are suitable for returning to
 // clients.
-func (ven *NewVenture) Validate() []string {
+func (nv *NewVenture) Validate() []string {
 	errMsgs := []string{}
 
-	errMsgs = u.AppendIfEmpty(ven.Description, errMsgs,
+	errMsgs = u.AppendIfEmpty(nv.Description, errMsgs,
 		"Ventures must have a description.")
 
-	if ven.OrderIDs != "" {
-		errMsgs = u.AppendIfNotPositiveIntCSV(ven.OrderIDs, errMsgs,
+	if nv.OrderIDs != "" {
+		errMsgs = u.AppendIfNotPositiveIntCSV(nv.OrderIDs, errMsgs,
 			"Child OrderIDs within a Venture must all be positive integers.")
 	}
 
-	errMsgs = u.AppendIfEmpty(ven.State, errMsgs, "Ventures must have a state.")
+	errMsgs = u.AppendIfEmpty(nv.State, errMsgs, "Ventures must have a state.")
 	return errMsgs
 }
 
@@ -71,6 +71,12 @@ func (nv *NewVenture) Insert(db *sql.DB) (*Venture, error) {
 		return nil, err
 	}
 
+	return nv._execInsert(stmt)
+}
+
+// _execInsert is a file private function that executes the supplied insert
+// statement
+func (nv *NewVenture) _execInsert(stmt *sql.Stmt) (*Venture, error) {
 	ven := Venture{
 		Description: nv.Description,
 		OrderIDs:    nv.OrderIDs,
