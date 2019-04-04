@@ -95,18 +95,6 @@ func _PUT_UpdatedVenture(res *http.ResponseWriter, req *http.Request) {
 }
 
 // _DELETE_Venture handles client requests for deleting a specific Venture.
-func _DELETE_Venture(id string, res *http.ResponseWriter, req *http.Request) {
-	ven, ok := deleteVenture(id, res, req)
-	if !ok {
-		return
-	}
-
-	m := fmt.Sprintf("Venture with ID '%s' deleted", ven.ID)
-	log.Println(m)
-	writeSuccessReply(res, req, http.StatusOK, ven, m)
-}
-
-// _DELETE_Venture handles client requests for deleting a specific Venture.
 func _DELETE_Venture_NEW(res *http.ResponseWriter, req *http.Request) {
 
 	ids := req.FormValue("ids")

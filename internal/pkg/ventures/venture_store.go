@@ -116,21 +116,6 @@ func (vs *VentureStore) Delete_NEW(ids []string) []Venture {
 	return r
 }
 
-// Delete removes a Venture from within the data store. If false is returned
-// then the item does not currently exist.
-func (vs *VentureStore) Delete(id string) (Venture, bool) {
-	vs.mutex.Lock()
-	defer vs.mutex.Unlock()
-
-	v, ok := vs.items[id]
-	if ok {
-		delete(vs.items, id)
-		return v, true
-	}
-
-	return Venture{}, false
-}
-
 // _genNewID generates a new, unused, Venture ID
 func (vs *VentureStore) _genNewID() string {
 	ID := 1

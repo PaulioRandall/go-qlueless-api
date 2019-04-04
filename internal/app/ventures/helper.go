@@ -108,16 +108,6 @@ func validateModVentures(mv *v.ModVenture, res *http.ResponseWriter, req *http.R
 	return true
 }
 
-// deleteVenture deletes a Venture from the data store.
-func deleteVenture(id string, res *http.ResponseWriter, req *http.Request) (v.Venture, bool) {
-	ven, ok := ventures.Delete(id)
-	if !ok {
-		h.WriteBadRequest(res, req, fmt.Sprintf("Thing '%s' not found", id))
-		return v.Venture{}, false
-	}
-	return ven, true
-}
-
 // ventureIdCsvToSlice validates then parses a CSV string of IDs into a slice.
 func ventureIdCsvToSlice(idCsv string, res *http.ResponseWriter, req *http.Request) ([]string, bool) {
 	idCsv = u.StripWhitespace(idCsv)
