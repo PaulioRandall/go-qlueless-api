@@ -75,25 +75,32 @@ func _POST_NewVenture(res *http.ResponseWriter, req *http.Request) {
 
 // _PUT_UpdatedVenture handles client requests for updating Ventures.
 func _PUT_UpdatedVenture(res *http.ResponseWriter, req *http.Request) {
-	mv, ok := decodeModVenture(res, req)
+	mv, ok := decodeModVentures(res, req)
 	if !ok {
 		return
 	}
 
 	mv.Clean()
-	ok = validateModVenture(mv, res, req)
+	ok = validateModVentures(mv, res, req)
 	if !ok {
 		return
 	}
 
-	ven, ok := updateVenture(mv, res, req)
-	if !ok {
-		return
+	vens := ventures.Update_NEW(mv)
+
+	ids := ""
+	for i, ven := range vens {
+		switch i {
+		case 0:
+			ids = ven.ID
+		default:
+			ids += ", " + ven.ID
+		}
 	}
 
-	m := fmt.Sprintf("Venture with ID '%s' updated", ven.ID)
+	m := fmt.Sprintf("Update Ventures with the following IDs '%s'", ids)
 	log.Println(m)
-	writeSuccessReply(res, req, http.StatusOK, ven, m)
+	writeSuccessReply(res, req, http.StatusOK, vens, m)
 }
 
 // _DELETE_Venture handles client requests for deleting a specific Venture.

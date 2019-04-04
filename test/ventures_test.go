@@ -289,9 +289,9 @@ func TestPUT_Venture_1(t *testing.T) {
 		...`)
 
 	input := v.ModVenture{
+		IDs:   "1",
 		Props: "description, state, order_ids, extra",
 		Values: v.Venture{
-			ID:          "1",
 			Description: "Black blizzard",
 			State:       "In progress",
 			OrderIDs:    "1,2,3",
@@ -314,27 +314,29 @@ func TestPUT_Venture_1(t *testing.T) {
 	require.Equal(t, 200, res.StatusCode)
 	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
 
-	output := v.AssertVentureFromReader(t, res.Body)
+	output := v.AssertVentureSliceFromReader(t, res.Body)
+	require.Len(t, output, 1)
 
+	input.Values.ID = "1"
 	input.Values.IsAlive = true
-	assert.Equal(t, input.Values, output)
+	assert.Equal(t, input.Values, output[0])
 }
 
 func TestPUT_Venture_2(t *testing.T) {
 	t.Log(`Given some Ventures already exist on the server
 		When an non-existent Venture is PUT to the server
-		Then ensure the response code is 400
+		Then ensure the response code is 200
 		And the 'Content-Type' header contains 'application/json'
 		And 'Access-Control-Allow-Origin' is '*'
 		And 'Access-Control-Allow-Headers' is '*'
 		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, and OPTIONS
-		And the body is a JSON object representing an error response
+		And the body is a JSON object representing an empty Venture array
 		...`)
 
 	input := v.ModVenture{
+		IDs:   "999999",
 		Props: "description, state, order_ids, extra",
 		Values: v.Venture{
-			ID:          "999999",
 			Description: "Black blizzard",
 			State:       "In progress",
 			OrderIDs:    "1,2,3",
@@ -354,14 +356,16 @@ func TestPUT_Venture_2(t *testing.T) {
 	defer res.Body.Close()
 	defer a.PrintResponse(t, res.Body)
 
-	require.Equal(t, 400, res.StatusCode)
+	require.Equal(t, 200, res.StatusCode)
 	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
-	assertWrappedErrorBody(t, res.Body)
+
+	output := v.AssertVentureSliceFromReader(t, res.Body)
+	require.Empty(t, output)
 }
 
 func TestPUT_Venture_3(t *testing.T) {
 	t.Log(`Given some Ventures already exist on the server
-		When an Venture without an ID is PUT to the server
+		When a venture modification without IDs is PUT to the server
 		Then ensure the response code is 400
 		And the 'Content-Type' header contains 'application/json'
 		And 'Access-Control-Allow-Origin' is '*'
@@ -399,7 +403,7 @@ func TestPUT_Venture_3(t *testing.T) {
 
 func TestPUT_Venture_4(t *testing.T) {
 	t.Log(`Given some Ventures already exist on the server
-		When an existent Venture is updated with invalid content and PUT to the server
+		When ventures updates are PUT to the server with invalid modifications
 		Then ensure the response code is 400
 		And the 'Content-Type' header contains 'application/json'
 		And 'Access-Control-Allow-Origin' is '*'
@@ -409,10 +413,9 @@ func TestPUT_Venture_4(t *testing.T) {
 		...`)
 
 	input := v.ModVenture{
-		Props: "description, state, order_ids, extra",
-		Values: v.Venture{
-			ID: "1",
-		},
+		IDs:    "1",
+		Props:  "description, state, order_ids, extra",
+		Values: v.Venture{},
 	}
 
 	buf := new(bytes.Buffer)
@@ -450,9 +453,9 @@ func TestPUT_Venture_5(t *testing.T) {
 		...`)
 
 	input := v.ModVenture{
+		IDs:   "1",
 		Props: "description, state, order_ids, extra",
 		Values: v.Venture{
-			ID:          "1",
 			Description: "Black blizzard",
 			State:       "In progress",
 			OrderIDs:    "1,2,3",
@@ -475,10 +478,12 @@ func TestPUT_Venture_5(t *testing.T) {
 	require.Equal(t, 200, res.StatusCode)
 	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
 
-	_, output := v.AssertWrappedVentureFromReader(t, res.Body)
+	_, output := v.AssertWrappedVentureSliceFromReader(t, res.Body)
+	require.Len(t, output, 1)
 
+	input.Values.ID = "1"
 	input.Values.IsAlive = true
-	assert.Equal(t, input.Values, output)
+	assert.Equal(t, input.Values, output[0])
 }
 
 // ****************************************************************************

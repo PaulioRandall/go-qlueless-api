@@ -40,6 +40,7 @@ func InjectDummyVentures() {
 		OrderIDs:    "4,5,6",
 	})
 	ventures.Update(v.ModVenture{
+		IDs:   "3",
 		Props: "is_alive",
 		Values: v.Venture{
 			IsAlive: false,
@@ -85,36 +86,25 @@ func validateNewVenture(ven v.NewVenture, res *http.ResponseWriter, req *http.Re
 	return true
 }
 
-// decodeModVenture decodes an update to a Venture from a Request.Body.
-func decodeModVenture(res *http.ResponseWriter, req *http.Request) (v.ModVenture, bool) {
-	vu, err := v.DecodeModVenture(req.Body)
+// decodeModVentures decodes modifications to Ventures from a Request.Body.
+func decodeModVentures(res *http.ResponseWriter, req *http.Request) (*v.ModVenture, bool) {
+	mv, err := v.DecodeModVenture(req.Body)
 	if err != nil {
 		h.WriteBadRequest(res, req,
 			"Unable to decode request body into a Venture update")
-		return v.ModVenture{}, false
+		return nil, false
 	}
-	return vu, true
+	return &mv, true
 }
 
-// validateModVenture validates a Venture update.
-func validateModVenture(mv v.ModVenture, res *http.ResponseWriter, req *http.Request) bool {
-	errMsgs := mv.Validate()
+// validateModVentures validates a Venture update.
+func validateModVentures(mv *v.ModVenture, res *http.ResponseWriter, req *http.Request) bool {
+	errMsgs := mv.Validate_NEW()
 	if len(errMsgs) != 0 {
 		h.WriteBadRequest(res, req, strings.Join(errMsgs, " "))
 		return false
 	}
 	return true
-}
-
-// updateVenture updates a Venture in the data store.
-func updateVenture(mv v.ModVenture, res *http.ResponseWriter, req *http.Request) (v.Venture, bool) {
-	ven, ok := ventures.Update(mv)
-	if !ok {
-		h.WriteBadRequest(res, req,
-			fmt.Sprintf("Venture with ID '%s' could not be found", mv.Values.ID))
-		return v.Venture{}, false
-	}
-	return ven, true
 }
 
 // deleteVenture deletes a Venture from the data store.
