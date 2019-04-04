@@ -118,24 +118,6 @@ func (vs *VentureStore) Update_NEW(mv *ModVenture) []Venture {
 	return r
 }
 
-// Update updates a Venture within the data store. If false is returned then
-// the item does not currently exist within the data store.
-func (vs *VentureStore) Update(mv ModVenture) (Venture, bool) {
-
-	v, ok := vs.Get(mv.Values.ID)
-	if !ok {
-		return Venture{}, false
-	}
-
-	v = vs._updateVenture(v, mv)
-
-	vs.mutex.Lock()
-	defer vs.mutex.Unlock()
-
-	vs.items[v.ID] = v
-	return v, true
-}
-
 // Delete removes a Venture from within the data store. If false is returned
 // then the item does not currently exist.
 func (vs *VentureStore) Delete(id string) (Venture, bool) {

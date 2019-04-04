@@ -39,7 +39,7 @@ func InjectDummyVentures() {
 		State:       "In Progress",
 		OrderIDs:    "4,5,6",
 	})
-	ventures.Update(v.ModVenture{
+	ventures.Update_NEW(&v.ModVenture{
 		IDs:   "3",
 		Props: "is_alive",
 		Values: v.Venture{

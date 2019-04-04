@@ -90,23 +90,6 @@ func (mv *ModVenture) Validate_NEW() []string {
 	return errMsgs
 }
 
-// Validate checks each field contains valid content returning a non-empty
-// slice of human readable error messages detailing the violations found or an
-// empty slice if all is well. These messages are suitable for returning to
-// clients.
-func (mv *ModVenture) Validate() []string {
-	errMsgs := []string{}
-
-	errMsgs = u.AppendIfEmpty(mv.Values.ID, errMsgs,
-		"'values.venture_id' must be supplied so I know which Venture to update.")
-
-	errMsgs = u.AppendIfEmpty(mv.Props, errMsgs,
-		"Some properties must be 'set' for any updating to take place.")
-
-	errMsgs = mv._validateProps(errMsgs)
-	return errMsgs
-}
-
 // ApplyMod applies the modifications to the supplied Venture only touching
 // those properties the user has specified
 //
