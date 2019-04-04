@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	h "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/uhttp"
+	u "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/utils"
 	v "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/ventures"
 )
 
@@ -115,4 +116,23 @@ func deleteVenture(id string, res *http.ResponseWriter, req *http.Request) (v.Ve
 		return v.Venture{}, false
 	}
 	return ven, true
+}
+
+// ventureIdCsvToSlice validates then parses a CSV string of IDs into a slice
+func ventureIdCsvToSlice(idCsv string, res *http.ResponseWriter, req *http.Request) ([]string, bool) {
+	idCsv = u.StripWhitespace(idCsv)
+
+	if idCsv == "" {
+		h.WriteBadRequest(res, req, "Query parameter 'ids' is missing or empty")
+		return nil, false
+	}
+
+	if !u.IsPositiveIntCSV(idCsv) {
+		h.WriteBadRequest(res, req, fmt.Sprintf("Could not parse query parameter"+
+			" 'ids=%s' into a list of Venture IDs", idCsv))
+		return nil, false
+	}
+
+	ids := strings.Split(idCsv, ",")
+	return ids, true
 }
