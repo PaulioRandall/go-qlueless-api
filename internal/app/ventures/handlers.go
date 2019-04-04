@@ -28,7 +28,7 @@ func VenturesHandler(res http.ResponseWriter, req *http.Request) {
 	case req.Method == "PUT":
 		_PUT_UpdatedVenture(&res, req)
 	case req.Method == "DELETE":
-		_DELETE_Venture(id, &res, req)
+		_DELETE_Venture_NEW(&res, req)
 	case req.Method == "OPTIONS":
 		res.WriteHeader(http.StatusOK)
 	default:
