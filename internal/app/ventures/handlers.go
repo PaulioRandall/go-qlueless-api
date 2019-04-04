@@ -28,7 +28,7 @@ func VenturesHandler(res http.ResponseWriter, req *http.Request) {
 	case req.Method == "PUT":
 		_PUT_UpdatedVenture(&res, req)
 	case req.Method == "DELETE":
-		_DELETE_Venture_NEW(&res, req)
+		_DELETE_Venture(&res, req)
 	case req.Method == "OPTIONS":
 		res.WriteHeader(http.StatusOK)
 	default:
@@ -95,7 +95,7 @@ func _PUT_UpdatedVenture(res *http.ResponseWriter, req *http.Request) {
 }
 
 // _DELETE_Venture handles client requests for deleting a specific Venture.
-func _DELETE_Venture_NEW(res *http.ResponseWriter, req *http.Request) {
+func _DELETE_Venture(res *http.ResponseWriter, req *http.Request) {
 
 	ids := req.FormValue("ids")
 	idSlice, ok := ventureIdCsvToSlice(ids, res, req)
@@ -104,7 +104,7 @@ func _DELETE_Venture_NEW(res *http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	vens := ventures.Delete_NEW(idSlice)
+	vens := ventures.Delete(idSlice)
 	ids = ventureIDsToCSV(vens)
 
 	m := fmt.Sprintf("Deleted Ventures with the following IDs '%s'", ids)

@@ -99,7 +99,7 @@ func (vs *VentureStore) Update(mv *ModVenture) []Venture {
 
 // Delete removes Ventures from within the data store. Only deleted Ventures
 // will be returned
-func (vs *VentureStore) Delete_NEW(ids []string) []Venture {
+func (vs *VentureStore) Delete(ids []string) []Venture {
 	vs.mutex.Lock()
 	defer vs.mutex.Unlock()
 

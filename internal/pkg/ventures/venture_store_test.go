@@ -265,10 +265,10 @@ func TestVentureStore_Update_3(t *testing.T) {
 }
 
 // ****************************************************************************
-// VentureStore.Delete_NEW()
+// VentureStore.Delete()
 // ****************************************************************************
 
-func TestVentureStore_Delete_NEW_1(t *testing.T) {
+func TestVentureStore_Delete_1(t *testing.T) {
 	store := NewVentureStore()
 	a := Venture{
 		ID: "1",
@@ -281,14 +281,14 @@ func TestVentureStore_Delete_NEW_1(t *testing.T) {
 
 	ids := []string{"1", "2"}
 
-	v := store.Delete_NEW(ids)
+	v := store.Delete(ids)
 	require.Len(t, v, 2)
 
 	assert.Equal(t, a, v[0])
 	assert.Equal(t, b, v[1])
 }
 
-func TestVentureStore_Delete_NEW_2(t *testing.T) {
+func TestVentureStore_Delete_2(t *testing.T) {
 	store := NewVentureStore()
 	a := Venture{
 		ID: "1",
@@ -301,7 +301,7 @@ func TestVentureStore_Delete_NEW_2(t *testing.T) {
 
 	ids := []string{"3"}
 
-	v := store.Delete_NEW(ids)
+	v := store.Delete(ids)
 	require.Len(t, v, 0)
 
 	aOut, ok := store.items["1"]
@@ -313,12 +313,12 @@ func TestVentureStore_Delete_NEW_2(t *testing.T) {
 	assert.Equal(t, b, bOut)
 }
 
-func TestVentureStore_Delete_NEW_3(t *testing.T) {
+func TestVentureStore_Delete_3(t *testing.T) {
 	store := NewVentureStore()
 
 	ids := []string{}
 
-	v := store.Delete_NEW(ids)
+	v := store.Delete(ids)
 	require.Len(t, v, 0)
 	assert.Len(t, store.items, 0)
 }
