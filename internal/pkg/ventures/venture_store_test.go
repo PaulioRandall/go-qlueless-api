@@ -171,6 +171,100 @@ func TestVentureStor_Add_2(t *testing.T) {
 }
 
 // ****************************************************************************
+// VentureStore.Update_NEW()
+// ****************************************************************************
+
+func TestVentureStore_Update_NEW_1(t *testing.T) {
+	store := NewVentureStore()
+	a := Venture{
+		ID: "1",
+	}
+	b := Venture{
+		ID: "2",
+	}
+	store.items["1"] = a
+	store.items["2"] = b
+
+	u := ModVenture{
+		IDs:   "1,2",
+		Props: "description,order_ids,state,is_alive,extra",
+		Values: Venture{
+			Description: "new",
+			OrderIDs:    "new",
+			State:       "new",
+			IsAlive:     true,
+			Extra:       "new",
+		},
+	}
+
+	v := store.Update_NEW(u)
+	require.Len(t, v, 2)
+
+	u.Values.ID = "1"
+	assert.Equal(t, u.Values, v[0])
+	aOut, ok := store.items["1"]
+	require.True(t, ok)
+	assert.Equal(t, u.Values, aOut)
+
+	u.Values.ID = "2"
+	assert.Equal(t, u.Values, v[1])
+	bOut, ok := store.items["2"]
+	require.True(t, ok)
+	assert.Equal(t, u.Values, bOut)
+}
+
+func TestVentureStore_Update_NEW_2(t *testing.T) {
+	store := NewVentureStore()
+	au := ModVenture{
+		IDs:   "1",
+		Props: "description",
+		Values: Venture{
+			Description: "original",
+		},
+	}
+
+	v := store.Update_NEW(au)
+	require.Empty(t, v)
+}
+
+func TestVentureStore_Update_NEW_3(t *testing.T) {
+	store := NewVentureStore()
+	a := Venture{
+		ID: "1",
+	}
+	b := Venture{
+		ID: "2",
+	}
+	store.items["1"] = a
+	store.items["2"] = b
+
+	au := ModVenture{
+		IDs:   "1,2",
+		Props: "IGNORED,SKIPPED",
+		Values: Venture{
+			Description: "new",
+			OrderIDs:    "new",
+			State:       "new",
+			IsAlive:     true,
+			Extra:       "new",
+		},
+	}
+
+	v := store.Update_NEW(au)
+	require.Len(t, v, 2)
+	assert.Equal(t, a, v[0])
+	assert.Equal(t, b, v[1])
+
+	aOut, ok := store.items["1"]
+	require.True(t, ok)
+	assert.Equal(t, a, aOut)
+
+	bOut, ok := store.items["2"]
+	require.True(t, ok)
+	assert.Equal(t, b, bOut)
+}
+
+// ****************************************************************************
 // VentureStore.Update()
 // ****************************************************************************
 

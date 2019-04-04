@@ -277,3 +277,122 @@ func TestModVenture_Validate_8(t *testing.T) {
 	errMsgs := a.Validate()
 	assert.Len(t, errMsgs, 5)
 }
+
+// ****************************************************************************
+// ModVenture.Validate_NEW()
+// ****************************************************************************
+
+func TestModVenture_Validate_NEW_1(t *testing.T) {
+	a := ModVenture{
+		IDs:   "1,2,3",
+		Props: "description,state,extra",
+		Values: Venture{
+			Description: "updated description",
+			OrderIDs:    "66,101,202",
+			State:       "updated state",
+			IsAlive:     false,
+			Extra:       "updated extra",
+		},
+	}
+
+	errMsgs := a.Validate_NEW()
+	assert.Empty(t, errMsgs)
+}
+
+func TestModVenture_Validate_NEW_2(t *testing.T) {
+	a := ModVenture{
+		IDs:   "1",
+		Props: "description",
+		Values: Venture{
+			Description: "updated description",
+		},
+	}
+
+	errMsgs := a.Validate_NEW()
+	assert.Empty(t, errMsgs)
+}
+
+func TestModVenture_Validate_NEW_3(t *testing.T) {
+	a := ModVenture{
+		IDs:    "1",
+		Props:  "",
+		Values: Venture{},
+	}
+
+	errMsgs := a.Validate_NEW()
+	assert.Len(t, errMsgs, 1)
+}
+
+func TestModVenture_Validate_NEW_4(t *testing.T) {
+	a := ModVenture{
+		IDs:    "1",
+		Props:  "description",
+		Values: Venture{},
+	}
+
+	errMsgs := a.Validate_NEW()
+	assert.Len(t, errMsgs, 1)
+}
+
+func TestModVenture_Validate_NEW_5(t *testing.T) {
+	a := ModVenture{
+		IDs:    "1",
+		Props:  "INVALID",
+		Values: Venture{},
+	}
+
+	errMsgs := a.Validate_NEW()
+	assert.Len(t, errMsgs, 1)
+}
+
+func TestModVenture_Validate_NEW_6(t *testing.T) {
+	a := ModVenture{
+		IDs:    "1",
+		Props:  "extra",
+		Values: Venture{},
+	}
+
+	errMsgs := a.Validate_NEW()
+	assert.Empty(t, errMsgs)
+}
+
+func TestModVenture_Validate_NEW_7(t *testing.T) {
+	a := ModVenture{
+		IDs:   "1",
+		Props: "order_ids",
+		Values: Venture{
+			OrderIDs: "1,2,ILLEGAL,99,100",
+		},
+	}
+
+	errMsgs := a.Validate_NEW()
+	assert.Len(t, errMsgs, 1)
+}
+
+func TestModVenture_Validate_NEW_8(t *testing.T) {
+	a := ModVenture{
+		Props: "description,,state,order_ids,INVALID,extra",
+		Values: Venture{
+			OrderIDs: "ILLEGAL,66,101,202",
+			State:    "updated state",
+			IsAlive:  false,
+			Extra:    "updated extra",
+		},
+	}
+
+	errMsgs := a.Validate_NEW()
+	assert.Len(t, errMsgs, 5)
+}
+
+func TestModVenture_Validate_NEW_9(t *testing.T) {
+	a := ModVenture{
+		IDs:   "",
+		Props: "description",
+		Values: Venture{
+			Description: "description",
+		},
+	}
+
+	errMsgs := a.Validate_NEW()
+	assert.Len(t, errMsgs, 1)
+}

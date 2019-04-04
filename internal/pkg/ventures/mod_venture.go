@@ -77,6 +77,23 @@ func (mv *ModVenture) _validateProps(errMsgs []string) []string {
 // slice of human readable error messages detailing the violations found or an
 // empty slice if all is well. These messages are suitable for returning to
 // clients.
+func (mv *ModVenture) Validate_NEW() []string {
+	errMsgs := []string{}
+
+	errMsgs = u.AppendIfNotPositiveIntCSV(mv.IDs, errMsgs,
+		"'ids' must be supplied so the Ventures to update can be determined.")
+
+	errMsgs = u.AppendIfEmpty(mv.Props, errMsgs,
+		"Some properties must be 'set' for any updating to take place.")
+
+	errMsgs = mv._validateProps(errMsgs)
+	return errMsgs
+}
+
+// Validate checks each field contains valid content returning a non-empty
+// slice of human readable error messages detailing the violations found or an
+// empty slice if all is well. These messages are suitable for returning to
+// clients.
 func (mv *ModVenture) Validate() []string {
 	errMsgs := []string{}
 

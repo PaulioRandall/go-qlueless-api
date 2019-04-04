@@ -96,6 +96,28 @@ func (vs *VentureStore) _updateVenture(v Venture, mv ModVenture) Venture {
 	return v
 }
 
+// Update updates Ventures within the data store. Only the Ventures in the slice
+// returned were actually updated.
+func (vs *VentureStore) Update_NEW(mv ModVenture) []Venture {
+	vs.mutex.Lock()
+	defer vs.mutex.Unlock()
+
+	r := []Venture{}
+
+	for _, id := range mv.SplitIDs() {
+		v, ok := vs.items[id]
+		if !ok {
+			continue
+		}
+
+		mv.ApplyMod(&v)
+		vs.items[id] = v
+		r = append(r, v)
+	}
+
+	return r
+}
+
 // Update updates a Venture within the data store. If false is returned then
 // the item does not currently exist within the data store.
 func (vs *VentureStore) Update(mv ModVenture) (Venture, bool) {
