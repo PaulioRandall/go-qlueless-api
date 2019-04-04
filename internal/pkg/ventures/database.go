@@ -19,7 +19,7 @@ func CreateTables(db *sql.DB) error {
 		return err
 	}
 
-	err = _create_insert_venture_Trigger(db)
+	err = _create_insert_on_venture_Trigger(db)
 	if err != nil {
 		return err
 	}
@@ -29,7 +29,7 @@ func CreateTables(db *sql.DB) error {
 
 // _create_venture_Table creates the Venture table within the supplied database.
 func _create_venture_Table(db *sql.DB) error {
-	stmt, err := db.Prepare(`CREATE TABLE venture (
+	return _execStmt(db, `CREATE TABLE venture (
 		id INTEGER NOT NULL,
 		vid INTEGER,
 		description TEXT NOT NULL,
@@ -39,23 +39,12 @@ func _create_venture_Table(db *sql.DB) error {
 		extra TEXT DEFAULT NULL,
 		PRIMARY KEY(id, vid)
 	);`)
-
-	if stmt != nil {
-		defer stmt.Close()
-	}
-
-	if err != nil {
-		return err
-	}
-
-	_, err = stmt.Exec()
-	return err
 }
 
 // _create_ql_venture_Table creates the query layer Venture table within the
 // supplied database.
 func _create_ql_venture_Table(db *sql.DB) error {
-	stmt, err := db.Prepare(`CREATE TABLE ql_venture (
+	return _execStmt(db, `CREATE TABLE ql_venture (
 		id INTEGER NOT NULL PRIMARY KEY,
 		vid INTEGER,
 		description TEXT NOT NULL,
@@ -64,24 +53,13 @@ func _create_ql_venture_Table(db *sql.DB) error {
 		is_alive BOOL DEFAULT TRUE,
 		extra TEXT DEFAULT NULL
 	);`)
-
-	if stmt != nil {
-		defer stmt.Close()
-	}
-
-	if err != nil {
-		return err
-	}
-
-	_, err = stmt.Exec()
-	return err
 }
 
-// _create_insert_venture_Trigger creates a trigger within the supplied
+// _create_insert_on_venture_Trigger creates a trigger within the supplied
 // database that updates the ql_venture table when ever a new record is inserted
 // into the venture table.
-func _create_insert_venture_Trigger(db *sql.DB) error {
-	stmt, err := db.Prepare(`CREATE TRIGGER new_venture
+func _create_insert_on_venture_Trigger(db *sql.DB) error {
+	return _execStmt(db, `CREATE TRIGGER new_venture
 		AFTER INSERT ON venture
 		FOR EACH ROW
 		BEGIN
@@ -99,6 +77,11 @@ func _create_insert_venture_Trigger(db *sql.DB) error {
 				is_alive = NEW.is_alive,
 				extra = NEW.extra;
 		END;`)
+}
+
+// _execStmt executes a SQL statment ensuring it is closed afterwards
+func _execStmt(db *sql.DB, sql string) error {
+	stmt, err := db.Prepare(sql)
 
 	if stmt != nil {
 		defer stmt.Close()
