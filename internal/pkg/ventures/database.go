@@ -46,7 +46,7 @@ func CreateTables(db *sql.DB) error {
 func _create_venture_Table(db *sql.DB) error {
 	return _execStmt(db, `CREATE TABLE venture (
 		id INTEGER NOT NULL,
-		vid INTEGER NOT NULL DEFAULT CURRENT_TIMESTAMP,
+		vid INTEGER NOT NULL DEFAULT(STRFTIME('%Y-%m-%d %H:%M:%f', 'NOW')),
 		description TEXT NOT NULL,
 		order_ids TEXT NOT NULL,
 		state TEXT NOT NULL,

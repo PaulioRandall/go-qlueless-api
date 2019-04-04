@@ -69,4 +69,17 @@ func main() {
 	for i, ven := range vens {
 		fmt.Printf("%d: %v\n", i, ven)
 	}
+
+	vens[1].Extra = "AAAAAGGGGGHHHHH"
+	_, err = vens[1].Update(db)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	ven, err := v.QueryFor(db, vens[1].ID)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Printf("UPDATED: %v\n", ven)
 }

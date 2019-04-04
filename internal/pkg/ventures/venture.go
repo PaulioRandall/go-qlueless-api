@@ -106,13 +106,11 @@ func (ven *Venture) Delete(db *sql.DB) error {
 //
 // @UNTESTED
 func (ven *Venture) Update(db *sql.DB) (int64, error) {
-	stmt, err := db.Prepare(`UPDATE venture 
-		SET description = ?,
-			order_ids = ?,
-			state = ?,
-			is_alive = ?,
-			extra = ?
-		WHERE id = ?;`)
+	stmt, err := db.Prepare(`INSERT INTO venture (
+		id, description, order_ids, state, is_alive, extra
+	) VALUES (
+		?, ?, ?, ?, ?, ?
+	);`)
 
 	if stmt != nil {
 		defer stmt.Close()
@@ -127,12 +125,12 @@ func (ven *Venture) Update(db *sql.DB) (int64, error) {
 
 // _execUpdate is a file private function that executes an update statment.
 func (ven *Venture) _execUpdate(stmt *sql.Stmt) (int64, error) {
-	res, err := stmt.Exec(ven.Description,
+	res, err := stmt.Exec(ven.ID,
+		ven.Description,
 		ven.OrderIDs,
 		ven.State,
 		ven.IsAlive,
-		ven.Extra,
-		ven.ID)
+		ven.Extra)
 
 	if err != nil {
 		return 0, err
