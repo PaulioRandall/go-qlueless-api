@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"io"
+	"strconv"
 	"strings"
 
 	u "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/utils"
@@ -56,6 +57,12 @@ func (nv *NewVenture) Validate() []string {
 //
 // @UNTESTED
 func (nv *NewVenture) Insert(db *sql.DB) (*Venture, error) {
+
+	id, err := _findNextID(db)
+	if err != nil {
+		return nil, err
+	}
+
 	stmt, err := db.Prepare(`INSERT INTO venture (
 		id, description, order_ids, state, is_alive, extra
 	) VALUES (
@@ -70,12 +77,30 @@ func (nv *NewVenture) Insert(db *sql.DB) (*Venture, error) {
 		return nil, err
 	}
 
-	id, err := FindNextID(db)
-	if err != nil {
-		return nil, err
+	return nv._execInsert(id, stmt)
+}
+
+// _findNextID returns the next free Venture ID.
+func _findNextID(db *sql.DB) (string, error) {
+	stmt, err := db.Prepare(`SELECT COALESCE(MAX(id), 0) FROM venture;`)
+
+	if stmt != nil {
+		defer stmt.Close()
 	}
 
-	return nv._execInsert(id, stmt)
+	if err != nil {
+		return "", err
+	}
+
+	var id int64
+	err = stmt.QueryRow().Scan(&id)
+	if err != nil {
+		return "", err
+	}
+
+	id++
+	r := strconv.FormatInt(id, 10)
+	return r, nil
 }
 
 // _execInsert is a file private function that executes the supplied insert
