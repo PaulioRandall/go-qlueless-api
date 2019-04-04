@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"encoding/json"
 	"io"
-	"strconv"
 	"strings"
 
 	u "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/utils"
@@ -58,9 +57,9 @@ func (nv *NewVenture) Validate() []string {
 // @UNTESTED
 func (nv *NewVenture) Insert(db *sql.DB) (*Venture, error) {
 	stmt, err := db.Prepare(`INSERT INTO venture (
-		description, order_ids, state, is_alive, extra
+		id, description, order_ids, state, is_alive, extra
 	) VALUES (
-		?, ?, ?, ?, ?
+		?, ?, ?, ?, ?, ?
 	);`)
 
 	if stmt != nil {
@@ -71,13 +70,19 @@ func (nv *NewVenture) Insert(db *sql.DB) (*Venture, error) {
 		return nil, err
 	}
 
-	return nv._execInsert(stmt)
+	id, err := FindNextID(db)
+	if err != nil {
+		return nil, err
+	}
+
+	return nv._execInsert(id, stmt)
 }
 
 // _execInsert is a file private function that executes the supplied insert
 // statement
-func (nv *NewVenture) _execInsert(stmt *sql.Stmt) (*Venture, error) {
+func (nv *NewVenture) _execInsert(id string, stmt *sql.Stmt) (*Venture, error) {
 	ven := Venture{
+		ID:          id,
 		Description: nv.Description,
 		OrderIDs:    nv.OrderIDs,
 		State:       nv.State,
@@ -85,7 +90,8 @@ func (nv *NewVenture) _execInsert(stmt *sql.Stmt) (*Venture, error) {
 		Extra:       nv.Extra,
 	}
 
-	res, err := stmt.Exec(ven.Description,
+	_, err := stmt.Exec(ven.ID,
+		ven.Description,
 		ven.OrderIDs,
 		ven.State,
 		ven.IsAlive,
@@ -95,11 +101,5 @@ func (nv *NewVenture) _execInsert(stmt *sql.Stmt) (*Venture, error) {
 		return nil, err
 	}
 
-	id, err := res.LastInsertId()
-	if err != nil {
-		return nil, err
-	}
-
-	ven.ID = strconv.FormatInt(id, 10)
 	return &ven, nil
 }

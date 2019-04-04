@@ -2,6 +2,7 @@ package ventures
 
 import (
 	"database/sql"
+	"strconv"
 )
 
 // CreateTable creates a Venture table within the supplied database.
@@ -9,7 +10,7 @@ import (
 // @UNTESTED
 func CreateTable(db *sql.DB) error {
 	stmt, err := db.Prepare(`CREATE TABLE venture (
-		id INTEGER PRIMARY KEY AUTOINCREMENT,
+		id INTEGER NOT NULL PRIMARY KEY,
 		description TEXT NOT NULL,
 		order_ids TEXT NOT NULL,
 		state TEXT NOT NULL,
@@ -27,6 +28,37 @@ func CreateTable(db *sql.DB) error {
 
 	_, err = stmt.Exec()
 	return err
+}
+
+// FindNextID returns the next free Venture ID.
+//
+// @UNTESTED
+func FindNextID(db *sql.DB) (string, error) {
+	stmt, err := db.Prepare(`SELECT COALESCE(MAX(id), 0)
+		FROM venture;`)
+
+	if stmt != nil {
+		defer stmt.Close()
+	}
+
+	if err != nil {
+		return "", err
+	}
+
+	var id string
+	err = stmt.QueryRow().Scan(&id)
+	if err != nil {
+		return "", err
+	}
+
+	idInt, err := strconv.Atoi(id)
+	if err != nil {
+		return "", err
+	}
+
+	idInt++
+	id = strconv.Itoa(idInt)
+	return id, nil
 }
 
 // QueryFor queries the database for a single Venture.
