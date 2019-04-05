@@ -82,26 +82,6 @@ func (ven *Venture) SetOrderIDs(ids []string) {
 	ven.OrderIDs = strings.Join(ids, ",")
 }
 
-// Delete removes the Venture from the database.
-//
-// @UNTESTED
-func (ven *Venture) Delete(db *sql.DB) error {
-	stmt, err := db.Prepare(`DELETE
-		FROM venture
-		WHERE id = ?`)
-
-	if stmt != nil {
-		defer stmt.Close()
-	}
-
-	if err != nil {
-		return err
-	}
-
-	_, err = stmt.Exec(ven.ID)
-	return err
-}
-
 // Update updates the Venture within the database.
 //
 // @UNTESTED

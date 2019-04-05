@@ -97,25 +97,6 @@ func (vs *VentureStore) Update(mv *ModVenture) []Venture {
 	return r
 }
 
-// Delete removes Ventures from within the data store. Only deleted Ventures
-// will be returned
-func (vs *VentureStore) Delete(ids []string) []Venture {
-	vs.mutex.Lock()
-	defer vs.mutex.Unlock()
-
-	r := []Venture{}
-
-	for _, id := range ids {
-		v, ok := vs.items[id]
-		if ok {
-			delete(vs.items, id)
-			r = append(r, v)
-		}
-	}
-
-	return r
-}
-
 // _genNewID generates a new, unused, Venture ID
 func (vs *VentureStore) _genNewID() string {
 	ID := 1

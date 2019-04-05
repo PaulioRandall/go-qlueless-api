@@ -435,11 +435,55 @@ func TestPUT_Ventures_4(t *testing.T) {
 	assertWrappedErrorBody(t, res.Body)
 }
 
+func TestPUT_Ventures_5(t *testing.T) {
+	t.Log(`Given some Ventures already exist on the server
+		When existing Ventures are modified as dead and PUT to the server
+		Then ensure the response code is 200
+		And the 'Content-Type' header contains 'application/json'
+		And 'Access-Control-Allow-Origin' is '*'
+		And 'Access-Control-Allow-Headers' is '*'
+		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, and OPTIONS
+		And the body is a JSON object representing the updated input Venture
+		...`)
+
+	input := v.ModVenture{
+		IDs:   "4,5",
+		Props: "is_alive",
+		Values: v.Venture{
+			IsAlive: false,
+		},
+	}
+
+	buf := new(bytes.Buffer)
+	json.NewEncoder(buf).Encode(&input)
+
+	req := APICall{
+		URL:    "http://localhost:8080/ventures",
+		Method: "PUT",
+		Body:   buf,
+	}
+	res := req.fire()
+	defer res.Body.Close()
+	defer a.PrintResponse(t, res.Body)
+
+	require.Equal(t, 200, res.StatusCode)
+	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
+
+	output := v.AssertVentureSliceFromReader(t, res.Body)
+	require.Len(t, output, 2)
+
+	assert.Equal(t, "4", output[0].ID)
+	assert.Equal(t, false, output[0].IsAlive)
+
+	assert.Equal(t, "5", output[1].ID)
+	assert.Equal(t, false, output[1].IsAlive)
+}
+
 // ****************************************************************************
 // (PUT) /ventures?wrap
 // ****************************************************************************
 
-func TestPUT_Ventures_5(t *testing.T) {
+func TestPUT_Ventures_6(t *testing.T) {
 	t.Log(`Given some Ventures already exist on the server
 		When an existing Venture is modified and PUT to the server
 		Then ensure the response code is 200
@@ -484,98 +528,6 @@ func TestPUT_Ventures_5(t *testing.T) {
 	input.Values.ID = "1"
 	input.Values.IsAlive = true
 	assert.Equal(t, input.Values, output[0])
-}
-
-// ****************************************************************************
-// (DELETE) /ventures?ids={ids}
-// ****************************************************************************
-
-func TestDELETE_Ventures_1(t *testing.T) {
-	t.Log(`Given some Ventures already exist on the server
-		When a DELETE Venture requested is made for an existent Venture
-		Then ensure the response code is 200
-		And the 'Content-Type' header contains 'application/json'
-		And 'Access-Control-Allow-Origin' is '*'
-		And 'Access-Control-Allow-Headers' is '*'
-		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, and OPTIONS
-		And the body is a JSON object representing the deleted input Ventures
-		...`)
-
-	req := APICall{
-		URL:    "http://localhost:8080/ventures?ids=4,5",
-		Method: "DELETE",
-	}
-	res := req.fire()
-	defer res.Body.Close()
-	defer a.PrintResponse(t, res.Body)
-
-	require.Equal(t, 200, res.StatusCode)
-	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
-
-	output := v.AssertVentureSliceFromReader(t, res.Body)
-	require.Len(t, output, 2)
-
-	assert.Equal(t, "4", output[0].ID)
-	assert.Equal(t, "5", output[1].ID)
-}
-
-func TestDELETE_Venture_2(t *testing.T) {
-	t.Log(`Given some Ventures already exist on the server
-		When a DELETE Venture requested is made for a non-existent Venture
-		Then ensure the response code is 400
-		And the 'Content-Type' header contains 'application/json'
-		And 'Access-Control-Allow-Origin' is '*'
-		And 'Access-Control-Allow-Headers' is '*'
-		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, and OPTIONS
-		And the body is a JSON object representing an empty Venture array
-		...`)
-
-	req := APICall{
-		URL:    "http://localhost:8080/ventures?ids=666,999",
-		Method: "DELETE",
-	}
-	res := req.fire()
-	defer res.Body.Close()
-	defer a.PrintResponse(t, res.Body)
-
-	require.Equal(t, 200, res.StatusCode)
-	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
-
-	output := v.AssertVentureSliceFromReader(t, res.Body)
-	require.Empty(t, output)
-}
-
-// ****************************************************************************
-// (DELETE) /ventures?wrap&id={id}
-// ****************************************************************************
-
-func TestDELETE_Venture_3(t *testing.T) {
-	t.Log(`Given some Ventures already exist on the server
-		When a DELETE Venture requested is made for an existent Venture
-		And the 'wrap' query parameter has been specified
-		Then ensure the response code is 200
-		And the 'Content-Type' header contains 'application/json'
-		And 'Access-Control-Allow-Origin' is '*'
-		And 'Access-Control-Allow-Headers' is '*'
-		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, and OPTIONS
-		And the body is a JSON object representing a WrappedReply
-		And the wrapped data is the deleted Ventures
-		...`)
-
-	req := APICall{
-		URL:    "http://localhost:8080/ventures?wrap&ids=2",
-		Method: "DELETE",
-	}
-	res := req.fire()
-	defer res.Body.Close()
-	defer a.PrintResponse(t, res.Body)
-
-	require.Equal(t, 200, res.StatusCode)
-	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
-
-	_, output := v.AssertWrappedVentureSliceFromReader(t, res.Body)
-	require.Len(t, output, 1)
-	assert.Equal(t, "2", output[0].ID)
 }
 
 // ****************************************************************************

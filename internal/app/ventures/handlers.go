@@ -27,8 +27,6 @@ func VenturesHandler(res http.ResponseWriter, req *http.Request) {
 		_POST_NewVenture(&res, req)
 	case req.Method == "PUT":
 		_PUT_UpdatedVenture(&res, req)
-	case req.Method == "DELETE":
-		_DELETE_Venture(&res, req)
 	case req.Method == "OPTIONS":
 		res.WriteHeader(http.StatusOK)
 	default:
@@ -38,7 +36,7 @@ func VenturesHandler(res http.ResponseWriter, req *http.Request) {
 
 // _GET_AllVentures handles client requests for all living Ventures.
 func _GET_AllVentures(res *http.ResponseWriter, req *http.Request) {
-	vens := ventures.GetAll()
+	vens := ventures.GetAllAlive()
 	m := fmt.Sprintf("Found %d Ventures", len(vens))
 	writeSuccessReply(res, req, http.StatusOK, vens, m)
 }
@@ -90,24 +88,6 @@ func _PUT_UpdatedVenture(res *http.ResponseWriter, req *http.Request) {
 	ids := ventureIDsToCSV(vens)
 
 	m := fmt.Sprintf("Updated Ventures with the following IDs '%s'", ids)
-	log.Println(m)
-	writeSuccessReply(res, req, http.StatusOK, vens, m)
-}
-
-// _DELETE_Venture handles client requests for deleting a specific Venture.
-func _DELETE_Venture(res *http.ResponseWriter, req *http.Request) {
-
-	ids := req.FormValue("ids")
-	idSlice, ok := ventureIdCsvToSlice(ids, res, req)
-
-	if !ok {
-		return
-	}
-
-	vens := ventures.Delete(idSlice)
-	ids = ventureIDsToCSV(vens)
-
-	m := fmt.Sprintf("Deleted Ventures with the following IDs '%s'", ids)
 	log.Println(m)
 	writeSuccessReply(res, req, http.StatusOK, vens, m)
 }
