@@ -90,7 +90,7 @@ func (ven *Venture) SetOrderIDs(ids []string) {
 // Update updates the Venture within the database.
 //
 // @UNTESTED
-func (ven *Venture) Update(db *sql.DB) (int64, error) {
+func (ven *Venture) Update(db *sql.DB) error {
 	stmt, err := db.Prepare(`INSERT INTO venture (
 		id, description, order_ids, state, is_dead, extra
 	) VALUES (
@@ -102,24 +102,15 @@ func (ven *Venture) Update(db *sql.DB) (int64, error) {
 	}
 
 	if err != nil {
-		return 0, err
+		return err
 	}
 
-	return ven._execUpdate(stmt)
-}
-
-// _execUpdate is a file private function that executes an update statment.
-func (ven *Venture) _execUpdate(stmt *sql.Stmt) (int64, error) {
-	res, err := stmt.Exec(ven.ID,
+	_, err = stmt.Exec(ven.ID,
 		ven.Description,
 		ven.OrderIDs,
 		ven.State,
 		ven.IsDead,
 		ven.Extra)
 
-	if err != nil {
-		return 0, err
-	}
-
-	return res.RowsAffected()
+	return err
 }

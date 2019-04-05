@@ -12,8 +12,6 @@ import (
 	v "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/ventures"
 )
 
-var ventureHttpMethods = []string{"GET", "POST", "PUT", "OPTIONS"}
-
 // ****************************************************************************
 // (GET) /ventures
 // ****************************************************************************

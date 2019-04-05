@@ -71,7 +71,7 @@ func main() {
 	}
 
 	vens[1].Extra = "AAAAAGGGGGHHHHH"
-	_, err = vens[1].Update(db)
+	err = vens[1].Update(db)
 	if err != nil {
 		log.Fatal(err)
 	}
