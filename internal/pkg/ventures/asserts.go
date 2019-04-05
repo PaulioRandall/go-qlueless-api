@@ -45,10 +45,10 @@ func AssertVentureModEquals(t *testing.T, exp Venture, act Venture) {
 
 // AssertVentureSliceModEquals asserts that the two Venture slices are equal
 // with the exception of the last_modified fields
-func AssertVentureSliceModEquals(t *testing.T, exp []Venture, act []Venture) {
+func AssertVentureSliceModEquals(t *testing.T, exp map[string]Venture, act []Venture) {
 	require.Len(t, act, len(exp))
-	for i, _ := range exp {
-		AssertVentureModEquals(t, exp[i], act[i])
+	for _, ven := range act {
+		AssertVentureModEquals(t, exp[ven.ID], ven)
 	}
 }
 
@@ -100,6 +100,10 @@ func AssertWrappedVentureFromReader(t *testing.T, r io.Reader) (w.WrappedReply, 
 	wr, err := w.DecodeWrappedReplyFromReader(r)
 	require.Nil(t, err)
 	w.AssertWrappedReply(t, wr)
+
+	assert.NotEmpty(t, wr.Message)
+	assert.NotEmpty(t, wr.Self)
+	require.NotEmpty(t, wr.Data)
 
 	var v Venture
 	config := ms.DecoderConfig{

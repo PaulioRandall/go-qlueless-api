@@ -40,7 +40,6 @@ func VenturesHandler(res http.ResponseWriter, req *http.Request) {
 
 // _GET_AllVentures handles client requests for all living Ventures.
 func _GET_AllVentures(res *http.ResponseWriter, req *http.Request) {
-	//vens := ventures.GetAllAlive()
 	vens, err := v.QueryAll(q.Sev.DB)
 	if err != nil {
 		h.WriteServerError(res, req)
@@ -53,7 +52,7 @@ func _GET_AllVentures(res *http.ResponseWriter, req *http.Request) {
 
 // _GET_Venture handles client requests for a specific Venture.
 func _GET_Venture(id string, res *http.ResponseWriter, req *http.Request) {
-	ven, ok := findVenture(id, res, req)
+	ven, ok := findVenture(q.Sev.DB, id, res, req)
 	if !ok {
 		return
 	}

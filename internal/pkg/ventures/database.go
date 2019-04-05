@@ -2,6 +2,7 @@ package ventures
 
 import (
 	"database/sql"
+	"log"
 )
 
 // CreateTables creates all the Venture tables, views and triggers within the
@@ -157,7 +158,11 @@ func QueryFor(db *sql.DB, id string) (*Venture, error) {
 		&ven.State,
 		&ven.Extra)
 
-	if err != nil {
+	switch {
+	case err == sql.ErrNoRows:
+		return nil, nil
+	case err != nil:
+		log.Println(err)
 		return nil, err
 	}
 
@@ -182,6 +187,7 @@ func QueryAll(db *sql.DB) ([]Venture, error) {
 	}
 
 	if err != nil {
+		log.Println(err)
 		return nil, err
 	}
 

@@ -12,8 +12,8 @@ var ventureHttpMethods = []string{"GET", "POST", "PUT", "OPTIONS"}
 var dbPath string = "../bin/qlueless.db"
 var venDB *sql.DB = nil
 
-var livingVens []v.Venture = []v.Venture{}
-var deadVens []v.Venture = []v.Venture{}
+var livingVens map[string]v.Venture = nil
+var deadVens map[string]v.Venture = nil
 
 // venDBReset will reset the database by closing and deleting it then
 // creating a new one.
@@ -45,51 +45,53 @@ func venDBClose() {
 }
 
 // venDBInject injects a Venture into the database.
-func venDBInject(new v.NewVenture) *v.Venture {
+func venDBInject(data map[string]v.Venture, new v.NewVenture) {
 	ven, err := new.Insert(venDB)
 	if err != nil {
 		panic(err)
 	}
-	return ven
+	data[ven.ID] = *ven
 }
 
 // venDBInjectLivingVentures injects a default set of living Ventures into the
 // database
 func venDBInjectLivingVentures() {
-	livingVens = append(livingVens, *venDBInject(v.NewVenture{
+	livingVens = map[string]v.Venture{}
+	venDBInject(livingVens, v.NewVenture{
 		Description: "White wizard",
 		State:       "Not started",
 		Extra:       "colour: white; power: 9000",
-	}))
-	livingVens = append(livingVens, *venDBInject(v.NewVenture{
+	})
+	venDBInject(livingVens, v.NewVenture{
 		Description: "Green lizard",
 		State:       "In progress",
-	}))
-	livingVens = append(livingVens, *venDBInject(v.NewVenture{
+	})
+	venDBInject(livingVens, v.NewVenture{
 		Description: "Pink gizzard",
 		State:       "Finished",
-	}))
-	livingVens = append(livingVens, *venDBInject(v.NewVenture{
+	})
+	venDBInject(livingVens, v.NewVenture{
 		Description: "Eddie Izzard",
 		State:       "In Progress",
-	}))
-	livingVens = append(livingVens, *venDBInject(v.NewVenture{
+	})
+	venDBInject(livingVens, v.NewVenture{
 		Description: "The Count of Tuscany",
 		State:       "In Progress",
-	}))
+	})
 }
 
 // venDBInjectDeadVentures injects a default set of dead Ventures into the
 // database
 func venDBInjectDeadVentures() {
-	deadVens = append(deadVens, *venDBInject(v.NewVenture{
+	deadVens = map[string]v.Venture{}
+	venDBInject(deadVens, v.NewVenture{
 		Description: "Rose",
 		State:       "Finised",
-	}))
-	deadVens = append(deadVens, *venDBInject(v.NewVenture{
+	})
+	venDBInject(deadVens, v.NewVenture{
 		Description: "Lily",
 		State:       "Closed",
-	}))
+	})
 
 	mod := v.ModVenture{
 		Props: "is_dead",
@@ -98,9 +100,11 @@ func venDBInjectDeadVentures() {
 		},
 	}
 
-	mod.ApplyMod(&deadVens[0])
-	deadVens[0].Update(venDB)
-
-	mod.ApplyMod(&deadVens[1])
-	deadVens[1].Update(venDB)
+	for _, ven := range deadVens {
+		mod.ApplyMod(&ven)
+		err := ven.Update(venDB)
+		if err != nil {
+			panic(err)
+		}
+	}
 }

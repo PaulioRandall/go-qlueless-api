@@ -38,7 +38,7 @@ func TestGET_Ventures_1(t *testing.T) {
 		And the 'Content-Type' header contains 'application/json'
 		And 'Access-Control-Allow-Origin' is '*'
 		And 'Access-Control-Allow-Headers' is '*'
-		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, and OPTIONS
+		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, and OPTIONS
 		And the body is a JSON array containing all living Ventures
 		...`)
 
@@ -72,8 +72,10 @@ func TestGET_Ventures_2(t *testing.T) {
 		And the 'Content-Type' header contains 'application/json'
 		And 'Access-Control-Allow-Origin' is '*'
 		And 'Access-Control-Allow-Headers' is '*'
-		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, and OPTIONS
-		And the body is a JSON array of valid Ventures wrapped with meta information
+		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, and OPTIONS
+		And the body is a JSON object wrapping the with meta information
+		And the wrapped meta information contains a message and self link
+		And the wrapped data is a JSON array containing all living Ventures
 		...`)
 
 	_beginVenTest()
@@ -89,7 +91,9 @@ func TestGET_Ventures_2(t *testing.T) {
 
 	require.Equal(t, 200, res.StatusCode)
 	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
-	v.AssertWrappedVentureSliceFromReader(t, res.Body)
+
+	_, out := v.AssertWrappedVentureSliceFromReader(t, res.Body)
+	v.AssertVentureSliceModEquals(t, livingVens, out)
 }
 
 // ****************************************************************************
@@ -103,8 +107,8 @@ func TestGET_Venture_1(t *testing.T) {
 		And the 'Content-Type' header contains 'application/json'
 		And 'Access-Control-Allow-Origin' is '*'
 		And 'Access-Control-Allow-Headers' is '*'
-		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, and OPTIONS
-		And the body is a JSON object representing a valid Venture
+		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, and OPTIONS
+		And the body is a JSON object representing the Venture requested
 		...`)
 
 	_beginVenTest()
@@ -120,7 +124,9 @@ func TestGET_Venture_1(t *testing.T) {
 
 	require.Equal(t, 200, res.StatusCode)
 	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
-	v.AssertVentureFromReader(t, res.Body)
+
+	out := v.AssertVentureFromReader(t, res.Body)
+	v.AssertVentureModEquals(t, livingVens[out.ID], out)
 }
 
 func TestGET_Venture_2(t *testing.T) {
@@ -130,7 +136,7 @@ func TestGET_Venture_2(t *testing.T) {
 		And the 'Content-Type' header contains 'application/json'
 		And 'Access-Control-Allow-Origin' is '*'
 		And 'Access-Control-Allow-Headers' is '*'
-		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, and OPTIONS
+		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, and OPTIONS
 		And the body is a JSON object representing an error response
 		...`)
 
@@ -162,8 +168,9 @@ func TestGET_Venture_3(t *testing.T) {
 		And the 'Content-Type' header contains 'application/json'
 		And 'Access-Control-Allow-Origin' is '*'
 		And 'Access-Control-Allow-Headers' is '*'
-		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, and OPTIONS
-		And the body is a JSON object representing a valid Venture wrapped with meta information
+		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, and OPTIONS
+		And the wrapped meta information contains a message and self link
+		And the wrapped data is a JSON object representing the requested Venture
 		...`)
 
 	_beginVenTest()
@@ -179,7 +186,9 @@ func TestGET_Venture_3(t *testing.T) {
 
 	require.Equal(t, 200, res.StatusCode)
 	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
-	v.AssertWrappedVentureFromReader(t, res.Body)
+
+	_, out := v.AssertWrappedVentureFromReader(t, res.Body)
+	v.AssertVentureModEquals(t, livingVens[out.ID], out)
 }
 
 // ****************************************************************************
