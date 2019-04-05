@@ -26,11 +26,15 @@ func attemptRecover(exitCode *int) {
 	}
 }
 
-// startServer starts the application server
-func startServer() {
+// StartServer starts the application server
+func StartServer(binPath string) {
+	if binPath == "" {
+		binPath = "../bin"
+	}
+
 	cmd = &exec.Cmd{
 		Path:   "./go-qlueless-assembly-api",
-		Dir:    "../bin",
+		Dir:    binPath,
 		Stdout: os.Stdout,
 		Stderr: os.Stderr,
 	}
@@ -48,8 +52,8 @@ func startServer() {
 	time.Sleep(50 * time.Millisecond)
 }
 
-// stopServer stops the application server
-func stopServer() {
+// StopServer stops the application server
+func StopServer() {
 	adminPrint("Killing server: " + cmd.Path)
 	err := cmd.Process.Kill()
 	if err != nil {

@@ -29,19 +29,19 @@ func TestGET_OpenAPI(t *testing.T) {
 		And the body is a valid JSON object
 		...`)
 
-	startServer()
-	defer stopServer()
+	StartServer("")
+	defer StopServer()
 
 	req := APICall{
 		URL:    "http://localhost:8080/openapi",
 		Method: "GET",
 	}
-	res := req.fire()
+	res := req.Fire()
 	defer res.Body.Close()
 	defer a.PrintResponse(t, res.Body)
 
 	require.Equal(t, 200, res.StatusCode)
-	assertDefaultHeaders(t, res, openapiMediaType, openapiHttpMethods)
+	AssertDefaultHeaders(t, res, openapiMediaType, openapiHttpMethods)
 
 	var spec map[string]interface{}
 	err := json.NewDecoder(res.Body).Decode(&spec)
@@ -63,20 +63,20 @@ func TestOPTIONS_OpenAPI(t *testing.T) {
 		And there is NO response body
 		...`)
 
-	startServer()
-	defer stopServer()
+	StartServer("")
+	defer StopServer()
 
 	req := APICall{
 		URL:    "http://localhost:8080/openapi",
 		Method: "OPTIONS",
 	}
-	res := req.fire()
+	res := req.Fire()
 	defer res.Body.Close()
 	defer a.PrintResponse(t, res.Body)
 
 	require.Equal(t, 200, res.StatusCode)
-	assertNoContentHeaders(t, res, openapiHttpMethods)
-	assertEmptyBody(t, res.Body)
+	AssertNoContentHeaders(t, res, openapiHttpMethods)
+	AssertEmptyBody(t, res.Body)
 }
 
 // ****************************************************************************
@@ -94,8 +94,8 @@ func TestINVALID_OpenAPI(t *testing.T) {
 		And there is NO response body
 		...`)
 
-	startServer()
-	defer stopServer()
+	StartServer("")
+	defer StopServer()
 
-	verifyNotAllowedMethods(t, "http://localhost:8080/openapi", openapiHttpMethods)
+	VerifyNotAllowedMethods(t, "http://localhost:8080/openapi", openapiHttpMethods)
 }

@@ -1,4 +1,4 @@
-package test
+package ventures
 
 import (
 	"database/sql"
@@ -6,14 +6,31 @@ import (
 	d "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/database"
 	u "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/utils"
 	v "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/ventures"
+	test "github.com/PaulioRandall/go-qlueless-assembly-api/test"
 )
 
 var ventureHttpMethods = []string{"GET", "POST", "PUT", "OPTIONS"}
-var dbPath string = "../bin/qlueless.db"
+var dbPath string = "../../bin/qlueless.db"
 var venDB *sql.DB = nil
 
 var livingVens map[string]v.Venture = nil
 var deadVens map[string]v.Venture = nil
+
+// beginVenTest is run at the start of every test to setup the server and
+// inject the test data.
+func beginVenTest() {
+	venDBReset()
+	venDBInjectLivingVentures()
+	venDBInjectDeadVentures()
+	test.StartServer("../../bin")
+}
+
+// endVenTest should be deferred straight after _beginVenTest() is run to
+// close resources at the end of every test.
+func endVenTest() {
+	test.StopServer()
+	venDBClose()
+}
 
 // venDBReset will reset the database by closing and deleting it then
 // creating a new one.

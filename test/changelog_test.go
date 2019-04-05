@@ -28,20 +28,20 @@ func TestGET_Changelog(t *testing.T) {
 		And the body contains some data
 		...`)
 
-	startServer()
-	defer stopServer()
+	StartServer("")
+	defer StopServer()
 
 	req := APICall{
 		URL:    "http://localhost:8080/changelog",
 		Method: "GET",
 	}
-	res := req.fire()
+	res := req.Fire()
 	defer res.Body.Close()
 	defer a.PrintResponse(t, res.Body)
 
 	require.Equal(t, 200, res.StatusCode)
-	assertDefaultHeaders(t, res, changelogMediaType, changelogHttpMethods)
-	assertNotEmptyBody(t, res.Body)
+	AssertDefaultHeaders(t, res, changelogMediaType, changelogHttpMethods)
+	AssertNotEmptyBody(t, res.Body)
 }
 
 // ****************************************************************************
@@ -59,20 +59,20 @@ func TestOPTIONS_Changelog(t *testing.T) {
 		And there is NO response body
 		...`)
 
-	startServer()
-	defer stopServer()
+	StartServer("")
+	defer StopServer()
 
 	req := APICall{
 		URL:    "http://localhost:8080/changelog",
 		Method: "OPTIONS",
 	}
-	res := req.fire()
+	res := req.Fire()
 	defer res.Body.Close()
 	defer a.PrintResponse(t, res.Body)
 
 	require.Equal(t, 200, res.StatusCode)
-	assertNoContentHeaders(t, res, changelogHttpMethods)
-	assertEmptyBody(t, res.Body)
+	AssertNoContentHeaders(t, res, changelogHttpMethods)
+	AssertEmptyBody(t, res.Body)
 }
 
 // ****************************************************************************
@@ -90,8 +90,8 @@ func TestINVALID_Changelog(t *testing.T) {
 		And there is NO response body
 		...`)
 
-	startServer()
-	defer stopServer()
+	StartServer("")
+	defer StopServer()
 
-	verifyNotAllowedMethods(t, "http://localhost:8080/changelog", changelogHttpMethods)
+	VerifyNotAllowedMethods(t, "http://localhost:8080/changelog", changelogHttpMethods)
 }

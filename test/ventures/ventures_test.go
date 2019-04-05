@@ -1,4 +1,4 @@
-package test
+package ventures
 
 import (
 	"bytes"
@@ -7,189 +7,10 @@ import (
 
 	a "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/asserts"
 	v "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/ventures"
+	test "github.com/PaulioRandall/go-qlueless-assembly-api/test"
 	assert "github.com/stretchr/testify/assert"
 	require "github.com/stretchr/testify/require"
 )
-
-// _beginVenTest is run at the start of every test to setup the server and
-// inject the test data.
-func _beginVenTest() {
-	venDBReset()
-	venDBInjectLivingVentures()
-	venDBInjectDeadVentures()
-	startServer()
-}
-
-// _endVenTest should be deferred straight after _beginVenTest() is run to
-// close resources at the end of every test.
-func _endVenTest() {
-	stopServer()
-	venDBClose()
-}
-
-// ****************************************************************************
-// (GET) /ventures
-// ****************************************************************************
-
-func TestGET_Ventures_1(t *testing.T) {
-	t.Log(`Given some Ventures already exist on the server
-		When all Ventures are requested
-		Then ensure the response code is 200
-		And the 'Content-Type' header contains 'application/json'
-		And 'Access-Control-Allow-Origin' is '*'
-		And 'Access-Control-Allow-Headers' is '*'
-		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, and OPTIONS
-		And the body is a JSON array containing all living Ventures
-		...`)
-
-	_beginVenTest()
-	defer _endVenTest()
-
-	req := APICall{
-		URL:    "http://localhost:8080/ventures",
-		Method: "GET",
-	}
-	res := req.fire()
-	defer res.Body.Close()
-	defer a.PrintResponse(t, res.Body)
-
-	require.Equal(t, 200, res.StatusCode)
-	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
-
-	out := v.AssertVentureSliceFromReader(t, res.Body)
-	v.AssertVentureSliceModEquals(t, livingVens, out)
-}
-
-// ****************************************************************************
-// (GET) /ventures?wrap
-// ****************************************************************************
-
-func TestGET_Ventures_2(t *testing.T) {
-	t.Log(`Given some Ventures already exist on the server
-		When all Ventures are requested
-		And the 'wrap' query parameter has been specified
-		Then ensure the response code is 200
-		And the 'Content-Type' header contains 'application/json'
-		And 'Access-Control-Allow-Origin' is '*'
-		And 'Access-Control-Allow-Headers' is '*'
-		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, and OPTIONS
-		And the body is a JSON object wrapping the with meta information
-		And the wrapped meta information contains a message and self link
-		And the wrapped data is a JSON array containing all living Ventures
-		...`)
-
-	_beginVenTest()
-	defer _endVenTest()
-
-	req := APICall{
-		URL:    "http://localhost:8080/ventures?wrap",
-		Method: "GET",
-	}
-	res := req.fire()
-	defer res.Body.Close()
-	defer a.PrintResponse(t, res.Body)
-
-	require.Equal(t, 200, res.StatusCode)
-	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
-
-	_, out := v.AssertWrappedVentureSliceFromReader(t, res.Body)
-	v.AssertVentureSliceModEquals(t, livingVens, out)
-}
-
-// ****************************************************************************
-// (GET) /ventures?id={id}
-// ****************************************************************************
-
-func TestGET_Venture_1(t *testing.T) {
-	t.Log(`Given some Ventures already exist on the server
-		When a specific existing Venture is requested
-		Then ensure the response code is 200
-		And the 'Content-Type' header contains 'application/json'
-		And 'Access-Control-Allow-Origin' is '*'
-		And 'Access-Control-Allow-Headers' is '*'
-		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, and OPTIONS
-		And the body is a JSON object representing the Venture requested
-		...`)
-
-	_beginVenTest()
-	defer _endVenTest()
-
-	req := APICall{
-		URL:    "http://localhost:8080/ventures?id=1",
-		Method: "GET",
-	}
-	res := req.fire()
-	defer res.Body.Close()
-	defer a.PrintResponse(t, res.Body)
-
-	require.Equal(t, 200, res.StatusCode)
-	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
-
-	out := v.AssertVentureFromReader(t, res.Body)
-	v.AssertVentureModEquals(t, livingVens[out.ID], out)
-}
-
-func TestGET_Venture_2(t *testing.T) {
-	t.Log(`Given some Ventures already exist on the server
-		When a specific non-existent Venture is requested
-		Then ensure the response code is 404
-		And the 'Content-Type' header contains 'application/json'
-		And 'Access-Control-Allow-Origin' is '*'
-		And 'Access-Control-Allow-Headers' is '*'
-		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, and OPTIONS
-		And the body is a JSON object representing an error response
-		...`)
-
-	_beginVenTest()
-	defer _endVenTest()
-
-	req := APICall{
-		URL:    "http://localhost:8080/ventures?id=999999",
-		Method: "GET",
-	}
-	res := req.fire()
-	defer res.Body.Close()
-	defer a.PrintResponse(t, res.Body)
-
-	require.Equal(t, 400, res.StatusCode)
-	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
-	assertWrappedErrorBody(t, res.Body)
-}
-
-// ****************************************************************************
-// (GET) /ventures?wrap&id={id}
-// ****************************************************************************
-
-func TestGET_Venture_3(t *testing.T) {
-	t.Log(`Given some Ventures already exist on the server
-		When a specific existing Venture is requested
-		And the 'wrap' query parameter has been specified
-		Then ensure the response code is 200
-		And the 'Content-Type' header contains 'application/json'
-		And 'Access-Control-Allow-Origin' is '*'
-		And 'Access-Control-Allow-Headers' is '*'
-		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, and OPTIONS
-		And the wrapped meta information contains a message and self link
-		And the wrapped data is a JSON object representing the requested Venture
-		...`)
-
-	_beginVenTest()
-	defer _endVenTest()
-
-	req := APICall{
-		URL:    "http://localhost:8080/ventures?wrap&id=1",
-		Method: "GET",
-	}
-	res := req.fire()
-	defer res.Body.Close()
-	defer a.PrintResponse(t, res.Body)
-
-	require.Equal(t, 200, res.StatusCode)
-	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
-
-	_, out := v.AssertWrappedVentureFromReader(t, res.Body)
-	v.AssertVentureModEquals(t, livingVens[out.ID], out)
-}
 
 // ****************************************************************************
 // (POST) /ventures
@@ -206,8 +27,8 @@ func TestPOST_Venture_1(t *testing.T) {
 		And the body is a JSON object representing the living input Venture with a new assigned ID
 		...`)
 
-	_beginVenTest()
-	defer _endVenTest()
+	beginVenTest()
+	defer endVenTest()
 
 	input := v.Venture{
 		Description: "A new Venture",
@@ -217,17 +38,17 @@ func TestPOST_Venture_1(t *testing.T) {
 	buf := new(bytes.Buffer)
 	json.NewEncoder(buf).Encode(&input)
 
-	req := APICall{
+	req := test.APICall{
 		URL:    "http://localhost:8080/ventures",
 		Method: "POST",
 		Body:   buf,
 	}
-	res := req.fire()
+	res := req.Fire()
 	defer res.Body.Close()
 	defer a.PrintResponse(t, res.Body)
 
 	require.Equal(t, 201, res.StatusCode)
-	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
+	test.AssertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
 
 	output := v.AssertVentureFromReader(t, res.Body)
 
@@ -248,8 +69,8 @@ func TestPOST_Venture_2(t *testing.T) {
 		And the body is a JSON object representing an error response
 		...`)
 
-	_beginVenTest()
-	defer _endVenTest()
+	beginVenTest()
+	defer endVenTest()
 
 	input := v.Venture{
 		Description: "",
@@ -259,18 +80,18 @@ func TestPOST_Venture_2(t *testing.T) {
 	buf := new(bytes.Buffer)
 	json.NewEncoder(buf).Encode(&input)
 
-	req := APICall{
+	req := test.APICall{
 		URL:    "http://localhost:8080/ventures",
 		Method: "POST",
 		Body:   buf,
 	}
-	res := req.fire()
+	res := req.Fire()
 	defer res.Body.Close()
 	defer a.PrintResponse(t, res.Body)
 
 	require.Equal(t, 400, res.StatusCode)
-	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
-	assertWrappedErrorBody(t, res.Body)
+	test.AssertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
+	test.AssertWrappedErrorBody(t, res.Body)
 }
 
 // ****************************************************************************
@@ -290,8 +111,8 @@ func TestPOST_Venture_3(t *testing.T) {
 		And that the wrapped data is the living input Venture with a new assigned ID
 		...`)
 
-	_beginVenTest()
-	defer _endVenTest()
+	beginVenTest()
+	defer endVenTest()
 
 	input := v.Venture{
 		Description: "A new Venture",
@@ -301,17 +122,17 @@ func TestPOST_Venture_3(t *testing.T) {
 	buf := new(bytes.Buffer)
 	json.NewEncoder(buf).Encode(&input)
 
-	req := APICall{
+	req := test.APICall{
 		URL:    "http://localhost:8080/ventures?wrap",
 		Method: "POST",
 		Body:   buf,
 	}
-	res := req.fire()
+	res := req.Fire()
 	defer res.Body.Close()
 	defer a.PrintResponse(t, res.Body)
 
 	require.Equal(t, 201, res.StatusCode)
-	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
+	test.AssertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
 
 	_, output := v.AssertWrappedVentureFromReader(t, res.Body)
 
@@ -336,8 +157,8 @@ func TestPUT_Ventures_1(t *testing.T) {
 		And the body is a JSON object representing the updated input Venture
 		...`)
 
-	_beginVenTest()
-	defer _endVenTest()
+	beginVenTest()
+	defer endVenTest()
 
 	input := v.ModVenture{
 		IDs:   "1",
@@ -353,17 +174,17 @@ func TestPUT_Ventures_1(t *testing.T) {
 	buf := new(bytes.Buffer)
 	json.NewEncoder(buf).Encode(&input)
 
-	req := APICall{
+	req := test.APICall{
 		URL:    "http://localhost:8080/ventures",
 		Method: "PUT",
 		Body:   buf,
 	}
-	res := req.fire()
+	res := req.Fire()
 	defer res.Body.Close()
 	defer a.PrintResponse(t, res.Body)
 
 	require.Equal(t, 200, res.StatusCode)
-	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
+	test.AssertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
 
 	output := v.AssertVentureSliceFromReader(t, res.Body)
 	require.Len(t, output, 1)
@@ -385,8 +206,8 @@ func TestPUT_Ventures_2(t *testing.T) {
 		And the body is a JSON object representing an empty Venture array
 		...`)
 
-	_beginVenTest()
-	defer _endVenTest()
+	beginVenTest()
+	defer endVenTest()
 
 	input := v.ModVenture{
 		IDs:   "999999",
@@ -402,17 +223,17 @@ func TestPUT_Ventures_2(t *testing.T) {
 	buf := new(bytes.Buffer)
 	json.NewEncoder(buf).Encode(&input)
 
-	req := APICall{
+	req := test.APICall{
 		URL:    "http://localhost:8080/ventures",
 		Method: "PUT",
 		Body:   buf,
 	}
-	res := req.fire()
+	res := req.Fire()
 	defer res.Body.Close()
 	defer a.PrintResponse(t, res.Body)
 
 	require.Equal(t, 200, res.StatusCode)
-	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
+	test.AssertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
 
 	output := v.AssertVentureSliceFromReader(t, res.Body)
 	require.Empty(t, output)
@@ -429,8 +250,8 @@ func TestPUT_Ventures_3(t *testing.T) {
 		And the body is a JSON object representing an error response
 		...`)
 
-	_beginVenTest()
-	defer _endVenTest()
+	beginVenTest()
+	defer endVenTest()
 
 	input := v.ModVenture{
 		Props: "description, state, order_ids, extra",
@@ -445,18 +266,18 @@ func TestPUT_Ventures_3(t *testing.T) {
 	buf := new(bytes.Buffer)
 	json.NewEncoder(buf).Encode(&input)
 
-	req := APICall{
+	req := test.APICall{
 		URL:    "http://localhost:8080/ventures",
 		Method: "PUT",
 		Body:   buf,
 	}
-	res := req.fire()
+	res := req.Fire()
 	defer res.Body.Close()
 	defer a.PrintResponse(t, res.Body)
 
 	require.Equal(t, 400, res.StatusCode)
-	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
-	assertWrappedErrorBody(t, res.Body)
+	test.AssertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
+	test.AssertWrappedErrorBody(t, res.Body)
 }
 
 func TestPUT_Ventures_4(t *testing.T) {
@@ -470,8 +291,8 @@ func TestPUT_Ventures_4(t *testing.T) {
 		And the body is a JSON object representing an error response
 		...`)
 
-	_beginVenTest()
-	defer _endVenTest()
+	beginVenTest()
+	defer endVenTest()
 
 	input := v.ModVenture{
 		IDs:    "1",
@@ -482,18 +303,18 @@ func TestPUT_Ventures_4(t *testing.T) {
 	buf := new(bytes.Buffer)
 	json.NewEncoder(buf).Encode(&input)
 
-	req := APICall{
+	req := test.APICall{
 		URL:    "http://localhost:8080/ventures",
 		Method: "PUT",
 		Body:   buf,
 	}
-	res := req.fire()
+	res := req.Fire()
 	defer res.Body.Close()
 	defer a.PrintResponse(t, res.Body)
 
 	require.Equal(t, 400, res.StatusCode)
-	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
-	assertWrappedErrorBody(t, res.Body)
+	test.AssertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
+	test.AssertWrappedErrorBody(t, res.Body)
 }
 
 func TestPUT_Ventures_5(t *testing.T) {
@@ -507,8 +328,8 @@ func TestPUT_Ventures_5(t *testing.T) {
 		And the body is a JSON object representing the updated input Venture
 		...`)
 
-	_beginVenTest()
-	defer _endVenTest()
+	beginVenTest()
+	defer endVenTest()
 
 	input := v.ModVenture{
 		IDs:   "4,5",
@@ -521,17 +342,17 @@ func TestPUT_Ventures_5(t *testing.T) {
 	buf := new(bytes.Buffer)
 	json.NewEncoder(buf).Encode(&input)
 
-	req := APICall{
+	req := test.APICall{
 		URL:    "http://localhost:8080/ventures",
 		Method: "PUT",
 		Body:   buf,
 	}
-	res := req.fire()
+	res := req.Fire()
 	defer res.Body.Close()
 	defer a.PrintResponse(t, res.Body)
 
 	require.Equal(t, 200, res.StatusCode)
-	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
+	test.AssertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
 
 	output := v.AssertVentureSliceFromReader(t, res.Body)
 	require.Len(t, output, 2)
@@ -560,8 +381,8 @@ func TestPUT_Ventures_6(t *testing.T) {
 		And the wrapped data is the updated input Venture
 		...`)
 
-	_beginVenTest()
-	defer _endVenTest()
+	beginVenTest()
+	defer endVenTest()
 
 	input := v.ModVenture{
 		IDs:   "1",
@@ -577,17 +398,17 @@ func TestPUT_Ventures_6(t *testing.T) {
 	buf := new(bytes.Buffer)
 	json.NewEncoder(buf).Encode(&input)
 
-	req := APICall{
+	req := test.APICall{
 		URL:    "http://localhost:8080/ventures?wrap",
 		Method: "PUT",
 		Body:   buf,
 	}
-	res := req.fire()
+	res := req.Fire()
 	defer res.Body.Close()
 	defer a.PrintResponse(t, res.Body)
 
 	require.Equal(t, 200, res.StatusCode)
-	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
+	test.AssertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
 
 	_, output := v.AssertWrappedVentureSliceFromReader(t, res.Body)
 	require.Len(t, output, 1)
@@ -613,20 +434,20 @@ func TestOPTIONS_Ventures(t *testing.T) {
 		And there is NO response body
 		...`)
 
-	_beginVenTest()
-	defer _endVenTest()
+	beginVenTest()
+	defer endVenTest()
 
-	req := APICall{
+	req := test.APICall{
 		URL:    "http://localhost:8080/ventures",
 		Method: "OPTIONS",
 	}
-	res := req.fire()
+	res := req.Fire()
 	defer res.Body.Close()
 	defer a.PrintResponse(t, res.Body)
 
 	require.Equal(t, 200, res.StatusCode)
-	assertNoContentHeaders(t, res, ventureHttpMethods)
-	assertEmptyBody(t, res.Body)
+	test.AssertNoContentHeaders(t, res, ventureHttpMethods)
+	test.AssertEmptyBody(t, res.Body)
 }
 
 // ****************************************************************************
@@ -644,8 +465,8 @@ func TestINVALID_Ventures(t *testing.T) {
 		And there is NO response body
 		...`)
 
-	_beginVenTest()
-	defer _endVenTest()
+	beginVenTest()
+	defer endVenTest()
 
-	verifyNotAllowedMethods(t, "http://localhost:8080/ventures", ventureHttpMethods)
+	test.VerifyNotAllowedMethods(t, "http://localhost:8080/ventures", ventureHttpMethods)
 }

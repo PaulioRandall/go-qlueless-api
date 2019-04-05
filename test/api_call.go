@@ -36,7 +36,7 @@ func (c *APICall) _invokeRequest(req *http.Request) *http.Response {
 }
 
 // fire allows a built APICall to be actioned
-func (c *APICall) fire() *http.Response {
+func (c *APICall) Fire() *http.Response {
 	req := c._newRequest()
 	res := c._invokeRequest(req)
 	return res
