@@ -38,9 +38,9 @@
   "type": "string",
   "description": "State of the Thing."
 },
-"is_alive": {
+"dead": {
   "type": "boolean",
-  "description": "True if the Thing is alive and should be included within search results."
+  "description": "True if the Thing is dead and should be omitted from search results."
 },
 "last_modified": {
   "type": "date-time",

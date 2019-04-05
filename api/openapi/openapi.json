@@ -186,26 +186,6 @@
 		      }
 		    }
 		  },
-		  "delete": {
-		    "tags": ["venture"],
-		    "description": "Deletes Ventures.",
-		    "parameters": [
-		      {
-		        "$ref": "#/components/parameters/wrap"
-		      },
-		      {
-		        "$ref": "#/components/parameters/venture_id_csv"
-		      }
-		    ],
-		    "responses": {
-		      "200": {
-		        "$ref": "#/components/responses/ventures_200"
-		      },
-		      "default": {
-		        "$ref": "#/components/responses/error"
-		      }
-		    }
-		  },
 		  "options": {
 		    "tags": ["venture"],
 		    "description": "Returns the endpoint options.",
@@ -464,8 +444,8 @@
 			        "order_ids": {
 			          "$ref": "#/components/x-hidden/order_id_csv"
 			        },
-			        "is_alive": {
-			          "$ref": "#/components/x-hidden/is_alive"
+			        "dead": {
+			          "$ref": "#/components/x-hidden/dead"
 			        },
 			        "extra": {
 			          "$ref": "#/components/x-hidden/extra"
@@ -480,7 +460,6 @@
 			    "venture_id",
 			    "description",
 			    "state",
-			    "is_alive",
 			    "last_modified"
 			  ],
 			  "properties": {
@@ -495,9 +474,6 @@
 			    },
 			    "order_ids": {
 			      "$ref": "#/components/x-hidden/order_id_csv"
-			    },
-			    "is_alive": {
-			      "$ref": "#/components/x-hidden/is_alive"
 			    },
 			    "last_modified": {
 			      "$ref": "#/components/x-hidden/last_modified"
@@ -616,9 +592,9 @@
 			  "type": "string",
 			  "description": "State of the Thing."
 			},
-			"is_alive": {
+			"dead": {
 			  "type": "boolean",
-			  "description": "True if the Thing is alive and should be included within search results."
+			  "description": "True if the Thing is dead and should be omitted from search results."
 			},
 			"last_modified": {
 			  "type": "date-time",

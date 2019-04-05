@@ -59,26 +59,6 @@
       }
     }
   },
-  "delete": {
-    "tags": ["venture"],
-    "description": "Deletes Ventures.",
-    "parameters": [
-      {
-        "$ref": "#/components/parameters/wrap"
-      },
-      {
-        "$ref": "#/components/parameters/venture_id_csv"
-      }
-    ],
-    "responses": {
-      "200": {
-        "$ref": "#/components/responses/ventures_200"
-      },
-      "default": {
-        "$ref": "#/components/responses/error"
-      }
-    }
-  },
   "options": {
     "tags": ["venture"],
     "description": "Returns the endpoint options.",

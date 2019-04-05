@@ -47,8 +47,8 @@
         "order_ids": {
           "$ref": "#/components/x-hidden/order_id_csv"
         },
-        "is_alive": {
-          "$ref": "#/components/x-hidden/is_alive"
+        "dead": {
+          "$ref": "#/components/x-hidden/dead"
         },
         "extra": {
           "$ref": "#/components/x-hidden/extra"
@@ -63,7 +63,6 @@
     "venture_id",
     "description",
     "state",
-    "is_alive",
     "last_modified"
   ],
   "properties": {
@@ -78,9 +77,6 @@
     },
     "order_ids": {
       "$ref": "#/components/x-hidden/order_id_csv"
-    },
-    "is_alive": {
-      "$ref": "#/components/x-hidden/is_alive"
     },
     "last_modified": {
       "$ref": "#/components/x-hidden/last_modified"
