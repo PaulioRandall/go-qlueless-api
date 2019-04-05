@@ -29,7 +29,7 @@ func TestDecodeVenture_1(t *testing.T) {
 		Description:  "description",
 		OrderIDs:     "2,3,4,999",
 		State:        "state",
-		IsAlive:      true,
+		IsDead:       false,
 		Extra:        "extra",
 	}
 
@@ -65,7 +65,7 @@ func TestDecodeVentureSlice_1(t *testing.T) {
 			"venture_id": "1",
 			"order_ids": "2,3,4",
 			"state": "1",
-			"is_alive": true,
+			"is_dead": false,
 			"extra": "1"
 		},
 		{
@@ -73,7 +73,7 @@ func TestDecodeVentureSlice_1(t *testing.T) {
 			"venture_id": "2",
 			"order_ids": "5,6,7",
 			"state": "2",
-			"is_alive": false,
+			"is_dead": true,
 			"extra": "2"
 		}
 	]`)
@@ -84,7 +84,7 @@ func TestDecodeVentureSlice_1(t *testing.T) {
 			ID:          "1",
 			OrderIDs:    "2,3,4",
 			State:       "1",
-			IsAlive:     true,
+			IsDead:      false,
 			Extra:       "1",
 		},
 		Venture{
@@ -92,7 +92,7 @@ func TestDecodeVentureSlice_1(t *testing.T) {
 			ID:          "2",
 			OrderIDs:    "5,6,7",
 			State:       "2",
-			IsAlive:     false,
+			IsDead:      true,
 			Extra:       "2",
 		},
 	}
@@ -126,7 +126,7 @@ func TestVenture_Clean_1(t *testing.T) {
 		ID:          "\n\t\v 1 \r\f ",
 		OrderIDs:    "\n\t\v 2 \r\f , 3,4,\v 999 \f\t",
 		State:       "\n\t\v state \r\f ",
-		IsAlive:     true,
+		IsDead:      false,
 		Extra:       "\n\t\v extra \r\f",
 	}
 
@@ -136,7 +136,7 @@ func TestVenture_Clean_1(t *testing.T) {
 	assert.Equal(t, "1", a.ID)
 	assert.Equal(t, "2,3,4,999", a.OrderIDs)
 	assert.Equal(t, "state", a.State)
-	assert.True(t, a.IsAlive)
+	assert.False(t, a.IsDead)
 	assert.Equal(t, "\n\t\v extra \r\f", a.Extra)
 }
 
@@ -176,7 +176,7 @@ func TestVenture_Validate_1(t *testing.T) {
 		Description:  "description",
 		OrderIDs:     "2,3,4,999",
 		State:        "state",
-		IsAlive:      true,
+		IsDead:       false,
 		Extra:        "\n\t\v extra \r\f",
 	}
 

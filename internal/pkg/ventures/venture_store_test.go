@@ -50,13 +50,13 @@ func TestVentureStore_GetAllAlive_1(t *testing.T) {
 		ID:          "1",
 		Description: "1",
 		State:       "1",
-		IsAlive:     true,
+		IsDead:      false,
 	}
 	b := Venture{
 		ID:          "2",
 		Description: "2",
 		State:       "2",
-		IsAlive:     false,
+		IsDead:      true,
 	}
 
 	store.items["1"] = a
@@ -192,7 +192,7 @@ func TestVentureStore_Update_1(t *testing.T) {
 			Description: "new",
 			OrderIDs:    "new",
 			State:       "new",
-			IsAlive:     true,
+			IsDead:      false,
 			Extra:       "new",
 		},
 	}
@@ -246,7 +246,7 @@ func TestVentureStore_Update_3(t *testing.T) {
 			Description: "new",
 			OrderIDs:    "new",
 			State:       "new",
-			IsAlive:     true,
+			IsDead:      false,
 			Extra:       "new",
 		},
 	}

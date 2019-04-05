@@ -44,7 +44,7 @@ func InjectDummyVentures() {
 		IDs:   "3",
 		Props: "is_alive",
 		Values: v.Venture{
-			IsAlive: false,
+			IsDead: true,
 		},
 	})
 }

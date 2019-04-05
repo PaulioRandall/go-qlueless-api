@@ -50,7 +50,7 @@ func _create_venture_Table(db *sql.DB) error {
 		description TEXT NOT NULL,
 		order_ids TEXT NOT NULL,
 		state TEXT NOT NULL,
-		is_alive BOOL NOT NULL DEFAULT TRUE,
+		is_dead BOOL NOT NULL DEFAULT FALSE,
 		extra TEXT NOT NULL DEFAULT "",
 		PRIMARY KEY(id, last_modified)
 	);`)
@@ -65,7 +65,7 @@ func _create_ql_venture_Table(db *sql.DB) error {
 		description TEXT NOT NULL,
 		order_ids TEXT NOT NULL,
 		state TEXT NOT NULL,
-		is_alive BOOL NOT NULL,
+		is_dead BOOL NOT NULL,
 		extra TEXT NOT NULL
 	);`)
 }
@@ -77,12 +77,12 @@ func _create_insert_on_living_venture_Trigger(db *sql.DB) error {
 	return _execStmt(db, `CREATE TRIGGER insert_on_living_venture
 		AFTER INSERT ON venture
 		FOR EACH ROW
-		WHEN (NEW.is_alive = true)
+		WHEN (NEW.is_dead = false)
 		BEGIN
 			REPLACE INTO ql_venture (
-				id, last_modified, description, order_ids, state, is_alive, extra
+				id, last_modified, description, order_ids, state, is_dead, extra
 			) VALUES (
-				NEW.id, NEW.last_modified, NEW.description, NEW.order_ids, NEW.state, NEW.is_alive, NEW.extra
+				NEW.id, NEW.last_modified, NEW.description, NEW.order_ids, NEW.state, NEW.is_dead, NEW.extra
 			);
 		END;`)
 }
@@ -94,7 +94,7 @@ func _create_insert_on_dead_venture_Trigger(db *sql.DB) error {
 	return _execStmt(db, `CREATE TRIGGER insert_on_dead_venture
 		AFTER INSERT ON venture
 		FOR EACH ROW
-		WHEN (NEW.is_alive = false)
+		WHEN (NEW.is_dead = true)
 		BEGIN
 			DELETE FROM ql_venture 
 			WHERE id = NEW.id;
@@ -148,7 +148,6 @@ func QueryFor(db *sql.DB, id string) (*Venture, error) {
 		description,
 		order_ids,
 		state,
-		is_alive,
 		extra
 	FROM ql_venture
 	WHERE id = ?`, id).Scan(&ven.ID,
@@ -156,7 +155,6 @@ func QueryFor(db *sql.DB, id string) (*Venture, error) {
 		&ven.Description,
 		&ven.OrderIDs,
 		&ven.State,
-		&ven.IsAlive,
 		&ven.Extra)
 
 	if err != nil {
@@ -176,7 +174,6 @@ func QueryAll(db *sql.DB) ([]Venture, error) {
 		description,
 		order_ids,
 		state,
-		is_alive,
 		extra
 	FROM ql_venture`)
 
@@ -216,7 +213,6 @@ func _mapRow(rows *sql.Rows) (*Venture, error) {
 		&ven.Description,
 		&ven.OrderIDs,
 		&ven.State,
-		&ven.IsAlive,
 		&ven.Extra)
 
 	if err != nil {

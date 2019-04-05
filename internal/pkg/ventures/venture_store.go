@@ -42,7 +42,7 @@ func (vs *VentureStore) GetAllAlive() []Venture {
 
 	r := []Venture{}
 	for _, v := range vs.items {
-		if v.IsAlive {
+		if !v.IsDead {
 			r = append(r, v)
 		}
 	}
@@ -70,7 +70,7 @@ func (vs *VentureStore) Add(new NewVenture) Venture {
 		Description:  new.Description,
 		OrderIDs:     new.OrderIDs,
 		State:        new.State,
-		IsAlive:      true,
+		IsDead:       false,
 		Extra:        new.Extra,
 	}
 

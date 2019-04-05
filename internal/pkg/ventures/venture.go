@@ -16,7 +16,7 @@ type Venture struct {
 	Description  string `json:"description"`
 	OrderIDs     string `json:"order_ids,omitempty"`
 	State        string `json:"state"`
-	IsAlive      bool   `json:"is_alive"`
+	IsDead       bool   `json:"is_dead,omitempty"`
 	Extra        string `json:"extra,omitempty"`
 }
 
@@ -92,7 +92,7 @@ func (ven *Venture) SetOrderIDs(ids []string) {
 // @UNTESTED
 func (ven *Venture) Update(db *sql.DB) (int64, error) {
 	stmt, err := db.Prepare(`INSERT INTO venture (
-		id, description, order_ids, state, is_alive, extra
+		id, description, order_ids, state, is_dead, extra
 	) VALUES (
 		?, ?, ?, ?, ?, ?
 	);`)
@@ -114,7 +114,7 @@ func (ven *Venture) _execUpdate(stmt *sql.Stmt) (int64, error) {
 		ven.Description,
 		ven.OrderIDs,
 		ven.State,
-		ven.IsAlive,
+		ven.IsDead,
 		ven.Extra)
 
 	if err != nil {

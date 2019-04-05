@@ -39,7 +39,7 @@ func AssertVentureModEquals(t *testing.T, a Venture, b Venture) {
 	assert.Equal(t, a.Description, b.Description, "Venture.Description")
 	assert.Equal(t, a.OrderIDs, b.OrderIDs, "Venture.OrderIDs")
 	assert.Equal(t, a.State, b.State, "Venture.State")
-	assert.Equal(t, a.IsAlive, b.IsAlive, "Venture.IsAlive")
+	assert.Equal(t, a.IsDead, b.IsDead, "Venture.IsDead")
 	assert.Equal(t, a.Extra, b.Extra, "Venture.Extra")
 }
 

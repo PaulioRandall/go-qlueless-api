@@ -54,7 +54,7 @@ func (mv *ModVenture) Clean() {
 func (mv *ModVenture) _validateProps(errMsgs []string) []string {
 	for _, prop := range mv.SplitProps() {
 		switch prop {
-		case "is_alive", "extra":
+		case "is_dead", "extra":
 		case "description":
 			errMsgs = u.AppendIfEmpty(mv.Values.Description, errMsgs,
 				"Ventures must have a description.")
@@ -105,8 +105,8 @@ func (mv *ModVenture) ApplyMod(ven *Venture) {
 			ven.OrderIDs = mod.OrderIDs
 		case "state":
 			ven.State = mod.State
-		case "is_alive":
-			ven.IsAlive = mod.IsAlive
+		case "is_dead":
+			ven.IsDead = mod.IsDead
 		case "extra":
 			ven.Extra = mod.Extra
 		}

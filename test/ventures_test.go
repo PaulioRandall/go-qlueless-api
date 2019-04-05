@@ -192,7 +192,7 @@ func TestPOST_Venture_1(t *testing.T) {
 	output := v.AssertVentureFromReader(t, res.Body)
 
 	input.ID = output.ID
-	input.IsAlive = true
+	input.IsDead = false
 	v.AssertGenericVenture(t, output)
 	v.AssertVentureModEquals(t, input, output)
 }
@@ -270,7 +270,7 @@ func TestPOST_Venture_3(t *testing.T) {
 	_, output := v.AssertWrappedVentureFromReader(t, res.Body)
 
 	input.ID = output.ID
-	input.IsAlive = true
+	input.IsDead = false
 	v.AssertGenericVenture(t, output)
 	v.AssertVentureModEquals(t, input, output)
 }
@@ -320,7 +320,7 @@ func TestPUT_Ventures_1(t *testing.T) {
 	require.Len(t, output, 1)
 
 	input.Values.ID = "1"
-	input.Values.IsAlive = true
+	input.Values.IsDead = false
 	v.AssertGenericVenture(t, output[0])
 	v.AssertVentureModEquals(t, input.Values, output[0])
 }
@@ -451,9 +451,9 @@ func TestPUT_Ventures_5(t *testing.T) {
 
 	input := v.ModVenture{
 		IDs:   "4,5",
-		Props: "is_alive",
+		Props: "is_dead",
 		Values: v.Venture{
-			IsAlive: false,
+			IsDead: true,
 		},
 	}
 
@@ -476,10 +476,10 @@ func TestPUT_Ventures_5(t *testing.T) {
 	require.Len(t, output, 2)
 
 	assert.Equal(t, "4", output[0].ID)
-	assert.Equal(t, false, output[0].IsAlive)
+	assert.True(t, output[0].IsDead)
 
 	assert.Equal(t, "5", output[1].ID)
-	assert.Equal(t, false, output[1].IsAlive)
+	assert.True(t, output[1].IsDead)
 }
 
 // ****************************************************************************
@@ -529,7 +529,7 @@ func TestPUT_Ventures_6(t *testing.T) {
 	require.Len(t, output, 1)
 
 	input.Values.ID = "1"
-	input.Values.IsAlive = true
+	input.Values.IsDead = false
 	v.AssertGenericVenture(t, output[0])
 	v.AssertVentureModEquals(t, input.Values, output[0])
 }

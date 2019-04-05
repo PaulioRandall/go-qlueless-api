@@ -64,9 +64,9 @@ func (nv *NewVenture) Insert(db *sql.DB) (*Venture, error) {
 	}
 
 	stmt, err := db.Prepare(`INSERT INTO venture (
-		id, description, order_ids, state, is_alive, extra
+		id, description, order_ids, state, extra
 	) VALUES (
-		?, ?, ?, ?, ?, ?
+		?, ?, ?, ?, ?
 	);`)
 
 	if stmt != nil {
@@ -111,7 +111,6 @@ func (nv *NewVenture) _execInsert(id string, stmt *sql.Stmt) (*Venture, error) {
 		Description: nv.Description,
 		OrderIDs:    nv.OrderIDs,
 		State:       nv.State,
-		IsAlive:     true,
 		Extra:       nv.Extra,
 	}
 
@@ -119,7 +118,6 @@ func (nv *NewVenture) _execInsert(id string, stmt *sql.Stmt) (*Venture, error) {
 		ven.Description,
 		ven.OrderIDs,
 		ven.State,
-		ven.IsAlive,
 		ven.Extra)
 
 	if err != nil {

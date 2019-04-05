@@ -32,7 +32,7 @@ func TestDecodeModVenture_1(t *testing.T) {
 			ID:          "1",
 			OrderIDs:    "2,3,4,999",
 			State:       "state",
-			IsAlive:     true,
+			IsDead:      false,
 			Extra:       "extra",
 		},
 	}
@@ -130,7 +130,7 @@ func TestModVenture_Clean_1(t *testing.T) {
 			Description: "\n\t\v description \r\f ",
 			OrderIDs:    "\n\t\v 2 \r\f ,    3,4,\v 999 \f\t",
 			State:       "\n\t\v state \r\f ",
-			IsAlive:     true,
+			IsDead:      false,
 			Extra:       "\n\t\v extra \r\f",
 		},
 	}
@@ -142,7 +142,7 @@ func TestModVenture_Clean_1(t *testing.T) {
 	assert.Equal(t, "description", a.Values.Description)
 	assert.Equal(t, "2,3,4,999", a.Values.OrderIDs)
 	assert.Equal(t, "state", a.Values.State)
-	assert.True(t, a.Values.IsAlive)
+	assert.False(t, a.Values.IsDead)
 	assert.Equal(t, "\n\t\v extra \r\f", a.Values.Extra)
 }
 
@@ -180,7 +180,7 @@ func TestModVenture_Validate_1(t *testing.T) {
 			Description: "updated description",
 			OrderIDs:    "66,101,202",
 			State:       "updated state",
-			IsAlive:     false,
+			IsDead:      true,
 			Extra:       "updated extra",
 		},
 	}
@@ -265,7 +265,7 @@ func TestModVenture_Validate_8(t *testing.T) {
 		Values: Venture{
 			OrderIDs: "ILLEGAL,66,101,202",
 			State:    "updated state",
-			IsAlive:  false,
+			IsDead:   true,
 			Extra:    "updated extra",
 		},
 	}
