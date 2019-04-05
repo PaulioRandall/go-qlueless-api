@@ -46,13 +46,13 @@ func CreateTables(db *sql.DB) error {
 func _create_venture_Table(db *sql.DB) error {
 	return _execStmt(db, `CREATE TABLE venture (
 		id INTEGER NOT NULL,
-		vid INTEGER NOT NULL DEFAULT(STRFTIME('%Y-%m-%d %H:%M:%f', 'NOW')),
+		last_modified INTEGER NOT NULL DEFAULT(CAST(ROUND((julianday('now') - 2440587.5)*86400000) As INTEGER)),
 		description TEXT NOT NULL,
 		order_ids TEXT NOT NULL,
 		state TEXT NOT NULL,
 		is_alive BOOL NOT NULL DEFAULT TRUE,
 		extra TEXT NOT NULL DEFAULT "",
-		PRIMARY KEY(id, vid)
+		PRIMARY KEY(id, last_modified)
 	);`)
 }
 
@@ -61,7 +61,7 @@ func _create_venture_Table(db *sql.DB) error {
 func _create_ql_venture_Table(db *sql.DB) error {
 	return _execStmt(db, `CREATE TABLE ql_venture (
 		id INTEGER NOT NULL PRIMARY KEY,
-		vid INTEGER NOT NULL,
+		last_modified INTEGER NOT NULL,
 		description TEXT NOT NULL,
 		order_ids TEXT NOT NULL,
 		state TEXT NOT NULL,
@@ -80,9 +80,9 @@ func _create_insert_on_living_venture_Trigger(db *sql.DB) error {
 		WHEN (NEW.is_alive = true)
 		BEGIN
 			REPLACE INTO ql_venture (
-				id, vid, description, order_ids, state, is_alive, extra
+				id, last_modified, description, order_ids, state, is_alive, extra
 			) VALUES (
-				NEW.id, NEW.vid, NEW.description, NEW.order_ids, NEW.state, NEW.is_alive, NEW.extra
+				NEW.id, NEW.last_modified, NEW.description, NEW.order_ids, NEW.state, NEW.is_alive, NEW.extra
 			);
 		END;`)
 }
@@ -144,6 +144,7 @@ func QueryFor(db *sql.DB, id string) (*Venture, error) {
 	ven := Venture{}
 	err := db.QueryRow(`SELECT
 		id,
+		last_modified,
 		description,
 		order_ids,
 		state,
@@ -151,6 +152,7 @@ func QueryFor(db *sql.DB, id string) (*Venture, error) {
 		extra
 	FROM ql_venture
 	WHERE id = ?`, id).Scan(&ven.ID,
+		&ven.LastModified,
 		&ven.Description,
 		&ven.OrderIDs,
 		&ven.State,
@@ -170,6 +172,7 @@ func QueryFor(db *sql.DB, id string) (*Venture, error) {
 func QueryAll(db *sql.DB) ([]Venture, error) {
 	rows, err := db.Query(`SELECT
 		id,
+		last_modified,
 		description,
 		order_ids,
 		state,
@@ -209,6 +212,7 @@ func _mapRows(rows *sql.Rows) ([]Venture, error) {
 func _mapRow(rows *sql.Rows) (*Venture, error) {
 	ven := Venture{}
 	err := rows.Scan(&ven.ID,
+		&ven.LastModified,
 		&ven.Description,
 		&ven.OrderIDs,
 		&ven.State,
