@@ -5,18 +5,31 @@ import (
 	"encoding/json"
 	"testing"
 
-	assert "github.com/stretchr/testify/assert"
-	require "github.com/stretchr/testify/require"
-
 	a "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/asserts"
 	v "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/ventures"
+	assert "github.com/stretchr/testify/assert"
+	require "github.com/stretchr/testify/require"
 )
+
+// _beginVenTest is run at the start of every test to setup the server and
+// inject the test data.
+func _beginVenTest() {
+	venDBReset()
+	venDBInjectVentures()
+	startServer()
+}
+
+// _endVenTest should be deferred straight after _beginVenTest() is run to
+// close resources at the end of every test.
+func _endVenTest() {
+	stopServer()
+	venDBClose()
+}
 
 // ****************************************************************************
 // (GET) /ventures
 // ****************************************************************************
 
-// TODO: Craft some test data and pre-inject it into a SQLite database
 func TestGET_Ventures_1(t *testing.T) {
 	t.Log(`Given some Ventures already exist on the server
 		When all Ventures are requested
@@ -27,6 +40,9 @@ func TestGET_Ventures_1(t *testing.T) {
 		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, and OPTIONS
 		And the body is a JSON array of valid Ventures
 		...`)
+
+	_beginVenTest()
+	defer _endVenTest()
 
 	req := APICall{
 		URL:    "http://localhost:8080/ventures",
@@ -57,6 +73,9 @@ func TestGET_Ventures_2(t *testing.T) {
 		And the body is a JSON array of valid Ventures wrapped with meta information
 		...`)
 
+	_beginVenTest()
+	defer _endVenTest()
+
 	req := APICall{
 		URL:    "http://localhost:8080/ventures?wrap",
 		Method: "GET",
@@ -74,7 +93,6 @@ func TestGET_Ventures_2(t *testing.T) {
 // (GET) /ventures?id={id}
 // ****************************************************************************
 
-// TODO: Craft some test data and pre-inject it into a SQLite database
 func TestGET_Venture_1(t *testing.T) {
 	t.Log(`Given some Ventures already exist on the server
 		When a specific existing Venture is requested
@@ -85,6 +103,9 @@ func TestGET_Venture_1(t *testing.T) {
 		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, and OPTIONS
 		And the body is a JSON object representing a valid Venture
 		...`)
+
+	_beginVenTest()
+	defer _endVenTest()
 
 	req := APICall{
 		URL:    "http://localhost:8080/ventures?id=1",
@@ -109,6 +130,9 @@ func TestGET_Venture_2(t *testing.T) {
 		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, and OPTIONS
 		And the body is a JSON object representing an error response
 		...`)
+
+	_beginVenTest()
+	defer _endVenTest()
 
 	req := APICall{
 		URL:    "http://localhost:8080/ventures?id=999999",
@@ -139,6 +163,9 @@ func TestGET_Venture_3(t *testing.T) {
 		And the body is a JSON object representing a valid Venture wrapped with meta information
 		...`)
 
+	_beginVenTest()
+	defer _endVenTest()
+
 	req := APICall{
 		URL:    "http://localhost:8080/ventures?wrap&id=1",
 		Method: "GET",
@@ -166,6 +193,9 @@ func TestPOST_Venture_1(t *testing.T) {
 		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, and OPTIONS
 		And the body is a JSON object representing the living input Venture with a new assigned ID
 		...`)
+
+	_beginVenTest()
+	defer _endVenTest()
 
 	input := v.Venture{
 		Description: "A new Venture",
@@ -206,6 +236,9 @@ func TestPOST_Venture_2(t *testing.T) {
 		And the body is a JSON object representing an error response
 		...`)
 
+	_beginVenTest()
+	defer _endVenTest()
+
 	input := v.Venture{
 		Description: "",
 		State:       "",
@@ -244,6 +277,9 @@ func TestPOST_Venture_3(t *testing.T) {
 		And the body is a JSON object representing a WrappedReply
 		And that the wrapped data is the living input Venture with a new assigned ID
 		...`)
+
+	_beginVenTest()
+	defer _endVenTest()
 
 	input := v.Venture{
 		Description: "A new Venture",
@@ -287,6 +323,9 @@ func TestPUT_Ventures_1(t *testing.T) {
 		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, and OPTIONS
 		And the body is a JSON object representing the updated input Venture
 		...`)
+
+	_beginVenTest()
+	defer _endVenTest()
 
 	input := v.ModVenture{
 		IDs:   "1",
@@ -334,6 +373,9 @@ func TestPUT_Ventures_2(t *testing.T) {
 		And the body is a JSON object representing an empty Venture array
 		...`)
 
+	_beginVenTest()
+	defer _endVenTest()
+
 	input := v.ModVenture{
 		IDs:   "999999",
 		Props: "description, state, order_ids, extra",
@@ -375,6 +417,9 @@ func TestPUT_Ventures_3(t *testing.T) {
 		And the body is a JSON object representing an error response
 		...`)
 
+	_beginVenTest()
+	defer _endVenTest()
+
 	input := v.ModVenture{
 		Props: "description, state, order_ids, extra",
 		Values: v.Venture{
@@ -413,6 +458,9 @@ func TestPUT_Ventures_4(t *testing.T) {
 		And the body is a JSON object representing an error response
 		...`)
 
+	_beginVenTest()
+	defer _endVenTest()
+
 	input := v.ModVenture{
 		IDs:    "1",
 		Props:  "description, state, order_ids, extra",
@@ -446,6 +494,9 @@ func TestPUT_Ventures_5(t *testing.T) {
 		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, and OPTIONS
 		And the body is a JSON object representing the updated input Venture
 		...`)
+
+	_beginVenTest()
+	defer _endVenTest()
 
 	input := v.ModVenture{
 		IDs:   "4,5",
@@ -497,6 +548,9 @@ func TestPUT_Ventures_6(t *testing.T) {
 		And the wrapped data is the updated input Venture
 		...`)
 
+	_beginVenTest()
+	defer _endVenTest()
+
 	input := v.ModVenture{
 		IDs:   "1",
 		Props: "description, state, order_ids, extra",
@@ -547,6 +601,9 @@ func TestOPTIONS_Ventures(t *testing.T) {
 		And there is NO response body
 		...`)
 
+	_beginVenTest()
+	defer _endVenTest()
+
 	req := APICall{
 		URL:    "http://localhost:8080/ventures",
 		Method: "OPTIONS",
@@ -574,6 +631,9 @@ func TestINVALID_Ventures(t *testing.T) {
 		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, and OPTIONS
 		And there is NO response body
 		...`)
+
+	_beginVenTest()
+	defer _endVenTest()
 
 	verifyNotAllowedMethods(t, "http://localhost:8080/ventures", ventureHttpMethods)
 }

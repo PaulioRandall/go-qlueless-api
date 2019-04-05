@@ -20,11 +20,11 @@ func _exit(exitCode *int) {
 // TestMain is the entry point for the 'go test'
 func TestMain(m *testing.M) {
 	var exitCode int = 1
-	cmd := startServer()
+	//startServer()
 
 	defer _exit(&exitCode)
 	defer attemptRecover(&exitCode)
-	defer stopServer(cmd)
+	//defer stopServer()
 
 	exitCode = m.Run()
 	adminPrint(fmt.Sprintf("Test exit code: %d", exitCode))

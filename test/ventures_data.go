@@ -25,6 +25,11 @@ func venDBReset() {
 	if err != nil {
 		panic(err)
 	}
+
+	err = v.CreateTables(venDB)
+	if err != nil {
+		panic(err)
+	}
 }
 
 // venDBClose closes the test database.
@@ -47,8 +52,8 @@ func venDBInject(new v.NewVenture) *v.Venture {
 	return ven
 }
 
-// venDBInjectDefaults injects a default set of Ventures into the database
-func venDBInjectDefaults() {
+// venDBInjectVentures injects a default set of Ventures into the database
+func venDBInjectVentures() {
 	defaultVens = append(defaultVens, *venDBInject(v.NewVenture{
 		Description: "White wizard",
 		State:       "Not started",

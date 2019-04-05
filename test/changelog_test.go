@@ -28,6 +28,9 @@ func TestGET_Changelog(t *testing.T) {
 		And the body contains some data
 		...`)
 
+	startServer()
+	defer stopServer()
+
 	req := APICall{
 		URL:    "http://localhost:8080/changelog",
 		Method: "GET",
@@ -56,6 +59,9 @@ func TestOPTIONS_Changelog(t *testing.T) {
 		And there is NO response body
 		...`)
 
+	startServer()
+	defer stopServer()
+
 	req := APICall{
 		URL:    "http://localhost:8080/changelog",
 		Method: "OPTIONS",
@@ -83,6 +89,9 @@ func TestINVALID_Changelog(t *testing.T) {
 		And 'Access-Control-Allow-Methods' only contains GET and OPTIONS
 		And there is NO response body
 		...`)
+
+	startServer()
+	defer stopServer()
 
 	verifyNotAllowedMethods(t, "http://localhost:8080/changelog", changelogHttpMethods)
 }

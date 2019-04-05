@@ -29,6 +29,9 @@ func TestGET_OpenAPI(t *testing.T) {
 		And the body is a valid JSON object
 		...`)
 
+	startServer()
+	defer stopServer()
+
 	req := APICall{
 		URL:    "http://localhost:8080/openapi",
 		Method: "GET",
@@ -60,6 +63,9 @@ func TestOPTIONS_OpenAPI(t *testing.T) {
 		And there is NO response body
 		...`)
 
+	startServer()
+	defer stopServer()
+
 	req := APICall{
 		URL:    "http://localhost:8080/openapi",
 		Method: "OPTIONS",
@@ -87,6 +93,9 @@ func TestINVALID_OpenAPI(t *testing.T) {
 		And 'Access-Control-Allow-Methods' only contains GET and OPTIONS
 		And there is NO response body
 		...`)
+
+	startServer()
+	defer stopServer()
 
 	verifyNotAllowedMethods(t, "http://localhost:8080/openapi", openapiHttpMethods)
 }

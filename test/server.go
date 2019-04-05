@@ -7,6 +7,8 @@ import (
 	"time"
 )
 
+var cmd *exec.Cmd = nil
+
 // adminPrint prints a general test message distinguishable from ordinary test
 // log messages
 func adminPrint(m string) {
@@ -23,8 +25,8 @@ func attemptRecover(exitCode *int) {
 }
 
 // startServer starts the application server
-func startServer() *exec.Cmd {
-	cmd := &exec.Cmd{
+func startServer() {
+	cmd = &exec.Cmd{
 		Path:   "./go-qlueless-assembly-api",
 		Dir:    "../bin",
 		Stdout: os.Stdout,
@@ -38,15 +40,15 @@ func startServer() *exec.Cmd {
 	}
 
 	adminPrint("Pause to let server start")
-	time.Sleep(500 * time.Millisecond)
-	return cmd
+	time.Sleep(50 * time.Millisecond)
 }
 
 // stopServer stops the application server
-func stopServer(cmd *exec.Cmd) {
+func stopServer() {
 	adminPrint("Killing server: " + cmd.Path)
 	err := cmd.Process.Kill()
 	if err != nil {
 		log.Fatal("StopServer(): ", err)
 	}
+	cmd = nil
 }
