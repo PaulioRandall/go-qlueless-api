@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 
+	q "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/qserver"
 	h "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/uhttp"
 	v "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/ventures"
 )
@@ -17,12 +18,15 @@ func VenturesHandler(res http.ResponseWriter, req *http.Request) {
 	h.LogRequest(req)
 	h.AppendCORSHeaders(&res, "GET, POST, PUT, OPTIONS")
 
-	id := req.FormValue("id")
 	switch {
-	case req.Method == "GET" && id == "":
-		_GET_AllVentures(&res, req)
 	case req.Method == "GET":
-		_GET_Venture(id, &res, req)
+		id := req.FormValue("id")
+		switch id {
+		case "":
+			_GET_AllVentures(&res, req)
+		default:
+			_GET_Venture(id, &res, req)
+		}
 	case req.Method == "POST":
 		_POST_NewVenture(&res, req)
 	case req.Method == "PUT":
@@ -36,7 +40,13 @@ func VenturesHandler(res http.ResponseWriter, req *http.Request) {
 
 // _GET_AllVentures handles client requests for all living Ventures.
 func _GET_AllVentures(res *http.ResponseWriter, req *http.Request) {
-	vens := ventures.GetAllAlive()
+	//vens := ventures.GetAllAlive()
+	vens, err := v.QueryAll(q.Sev.DB)
+	if err != nil {
+		h.WriteServerError(res, req)
+		return
+	}
+
 	m := fmt.Sprintf("Found %d Ventures", len(vens))
 	writeSuccessReply(res, req, http.StatusOK, vens, m)
 }

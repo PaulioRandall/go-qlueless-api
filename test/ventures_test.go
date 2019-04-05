@@ -15,7 +15,8 @@ import (
 // inject the test data.
 func _beginVenTest() {
 	venDBReset()
-	venDBInjectVentures()
+	venDBInjectLivingVentures()
+	venDBInjectDeadVentures()
 	startServer()
 }
 
@@ -38,7 +39,7 @@ func TestGET_Ventures_1(t *testing.T) {
 		And 'Access-Control-Allow-Origin' is '*'
 		And 'Access-Control-Allow-Headers' is '*'
 		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, and OPTIONS
-		And the body is a JSON array of valid Ventures
+		And the body is a JSON array containing all living Ventures
 		...`)
 
 	_beginVenTest()
@@ -54,7 +55,9 @@ func TestGET_Ventures_1(t *testing.T) {
 
 	require.Equal(t, 200, res.StatusCode)
 	assertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
-	v.AssertVentureSliceFromReader(t, res.Body)
+
+	out := v.AssertVentureSliceFromReader(t, res.Body)
+	v.AssertVentureSliceModEquals(t, livingVens, out)
 }
 
 // ****************************************************************************

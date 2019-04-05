@@ -34,13 +34,22 @@ func AssertGenericVenture(t *testing.T, v Venture) {
 
 // AssertVentureModEquals asserts that the two Ventures are equal with the
 // exception of the last_modified field
-func AssertVentureModEquals(t *testing.T, a Venture, b Venture) {
-	assert.Equal(t, a.ID, b.ID, "Venture.ID")
-	assert.Equal(t, a.Description, b.Description, "Venture.Description")
-	assert.Equal(t, a.OrderIDs, b.OrderIDs, "Venture.OrderIDs")
-	assert.Equal(t, a.State, b.State, "Venture.State")
-	assert.Equal(t, a.IsDead, b.IsDead, "Venture.IsDead")
-	assert.Equal(t, a.Extra, b.Extra, "Venture.Extra")
+func AssertVentureModEquals(t *testing.T, exp Venture, act Venture) {
+	assert.Equal(t, exp.ID, act.ID, "Venture.ID")
+	assert.Equal(t, exp.Description, act.Description, "Venture.Description")
+	assert.Equal(t, exp.OrderIDs, act.OrderIDs, "Venture.OrderIDs")
+	assert.Equal(t, exp.State, act.State, "Venture.State")
+	assert.Equal(t, exp.IsDead, act.IsDead, "Venture.IsDead")
+	assert.Equal(t, exp.Extra, act.Extra, "Venture.Extra")
+}
+
+// AssertVentureSliceModEquals asserts that the two Venture slices are equal
+// with the exception of the last_modified fields
+func AssertVentureSliceModEquals(t *testing.T, exp []Venture, act []Venture) {
+	require.Len(t, act, len(exp))
+	for i, _ := range exp {
+		AssertVentureModEquals(t, exp[i], act[i])
+	}
 }
 
 // AssertVentureSliceFromReader asserts that a Venture slice decoded from an

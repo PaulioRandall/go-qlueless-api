@@ -4,10 +4,12 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"sync"
 	"time"
 )
 
 var cmd *exec.Cmd = nil
+var longPause sync.Once
 
 // adminPrint prints a general test message distinguishable from ordinary test
 // log messages
@@ -40,6 +42,9 @@ func startServer() {
 	}
 
 	adminPrint("Pause to let server start")
+	longPause.Do(func() {
+		time.Sleep(250 * time.Millisecond)
+	})
 	time.Sleep(50 * time.Millisecond)
 }
 
