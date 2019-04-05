@@ -14,8 +14,9 @@ import (
 
 func TestDecodeVenture_1(t *testing.T) {
 	a := strings.NewReader(`{
-		"description": "description",
 		"venture_id": "1",
+		"last_modified": 1554458321281,
+		"description": "description",
 		"order_ids": "2,3,4,999",
 		"state": "state",
 		"is_alive": true,
@@ -23,12 +24,13 @@ func TestDecodeVenture_1(t *testing.T) {
 	}`)
 
 	exp := Venture{
-		Description: "description",
-		ID:          "1",
-		OrderIDs:    "2,3,4,999",
-		State:       "state",
-		IsAlive:     true,
-		Extra:       "extra",
+		ID:           "1",
+		LastModified: 1554458321281,
+		Description:  "description",
+		OrderIDs:     "2,3,4,999",
+		State:        "state",
+		IsAlive:      true,
+		Extra:        "extra",
 	}
 
 	b, err := DecodeVenture(a)
@@ -169,12 +171,13 @@ func TestVenture_Clean_3(t *testing.T) {
 
 func TestVenture_Validate_1(t *testing.T) {
 	a := Venture{
-		Description: "description",
-		ID:          "1",
-		OrderIDs:    "2,3,4,999",
-		State:       "state",
-		IsAlive:     true,
-		Extra:       "\n\t\v extra \r\f",
+		ID:           "1",
+		LastModified: 1554458321281,
+		Description:  "description",
+		OrderIDs:     "2,3,4,999",
+		State:        "state",
+		IsAlive:      true,
+		Extra:        "\n\t\v extra \r\f",
 	}
 
 	errMsgs := a.Validate(false)
@@ -183,9 +186,10 @@ func TestVenture_Validate_1(t *testing.T) {
 
 func TestVenture_Validate_2(t *testing.T) {
 	a := Venture{
-		Description: "description",
-		ID:          "1",
-		State:       "state",
+		ID:           "1",
+		LastModified: 1554458321281,
+		Description:  "description",
+		State:        "state",
 	}
 
 	errMsgs := a.Validate(false)
@@ -194,21 +198,23 @@ func TestVenture_Validate_2(t *testing.T) {
 
 func TestVenture_Validate_3(t *testing.T) {
 	a := Venture{
-		Description: "",
-		ID:          "",
-		State:       "",
+		Description:  "",
+		ID:           "",
+		State:        "",
+		LastModified: 0,
 	}
 
 	errMsgs := a.Validate(false)
-	assert.Len(t, errMsgs, 3)
+	assert.Len(t, errMsgs, 4)
 }
 
 func TestVenture_Validate_4(t *testing.T) {
 	a := Venture{
-		Description: "valid",
-		ID:          "invalid",
-		OrderIDs:    "3,invalid,4",
-		State:       "valid",
+		Description:  "valid",
+		ID:           "invalid",
+		OrderIDs:     "3,invalid,4",
+		State:        "valid",
+		LastModified: 1554458321281,
 	}
 
 	errMsgs := a.Validate(false)

@@ -3,6 +3,8 @@ package ventures
 import (
 	"strconv"
 	"sync"
+
+	u "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/utils"
 )
 
 // VentureStore represents a data store of Ventures
@@ -63,12 +65,13 @@ func (vs *VentureStore) Add(new NewVenture) Venture {
 	defer vs.mutex.Unlock()
 
 	ven := Venture{
-		ID:          vs._genNewID(),
-		Description: new.Description,
-		OrderIDs:    new.OrderIDs,
-		State:       new.State,
-		IsAlive:     true,
-		Extra:       new.Extra,
+		ID:           vs._genNewID(),
+		LastModified: u.UnixMilliNow(),
+		Description:  new.Description,
+		OrderIDs:     new.OrderIDs,
+		State:        new.State,
+		IsAlive:      true,
+		Extra:        new.Extra,
 	}
 
 	vs.items[ven.ID] = ven

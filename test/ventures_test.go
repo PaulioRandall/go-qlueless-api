@@ -193,7 +193,8 @@ func TestPOST_Venture_1(t *testing.T) {
 
 	input.ID = output.ID
 	input.IsAlive = true
-	assert.Equal(t, input, output)
+	v.AssertGenericVenture(t, output)
+	v.AssertVentureModEquals(t, input, output)
 }
 
 func TestPOST_Venture_2(t *testing.T) {
@@ -270,7 +271,8 @@ func TestPOST_Venture_3(t *testing.T) {
 
 	input.ID = output.ID
 	input.IsAlive = true
-	assert.Equal(t, input, output)
+	v.AssertGenericVenture(t, output)
+	v.AssertVentureModEquals(t, input, output)
 }
 
 // ****************************************************************************
@@ -319,7 +321,8 @@ func TestPUT_Ventures_1(t *testing.T) {
 
 	input.Values.ID = "1"
 	input.Values.IsAlive = true
-	assert.Equal(t, input.Values, output[0])
+	v.AssertGenericVenture(t, output[0])
+	v.AssertVentureModEquals(t, input.Values, output[0])
 }
 
 func TestPUT_Ventures_2(t *testing.T) {
@@ -527,7 +530,8 @@ func TestPUT_Ventures_6(t *testing.T) {
 
 	input.Values.ID = "1"
 	input.Values.IsAlive = true
-	assert.Equal(t, input.Values, output[0])
+	v.AssertGenericVenture(t, output[0])
+	v.AssertVentureModEquals(t, input.Values, output[0])
 }
 
 // ****************************************************************************

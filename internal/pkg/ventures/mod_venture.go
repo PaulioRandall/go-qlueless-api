@@ -97,6 +97,7 @@ func (mv *ModVenture) Validate() []string {
 func (mv *ModVenture) ApplyMod(ven *Venture) {
 	mod := mv.Values
 	for _, p := range mv.SplitProps() {
+		ven.LastModified = u.UnixMilliNow()
 		switch p {
 		case "description":
 			ven.Description = mod.Description

@@ -26,9 +26,21 @@ func AssertGenericVenture(t *testing.T, v Venture) {
 	assert.NotEmpty(t, v.ID, "Venture.ID")
 	assert.NotEmpty(t, v.Description, "Venture.Description")
 	assert.NotEmpty(t, v.State, "Venture.State")
+	assert.True(t, v.LastModified > 0, "Venture.LastModified")
 	if v.OrderIDs != "" {
 		ts.AssertGenericIntCSV(t, v.OrderIDs)
 	}
+}
+
+// AssertVentureModEquals asserts that the two Ventures are equal with the
+// exception of the last_modified field
+func AssertVentureModEquals(t *testing.T, a Venture, b Venture) {
+	assert.Equal(t, a.ID, b.ID, "Venture.ID")
+	assert.Equal(t, a.Description, b.Description, "Venture.Description")
+	assert.Equal(t, a.OrderIDs, b.OrderIDs, "Venture.OrderIDs")
+	assert.Equal(t, a.State, b.State, "Venture.State")
+	assert.Equal(t, a.IsAlive, b.IsAlive, "Venture.IsAlive")
+	assert.Equal(t, a.Extra, b.Extra, "Venture.Extra")
 }
 
 // AssertVentureSliceFromReader asserts that a Venture slice decoded from an

@@ -6,6 +6,7 @@ import (
 	"os"
 	"regexp"
 	"strconv"
+	"time"
 	"unicode"
 )
 
@@ -93,4 +94,11 @@ func DeleteIfExists(path string) {
 	default:
 		log.Fatal(err)
 	}
+}
+
+// UnixMilliNow returns the current time as Unix milliseconds
+//
+// @UNTESTED
+func UnixMilliNow() int64 {
+	return time.Now().UnixNano() / int64(time.Millisecond)
 }

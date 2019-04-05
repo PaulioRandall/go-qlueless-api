@@ -201,6 +201,7 @@ func TestVentureStore_Update_1(t *testing.T) {
 	require.Len(t, v, 2)
 
 	u.Values.ID = "1"
+	u.Values.LastModified = v[0].LastModified
 	assert.Equal(t, u.Values, v[0])
 	aOut, ok := store.items["1"]
 	require.True(t, ok)
@@ -238,7 +239,7 @@ func TestVentureStore_Update_3(t *testing.T) {
 	store.items["1"] = a
 	store.items["2"] = b
 
-	au := ModVenture{
+	u := ModVenture{
 		IDs:   "1,2",
 		Props: "IGNORED,SKIPPED",
 		Values: Venture{
@@ -250,9 +251,12 @@ func TestVentureStore_Update_3(t *testing.T) {
 		},
 	}
 
-	v := store.Update(&au)
+	v := store.Update(&u)
 	require.Len(t, v, 2)
+
+	a.LastModified = v[0].LastModified
 	assert.Equal(t, a, v[0])
+	b.LastModified = v[1].LastModified
 	assert.Equal(t, b, v[1])
 
 	aOut, ok := store.items["1"]

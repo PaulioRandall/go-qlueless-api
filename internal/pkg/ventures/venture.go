@@ -12,7 +12,7 @@ import (
 // Venture represents a Venture, aka, project.
 type Venture struct {
 	ID           string `json:"venture_id,omitempty"`
-	LastModified string `json:"last_modified"`
+	LastModified int64  `json:"last_modified"`
 	Description  string `json:"description"`
 	OrderIDs     string `json:"order_ids,omitempty"`
 	State        string `json:"state"`
@@ -59,6 +59,10 @@ func (ven *Venture) Validate(isNew bool) []string {
 	if !isNew {
 		errMsgs = u.AppendIfNotPositiveInt(ven.ID, errMsgs,
 			"Ventures must have a positive integer ID.")
+
+		if ven.LastModified < 1 {
+			errMsgs = append(errMsgs, "Ventures must have a last modified Unix date in milliseconds")
+		}
 	}
 
 	if ven.OrderIDs != "" {
