@@ -14,6 +14,7 @@ func main() {
 	s := QServer{}
 
 	s.preload()
+	defer s.Close()
 	s.routes()
 
 	log.Println("[Go Qlueless Assembly API]: Starting server")

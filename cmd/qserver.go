@@ -1,6 +1,8 @@
 package main
 
 import (
+	"database/sql"
+	"log"
 	"net/http"
 	"sync"
 
@@ -8,12 +10,14 @@ import (
 	h "github.com/PaulioRandall/go-qlueless-assembly-api/internal/app/home"
 	o "github.com/PaulioRandall/go-qlueless-assembly-api/internal/app/openapi"
 	v "github.com/PaulioRandall/go-qlueless-assembly-api/internal/app/ventures"
+	d "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/database"
 )
 
 // QServer represents the... err... server
 type QServer struct {
 	preloadOnce sync.Once
 	routeOnce   sync.Once
+	db          *sql.DB
 }
 
 // preload performs any loading of configurations or preloading of static values
@@ -22,6 +26,12 @@ func (s *QServer) preload() {
 		c.LoadChangelog()
 		o.LoadSpec()
 		v.InjectDummyVentures()
+
+		var err error
+		s.db, err = d.OpenSQLiteDatabase("./qlueless.db")
+		if err != nil {
+			log.Fatal(err)
+		}
 	})
 }
 
@@ -33,4 +43,12 @@ func (s *QServer) routes() {
 		http.HandleFunc("/openapi", o.OpenAPIHandler)
 		http.HandleFunc("/ventures", v.VenturesHandler)
 	})
+}
+
+// Close closes resources used by the server
+func (s *QServer) Close() {
+	if s.db != nil {
+		log.Fatal(s.db.Close())
+		s.db = nil
+	}
 }
