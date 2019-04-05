@@ -11,12 +11,13 @@ import (
 
 // Venture represents a Venture, aka, project.
 type Venture struct {
-	Description string `json:"description"`
-	ID          string `json:"venture_id,omitempty"`
-	OrderIDs    string `json:"order_ids,omitempty"`
-	State       string `json:"state"`
-	IsAlive     bool   `json:"is_alive"`
-	Extra       string `json:"extra,omitempty"`
+	ID           string `json:"venture_id,omitempty"`
+	LastModified string `json:"last_modified"`
+	Description  string `json:"description"`
+	OrderIDs     string `json:"order_ids,omitempty"`
+	State        string `json:"state"`
+	IsAlive      bool   `json:"is_alive"`
+	Extra        string `json:"extra,omitempty"`
 }
 
 // DecodeVenture decodes a Venture from data obtained via a Reader.

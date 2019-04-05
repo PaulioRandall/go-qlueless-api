@@ -15,7 +15,7 @@ var ventures = v.NewVentureStore()
 // Ventures.
 func VenturesHandler(res http.ResponseWriter, req *http.Request) {
 	h.LogRequest(req)
-	h.AppendCORSHeaders(&res, "GET, POST, PUT, DELETE, OPTIONS")
+	h.AppendCORSHeaders(&res, "GET, POST, PUT, OPTIONS")
 
 	id := req.FormValue("id")
 	switch {
