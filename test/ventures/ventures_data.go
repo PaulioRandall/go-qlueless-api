@@ -13,6 +13,7 @@ var ventureHttpMethods = []string{"GET", "POST", "PUT", "OPTIONS"}
 var dbPath string = "../../bin/qlueless.db"
 var venDB *sql.DB = nil
 
+var allVens map[string]v.Venture = nil
 var livingVens map[string]v.Venture = nil
 var deadVens map[string]v.Venture = nil
 
@@ -63,9 +64,9 @@ func venDBClose() {
 
 // venDBInject injects a Venture into the database.
 func venDBInject(data map[string]v.Venture, new v.NewVenture) {
-	ven, err := new.Insert(venDB)
-	if err != nil {
-		panic(err)
+	ven, ok := new.Insert(venDB)
+	if !ok {
+		panic("Already printed above!")
 	}
 	data[ven.ID] = *ven
 }
@@ -122,6 +123,24 @@ func venDBInjectDeadVentures() {
 		err := ven.Update(venDB)
 		if err != nil {
 			panic(err)
+		}
+	}
+}
+
+// venDBCollectAllVentures creates a map containing all ventures from the test
+// set
+func venDBCollectAllVentures() {
+	allVens = map[string]v.Venture{}
+
+	if livingVens != nil {
+		for k, v := range livingVens {
+			allVens[k] = v
+		}
+	}
+
+	if deadVens != nil {
+		for k, v := range deadVens {
+			allVens[k] = v
 		}
 	}
 }

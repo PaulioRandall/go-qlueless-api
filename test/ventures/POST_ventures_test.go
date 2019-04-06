@@ -8,6 +8,7 @@ import (
 	a "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/asserts"
 	v "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/ventures"
 	test "github.com/PaulioRandall/go-qlueless-assembly-api/test"
+	assert "github.com/stretchr/testify/assert"
 	require "github.com/stretchr/testify/require"
 )
 
@@ -22,8 +23,10 @@ func TestPOST_Venture_1(t *testing.T) {
 		And the 'Content-Type' header contains 'application/json'
 		And 'Access-Control-Allow-Origin' is '*'
 		And 'Access-Control-Allow-Headers' is '*'
-		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, and OPTIONS
-		And the body is a JSON object representing the living input Venture with a new assigned ID
+		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, and OPTIONS
+		And the body is a JSON object representing the living input Venture
+		And that Venture will have a new, unused, ID
+		And that Venture will have a new 'last_updated' datetime
 		...`)
 
 	beginVenTest()
@@ -33,6 +36,7 @@ func TestPOST_Venture_1(t *testing.T) {
 		Description: "A new Venture",
 		State:       "Not started",
 		OrderIDs:    "1,2,3",
+		Extra:       "Extra, extra",
 	}
 	buf := new(bytes.Buffer)
 	json.NewEncoder(buf).Encode(&input)
@@ -50,16 +54,19 @@ func TestPOST_Venture_1(t *testing.T) {
 	test.AssertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
 
 	output := v.AssertVentureFromReader(t, res.Body)
-
 	input.ID = output.ID
-	input.IsDead = false
+	input.LastModified = output.LastModified
+
 	v.AssertGenericVenture(t, output)
-	v.AssertVentureModEquals(t, input, output)
+	assert.Equal(t, input, output)
+
+	_, ok := allVens[output.ID]
+	assert.False(t, ok)
 }
 
 func TestPOST_Venture_2(t *testing.T) {
 	t.Log(`Given some Ventures already exist on the server
-		When a new invalid Venture is POSTed
+		When a new but invalid Venture is POSTed
 		Then ensure the response code is 400
 		And the 'Content-Type' header contains 'application/json'
 		And 'Access-Control-Allow-Origin' is '*'
@@ -107,7 +114,9 @@ func TestPOST_Venture_3(t *testing.T) {
 		And 'Access-Control-Allow-Headers' is '*'
 		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, and OPTIONS
 		And the body is a JSON object representing a WrappedReply
-		And that the wrapped data is the living input Venture with a new assigned ID
+		And the wrapped data is a JSON object representing the living input Venture
+		And that Venture will have a new, unused, ID
+		And that Venture will have a new 'last_updated' datetime
 		...`)
 
 	beginVenTest()
@@ -134,9 +143,12 @@ func TestPOST_Venture_3(t *testing.T) {
 	test.AssertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
 
 	_, output := v.AssertWrappedVentureFromReader(t, res.Body)
-
 	input.ID = output.ID
-	input.IsDead = false
+	input.LastModified = output.LastModified
+
 	v.AssertGenericVenture(t, output)
-	v.AssertVentureModEquals(t, input, output)
+	assert.Equal(t, input, output)
+
+	_, ok := allVens[output.ID]
+	assert.False(t, ok)
 }

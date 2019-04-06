@@ -53,9 +53,9 @@ func main() {
 			log.Fatal(m)
 		}
 
-		ven, err := nv.Insert(db)
-		if err != nil {
-			log.Fatal(err)
+		ven, ok := nv.Insert(db)
+		if !ok {
+			log.Fatal("Error printed above!")
 		}
 
 		output = append(output, *ven)

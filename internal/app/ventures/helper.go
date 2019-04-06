@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"strings"
 
+	q "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/qserver"
 	h "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/uhttp"
 	u "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/utils"
 	v "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/ventures"
@@ -83,13 +84,22 @@ func decodeNewVenture(res *http.ResponseWriter, req *http.Request) (v.NewVenture
 }
 
 // validateNewVenture validates a NewVenture that has yet to be assigned an ID.
-func validateNewVenture(ven v.NewVenture, res *http.ResponseWriter, req *http.Request) bool {
+func validateNewVenture(ven *v.NewVenture, res *http.ResponseWriter, req *http.Request) bool {
 	errMsgs := ven.Validate()
 	if len(errMsgs) != 0 {
 		h.WriteBadRequest(res, req, strings.Join(errMsgs, " "))
 		return false
 	}
 	return true
+}
+
+// insertNewVenture inserts a new Venture into the database
+func insertNewVenture(db *sql.DB, new *v.NewVenture, res *http.ResponseWriter, req *http.Request) (*v.Venture, bool) {
+	ven, ok := new.Insert(q.Sev.DB)
+	if !ok {
+		h.WriteServerError(res, req)
+	}
+	return ven, ok
 }
 
 // decodeModVentures decodes modifications to Ventures from a Request.Body.

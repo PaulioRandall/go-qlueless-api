@@ -69,12 +69,16 @@ func _POST_NewVenture(res *http.ResponseWriter, req *http.Request) {
 	}
 
 	new.Clean()
-	ok = validateNewVenture(new, res, req)
+	ok = validateNewVenture(&new, res, req)
 	if !ok {
 		return
 	}
 
-	ven := ventures.Add(new)
+	ven, ok := insertNewVenture(q.Sev.DB, &new, res, req)
+	if !ok {
+		return
+	}
+
 	m := fmt.Sprintf("New Venture with ID '%s' created", ven.ID)
 	log.Println(m)
 	writeSuccessReply(res, req, http.StatusCreated, ven, m)

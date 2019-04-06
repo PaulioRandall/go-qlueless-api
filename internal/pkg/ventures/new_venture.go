@@ -56,11 +56,11 @@ func (nv *NewVenture) Validate() []string {
 // Insert inserts the NewVenture into the database
 //
 // @UNTESTED
-func (nv *NewVenture) Insert(db *sql.DB) (*Venture, error) {
+func (nv *NewVenture) Insert(db *sql.DB) (*Venture, bool) {
 
 	id, err := _findNextID(db)
-	if err != nil {
-		return nil, err
+	if u.LogIfErr(err) {
+		return nil, false
 	}
 
 	stmt, err := db.Prepare(`INSERT INTO venture (
@@ -73,11 +73,21 @@ func (nv *NewVenture) Insert(db *sql.DB) (*Venture, error) {
 		defer stmt.Close()
 	}
 
-	if err != nil {
-		return nil, err
+	if u.LogIfErr(err) {
+		return nil, false
 	}
 
-	return nv._execInsert(id, stmt)
+	_, err = nv._execInsert(id, stmt)
+	if u.LogIfErr(err) {
+		return nil, false
+	}
+
+	ven, err := QueryFor(db, id)
+	if u.LogIfErr(err) {
+		return nil, false
+	}
+
+	return ven, true
 }
 
 // _findNextID returns the next free Venture ID.
