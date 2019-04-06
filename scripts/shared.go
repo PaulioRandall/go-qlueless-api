@@ -105,7 +105,7 @@ func goTest(root string) {
 // goTestApi runs the application API tests
 func goTestApi(root string) {
 	fmt.Println("...testing API, this may take a few moments...")
-	goExe(".", []string{"test", "-count=1", "-p", "1", root + "/test/..."})
+	goExe(".", []string{"test", "-count=1", "-p=1", "-failfast", root + "/test/..."})
 }
 
 // goRunApp runs the compiled application from the /bin directory
