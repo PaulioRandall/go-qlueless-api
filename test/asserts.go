@@ -15,7 +15,7 @@ import (
 )
 
 const (
-	CORS_METHODS_PATTERN = "^((\\s*[A-Z]*\\s*,)+)*(\\s*[A-Z]*\\s*)$" // Example: 'GET,  POST   ,OPTIONS'
+	CORS_METHODS_PATTERN = "^((\\s*[A-Z]*\\s*,)+)*(\\s*[A-Z]*\\s*)$" // Example: 'GET,  POST, OPTIONS'
 )
 
 var ALL_STD_HTTP_METHODS = []string{

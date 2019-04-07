@@ -30,7 +30,7 @@ func VenturesHandler(res http.ResponseWriter, req *http.Request) {
 	case req.Method == "POST":
 		_POST_NewVenture(&res, req)
 	case req.Method == "PUT":
-		_PUT_UpdatedVenture(&res, req)
+		_PUT_ModifiedVentures(&res, req)
 	case req.Method == "OPTIONS":
 		res.WriteHeader(http.StatusOK)
 	default:
@@ -52,7 +52,7 @@ func _GET_AllVentures(res *http.ResponseWriter, req *http.Request) {
 
 // _GET_Venture handles client requests for a specific Venture.
 func _GET_Venture(id string, res *http.ResponseWriter, req *http.Request) {
-	ven, ok := findVenture(q.Sev.DB, id, res, req)
+	ven, ok := findVenture(id, res, req)
 	if !ok {
 		return
 	}
@@ -74,7 +74,7 @@ func _POST_NewVenture(res *http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	ven, ok := insertNewVenture(q.Sev.DB, &new, res, req)
+	ven, ok := insertNewVenture(&new, res, req)
 	if !ok {
 		return
 	}
@@ -84,8 +84,8 @@ func _POST_NewVenture(res *http.ResponseWriter, req *http.Request) {
 	writeSuccessReply(res, req, http.StatusCreated, ven, m)
 }
 
-// _PUT_UpdatedVenture handles client requests for updating Ventures.
-func _PUT_UpdatedVenture(res *http.ResponseWriter, req *http.Request) {
+// _PUT_ModifiedVentures handles client requests for updating Ventures.
+func _PUT_ModifiedVentures(res *http.ResponseWriter, req *http.Request) {
 	mv, ok := decodeModVentures(res, req)
 	if !ok {
 		return
@@ -97,9 +97,12 @@ func _PUT_UpdatedVenture(res *http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	vens := ventures.Update(mv)
-	ids := ventureIDsToCSV(vens)
+	vens, ok := pushModifiedVentures(mv, res, req)
+	if !ok {
+		return
+	}
 
+	ids := ventureIDsToCSV(vens)
 	m := fmt.Sprintf("Updated Ventures with the following IDs '%s'", ids)
 	log.Println(m)
 	writeSuccessReply(res, req, http.StatusOK, vens, m)

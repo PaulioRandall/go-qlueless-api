@@ -2,7 +2,9 @@ package ventures
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
+	"strings"
 )
 
 // CreateTables creates all the Venture tables, views and triggers within the
@@ -167,6 +169,37 @@ func QueryFor(db *sql.DB, id string) (*Venture, error) {
 	}
 
 	return &ven, nil
+}
+
+// QueryMany queries the database for all specified Ventures.
+//
+// @UNTESTED
+func QueryMany(db *sql.DB, ids []interface{}) ([]Venture, error) {
+
+	posParams := strings.Repeat(",?", len(ids))[1:]
+
+	sql := fmt.Sprintf(`SELECT
+			id,
+			last_modified,
+			description,
+			order_ids,
+			state,
+			extra
+		FROM ql_venture
+		WHERE id IN (%s)`, posParams)
+
+	rows, err := db.Query(sql, ids...)
+
+	if rows != nil {
+		defer rows.Close()
+	}
+
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+
+	return _mapRows(rows)
 }
 
 // QueryAll queries the database for all Ventures.

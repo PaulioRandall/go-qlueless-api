@@ -1,7 +1,6 @@
 package ventures
 
 import (
-	"database/sql"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -60,8 +59,8 @@ func writeSuccessReply(res *http.ResponseWriter, req *http.Request, code int, da
 }
 
 // findVenture finds the Venture with the specified ID.
-func findVenture(db *sql.DB, id string, res *http.ResponseWriter, req *http.Request) (*v.Venture, bool) {
-	ven, err := v.QueryFor(db, id)
+func findVenture(id string, res *http.ResponseWriter, req *http.Request) (*v.Venture, bool) {
+	ven, err := v.QueryFor(q.Sev.DB, id)
 	switch {
 	case err != nil:
 		h.WriteServerError(res, req)
@@ -94,7 +93,7 @@ func validateNewVenture(ven *v.NewVenture, res *http.ResponseWriter, req *http.R
 }
 
 // insertNewVenture inserts a new Venture into the database
-func insertNewVenture(db *sql.DB, new *v.NewVenture, res *http.ResponseWriter, req *http.Request) (*v.Venture, bool) {
+func insertNewVenture(new *v.NewVenture, res *http.ResponseWriter, req *http.Request) (*v.Venture, bool) {
 	ven, ok := new.Insert(q.Sev.DB)
 	if !ok {
 		h.WriteServerError(res, req)
@@ -155,4 +154,14 @@ func ventureIDsToCSV(vens []v.Venture) string {
 		}
 	}
 	return ids
+}
+
+// pushModifiedVentures performs the specified update operation.
+func pushModifiedVentures(mv *v.ModVenture, res *http.ResponseWriter, req *http.Request) ([]v.Venture, bool) {
+	vens, ok := mv.Update(q.Sev.DB)
+	if !ok {
+		h.WriteServerError(res, req)
+		return nil, false
+	}
+	return vens, true
 }

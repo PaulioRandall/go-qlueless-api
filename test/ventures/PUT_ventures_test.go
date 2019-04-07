@@ -23,19 +23,22 @@ func TestPUT_Ventures_1(t *testing.T) {
 		And the 'Content-Type' header contains 'application/json'
 		And 'Access-Control-Allow-Origin' is '*'
 		And 'Access-Control-Allow-Headers' is '*'
-		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, and OPTIONS
-		And the body is a JSON object representing the updated input Venture
+		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, and OPTIONS
+		And the body is a JSON array containing all updated Ventures
+		And those Ventures will have new 'last_updated' datetimes
 		...`)
 
 	beginVenTest()
 	defer endVenTest()
 
+	exp, ok := livingVens["1"]
+	require.True(t, ok)
+
 	input := v.ModVenture{
-		IDs:   "1",
-		Props: "description, state, order_ids, extra",
+		IDs:   exp.ID,
+		Props: "description, order_ids, extra",
 		Values: v.Venture{
 			Description: "Black blizzard",
-			State:       "In progress",
 			OrderIDs:    "1,2,3",
 			Extra:       "colour: black; power: 9000",
 		},
@@ -56,13 +59,15 @@ func TestPUT_Ventures_1(t *testing.T) {
 	require.Equal(t, 200, res.StatusCode)
 	test.AssertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
 
-	output := v.AssertVentureSliceFromReader(t, res.Body)
-	require.Len(t, output, 1)
+	out := v.AssertVentureSliceFromReader(t, res.Body)
+	require.Len(t, out, 1)
 
-	input.Values.ID = "1"
-	input.Values.IsDead = false
-	v.AssertGenericVenture(t, output[0])
-	v.AssertVentureModEquals(t, input.Values, output[0])
+	input.Values.State = exp.State
+	input.Values.ID = out[0].ID
+	input.Values.LastModified = out[0].LastModified
+
+	v.AssertGenericVenture(t, out[0])
+	v.AssertVentureModEquals(t, input.Values, out[0])
 }
 
 func TestPUT_Ventures_2(t *testing.T) {
@@ -72,8 +77,8 @@ func TestPUT_Ventures_2(t *testing.T) {
 		And the 'Content-Type' header contains 'application/json'
 		And 'Access-Control-Allow-Origin' is '*'
 		And 'Access-Control-Allow-Headers' is '*'
-		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, and OPTIONS
-		And the body is a JSON object representing an empty Venture array
+		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, and OPTIONS
+		And the body is an empty JSON array
 		...`)
 
 	beginVenTest()
@@ -81,10 +86,9 @@ func TestPUT_Ventures_2(t *testing.T) {
 
 	input := v.ModVenture{
 		IDs:   "999999",
-		Props: "description, state, order_ids, extra",
+		Props: "description, order_ids, extra",
 		Values: v.Venture{
 			Description: "Black blizzard",
-			State:       "In progress",
 			OrderIDs:    "1,2,3",
 			Extra:       "colour: black; power: 9000",
 		},
@@ -105,8 +109,8 @@ func TestPUT_Ventures_2(t *testing.T) {
 	require.Equal(t, 200, res.StatusCode)
 	test.AssertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
 
-	output := v.AssertVentureSliceFromReader(t, res.Body)
-	require.Empty(t, output)
+	out := v.AssertVentureSliceFromReader(t, res.Body)
+	require.Empty(t, out)
 }
 
 func TestPUT_Ventures_3(t *testing.T) {
@@ -116,7 +120,7 @@ func TestPUT_Ventures_3(t *testing.T) {
 		And the 'Content-Type' header contains 'application/json'
 		And 'Access-Control-Allow-Origin' is '*'
 		And 'Access-Control-Allow-Headers' is '*'
-		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, and OPTIONS
+		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, and OPTIONS
 		And the body is a JSON object representing an error response
 		...`)
 
@@ -124,10 +128,9 @@ func TestPUT_Ventures_3(t *testing.T) {
 	defer endVenTest()
 
 	input := v.ModVenture{
-		Props: "description, state, order_ids, extra",
+		Props: "description, order_ids, extra",
 		Values: v.Venture{
 			Description: "Black blizzard",
-			State:       "In progress",
 			OrderIDs:    "1,2,3",
 			Extra:       "colour: black; power: 9000",
 		},
@@ -157,7 +160,7 @@ func TestPUT_Ventures_4(t *testing.T) {
 		And the 'Content-Type' header contains 'application/json'
 		And 'Access-Control-Allow-Origin' is '*'
 		And 'Access-Control-Allow-Headers' is '*'
-		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, and OPTIONS
+		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, and OPTIONS
 		And the body is a JSON object representing an error response
 		...`)
 
@@ -166,7 +169,7 @@ func TestPUT_Ventures_4(t *testing.T) {
 
 	input := v.ModVenture{
 		IDs:    "1",
-		Props:  "description, state, order_ids, extra",
+		Props:  "description, order_ids, extra",
 		Values: v.Venture{},
 	}
 
@@ -189,13 +192,14 @@ func TestPUT_Ventures_4(t *testing.T) {
 
 func TestPUT_Ventures_5(t *testing.T) {
 	t.Log(`Given some Ventures already exist on the server
-		When existing Ventures are modified as dead and PUT to the server
+		When multiple existing Ventures are modified as dead and PUT to the server
 		Then ensure the response code is 200
 		And the 'Content-Type' header contains 'application/json'
 		And 'Access-Control-Allow-Origin' is '*'
 		And 'Access-Control-Allow-Headers' is '*'
-		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, and OPTIONS
-		And the body is a JSON object representing the updated input Venture
+		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, and OPTIONS
+		And the body is a JSON array containing all updated Ventures
+		And those Ventures will have new 'last_updated' datetimes
 		...`)
 
 	beginVenTest()
@@ -224,14 +228,20 @@ func TestPUT_Ventures_5(t *testing.T) {
 	require.Equal(t, 200, res.StatusCode)
 	test.AssertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
 
-	output := v.AssertVentureSliceFromReader(t, res.Body)
-	require.Len(t, output, 2)
+	out := v.AssertVentureSliceFromReader(t, res.Body)
+	require.Len(t, out, 2)
 
-	assert.Equal(t, "4", output[0].ID)
-	assert.True(t, output[0].IsDead)
+	for _, ven := range out {
+		ok := assert.Contains(t, []string{"4", "5"}, ven.ID)
+		if !ok {
+			continue
+		}
 
-	assert.Equal(t, "5", output[1].ID)
-	assert.True(t, output[1].IsDead)
+		exp, ok := livingVens[ven.ID]
+		require.True(t, ok)
+		exp.IsDead = true
+		v.AssertVentureModEquals(t, exp, ven)
+	}
 }
 
 // ****************************************************************************
@@ -246,21 +256,24 @@ func TestPUT_Ventures_6(t *testing.T) {
 		And the 'Content-Type' header contains 'application/json'
 		And 'Access-Control-Allow-Origin' is '*'
 		And 'Access-Control-Allow-Headers' is '*'
-		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, and OPTIONS
+		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, and OPTIONS
 		And the body is a JSON object representing a WrappedReply
-		And the wrapped data is the updated input Venture
+		And the wrapped data is a JSON array containing all updated Ventures
+		And those Ventures will have new 'last_updated' datetimes
 		...`)
 
 	beginVenTest()
 	defer endVenTest()
 
+	exp, ok := livingVens["1"]
+	require.True(t, ok)
+
 	input := v.ModVenture{
-		IDs:   "1",
-		Props: "description, state, order_ids, extra",
+		IDs:   exp.ID,
+		Props: "description, state, extra",
 		Values: v.Venture{
 			Description: "Black blizzard",
 			State:       "In progress",
-			OrderIDs:    "1,2,3",
 			Extra:       "colour: black; power: 9000",
 		},
 	}
@@ -280,11 +293,13 @@ func TestPUT_Ventures_6(t *testing.T) {
 	require.Equal(t, 200, res.StatusCode)
 	test.AssertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
 
-	_, output := v.AssertWrappedVentureSliceFromReader(t, res.Body)
-	require.Len(t, output, 1)
+	_, out := v.AssertWrappedVentureSliceFromReader(t, res.Body)
+	require.Len(t, out, 1)
 
-	input.Values.ID = "1"
-	input.Values.IsDead = false
-	v.AssertGenericVenture(t, output[0])
-	v.AssertVentureModEquals(t, input.Values, output[0])
+	input.Values.OrderIDs = exp.OrderIDs
+	input.Values.ID = out[0].ID
+	input.Values.LastModified = out[0].LastModified
+
+	v.AssertGenericVenture(t, out[0])
+	v.AssertVentureModEquals(t, input.Values, out[0])
 }

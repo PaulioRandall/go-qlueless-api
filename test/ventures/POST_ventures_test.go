@@ -71,7 +71,7 @@ func TestPOST_Venture_2(t *testing.T) {
 		And the 'Content-Type' header contains 'application/json'
 		And 'Access-Control-Allow-Origin' is '*'
 		And 'Access-Control-Allow-Headers' is '*'
-		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, and OPTIONS
+		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, and OPTIONS
 		And the body is a JSON object representing an error response
 		...`)
 
@@ -112,7 +112,7 @@ func TestPOST_Venture_3(t *testing.T) {
 		And the 'Content-Type' header contains 'application/json'
 		And 'Access-Control-Allow-Origin' is '*'
 		And 'Access-Control-Allow-Headers' is '*'
-		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, and OPTIONS
+		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, and OPTIONS
 		And the body is a JSON object representing a WrappedReply
 		And the wrapped data is a JSON object representing the living input Venture
 		And that Venture will have a new, unused, ID

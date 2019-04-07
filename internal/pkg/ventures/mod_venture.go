@@ -1,6 +1,7 @@
 package ventures
 
 import (
+	"database/sql"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -24,7 +25,7 @@ func DecodeModVenture(r io.Reader) (ModVenture, error) {
 	return mv, err
 }
 
-// SplitIDs returns the IDs of the Ventures to update.
+// SplitIDs returns the IDs of the Ventures to update as a slice.
 func (mv *ModVenture) SplitIDs() []string {
 	if mv.IDs == "" {
 		return []string{}
@@ -111,4 +112,71 @@ func (mv *ModVenture) ApplyMod(ven *Venture) {
 			ven.Extra = mod.Extra
 		}
 	}
+}
+
+// Update pushes the modification of changes to the database.
+//
+// @UNTESTED
+func (mv *ModVenture) Update(db *sql.DB) ([]Venture, bool) {
+
+	ids := mv.SplitIDs()
+	args := make([]interface{}, len(ids))
+	for i, _ := range ids {
+		args[i] = ids[i]
+	}
+
+	vens, err := QueryMany(db, args)
+	if u.LogIfErr(err) {
+		return nil, false
+	}
+
+	ok := mv._insertEach(db, vens)
+	if !ok {
+		return nil, false
+	}
+
+	return vens, true
+}
+
+// _insertEach is a file private function that performs the actual SQL operation
+// of pushing modifications to the database.
+func (mv *ModVenture) _insertEach(db *sql.DB, vens []Venture) bool {
+
+	stmt, err := db.Prepare(`INSERT INTO venture
+			(id, description, order_ids, state, is_dead, extra)
+		VALUES
+			(?, ?, ?, ?, ?, ?);`)
+
+	if stmt != nil {
+		defer stmt.Close()
+	}
+
+	if u.LogIfErr(err) {
+		return false
+	}
+
+	return mv._execStmtForEach(stmt, vens)
+}
+
+// _execStmtForEach executes the insert statment provided for each Venture
+// provided.
+func (mv *ModVenture) _execStmtForEach(stmt *sql.Stmt, vens []Venture) bool {
+	for i, _ := range vens {
+
+		ven := &vens[i]
+		mv.ApplyMod(ven)
+
+		_, err := stmt.Exec(ven.ID,
+			ven.Description,
+			ven.OrderIDs,
+			ven.State,
+			ven.IsDead,
+			ven.Extra)
+
+		if u.LogIfErr(err) {
+			return false
+		}
+	}
+
+	return true
 }
