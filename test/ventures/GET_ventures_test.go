@@ -9,11 +9,17 @@ import (
 	require "github.com/stretchr/testify/require"
 )
 
+var FEATURE_TOGGLE bool = false
+
 // ****************************************************************************
 // (GET) /ventures
 // ****************************************************************************
 
 func TestGET_Ventures_1(t *testing.T) {
+	if !FEATURE_TOGGLE {
+		return
+	}
+
 	t.Log(`Given some Ventures already exist on the server
 		When all Ventures are requested
 		Then ensure the response code is 200
@@ -47,6 +53,10 @@ func TestGET_Ventures_1(t *testing.T) {
 // ****************************************************************************
 
 func TestGET_Ventures_2(t *testing.T) {
+	if !FEATURE_TOGGLE {
+		return
+	}
+
 	t.Log(`Given some Ventures already exist on the server
 		When all Ventures are requested
 		And the 'wrap' query parameter has been specified
@@ -77,6 +87,8 @@ func TestGET_Ventures_2(t *testing.T) {
 	_, out := v.AssertWrappedVentureSliceFromReader(t, res.Body)
 	v.AssertVentureSliceModEquals(t, livingVens, out)
 }
+
+// @DEPRECATED @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 // ****************************************************************************
 // (GET) /ventures?id={id}
@@ -171,4 +183,120 @@ func TestGET_Venture_3(t *testing.T) {
 
 	_, out := v.AssertWrappedVentureFromReader(t, res.Body)
 	v.AssertVentureModEquals(t, livingVens[out.ID], out)
+}
+
+// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+// ****************************************************************************
+// (GET) /ventures?ids={ids}
+// ****************************************************************************
+
+func TestGET_Ventures_3(t *testing.T) {
+	if !FEATURE_TOGGLE {
+		return
+	}
+
+	t.Log(`Given some Ventures already exist on the server
+		When a specific living Venture is requested
+		Then ensure the response code is 200
+		And the 'Content-Type' header contains 'application/json'
+		And 'Access-Control-Allow-Origin' is '*'
+		And 'Access-Control-Allow-Headers' is '*'
+		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, and OPTIONS
+		And the body is a JSON array containing only the living Venture requested
+		...`)
+
+	beginVenTest()
+	defer endVenTest()
+
+	req := test.APICall{
+		URL:    "http://localhost:8080/ventures?ids=1",
+		Method: "GET",
+	}
+	res := req.Fire()
+	defer res.Body.Close()
+	defer a.PrintResponse(t, res.Body)
+
+	require.Equal(t, 200, res.StatusCode)
+	test.AssertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
+
+	out := v.AssertVentureSliceFromReader(t, res.Body)
+	require.Len(t, out, 1)
+
+	v.AssertVentureModEquals(t, livingVens["1"], out[0])
+}
+
+func TestGET_Ventures_4(t *testing.T) {
+	if !FEATURE_TOGGLE {
+		return
+	}
+
+	t.Log(`Given some Ventures already exist on the server
+		When a non-existent Venture is requested
+		Then ensure the response code is 404
+		And the 'Content-Type' header contains 'application/json'
+		And 'Access-Control-Allow-Origin' is '*'
+		And 'Access-Control-Allow-Headers' is '*'
+		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, and OPTIONS
+		And the body is an empty JSON array of Ventures
+		...`)
+
+	beginVenTest()
+	defer endVenTest()
+
+	req := test.APICall{
+		URL:    "http://localhost:8080/ventures?ids=999999",
+		Method: "GET",
+	}
+	res := req.Fire()
+	defer res.Body.Close()
+	defer a.PrintResponse(t, res.Body)
+
+	require.Equal(t, 400, res.StatusCode)
+	test.AssertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
+
+	out := v.AssertVentureSliceFromReader(t, res.Body)
+	require.Empty(t, out)
+}
+
+// ****************************************************************************
+// (GET) /ventures?wrap&id={id}
+// ****************************************************************************
+
+func TestGET_Ventures_5(t *testing.T) {
+	if !FEATURE_TOGGLE {
+		return
+	}
+
+	t.Log(`Given some Ventures already exist on the server
+		When a specific living Venture is requested
+		And the 'wrap' query parameter has been specified
+		Then ensure the response code is 200
+		And the 'Content-Type' header contains 'application/json'
+		And 'Access-Control-Allow-Origin' is '*'
+		And 'Access-Control-Allow-Headers' is '*'
+		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, and OPTIONS
+		And the body is a JSON object wrapping the with meta information
+		And the wrapped meta information contains a message and self link
+		And the body is a JSON array containing only the living Venture requested
+		...`)
+
+	beginVenTest()
+	defer endVenTest()
+
+	req := test.APICall{
+		URL:    "http://localhost:8080/ventures?wrap&ids=1",
+		Method: "GET",
+	}
+	res := req.Fire()
+	defer res.Body.Close()
+	defer a.PrintResponse(t, res.Body)
+
+	require.Equal(t, 200, res.StatusCode)
+	test.AssertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
+
+	_, out := v.AssertWrappedVentureSliceFromReader(t, res.Body)
+	require.Len(t, out, 1)
+
+	v.AssertVentureModEquals(t, livingVens["1"], out[0])
 }
