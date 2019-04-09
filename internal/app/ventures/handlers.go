@@ -31,18 +31,6 @@ func VenturesHandler(res http.ResponseWriter, req *http.Request) {
 	}
 }
 
-// _GET_Demux directs requests to the correct GET handler depending on the
-// query parameters set
-func _GET_Demux(res *http.ResponseWriter, req *http.Request) {
-	id := req.FormValue("id")
-	switch id {
-	case "":
-		_GET_AllVentures(res, req)
-	default:
-		_GET_Venture(id, res, req)
-	}
-}
-
 // _GET_Ventures handles client requests for any amount of living Ventures.
 func _GET_Ventures(res *http.ResponseWriter, req *http.Request) {
 
@@ -68,29 +56,6 @@ func _GET_Ventures(res *http.ResponseWriter, req *http.Request) {
 
 	m := fmt.Sprintf("Found %d Ventures", len(vens))
 	writeSuccessReply(res, req, http.StatusOK, vens, m)
-}
-
-// _GET_AllVentures handles client requests for all living Ventures.
-func _GET_AllVentures(res *http.ResponseWriter, req *http.Request) {
-	vens, err := v.QueryAll(q.Sev.DB)
-	if err != nil {
-		h.WriteServerError(res, req)
-		return
-	}
-
-	m := fmt.Sprintf("Found %d Ventures", len(vens))
-	writeSuccessReply(res, req, http.StatusOK, vens, m)
-}
-
-// _GET_Venture handles client requests for a specific Venture.
-func _GET_Venture(id string, res *http.ResponseWriter, req *http.Request) {
-	ven, ok := findVenture(id, res, req)
-	if !ok {
-		return
-	}
-
-	m := fmt.Sprintf("Found Venture '%s'", id)
-	writeSuccessReply(res, req, http.StatusOK, ven, m)
 }
 
 // _POST_NewVenture handles client requests for creating new Ventures.

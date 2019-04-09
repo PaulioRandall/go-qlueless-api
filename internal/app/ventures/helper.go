@@ -39,20 +39,6 @@ func findVentures(ids string, res *http.ResponseWriter, req *http.Request) ([]v.
 	return vens, true
 }
 
-// findVenture finds the Venture with the specified ID.
-func findVenture(id string, res *http.ResponseWriter, req *http.Request) (*v.Venture, bool) {
-	ven, err := v.QueryFor(q.Sev.DB, id)
-	switch {
-	case err != nil:
-		h.WriteServerError(res, req)
-		return nil, false
-	case ven == nil:
-		h.WriteBadRequest(res, req, fmt.Sprintf("Thing '%s' not found", id))
-		return nil, false
-	}
-	return ven, true
-}
-
 // decodeNewVenture decodes a NewVenture from a Request.Body.
 func decodeNewVenture(res *http.ResponseWriter, req *http.Request) (v.NewVenture, bool) {
 	ven, err := v.DecodeNewVenture(req.Body)
