@@ -19,7 +19,7 @@ func TestOPTIONS_Ventures(t *testing.T) {
 		And the 'Content-Type' header contains 'application/json'
 		And 'Access-Control-Allow-Origin' is '*'
 		And 'Access-Control-Allow-Headers' is '*'
-		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, and OPTIONS
+		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, and OPTIONS
 		And there is NO response body
 		...`)
 
@@ -50,7 +50,7 @@ func TestINVALID_Ventures(t *testing.T) {
 		And the 'Content-Type' header contains 'application/json'
 		And 'Access-Control-Allow-Origin' is '*'
 		And 'Access-Control-Allow-Headers' is '*'
-		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE, and OPTIONS
+		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, and OPTIONS
 		And there is NO response body
 		...`)
 
