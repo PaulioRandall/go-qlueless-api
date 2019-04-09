@@ -12,44 +12,6 @@ import (
 	v "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/ventures"
 )
 
-// InjectDummyVentures injects dummy Ventures so the API testing can performed.
-// This function is expected to be removed once a database and formal test data
-// has been crafted.
-func InjectDummyVentures() {
-	ventures.Add(v.NewVenture{
-		Description: "White wizard",
-		State:       "Not started",
-		Extra:       "colour: white; power: 9000",
-	})
-	ventures.Add(v.NewVenture{
-		Description: "Green lizard",
-		State:       "In progress",
-		OrderIDs:    "4,5,6,7,8",
-	})
-	ventures.Add(v.NewVenture{
-		Description: "Pink gizzard",
-		State:       "Finished",
-		OrderIDs:    "1,2,3",
-	})
-	ventures.Add(v.NewVenture{
-		Description: "Eddie Izzard",
-		State:       "In Progress",
-		OrderIDs:    "4,5,6",
-	})
-	ventures.Add(v.NewVenture{
-		Description: "The Count of Tuscany",
-		State:       "In Progress",
-		OrderIDs:    "4,5,6",
-	})
-	ventures.Update(&v.ModVenture{
-		IDs:   "3",
-		Props: "is_alive",
-		Values: v.Venture{
-			IsDead: true,
-		},
-	})
-}
-
 // writeSuccessReply writes a success response.
 func writeSuccessReply(res *http.ResponseWriter, req *http.Request, code int, data interface{}, msg string) {
 	h.AppendJSONHeader(res, "")

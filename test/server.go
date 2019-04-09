@@ -47,9 +47,9 @@ func StartServer(binPath string) {
 
 	adminPrint("Pause to let server start")
 	longPause.Do(func() {
-		time.Sleep(250 * time.Millisecond)
+		time.Sleep(300 * time.Millisecond)
 	})
-	time.Sleep(50 * time.Millisecond)
+	time.Sleep(75 * time.Millisecond)
 }
 
 // StopServer stops the application server

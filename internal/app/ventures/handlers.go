@@ -10,8 +10,6 @@ import (
 	v "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/ventures"
 )
 
-var ventures = v.NewVentureStore()
-
 // VenturesHandler handles requests to do with collections of, or individual,
 // Ventures.
 func VenturesHandler(res http.ResponseWriter, req *http.Request) {
@@ -20,13 +18,7 @@ func VenturesHandler(res http.ResponseWriter, req *http.Request) {
 
 	switch {
 	case req.Method == "GET":
-		id := req.FormValue("id")
-		switch id {
-		case "":
-			_GET_AllVentures(&res, req)
-		default:
-			_GET_Venture(id, &res, req)
-		}
+		_GET_Demux(&res, req)
 	case req.Method == "POST":
 		_POST_NewVenture(&res, req)
 	case req.Method == "PUT":
@@ -35,6 +27,18 @@ func VenturesHandler(res http.ResponseWriter, req *http.Request) {
 		res.WriteHeader(http.StatusOK)
 	default:
 		res.WriteHeader(http.StatusMethodNotAllowed)
+	}
+}
+
+// _GET_Demux directs requests to the correct GET handler depending on the
+// query parameters set
+func _GET_Demux(res *http.ResponseWriter, req *http.Request) {
+	id := req.FormValue("id")
+	switch id {
+	case "":
+		_GET_AllVentures(res, req)
+	default:
+		_GET_Venture(id, res, req)
 	}
 }
 

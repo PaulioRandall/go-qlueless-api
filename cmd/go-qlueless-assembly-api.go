@@ -31,7 +31,6 @@ func main() {
 func _preload() {
 	c.LoadChangelog()
 	o.LoadSpec()
-	v.InjectDummyVentures()
 }
 
 // _routes attaches the service routes to the servers router
