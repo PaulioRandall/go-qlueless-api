@@ -6,6 +6,7 @@ import (
 	a "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/asserts"
 	v "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/ventures"
 	test "github.com/PaulioRandall/go-qlueless-assembly-api/test"
+	assert "github.com/stretchr/testify/assert"
 	require "github.com/stretchr/testify/require"
 )
 
@@ -232,8 +233,52 @@ func TestGET_Ventures_4(t *testing.T) {
 	}
 
 	t.Log(`Given some Ventures already exist on the server
-		When a non-existent Venture is requested
-		Then ensure the response code is 404
+		When a specific living Venture is requested
+		Then ensure the response code is 200
+		And the 'Content-Type' header contains 'application/json'
+		And 'Access-Control-Allow-Origin' is '*'
+		And 'Access-Control-Allow-Headers' is '*'
+		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, and OPTIONS
+		And the body is a JSON array containing only the living Ventures requested
+		...`)
+
+	beginVenTest()
+	defer endVenTest()
+
+	req := test.APICall{
+		URL:    "http://localhost:8080/ventures?ids=1,2,3",
+		Method: "GET",
+	}
+	res := req.Fire()
+	defer res.Body.Close()
+	defer a.PrintResponse(t, res.Body)
+
+	require.Equal(t, 200, res.StatusCode)
+	test.AssertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
+
+	out := v.AssertVentureSliceFromReader(t, res.Body)
+	require.Len(t, out, 3)
+
+	for _, ven := range out {
+		ok := assert.Contains(t, []string{"1", "2", "3"}, ven.ID)
+		if !ok {
+			continue
+		}
+
+		exp, ok := livingVens[ven.ID]
+		require.True(t, ok)
+		v.AssertVentureModEquals(t, exp, ven)
+	}
+}
+
+func TestGET_Ventures_5(t *testing.T) {
+	if !FEATURE_TOGGLE {
+		return
+	}
+
+	t.Log(`Given some Ventures already exist on the server
+		When non-existent Ventures are requested
+		Then ensure the response code is 200
 		And the 'Content-Type' header contains 'application/json'
 		And 'Access-Control-Allow-Origin' is '*'
 		And 'Access-Control-Allow-Headers' is '*'
@@ -245,14 +290,14 @@ func TestGET_Ventures_4(t *testing.T) {
 	defer endVenTest()
 
 	req := test.APICall{
-		URL:    "http://localhost:8080/ventures?ids=999999",
+		URL:    "http://localhost:8080/ventures?ids=888888,999999",
 		Method: "GET",
 	}
 	res := req.Fire()
 	defer res.Body.Close()
 	defer a.PrintResponse(t, res.Body)
 
-	require.Equal(t, 400, res.StatusCode)
+	require.Equal(t, 200, res.StatusCode)
 	test.AssertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
 
 	out := v.AssertVentureSliceFromReader(t, res.Body)
@@ -263,13 +308,13 @@ func TestGET_Ventures_4(t *testing.T) {
 // (GET) /ventures?wrap&id={id}
 // ****************************************************************************
 
-func TestGET_Ventures_5(t *testing.T) {
+func TestGET_Ventures_6(t *testing.T) {
 	if !FEATURE_TOGGLE {
 		return
 	}
 
 	t.Log(`Given some Ventures already exist on the server
-		When a specific living Venture is requested
+		When specific living Ventures are requested
 		And the 'wrap' query parameter has been specified
 		Then ensure the response code is 200
 		And the 'Content-Type' header contains 'application/json'
@@ -278,14 +323,14 @@ func TestGET_Ventures_5(t *testing.T) {
 		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, and OPTIONS
 		And the body is a JSON object wrapping the with meta information
 		And the wrapped meta information contains a message and self link
-		And the body is a JSON array containing only the living Venture requested
+		And the body is a JSON array containing only the living Ventures requested
 		...`)
 
 	beginVenTest()
 	defer endVenTest()
 
 	req := test.APICall{
-		URL:    "http://localhost:8080/ventures?wrap&ids=1",
+		URL:    "http://localhost:8080/ventures?wrap&ids=1,4,5",
 		Method: "GET",
 	}
 	res := req.Fire()
@@ -296,7 +341,16 @@ func TestGET_Ventures_5(t *testing.T) {
 	test.AssertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
 
 	_, out := v.AssertWrappedVentureSliceFromReader(t, res.Body)
-	require.Len(t, out, 1)
+	require.Len(t, out, 3)
 
-	v.AssertVentureModEquals(t, livingVens["1"], out[0])
+	for _, ven := range out {
+		ok := assert.Contains(t, []string{"1", "2", "3"}, ven.ID)
+		if !ok {
+			continue
+		}
+
+		exp, ok := livingVens[ven.ID]
+		require.True(t, ok)
+		v.AssertVentureModEquals(t, exp, ven)
+	}
 }
