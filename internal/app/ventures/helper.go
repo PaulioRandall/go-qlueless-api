@@ -20,6 +20,26 @@ func writeSuccessReply(res *http.ResponseWriter, req *http.Request, code int, da
 	json.NewEncoder(*res).Encode(reply)
 }
 
+// findVentures finds the Ventures with the IDs specified.
+func findVentures(ids string, res *http.ResponseWriter, req *http.Request) ([]v.Venture, bool) {
+	ids = u.StripWhitespace(ids)
+	idSlice := strings.Split(ids, ",")
+	s := make([]interface{}, len(idSlice))
+
+	for i, id := range idSlice {
+		s[i] = id
+	}
+
+	vens, err := v.QueryMany(q.Sev.DB, s)
+
+	if err != nil {
+		h.WriteServerError(res, req)
+		return nil, false
+	}
+
+	return vens, true
+}
+
 // findVenture finds the Venture with the specified ID.
 func findVenture(id string, res *http.ResponseWriter, req *http.Request) (*v.Venture, bool) {
 	ven, err := v.QueryFor(q.Sev.DB, id)
