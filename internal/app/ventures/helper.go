@@ -22,7 +22,6 @@ func writeSuccessReply(res *http.ResponseWriter, req *http.Request, code int, da
 
 // findVentures finds the Ventures with the IDs specified.
 func findVentures(ids string, res *http.ResponseWriter, req *http.Request) ([]v.Venture, bool) {
-	ids = u.StripWhitespace(ids)
 	idSlice := strings.Split(ids, ",")
 	s := make([]interface{}, len(idSlice))
 

@@ -7,6 +7,7 @@ import (
 
 	q "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/qserver"
 	h "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/uhttp"
+	u "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/utils"
 	v "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/ventures"
 )
 
@@ -40,6 +41,33 @@ func _GET_Demux(res *http.ResponseWriter, req *http.Request) {
 	default:
 		_GET_Venture(id, res, req)
 	}
+}
+
+// _GET_Ventures handles client requests for any amount of living Ventures.
+func _GET_Ventures(res *http.ResponseWriter, req *http.Request) {
+
+	ids := req.FormValue("ids")
+	ids = u.StripWhitespace(ids)
+	var vens []v.Venture
+
+	switch {
+	case ids == "":
+		var err error
+		vens, err = v.QueryAll(q.Sev.DB)
+		if err != nil {
+			h.WriteServerError(res, req)
+			return
+		}
+	default:
+		var ok bool
+		vens, ok = findVentures(ids, res, req)
+		if !ok {
+			return
+		}
+	}
+
+	m := fmt.Sprintf("Found %d Ventures", len(vens))
+	writeSuccessReply(res, req, http.StatusOK, vens, m)
 }
 
 // _GET_AllVentures handles client requests for all living Ventures.

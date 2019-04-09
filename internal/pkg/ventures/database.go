@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"log"
 	"strings"
+
+	u "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/utils"
 )
 
 // CreateTables creates all the Venture tables, views and triggers within the
@@ -219,8 +221,7 @@ func QueryAll(db *sql.DB) ([]Venture, error) {
 		defer rows.Close()
 	}
 
-	if err != nil {
-		log.Println(err)
+	if u.LogIfErr(err) {
 		return nil, err
 	}
 
