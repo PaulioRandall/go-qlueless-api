@@ -134,12 +134,12 @@
 		        "$ref": "#/components/parameters/wrap"
 		      },
 		      {
-		        "$ref": "#/components/parameters/venture_id"
+		        "$ref": "#/components/parameters/venture_id_csv"
 		      }
 		    ],
 		    "responses": {
 		      "200": {
-		        "$ref": "#/components/responses/ventures_or_venture_200"
+		        "$ref": "#/components/responses/ventures_200"
 		      },
 		      "default": {
 		        "$ref": "#/components/responses/error"

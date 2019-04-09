@@ -10,7 +10,7 @@ import (
 	require "github.com/stretchr/testify/require"
 )
 
-var FEATURE_TOGGLE bool = false
+var FEATURE_TOGGLE bool = true
 
 // ****************************************************************************
 // (GET) /ventures
@@ -96,6 +96,10 @@ func TestGET_Ventures_2(t *testing.T) {
 // ****************************************************************************
 
 func TestGET_Venture_1(t *testing.T) {
+	if FEATURE_TOGGLE {
+		return
+	}
+
 	t.Log(`Given some Ventures already exist on the server
 		When a specific existing Venture is requested
 		Then ensure the response code is 200
@@ -125,6 +129,10 @@ func TestGET_Venture_1(t *testing.T) {
 }
 
 func TestGET_Venture_2(t *testing.T) {
+	if FEATURE_TOGGLE {
+		return
+	}
+
 	t.Log(`Given some Ventures already exist on the server
 		When a specific non-existent Venture is requested
 		Then ensure the response code is 404
@@ -156,6 +164,10 @@ func TestGET_Venture_2(t *testing.T) {
 // ****************************************************************************
 
 func TestGET_Venture_3(t *testing.T) {
+	if FEATURE_TOGGLE {
+		return
+	}
+
 	t.Log(`Given some Ventures already exist on the server
 		When a specific existing Venture is requested
 		And the 'wrap' query parameter has been specified
@@ -304,11 +316,55 @@ func TestGET_Ventures_5(t *testing.T) {
 	require.Empty(t, out)
 }
 
+func TestGET_Ventures_6(t *testing.T) {
+	if !FEATURE_TOGGLE {
+		return
+	}
+
+	t.Log(`Given some Ventures already exist on the server
+	When existent and non-existent Ventures are requested
+	Then ensure the response code is 200
+	And the 'Content-Type' header contains 'application/json'
+	And 'Access-Control-Allow-Origin' is '*'
+	And 'Access-Control-Allow-Headers' is '*'
+	And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, and OPTIONS
+	And the body is a JSON array containing only the living Ventures requested
+	...`)
+
+	beginVenTest()
+	defer endVenTest()
+
+	req := test.APICall{
+		URL:    "http://localhost:8080/ventures?ids=1,88888,2,99999",
+		Method: "GET",
+	}
+	res := req.Fire()
+	defer res.Body.Close()
+	defer a.PrintResponse(t, res.Body)
+
+	require.Equal(t, 200, res.StatusCode)
+	test.AssertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
+
+	out := v.AssertVentureSliceFromReader(t, res.Body)
+	require.Len(t, out, 2)
+
+	for _, ven := range out {
+		ok := assert.Contains(t, []string{"1", "2"}, ven.ID)
+		if !ok {
+			continue
+		}
+
+		exp, ok := livingVens[ven.ID]
+		require.True(t, ok)
+		v.AssertVentureModEquals(t, exp, ven)
+	}
+}
+
 // ****************************************************************************
 // (GET) /ventures?wrap&id={id}
 // ****************************************************************************
 
-func TestGET_Ventures_6(t *testing.T) {
+func TestGET_Ventures_7(t *testing.T) {
 	if !FEATURE_TOGGLE {
 		return
 	}
@@ -344,7 +400,7 @@ func TestGET_Ventures_6(t *testing.T) {
 	require.Len(t, out, 3)
 
 	for _, ven := range out {
-		ok := assert.Contains(t, []string{"1", "2", "3"}, ven.ID)
+		ok := assert.Contains(t, []string{"1", "4", "5"}, ven.ID)
 		if !ok {
 			continue
 		}

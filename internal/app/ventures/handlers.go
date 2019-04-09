@@ -19,7 +19,7 @@ func VenturesHandler(res http.ResponseWriter, req *http.Request) {
 
 	switch {
 	case req.Method == "GET":
-		_GET_Demux(&res, req)
+		_GET_Ventures(&res, req)
 	case req.Method == "POST":
 		_POST_NewVenture(&res, req)
 	case req.Method == "PUT":
