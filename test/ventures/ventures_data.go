@@ -22,8 +22,8 @@ var deadVens map[string]v.Venture = nil
 // inject the test data.
 func beginVenTest() {
 	venDBReset()
-	venDBInjectLivingVentures()
-	venDBInjectDeadVentures()
+	venDBInjectLiving()
+	venDBInjectDead()
 	test.StartServer("../../bin")
 }
 
@@ -72,9 +72,8 @@ func venDBInject(data map[string]v.Venture, new v.NewVenture) {
 	data[ven.ID] = *ven
 }
 
-// venDBInjectLivingVentures injects a default set of living Ventures into the
-// database
-func venDBInjectLivingVentures() {
+// venDBInjectLiving injects a default set of living Ventures into the database
+func venDBInjectLiving() {
 	livingVens = map[string]v.Venture{}
 	venDBInject(livingVens, v.NewVenture{
 		Description: "White wizard",
@@ -99,9 +98,8 @@ func venDBInjectLivingVentures() {
 	})
 }
 
-// venDBInjectDeadVentures injects a default set of dead Ventures into the
-// database
-func venDBInjectDeadVentures() {
+// venDBInjectDead injects a default set of dead Ventures into the database
+func venDBInjectDead() {
 	deadVens = map[string]v.Venture{}
 	venDBInject(deadVens, v.NewVenture{
 		Description: "Rose",
@@ -128,9 +126,8 @@ func venDBInjectDeadVentures() {
 	}
 }
 
-// venDBCollectAllVentures creates a map containing all ventures from the test
-// set
-func venDBCollectAllVentures() {
+// venDBCollectAll creates a map containing all ventures from the test set
+func venDBCollectAll() {
 	allVens = map[string]v.Venture{}
 
 	if livingVens != nil {
@@ -146,8 +143,26 @@ func venDBCollectAllVentures() {
 	}
 }
 
-// venDBQueryVentures queries the database for the specified IDs
-func venDBQueryVentures(ids string) []v.Venture {
+// venDBQueryAll queries the database for all living ventures
+func venDBQueryAll() []v.Venture {
+	rows, err := venDB.Query(`
+		SELECT id, last_modified, description, order_ids, state, extra
+		FROM ql_ventures
+	`)
+
+	if rows != nil {
+		defer rows.Close()
+	}
+
+	if err != nil {
+		panic(err)
+	}
+
+	return _mapRows(rows)
+}
+
+// venDBQueryMany queries the database for Ventures with the specified IDs
+func venDBQueryMany(ids string) []v.Venture {
 	rows, err := venDB.Query(fmt.Sprintf(`
 		SELECT id, last_modified, description, order_ids, state, extra
 		FROM ql_ventures
