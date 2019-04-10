@@ -6,7 +6,6 @@ import (
 	a "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/asserts"
 	v "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/ventures"
 	test "github.com/PaulioRandall/go-qlueless-assembly-api/test"
-	assert "github.com/stretchr/testify/assert"
 	require "github.com/stretchr/testify/require"
 )
 
@@ -79,7 +78,8 @@ func TestGET_Ventures_2(t *testing.T) {
 	test.AssertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
 
 	_, out := v.AssertWrappedVentureSliceFromReader(t, res.Body)
-	v.AssertVentureSliceModEquals(t, livingVens, out)
+	exp := venDBQueryAll()
+	v.AssertOrderlessSlicesEqual(t, exp, out)
 }
 
 // ****************************************************************************
@@ -115,7 +115,8 @@ func TestGET_Ventures_3(t *testing.T) {
 	out := v.AssertVentureSliceFromReader(t, res.Body)
 	require.Len(t, out, 1)
 
-	v.AssertVentureModEquals(t, livingVens["1"], out[0])
+	exp := venDBQueryMany("1")
+	v.AssertOrderlessSlicesEqual(t, exp, out)
 }
 
 func TestGET_Ventures_4(t *testing.T) {
@@ -147,16 +148,8 @@ func TestGET_Ventures_4(t *testing.T) {
 	out := v.AssertVentureSliceFromReader(t, res.Body)
 	require.Len(t, out, 3)
 
-	for _, ven := range out {
-		ok := assert.Contains(t, []string{"1", "2", "3"}, ven.ID)
-		if !ok {
-			continue
-		}
-
-		exp, ok := livingVens[ven.ID]
-		require.True(t, ok)
-		v.AssertVentureModEquals(t, exp, ven)
-	}
+	exp := venDBQueryMany("1,2,3")
+	v.AssertOrderlessSlicesEqual(t, exp, out)
 }
 
 func TestGET_Ventures_5(t *testing.T) {
@@ -218,16 +211,8 @@ func TestGET_Ventures_6(t *testing.T) {
 	out := v.AssertVentureSliceFromReader(t, res.Body)
 	require.Len(t, out, 2)
 
-	for _, ven := range out {
-		ok := assert.Contains(t, []string{"1", "2"}, ven.ID)
-		if !ok {
-			continue
-		}
-
-		exp, ok := livingVens[ven.ID]
-		require.True(t, ok)
-		v.AssertVentureModEquals(t, exp, ven)
-	}
+	exp := venDBQueryMany("1,2")
+	v.AssertOrderlessSlicesEqual(t, exp, out)
 }
 
 // ****************************************************************************
@@ -266,14 +251,6 @@ func TestGET_Ventures_7(t *testing.T) {
 	_, out := v.AssertWrappedVentureSliceFromReader(t, res.Body)
 	require.Len(t, out, 3)
 
-	for _, ven := range out {
-		ok := assert.Contains(t, []string{"1", "4", "5"}, ven.ID)
-		if !ok {
-			continue
-		}
-
-		exp, ok := livingVens[ven.ID]
-		require.True(t, ok)
-		v.AssertVentureModEquals(t, exp, ven)
-	}
+	exp := venDBQueryMany("1,4,5")
+	v.AssertOrderlessSlicesEqual(t, exp, out)
 }
