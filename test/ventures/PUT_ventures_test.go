@@ -61,13 +61,15 @@ func TestPUT_Ventures_1(t *testing.T) {
 
 	out := v.AssertVentureSliceFromReader(t, res.Body)
 	require.Len(t, out, 1)
+	v.AssertGenericVenture(t, out[0])
 
 	input.Values.State = exp.State
 	input.Values.ID = out[0].ID
 	input.Values.LastModified = out[0].LastModified
+	fromDB := venDBQueryOne(out[0].ID)
 
-	v.AssertGenericVenture(t, out[0])
-	v.AssertVentureModEquals(t, input.Values, out[0])
+	assert.Equal(t, input.Values, out[0])
+	assert.Equal(t, fromDB, out[0])
 }
 
 func TestPUT_Ventures_2(t *testing.T) {
@@ -231,17 +233,8 @@ func TestPUT_Ventures_5(t *testing.T) {
 	out := v.AssertVentureSliceFromReader(t, res.Body)
 	require.Len(t, out, 2)
 
-	for _, ven := range out {
-		ok := assert.Contains(t, []string{"4", "5"}, ven.ID)
-		if !ok {
-			continue
-		}
-
-		exp, ok := livingVens[ven.ID]
-		require.True(t, ok)
-		exp.IsDead = true
-		v.AssertVentureModEquals(t, exp, ven)
-	}
+	fromDB := venDBQueryMany("4,5")
+	assert.Empty(t, fromDB)
 }
 
 // ****************************************************************************
@@ -295,11 +288,13 @@ func TestPUT_Ventures_6(t *testing.T) {
 
 	_, out := v.AssertWrappedVentureSliceFromReader(t, res.Body)
 	require.Len(t, out, 1)
+	v.AssertGenericVenture(t, out[0])
 
 	input.Values.OrderIDs = exp.OrderIDs
 	input.Values.ID = out[0].ID
 	input.Values.LastModified = out[0].LastModified
+	fromDB := venDBQueryOne(out[0].ID)
 
-	v.AssertGenericVenture(t, out[0])
-	v.AssertVentureModEquals(t, input.Values, out[0])
+	assert.Equal(t, input.Values, out[0])
+	assert.Equal(t, fromDB, out[0])
 }
