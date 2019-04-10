@@ -18,7 +18,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Added `(GET) /changelog` which returns this changelog
 - Added `(OPTIONS) /changelog` which handles requests for the endpoints capabilities
 - Added `(GET) /ventures` which handles requests for `Ventures`
-- Updated `(GET) /ventures` with the `id` query parameter so that specific Ventures may be requested
+- Updated `(GET) /ventures` with the `ids` query parameter so that specific Ventures may be requested
 - Added `(POST) /ventures` which handles creation of new `Ventures`
 - Added `(PUT) /ventures` which handles updating of existing `Ventures`
 - Added `(OPTIONS) /ventures` which handles requests for the endpoints capabilities

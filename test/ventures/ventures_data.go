@@ -2,6 +2,7 @@ package ventures
 
 import (
 	"database/sql"
+	"fmt"
 
 	d "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/database"
 	u "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/utils"
@@ -143,4 +144,52 @@ func venDBCollectAllVentures() {
 			allVens[k] = v
 		}
 	}
+}
+
+// venDBQueryVentures queries the database for the specified IDs
+func venDBQueryVentures(ids string) []v.Venture {
+	rows, err := venDB.Query(fmt.Sprintf(`
+		SELECT id, last_modified, description, order_ids, state, extra
+		FROM ql_ventures
+		WHERE id IN (%s)
+	`, ids))
+
+	if rows != nil {
+		defer rows.Close()
+	}
+
+	if err != nil {
+		panic(err)
+	}
+
+	return _mapRows(rows)
+}
+
+// _mapRows is a file private function that maps rows from a database query into
+// a slice of Ventures.
+func _mapRows(rows *sql.Rows) []v.Venture {
+	vens := []v.Venture{}
+
+	for rows.Next() {
+		vens = append(vens, *_mapRow(rows))
+	}
+
+	return vens
+}
+
+// _mapRow is a file private function that maps a single row from a database
+// query into a Venture.
+func _mapRow(rows *sql.Rows) *v.Venture {
+	ven := v.Venture{}
+	err := rows.Scan(&ven.ID,
+		&ven.LastModified,
+		&ven.Description,
+		&ven.OrderIDs,
+		&ven.State,
+		&ven.Extra)
+
+	if err != nil {
+		panic(err)
+	}
+	return &ven
 }
