@@ -2,6 +2,7 @@ package ventures
 
 import (
 	"io"
+	"sort"
 	"testing"
 
 	ts "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/asserts"
@@ -119,4 +120,12 @@ func AssertWrappedVentureFromReader(t *testing.T, r io.Reader) (w.WrappedReply, 
 
 	AssertGenericVenture(t, v)
 	return wr, v
+}
+
+// AssertOrderlessSlicesEqual asserts that the two slices contain the same
+// Ventures but differences in order should be ignored
+func AssertOrderlessSlicesEqual(t *testing.T, exp []Venture, act []Venture) {
+	sort.Sort(ByVenID(exp))
+	sort.Sort(ByVenID(act))
+	assert.Equal(t, exp, act)
 }
