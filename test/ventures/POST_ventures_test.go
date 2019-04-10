@@ -54,14 +54,14 @@ func TestPOST_Venture_1(t *testing.T) {
 	test.AssertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
 
 	output := v.AssertVentureFromReader(t, res.Body)
+	v.AssertGenericVenture(t, output)
+
 	input.ID = output.ID
 	input.LastModified = output.LastModified
+	fromDB := venDBQueryOne(output.ID)
 
-	v.AssertGenericVenture(t, output)
 	assert.Equal(t, input, output)
-
-	_, ok := allVens[output.ID]
-	assert.False(t, ok)
+	assert.Equal(t, fromDB, output)
 }
 
 func TestPOST_Venture_2(t *testing.T) {
@@ -143,12 +143,12 @@ func TestPOST_Venture_3(t *testing.T) {
 	test.AssertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
 
 	_, output := v.AssertWrappedVentureFromReader(t, res.Body)
+	v.AssertGenericVenture(t, output)
+
 	input.ID = output.ID
 	input.LastModified = output.LastModified
+	fromDB := venDBQueryOne(output.ID)
 
-	v.AssertGenericVenture(t, output)
 	assert.Equal(t, input, output)
-
-	_, ok := allVens[output.ID]
-	assert.False(t, ok)
+	assert.Equal(t, fromDB, output)
 }

@@ -180,6 +180,15 @@ func venDBQueryMany(ids string) []v.Venture {
 	return _mapRows(rows)
 }
 
+// venDBQueryOne queries the database for a specific Venture
+func venDBQueryOne(id string) v.Venture {
+	vens := venDBQueryMany(id)
+	if len(vens) != 1 {
+		panic("Expected a single venture from query")
+	}
+	return vens[0]
+}
+
 // _mapRows is a file private function that maps rows from a database query into
 // a slice of Ventures.
 func _mapRows(rows *sql.Rows) []v.Venture {
