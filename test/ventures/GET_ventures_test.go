@@ -1,6 +1,7 @@
 package ventures
 
 import (
+	"sort"
 	"testing"
 
 	a "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/asserts"
@@ -41,7 +42,12 @@ func TestGET_Ventures_1(t *testing.T) {
 	test.AssertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
 
 	out := v.AssertVentureSliceFromReader(t, res.Body)
-	v.AssertVentureSliceModEquals(t, livingVens, out)
+	exp := venDBQueryAll()
+
+	sort.Sort(v.ByVenID(out))
+	sort.Sort(v.ByVenID(exp))
+
+	assert.Equal(t, exp, out)
 }
 
 // ****************************************************************************

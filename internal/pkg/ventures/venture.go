@@ -114,3 +114,26 @@ func (ven *Venture) Update(db *sql.DB) error {
 
 	return err
 }
+
+type ByVenID []Venture
+
+// Len implements from sort.Interface
+//
+// @UNTESTED
+func (bv ByVenID) Len() int {
+	return len(bv)
+}
+
+// Swap implements from sort.Interface
+//
+// @UNTESTED
+func (bv ByVenID) Swap(i, j int) {
+	bv[i], bv[j] = bv[j], bv[i]
+}
+
+// Less implements from sort.Interface
+//
+// @UNTESTED
+func (bv ByVenID) Less(i, j int) bool {
+	return bv[i].ID < bv[j].ID
+}

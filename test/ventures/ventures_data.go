@@ -147,7 +147,7 @@ func venDBCollectAll() {
 func venDBQueryAll() []v.Venture {
 	rows, err := venDB.Query(`
 		SELECT id, last_modified, description, order_ids, state, extra
-		FROM ql_ventures
+		FROM ql_venture
 	`)
 
 	if rows != nil {
@@ -165,7 +165,7 @@ func venDBQueryAll() []v.Venture {
 func venDBQueryMany(ids string) []v.Venture {
 	rows, err := venDB.Query(fmt.Sprintf(`
 		SELECT id, last_modified, description, order_ids, state, extra
-		FROM ql_ventures
+		FROM ql_venture
 		WHERE id IN (%s)
 	`, ids))
 
