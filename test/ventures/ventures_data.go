@@ -14,10 +14,6 @@ var ventureHttpMethods = []string{"GET", "POST", "PUT", "OPTIONS"}
 var dbPath string = "../../bin/qlueless.db"
 var venDB *sql.DB = nil
 
-var allVens map[string]v.Venture = nil
-var livingVens map[string]v.Venture = nil
-var deadVens map[string]v.Venture = nil
-
 // beginVenTest is run at the start of every test to setup the server and
 // inject the test data.
 func beginVenTest() {
@@ -64,35 +60,34 @@ func venDBClose() {
 }
 
 // venDBInject injects a Venture into the database.
-func venDBInject(data map[string]v.Venture, new v.NewVenture) {
+func venDBInject(new v.NewVenture) *v.Venture {
 	ven, ok := new.Insert(venDB)
 	if !ok {
 		panic("Already printed above!")
 	}
-	data[ven.ID] = *ven
+	return ven
 }
 
 // venDBInjectLiving injects a default set of living Ventures into the database
 func venDBInjectLiving() {
-	livingVens = map[string]v.Venture{}
-	venDBInject(livingVens, v.NewVenture{
+	venDBInject(v.NewVenture{
 		Description: "White wizard",
 		State:       "Not started",
 		Extra:       "colour: white; power: 9000",
 	})
-	venDBInject(livingVens, v.NewVenture{
+	venDBInject(v.NewVenture{
 		Description: "Green lizard",
 		State:       "In progress",
 	})
-	venDBInject(livingVens, v.NewVenture{
+	venDBInject(v.NewVenture{
 		Description: "Pink gizzard",
 		State:       "Finished",
 	})
-	venDBInject(livingVens, v.NewVenture{
+	venDBInject(v.NewVenture{
 		Description: "Eddie Izzard",
 		State:       "In Progress",
 	})
-	venDBInject(livingVens, v.NewVenture{
+	venDBInject(v.NewVenture{
 		Description: "The Count of Tuscany",
 		State:       "In Progress",
 	})
@@ -100,15 +95,16 @@ func venDBInjectLiving() {
 
 // venDBInjectDead injects a default set of dead Ventures into the database
 func venDBInjectDead() {
-	deadVens = map[string]v.Venture{}
-	venDBInject(deadVens, v.NewVenture{
-		Description: "Rose",
-		State:       "Finised",
-	})
-	venDBInject(deadVens, v.NewVenture{
-		Description: "Lily",
-		State:       "Closed",
-	})
+	s := []v.Venture{
+		*venDBInject(v.NewVenture{
+			Description: "Rose",
+			State:       "Finised",
+		}),
+		*venDBInject(v.NewVenture{
+			Description: "Lily",
+			State:       "Closed",
+		}),
+	}
 
 	mod := v.ModVenture{
 		Props: "is_dead",
@@ -117,28 +113,11 @@ func venDBInjectDead() {
 		},
 	}
 
-	for _, ven := range deadVens {
+	for _, ven := range s {
 		mod.ApplyMod(&ven)
 		err := ven.Update(venDB)
 		if err != nil {
 			panic(err)
-		}
-	}
-}
-
-// venDBCollectAll creates a map containing all ventures from the test set
-func venDBCollectAll() {
-	allVens = map[string]v.Venture{}
-
-	if livingVens != nil {
-		for k, v := range livingVens {
-			allVens[k] = v
-		}
-	}
-
-	if deadVens != nil {
-		for k, v := range deadVens {
-			allVens[k] = v
 		}
 	}
 }

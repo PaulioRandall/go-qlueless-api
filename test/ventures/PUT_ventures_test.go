@@ -31,11 +31,8 @@ func TestPUT_Ventures_1(t *testing.T) {
 	beginVenTest()
 	defer endVenTest()
 
-	exp, ok := livingVens["1"]
-	require.True(t, ok)
-
 	input := v.ModVenture{
-		IDs:   exp.ID,
+		IDs:   "1",
 		Props: "description, order_ids, extra",
 		Values: v.Venture{
 			Description: "Black blizzard",
@@ -63,13 +60,13 @@ func TestPUT_Ventures_1(t *testing.T) {
 	require.Len(t, out, 1)
 	v.AssertGenericVenture(t, out[0])
 
-	input.Values.State = exp.State
+	input.Values.State = out[0].State
 	input.Values.ID = out[0].ID
 	input.Values.LastModified = out[0].LastModified
 	fromDB := venDBQueryOne(out[0].ID)
 
 	assert.Equal(t, input.Values, out[0])
-	assert.Equal(t, fromDB, out[0])
+	v.AssertVentureModEquals(t, fromDB, out[0])
 }
 
 func TestPUT_Ventures_2(t *testing.T) {
@@ -258,11 +255,8 @@ func TestPUT_Ventures_6(t *testing.T) {
 	beginVenTest()
 	defer endVenTest()
 
-	exp, ok := livingVens["1"]
-	require.True(t, ok)
-
 	input := v.ModVenture{
-		IDs:   exp.ID,
+		IDs:   "1",
 		Props: "description, state, extra",
 		Values: v.Venture{
 			Description: "Black blizzard",
@@ -290,11 +284,11 @@ func TestPUT_Ventures_6(t *testing.T) {
 	require.Len(t, out, 1)
 	v.AssertGenericVenture(t, out[0])
 
-	input.Values.OrderIDs = exp.OrderIDs
+	input.Values.OrderIDs = out[0].OrderIDs
 	input.Values.ID = out[0].ID
 	input.Values.LastModified = out[0].LastModified
-	fromDB := venDBQueryOne(out[0].ID)
-
 	assert.Equal(t, input.Values, out[0])
-	assert.Equal(t, fromDB, out[0])
+
+	fromDB := venDBQueryOne(out[0].ID)
+	v.AssertVentureModEquals(t, fromDB, out[0])
 }
