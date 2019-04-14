@@ -68,6 +68,16 @@ func WriteEmptyReply(res *http.ResponseWriter, contentType string) {
 	(*res).WriteHeader(http.StatusOK)
 }
 
+// WriteSuccessReply writes a success response.
+//
+// @UNTESTED
+func WriteSuccessReply(res *http.ResponseWriter, req *http.Request, code int, data interface{}, msg string) {
+	AppendJSONHeader(res, "")
+	(*res).WriteHeader(code)
+	reply := PrepResponseData(req, data, msg)
+	json.NewEncoder(*res).Encode(reply)
+}
+
 // WriteJSONReply appends the required JSON headers and then writes the response
 // data
 func WriteJSONReply(res *http.ResponseWriter, req *http.Request, data interface{}, extensionType string) {

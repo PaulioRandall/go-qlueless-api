@@ -55,7 +55,7 @@ func _GET_Ventures(res *http.ResponseWriter, req *http.Request) {
 	}
 
 	m := fmt.Sprintf("Found %d Ventures", len(vens))
-	writeSuccessReply(res, req, http.StatusOK, vens, m)
+	h.WriteSuccessReply(res, req, http.StatusOK, vens, m)
 }
 
 // _POST_NewVenture handles client requests for creating new Ventures.
@@ -78,7 +78,7 @@ func _POST_NewVenture(res *http.ResponseWriter, req *http.Request) {
 
 	m := fmt.Sprintf("New Venture with ID '%s' created", ven.ID)
 	log.Println(m)
-	writeSuccessReply(res, req, http.StatusCreated, ven, m)
+	h.WriteSuccessReply(res, req, http.StatusCreated, ven, m)
 }
 
 // _PUT_ModifiedVentures handles client requests for updating Ventures.
@@ -102,5 +102,5 @@ func _PUT_ModifiedVentures(res *http.ResponseWriter, req *http.Request) {
 	ids := ventureIDsToCSV(vens)
 	m := fmt.Sprintf("Updated Ventures with the following IDs '%s'", ids)
 	log.Println(m)
-	writeSuccessReply(res, req, http.StatusOK, vens, m)
+	h.WriteSuccessReply(res, req, http.StatusOK, vens, m)
 }

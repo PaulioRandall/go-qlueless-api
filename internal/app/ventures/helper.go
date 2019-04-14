@@ -1,7 +1,6 @@
 package ventures
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"strings"
@@ -11,14 +10,6 @@ import (
 	u "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/utils"
 	v "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/ventures"
 )
-
-// writeSuccessReply writes a success response.
-func writeSuccessReply(res *http.ResponseWriter, req *http.Request, code int, data interface{}, msg string) {
-	h.AppendJSONHeader(res, "")
-	(*res).WriteHeader(code)
-	reply := h.PrepResponseData(req, data, msg)
-	json.NewEncoder(*res).Encode(reply)
-}
 
 // findVentures finds the Ventures with the IDs specified.
 func findVentures(ids string, res *http.ResponseWriter, req *http.Request) ([]v.Venture, bool) {
