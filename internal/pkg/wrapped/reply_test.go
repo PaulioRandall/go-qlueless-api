@@ -9,10 +9,10 @@ import (
 )
 
 // ****************************************************************************
-// DecodeWrappedReplyFromReader()
+// DecodeFromReader()
 // ****************************************************************************
 
-func TestDecodeWrappedReplyFromReader_1(t *testing.T) {
+func TestDecodeFromReader_1(t *testing.T) {
 	aIn := strings.NewReader(`{
 		"message": "message",
 		"self": "/self",
@@ -31,20 +31,20 @@ func TestDecodeWrappedReplyFromReader_1(t *testing.T) {
 		},
 	}
 
-	aOut, err := DecodeWrappedReplyFromReader(aIn)
+	aOut, err := DecodeFromReader(aIn)
 	require.Nil(t, err)
 	assert.Equal(t, exp, aOut)
 }
 
-func TestDecodeWrappedReplyFromReader_2(t *testing.T) {
+func TestDecodeFromReader_2(t *testing.T) {
 	aIn := strings.NewReader(``)
-	_, err := DecodeWrappedReplyFromReader(aIn)
+	_, err := DecodeFromReader(aIn)
 	require.NotNil(t, err)
 }
 
-func TestDecodeWrappedReplyFromReader_3(t *testing.T) {
+func TestDecodeFromReader_3(t *testing.T) {
 	aIn := strings.NewReader(`{}`)
-	aOut, err := DecodeWrappedReplyFromReader(aIn)
+	aOut, err := DecodeFromReader(aIn)
 	require.Nil(t, err)
 	assert.Equal(t, WrappedReply{}, aOut)
 }

@@ -74,7 +74,7 @@ func AssertGenericVentureSlice(t *testing.T, vens []Venture) {
 // within a WrappedReply and decoded from an io.Reader has the required fields
 // populated and in the correct format
 func AssertWrappedVentureSliceFromReader(t *testing.T, r io.Reader) (w.WrappedReply, []Venture) {
-	wr, err := w.DecodeWrappedReplyFromReader(r)
+	wr, err := w.DecodeFromReader(r)
 	require.Nil(t, err)
 	w.AssertWrappedReply(t, wr)
 
@@ -98,7 +98,7 @@ func AssertWrappedVentureSliceFromReader(t *testing.T, r io.Reader) (w.WrappedRe
 // WrappedReply and decoded from an io.Reader has the required fields populated
 // and in the correct format
 func AssertWrappedVentureFromReader(t *testing.T, r io.Reader) (w.WrappedReply, Venture) {
-	wr, err := w.DecodeWrappedReplyFromReader(r)
+	wr, err := w.DecodeFromReader(r)
 	require.Nil(t, err)
 	w.AssertWrappedReply(t, wr)
 
