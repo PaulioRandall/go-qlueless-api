@@ -12,19 +12,38 @@ import (
 // LogIfErr()
 // ****************************************************************************
 
-func TestLogIfErr___1(t *testing.T) {
+func TestLogIfErr_1(t *testing.T) {
 	act := LogIfErr(nil)
 	assert.False(t, act)
 	// Output:
 	//
 }
 
-func TestLogIfErr___2(t *testing.T) {
+func TestLogIfErr_2(t *testing.T) {
 	err := errors.New("Computer says no!")
 	act := LogIfErr(err)
 	assert.True(t, act)
 	// Output:
-	// Computer says no!
+	// [ERROR] Computer says no!
+}
+
+// ****************************************************************************
+// WarnIfErr()
+// ****************************************************************************
+
+func TestWarnIfErr_1(t *testing.T) {
+	act := WarnIfErr(nil)
+	assert.False(t, act)
+	// Output:
+	//
+}
+
+func TestWarnIfErr_2(t *testing.T) {
+	err := errors.New("Computer says no!")
+	act := WarnIfErr(err)
+	assert.True(t, act)
+	// Output:
+	// [warning] Computer says no!
 }
 
 // ****************************************************************************

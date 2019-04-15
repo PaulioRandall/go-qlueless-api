@@ -14,12 +14,21 @@ const (
 	POSITIVE_INT_CSV_PATTERN = "^([1-9][0-9]*,)*([1-9][0-9]*)$"
 )
 
-// LogIfErr checks if the input err is NOT nil returning true if it is.
-// When true the error is logged so all the calling handler needs to do is
-// clean up then invoke Http_500(*http.ResponseWriter) before returning
+// LogIfErr checks if the input error is NOT nil. When true, the error is logged
+// and the check result is returned.
 func LogIfErr(err error) bool {
 	if err != nil {
-		log.Println(err)
+		log.Println("[ERROR] " + err.Error())
+		return true
+	}
+	return false
+}
+
+// WarnIfErr checks if the input error is NOT nil. When true, the error is
+// logged as a warning and the check result is returned.
+func WarnIfErr(err error) bool {
+	if err != nil {
+		log.Println("[WARNING] " + err.Error())
 		return true
 	}
 	return false
