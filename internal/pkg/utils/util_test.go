@@ -50,24 +50,39 @@ func TestWarnIfErr_2(t *testing.T) {
 // StripWhitespace()
 // ****************************************************************************
 
-func TestStripWhitespace___1(t *testing.T) {
+func TestStripWhitespace_1(t *testing.T) {
 	act := StripWhitespace("Rince \n\t\f\r wind")
 	assert.Equal(t, "Rincewind", act)
 }
 
-func TestStripWhitespace___2(t *testing.T) {
+func TestStripWhitespace_2(t *testing.T) {
 	act := StripWhitespace("\t \n\t \r\n\n\fRincewind")
 	assert.Equal(t, "Rincewind", act)
 }
 
-func TestStripWhitespace___3(t *testing.T) {
+func TestStripWhitespace_3(t *testing.T) {
 	act := StripWhitespace("Rincewind\r\n \t\t\t\t \f \r  \v\v")
 	assert.Equal(t, "Rincewind", act)
 }
 
-func TestStripWhitespace___4(t *testing.T) {
+func TestStripWhitespace_4(t *testing.T) {
 	act := StripWhitespace("\r\nRi \tn\tc\t\t ew\f \r  in\vd\v")
 	assert.Equal(t, "Rincewind", act)
+}
+
+func TestStripWhitespace_5(t *testing.T) {
+	act := StripWhitespace("Rincewind")
+	assert.Equal(t, "Rincewind", act)
+}
+
+func TestStripWhitespace_6(t *testing.T) {
+	act := StripWhitespace("")
+	assert.Equal(t, "", act)
+}
+
+func TestStripWhitespace_7(t *testing.T) {
+	act := StripWhitespace("\r\n \t\t \t\t \f \r  \v\v  ")
+	assert.Equal(t, "", act)
 }
 
 // ****************************************************************************

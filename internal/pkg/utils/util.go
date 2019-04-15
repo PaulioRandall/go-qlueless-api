@@ -34,7 +34,7 @@ func WarnIfErr(err error) bool {
 	return false
 }
 
-// StripWhitespace removes all white space from a string
+// StripWhitespace removes all white space from a string.
 func StripWhitespace(s string) string {
 	var buf bytes.Buffer
 	for _, r := range s {
