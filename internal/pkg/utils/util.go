@@ -14,12 +14,6 @@ const (
 	POSITIVE_INT_CSV_PATTERN = "^([1-9][0-9]*,)*([1-9][0-9]*)$"
 )
 
-// IsInt returns true if the string contains an integer
-func IsInt(s string) bool {
-	_, err := strconv.Atoi(s)
-	return err == nil
-}
-
 // IsBlank returns true if the string is empty or only contains whitespace
 func IsBlank(s string) bool {
 	for _, r := range s {
