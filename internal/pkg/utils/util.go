@@ -14,16 +14,6 @@ const (
 	POSITIVE_INT_CSV_PATTERN = "^([1-9][0-9]*,)*([1-9][0-9]*)$"
 )
 
-// IsBlank returns true if the string is empty or only contains whitespace
-func IsBlank(s string) bool {
-	for _, r := range s {
-		if !unicode.IsSpace(r) {
-			return false
-		}
-	}
-	return true
-}
-
 // LogIfErr checks if the input err is NOT nil returning true if it is.
 // When true the error is logged so all the calling handler needs to do is
 // clean up then invoke Http_500(*http.ResponseWriter) before returning

@@ -9,25 +9,6 @@ import (
 )
 
 // ****************************************************************************
-// IsBlank()
-// ****************************************************************************
-
-func TestIsBlank___1(t *testing.T) {
-	act := IsBlank("")
-	assert.True(t, act)
-}
-
-func TestIsBlank___2(t *testing.T) {
-	act := IsBlank("\r\n \t\f")
-	assert.True(t, act)
-}
-
-func TestIsBlank___3(t *testing.T) {
-	act := IsBlank("Captain Vimes")
-	assert.False(t, act)
-}
-
-// ****************************************************************************
 // LogIfErr()
 // ****************************************************************************
 
