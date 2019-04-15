@@ -45,7 +45,7 @@ func StripWhitespace(s string) string {
 	return buf.String()
 }
 
-// AppendIfEmpty appends 'm' to 'r' if 's' is empty
+// AppendIfEmpty appends m to r if s is empty.
 func AppendIfEmpty(s string, r []string, m string) []string {
 	if s == "" {
 		return append(r, m)
@@ -53,7 +53,7 @@ func AppendIfEmpty(s string, r []string, m string) []string {
 	return r
 }
 
-// AppendIfNotPositiveInt appends 'm' to 'r' if 's' is not a positive integer
+// AppendIfNotPositiveInt appends m to r if s is NOT a positive integer.
 func AppendIfNotPositiveInt(s string, r []string, m string) []string {
 	i, err := strconv.Atoi(s)
 	if err != nil || i < 1 {
@@ -62,19 +62,19 @@ func AppendIfNotPositiveInt(s string, r []string, m string) []string {
 	return r
 }
 
-// AppendIfNotPositiveIntCSV appends 'm' to 'r' if 's' is not a CSV of
-// positive integers
+// IsPositiveIntCSV returns true if the input is a CSV of positive integers.
+func IsPositiveIntCSV(s string) bool {
+	match, _ := regexp.MatchString(POSITIVE_INT_CSV_PATTERN, s)
+	return match
+}
+
+// AppendIfNotPositiveIntCSV appends m to r if s is not a CSV of positive
+// integers.
 func AppendIfNotPositiveIntCSV(s string, r []string, m string) []string {
 	if IsPositiveIntCSV(s) {
 		return r
 	}
 	return append(r, m)
-}
-
-// IsPositiveIntCSV returns true if the input is a CSV of positive integers
-func IsPositiveIntCSV(s string) bool {
-	match, _ := regexp.MatchString(POSITIVE_INT_CSV_PATTERN, s)
-	return match
 }
 
 // DeleteIfExists deletes the file at the path specified if it exists

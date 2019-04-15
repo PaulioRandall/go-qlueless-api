@@ -89,51 +89,22 @@ func TestStripWhitespace_7(t *testing.T) {
 // AppendIfEmpty()
 // ****************************************************************************
 
-func TestAppendIfEmpty___1(t *testing.T) {
+func TestAppendIfEmpty_1(t *testing.T) {
 	act := AppendIfEmpty("", []string{}, "abc")
 	require.Len(t, act, 1)
 	assert.Contains(t, act, "abc")
 }
 
-func TestAppendIfEmpty___2(t *testing.T) {
+func TestAppendIfEmpty_2(t *testing.T) {
 	act := AppendIfEmpty("", []string{"xyz"}, "abc")
 	require.Len(t, act, 2)
 	assert.Contains(t, act, "xyz")
 	assert.Contains(t, act, "abc")
 }
 
-func TestAppendIfEmpty___3(t *testing.T) {
+func TestAppendIfEmpty_3(t *testing.T) {
 	act := AppendIfEmpty("NOT-EMPTY", []string{}, "abc")
 	assert.Len(t, act, 0)
-}
-
-// ****************************************************************************
-// IsPositiveInt()
-// ****************************************************************************
-
-func TestIsPositiveIntCSV_1(t *testing.T) {
-	act := IsPositiveIntCSV("5")
-	assert.True(t, act)
-}
-
-func TestIsPositiveIntCSV_2(t *testing.T) {
-	act := IsPositiveIntCSV("1,2,3,4")
-	assert.True(t, act)
-}
-
-func TestIsPositiveIntCSV_3(t *testing.T) {
-	act := IsPositiveIntCSV("")
-	assert.False(t, act)
-}
-
-func TestIsPositiveIntCSV_4(t *testing.T) {
-	act := IsPositiveIntCSV("abc")
-	assert.False(t, act)
-}
-
-func TestIsPositiveIntCSV_5(t *testing.T) {
-	act := IsPositiveIntCSV("abc,efg,xyz")
-	assert.False(t, act)
 }
 
 // ****************************************************************************
@@ -166,6 +137,35 @@ func TestAppendIfNotPositiveInt___4(t *testing.T) {
 	assert.Contains(t, act, "abc")
 	assert.Contains(t, act, "efg")
 	assert.Contains(t, act, "hij")
+}
+
+// ****************************************************************************
+// IsPositiveInt()
+// ****************************************************************************
+
+func TestIsPositiveIntCSV_1(t *testing.T) {
+	act := IsPositiveIntCSV("5")
+	assert.True(t, act)
+}
+
+func TestIsPositiveIntCSV_2(t *testing.T) {
+	act := IsPositiveIntCSV("1,2,3,4")
+	assert.True(t, act)
+}
+
+func TestIsPositiveIntCSV_3(t *testing.T) {
+	act := IsPositiveIntCSV("")
+	assert.False(t, act)
+}
+
+func TestIsPositiveIntCSV_4(t *testing.T) {
+	act := IsPositiveIntCSV("abc")
+	assert.False(t, act)
+}
+
+func TestIsPositiveIntCSV_5(t *testing.T) {
+	act := IsPositiveIntCSV("abc,efg,xyz")
+	assert.False(t, act)
 }
 
 // ****************************************************************************
