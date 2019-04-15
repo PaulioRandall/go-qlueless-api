@@ -3,6 +3,7 @@ package utils
 import (
 	"errors"
 	"testing"
+	"time"
 
 	assert "github.com/stretchr/testify/assert"
 	require "github.com/stretchr/testify/require"
@@ -210,4 +211,15 @@ func TestAppendIfNotPositiveIntCSV_7(t *testing.T) {
 	act := AppendIfNotPositiveIntCSV("", []string{}, "abc")
 	assert.Len(t, act, 1)
 	assert.Equal(t, "abc", act[0])
+}
+
+// ****************************************************************************
+// ToUnixMilli()
+// ****************************************************************************
+
+func TestToUnixMilli_1(t *testing.T) {
+	aIn, err := time.Parse(time.RFC3339, "2019-04-15T21:50:33-00:00")
+	require.Nil(t, err)
+	aOut := ToUnixMilli(aIn)
+	assert.Equal(t, int64(1555365033000), aOut)
 }

@@ -76,9 +76,7 @@ func AppendIfNotPositiveIntCSV(s string, r []string, m string) []string {
 	return append(r, m)
 }
 
-// UnixMilliNow returns the current time as Unix milliseconds
-//
-// @UNTESTED
-func UnixMilliNow() int64 {
-	return time.Now().UnixNano() / int64(time.Millisecond)
+// ToUnixMilli returns the input Time as Unix milliseconds.
+func ToUnixMilli(t time.Time) int64 {
+	return t.UnixNano() / int64(time.Millisecond)
 }

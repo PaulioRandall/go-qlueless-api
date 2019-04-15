@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"strings"
+	"time"
 
 	u "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/utils"
 )
@@ -98,7 +99,7 @@ func (mv *ModVenture) Validate() []string {
 func (mv *ModVenture) ApplyMod(ven *Venture) {
 	mod := mv.Values
 	for _, p := range mv.SplitProps() {
-		ven.LastModified = u.UnixMilliNow()
+		ven.LastModified = u.ToUnixMilli(time.Now())
 		switch p {
 		case "description":
 			ven.Description = mod.Description
