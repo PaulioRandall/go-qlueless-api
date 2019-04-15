@@ -3,9 +3,10 @@ package ventures
 import (
 	"database/sql"
 	"fmt"
+	"log"
+	"os"
 
 	d "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/database"
-	u "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/utils"
 	v "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/ventures"
 	test "github.com/PaulioRandall/go-qlueless-assembly-api/test"
 )
@@ -30,11 +31,21 @@ func endVenTest() {
 	venDBClose()
 }
 
+// _deleteIfExists deletes the file at the path specified if it exist.
+func _deleteIfExists(path string) {
+	err := os.Remove(path)
+	switch {
+	case err == nil, os.IsNotExist(err):
+	default:
+		log.Fatal(err)
+	}
+}
+
 // venDBReset will reset the database by closing and deleting it then
 // creating a new one.
 func venDBReset() {
 	venDBClose()
-	u.DeleteIfExists(dbPath)
+	_deleteIfExists(dbPath)
 
 	var err error
 	venDB, err = d.OpenSQLiteDatabase(dbPath)

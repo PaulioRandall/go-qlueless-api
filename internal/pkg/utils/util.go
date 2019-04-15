@@ -3,7 +3,6 @@ package utils
 import (
 	"bytes"
 	"log"
-	"os"
 	"regexp"
 	"strconv"
 	"time"
@@ -75,18 +74,6 @@ func AppendIfNotPositiveIntCSV(s string, r []string, m string) []string {
 		return r
 	}
 	return append(r, m)
-}
-
-// DeleteIfExists deletes the file at the path specified if it exists
-//
-// @UNTESTED
-func DeleteIfExists(path string) {
-	err := os.Remove(path)
-	switch {
-	case err == nil, os.IsNotExist(err):
-	default:
-		log.Fatal(err)
-	}
 }
 
 // UnixMilliNow returns the current time as Unix milliseconds
