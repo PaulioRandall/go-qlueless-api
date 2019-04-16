@@ -2,8 +2,6 @@ package uhttp
 
 import (
 	"encoding/json"
-	"net/http"
-	"net/http/httptest"
 	"testing"
 
 	a "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/asserts"
@@ -148,31 +146,4 @@ func TestWriteWrappedReply_5(t *testing.T) {
 	err := json.NewDecoder(rec.Body).Decode(&m)
 	require.Nil(t, err)
 	assert.Equal(t, "/search?q=mistress+weatherwax", m["self"])
-}
-
-// ****************************************************************************
-// WriteEmptyJSONReply()
-// ****************************************************************************
-
-func TestWriteEmptyJSONReply___1(t *testing.T) {
-	rec := httptest.NewRecorder()
-	var res http.ResponseWriter = rec
-	WriteEmptyJSONReply(&res, "")
-	assert.Equal(t, 200, rec.Code)
-}
-
-func TestWriteEmptyJSONReply___2(t *testing.T) {
-	rec := httptest.NewRecorder()
-	var res http.ResponseWriter = rec
-	WriteEmptyJSONReply(&res, "")
-	a.AssertHeadersEquals(t, (*rec).Header(), map[string]string{
-		"Content-Type": "application/json; charset=utf-8",
-	})
-}
-
-func TestWriteEmptyJSONReply___3(t *testing.T) {
-	rec := httptest.NewRecorder()
-	var res http.ResponseWriter = rec
-	WriteEmptyJSONReply(&res, "")
-	assert.Empty(t, rec.Body)
 }

@@ -59,9 +59,3 @@ func WriteSuccessReply(res *http.ResponseWriter, req *http.Request, code int, da
 	reply := PrepResponseData(req, data, msg)
 	json.NewEncoder(*res).Encode(reply)
 }
-
-// WriteEmptyJSONReply appends the required JSON headers and sets status as OK
-func WriteEmptyJSONReply(res *http.ResponseWriter, extensionType string) {
-	AppendJSONHeader(res, extensionType)
-	(*res).WriteHeader(http.StatusOK)
-}
