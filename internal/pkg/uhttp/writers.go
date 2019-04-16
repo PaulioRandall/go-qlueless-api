@@ -50,12 +50,6 @@ func WriteWrappedReply(res *http.ResponseWriter, req *http.Request, status int, 
 	json.NewEncoder(*res).Encode(r)
 }
 
-// WriteEmptyReply appends the required headers without writing any data
-func WriteEmptyReply(res *http.ResponseWriter, contentType string) {
-	(*res).Header().Set("Content-Type", contentType)
-	(*res).WriteHeader(http.StatusOK)
-}
-
 // WriteSuccessReply writes a success response.
 //
 // @UNTESTED

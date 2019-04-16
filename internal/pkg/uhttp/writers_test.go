@@ -151,28 +151,6 @@ func TestWriteWrappedReply_5(t *testing.T) {
 }
 
 // ****************************************************************************
-// WriteEmptyReply()
-// ****************************************************************************
-
-func TestWriteEmptyReply___1(t *testing.T) {
-	_, res, rec := SetupRequest("/")
-	WriteEmptyReply(res, "text/plain")
-	assert.Equal(t, 200, rec.Code)
-}
-
-func TestWriteEmptyReply___2(t *testing.T) {
-	_, res, rec := SetupRequest("/")
-	WriteEmptyReply(res, "text/plain")
-	AssertHeaderValue(t, rec.Header(), "Content-Type", "text/plain")
-}
-
-func TestWriteEmptyReply___3(t *testing.T) {
-	_, res, rec := SetupRequest("/")
-	WriteEmptyReply(res, "text/plain")
-	assert.Empty(t, rec.Body)
-}
-
-// ****************************************************************************
 // WriteJSONReply()
 // ****************************************************************************
 
