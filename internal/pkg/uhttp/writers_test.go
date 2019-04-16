@@ -151,44 +151,6 @@ func TestWriteWrappedReply_5(t *testing.T) {
 }
 
 // ****************************************************************************
-// WriteJSONReply()
-// ****************************************************************************
-
-func TestWriteJsonReply___1(t *testing.T) {
-	req, res, rec := SetupRequest("/")
-	m := make(map[string]interface{})
-	m["killswitch"] = "engage"
-
-	WriteJSONReply(res, req, m, "")
-	assert.Equal(t, 200, rec.Code)
-}
-
-func TestWriteJsonReply___2(t *testing.T) {
-	req, res, rec := SetupRequest("/")
-	m := make(map[string]interface{})
-	m["killswitch"] = "engage"
-
-	WriteJSONReply(res, req, m, "")
-	a.AssertHeadersEquals(t, (*rec).Header(), map[string]string{
-		"Content-Type": "application/json; charset=utf-8",
-	})
-}
-
-func TestWriteJsonReply___3(t *testing.T) {
-	req, res, rec := SetupRequest("/")
-	data := make(map[string]interface{})
-	data["killswitch"] = "engage"
-
-	WriteJSONReply(res, req, data, "")
-
-	require.NotNil(t, rec.Body)
-	var m map[string]interface{}
-	err := json.NewDecoder(rec.Body).Decode(&m)
-	require.Nil(t, err)
-	assert.Equal(t, data, m)
-}
-
-// ****************************************************************************
 // WriteEmptyJSONReply()
 // ****************************************************************************
 

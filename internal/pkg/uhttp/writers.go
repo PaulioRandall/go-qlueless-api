@@ -60,14 +60,6 @@ func WriteSuccessReply(res *http.ResponseWriter, req *http.Request, code int, da
 	json.NewEncoder(*res).Encode(reply)
 }
 
-// WriteJSONReply appends the required JSON headers and then writes the response
-// data
-func WriteJSONReply(res *http.ResponseWriter, req *http.Request, data interface{}, extensionType string) {
-	AppendJSONHeader(res, extensionType)
-	(*res).WriteHeader(http.StatusOK)
-	json.NewEncoder(*res).Encode(data)
-}
-
 // WriteEmptyJSONReply appends the required JSON headers and sets status as OK
 func WriteEmptyJSONReply(res *http.ResponseWriter, extensionType string) {
 	AppendJSONHeader(res, extensionType)
