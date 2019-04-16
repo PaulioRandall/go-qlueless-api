@@ -51,8 +51,6 @@ func WriteWrappedReply(res *http.ResponseWriter, req *http.Request, status int, 
 }
 
 // WriteSuccessReply writes a success response.
-//
-// @UNTESTED
 func WriteSuccessReply(res *http.ResponseWriter, req *http.Request, code int, data interface{}, msg string) {
 	AppendJSONHeader(res, "")
 	(*res).WriteHeader(code)

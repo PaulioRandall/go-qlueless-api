@@ -147,3 +147,42 @@ func TestWriteWrappedReply_5(t *testing.T) {
 	require.Nil(t, err)
 	assert.Equal(t, "/search?q=mistress+weatherwax", m["self"])
 }
+
+// ****************************************************************************
+// WriteSuccessReply()
+// ****************************************************************************
+
+func TestWriteSuccessReply_1(t *testing.T) {
+	req, res, rec := SetupRequest("/")
+
+	exp := "{\"abc\":\"xyz\"}\n"
+	d := map[string]string{
+		"abc": "xyz",
+	}
+
+	WriteSuccessReply(res, req, 200, d, "message")
+
+	assert.Equal(t, 200, rec.Code)
+	assert.Equal(t, exp, rec.Body.String())
+}
+
+func TestWriteSuccessReply_2(t *testing.T) {
+	req, res, rec := SetupRequest("/?wrap")
+
+	d := map[string]interface{}{
+		"abc": "xyz",
+	}
+	exp := map[string]interface{}{
+		"message": "message",
+		"self":    "/?wrap",
+		"data":    d,
+	}
+
+	WriteSuccessReply(res, req, 200, d, "message")
+
+	assert.Equal(t, 200, rec.Code)
+	act := map[string]interface{}{}
+	err := json.NewDecoder(rec.Body).Decode(&act)
+	require.Nil(t, err)
+	assert.Equal(t, exp, act)
+}
