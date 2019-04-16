@@ -19,5 +19,5 @@ func notFound(res *http.ResponseWriter, req *http.Request) {
 		Message: "Resource not found",
 	}
 
-	h.Write4XXReply(res, req, 404, r)
+	h.WriteWrappedReply(res, req, http.StatusNotFound, r)
 }

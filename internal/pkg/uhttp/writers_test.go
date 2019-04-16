@@ -80,59 +80,49 @@ func TestWriteBadRequest___3(t *testing.T) {
 }
 
 // ****************************************************************************
-// Write4XXReply()
+// WriteWrappedReply()
 // ****************************************************************************
 
-func TestWrite4XXReply___1(t *testing.T) {
-	req, res, rec := SetupRequest("/")
-	r := w.WrappedReply{
-		Message: "message",
-	}
-
-	Write4XXReply(res, req, 300, r)
-	assert.Equal(t, 500, rec.Code)
-}
-
-func TestWrite4XXReply___2(t *testing.T) {
+func TestWriteWrappedReply___2(t *testing.T) {
 	req, res, rec := SetupRequest("/")
 	r := w.WrappedReply{}
 
-	Write4XXReply(res, req, 400, r)
+	WriteWrappedReply(res, req, 400, r)
 	assert.Equal(t, 500, rec.Code)
 }
 
-func TestWrite4XXReply___3(t *testing.T) {
+func TestWriteWrappedReply___3(t *testing.T) {
 	req, res, rec := SetupRequest("/search?q=dan+north")
 	r := w.WrappedReply{
 		Message: "abc",
 		Self:    (*req).URL.String(),
 	}
 
-	Write4XXReply(res, req, 400, r)
+	WriteWrappedReply(res, req, 400, r)
 	assert.Equal(t, 400, rec.Code)
 }
 
-func TestWrite4XXReply___4(t *testing.T) {
+func TestWriteWrappedReply___4(t *testing.T) {
 	req, res, rec := SetupRequest("/search?q=dan+north")
 	r := w.WrappedReply{
 		Message: "abc",
 		Self:    (*req).URL.String(),
 	}
 
-	Write4XXReply(res, req, 400, r)
+	WriteWrappedReply(res, req, 400, r)
 	a.AssertHeadersEquals(t, (*rec).Header(), map[string]string{
 		"Content-Type": "application/json; charset=utf-8",
 	})
 }
 
-func TestWrite4XXReply___5(t *testing.T) {
+func TestWriteWrappedReply___5(t *testing.T) {
 	req, res, rec := SetupRequest("/search?q=dan+north")
 	r := w.WrappedReply{
 		Message: "abc",
 		Self:    (*req).URL.Path + "?" + (*req).URL.RawQuery,
 	}
 
-	Write4XXReply(res, req, 400, r)
+	WriteWrappedReply(res, req, 400, r)
 
 	require.NotNil(t, rec.Body)
 	var m map[string]interface{}
@@ -144,13 +134,13 @@ func TestWrite4XXReply___5(t *testing.T) {
 	assert.Equal(t, "/search?q=dan+north", m["self"])
 }
 
-func TestWrite4XXReply___6(t *testing.T) {
+func TestWriteWrappedReply___6(t *testing.T) {
 	req, res, rec := SetupRequest("/search?q=dan+north")
 	r := w.WrappedReply{
 		Message: "abc",
 	}
 
-	Write4XXReply(res, req, 400, r)
+	WriteWrappedReply(res, req, 400, r)
 
 	require.NotNil(t, rec.Body)
 	var m map[string]interface{}

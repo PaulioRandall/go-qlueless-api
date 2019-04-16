@@ -36,12 +36,8 @@ func WriteBadRequest(res *http.ResponseWriter, req *http.Request, m string) {
 	json.NewEncoder(*res).Encode(r)
 }
 
-// Write4XXReply writes the response for a 4XX error
-func Write4XXReply(res *http.ResponseWriter, req *http.Request, status int, r w.WrappedReply) {
-	if !CheckStatusBetween(res, req, status, 400, 499) {
-		return
-	}
-
+// WriteWrappedReply writes the response for a WrappedReply
+func WriteWrappedReply(res *http.ResponseWriter, req *http.Request, status int, r w.WrappedReply) {
 	if !CheckNotEmpty(res, req, "response message", r.Message) {
 		return
 	}
