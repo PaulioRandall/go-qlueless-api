@@ -7,8 +7,7 @@ import (
 	w "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/wrapped"
 )
 
-// WriteServerError sets up the response with generic 500 error details. This
-// method should be used when ever a 500 error needs to be returned
+// WriteServerError writes the response for a generic 500 error to the client.
 func WriteServerError(res *http.ResponseWriter, req *http.Request) {
 	r := w.WrappedReply{
 		Message: "Bummer! Something went wrong on the server.",
@@ -20,7 +19,7 @@ func WriteServerError(res *http.ResponseWriter, req *http.Request) {
 	json.NewEncoder(*res).Encode(r)
 }
 
-// WriteBadRequest writes the response for a 400 error
+// WriteBadRequest writes the response for a 400 error to the client.
 func WriteBadRequest(res *http.ResponseWriter, req *http.Request, m string) {
 	if !CheckNotEmpty(res, req, "response message", m) {
 		return
@@ -36,7 +35,7 @@ func WriteBadRequest(res *http.ResponseWriter, req *http.Request, m string) {
 	json.NewEncoder(*res).Encode(r)
 }
 
-// WriteWrappedReply writes the response for a WrappedReply
+// WriteWrappedReply writes the response for a WrappedReply to the client.
 func WriteWrappedReply(res *http.ResponseWriter, req *http.Request, status int, r w.WrappedReply) {
 	if !CheckNotEmpty(res, req, "response message", r.Message) {
 		return
@@ -49,13 +48,6 @@ func WriteWrappedReply(res *http.ResponseWriter, req *http.Request, status int, 
 	AppendJSONHeader(res, "")
 	(*res).WriteHeader(status)
 	json.NewEncoder(*res).Encode(r)
-}
-
-// WriteReply appends the required headers and then writes the response data
-func WriteReply(res *http.ResponseWriter, data *[]byte, contentType string) {
-	(*res).Header().Set("Content-Type", contentType)
-	(*res).WriteHeader(http.StatusOK)
-	(*res).Write(*data)
 }
 
 // WriteEmptyReply appends the required headers without writing any data

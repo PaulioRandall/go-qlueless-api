@@ -73,7 +73,7 @@ func TestPrepResponseData_3(t *testing.T) {
 
 	exp := w.WrappedReply{
 		Message: "Cheese",
-		Self:    req.URL.String(),
+		Self:    "/?wrap",
 		Data:    data,
 	}
 

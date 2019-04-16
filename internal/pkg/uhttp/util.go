@@ -40,7 +40,7 @@ func PrepResponseData(req *http.Request, data interface{}, msg string) interface
 	if req.URL.Query()["wrap"] != nil {
 		return w.WrappedReply{
 			Message: msg,
-			Self:    req.URL.String(),
+			Self:    RelURL(req),
 			Data:    data,
 		}
 	} else {

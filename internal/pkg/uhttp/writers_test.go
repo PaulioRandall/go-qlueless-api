@@ -16,14 +16,14 @@ import (
 // WriteServerError()
 // ****************************************************************************
 
-func TestWriteServerError___1(t *testing.T) {
+func TestWriteServerError_1(t *testing.T) {
 	req, res, rec := SetupRequest("/")
 
 	WriteServerError(res, req)
 	assert.Equal(t, 500, rec.Code)
 }
 
-func TestWriteServerError___2(t *testing.T) {
+func TestWriteServerError_2(t *testing.T) {
 	req, res, rec := SetupRequest("/")
 
 	WriteServerError(res, req)
@@ -32,14 +32,15 @@ func TestWriteServerError___2(t *testing.T) {
 	})
 }
 
-func TestWriteServerError___3(t *testing.T) {
+func TestWriteServerError_3(t *testing.T) {
 	req, res, rec := SetupRequest("/")
 
 	WriteServerError(res, req)
-
 	require.NotNil(t, rec.Body)
+
 	var m map[string]interface{}
 	err := json.NewDecoder(rec.Body).Decode(&m)
+
 	require.Nil(t, err)
 	require.Len(t, m, 2)
 	assert.Contains(t, m, "message")
@@ -50,13 +51,13 @@ func TestWriteServerError___3(t *testing.T) {
 // WriteBadRequest()
 // ****************************************************************************
 
-func TestWriteBadRequest___1(t *testing.T) {
+func TestWriteBadRequest_1(t *testing.T) {
 	req, res, rec := SetupRequest("/")
 	WriteBadRequest(res, req, "message")
 	assert.Equal(t, 400, rec.Code)
 }
 
-func TestWriteBadRequest___2(t *testing.T) {
+func TestWriteBadRequest_2(t *testing.T) {
 	req, res, rec := SetupRequest("/")
 
 	WriteBadRequest(res, req, "message")
@@ -73,7 +74,7 @@ func TestWriteBadRequest___2(t *testing.T) {
 	assert.Equal(t, exp, a)
 }
 
-func TestWriteBadRequest___3(t *testing.T) {
+func TestWriteBadRequest_3(t *testing.T) {
 	req, res, rec := SetupRequest("/")
 	WriteBadRequest(res, req, "")
 	assert.Equal(t, 500, rec.Code)
@@ -83,7 +84,7 @@ func TestWriteBadRequest___3(t *testing.T) {
 // WriteWrappedReply()
 // ****************************************************************************
 
-func TestWriteWrappedReply___2(t *testing.T) {
+func TestWriteWrappedReply_1(t *testing.T) {
 	req, res, rec := SetupRequest("/")
 	r := w.WrappedReply{}
 
@@ -91,8 +92,8 @@ func TestWriteWrappedReply___2(t *testing.T) {
 	assert.Equal(t, 500, rec.Code)
 }
 
-func TestWriteWrappedReply___3(t *testing.T) {
-	req, res, rec := SetupRequest("/search?q=dan+north")
+func TestWriteWrappedReply_2(t *testing.T) {
+	req, res, rec := SetupRequest("/search?q=mistress+weatherwax")
 	r := w.WrappedReply{
 		Message: "abc",
 		Self:    (*req).URL.String(),
@@ -102,8 +103,8 @@ func TestWriteWrappedReply___3(t *testing.T) {
 	assert.Equal(t, 400, rec.Code)
 }
 
-func TestWriteWrappedReply___4(t *testing.T) {
-	req, res, rec := SetupRequest("/search?q=dan+north")
+func TestWriteWrappedReply_3(t *testing.T) {
+	req, res, rec := SetupRequest("/search?q=mistress+weatherwax")
 	r := w.WrappedReply{
 		Message: "abc",
 		Self:    (*req).URL.String(),
@@ -115,8 +116,8 @@ func TestWriteWrappedReply___4(t *testing.T) {
 	})
 }
 
-func TestWriteWrappedReply___5(t *testing.T) {
-	req, res, rec := SetupRequest("/search?q=dan+north")
+func TestWriteWrappedReply_4(t *testing.T) {
+	req, res, rec := SetupRequest("/search?q=mistress+weatherwax")
 	r := w.WrappedReply{
 		Message: "abc",
 		Self:    (*req).URL.Path + "?" + (*req).URL.RawQuery,
@@ -131,11 +132,11 @@ func TestWriteWrappedReply___5(t *testing.T) {
 	require.Nil(t, err)
 	require.Len(t, m, 2)
 	assert.Equal(t, "abc", m["message"])
-	assert.Equal(t, "/search?q=dan+north", m["self"])
+	assert.Equal(t, "/search?q=mistress+weatherwax", m["self"])
 }
 
-func TestWriteWrappedReply___6(t *testing.T) {
-	req, res, rec := SetupRequest("/search?q=dan+north")
+func TestWriteWrappedReply_5(t *testing.T) {
+	req, res, rec := SetupRequest("/search?q=mistress+weatherwax")
 	r := w.WrappedReply{
 		Message: "abc",
 	}
@@ -146,38 +147,7 @@ func TestWriteWrappedReply___6(t *testing.T) {
 	var m map[string]interface{}
 	err := json.NewDecoder(rec.Body).Decode(&m)
 	require.Nil(t, err)
-	assert.Equal(t, "/search?q=dan+north", m["self"])
-}
-
-// ****************************************************************************
-// WriteReply()
-// ****************************************************************************
-
-func TestWriteReply___1(t *testing.T) {
-	_, res, rec := SetupRequest("/")
-	b := []byte("Ghost in the moon")
-
-	WriteReply(res, &b, "text/plain")
-	assert.Equal(t, 200, rec.Code)
-}
-
-func TestWriteReply___2(t *testing.T) {
-	_, res, rec := SetupRequest("/")
-	b := []byte("Ghost in the moon")
-
-	WriteReply(res, &b, "text/plain")
-	AssertHeaderValue(t, rec.Header(), "Content-Type", "text/plain")
-}
-
-func TestWriteReply___3(t *testing.T) {
-	_, res, rec := SetupRequest("/")
-	b := []byte("Ghost in the moon")
-
-	WriteReply(res, &b, "text/plain")
-
-	require.NotNil(t, rec.Body)
-	s := string(rec.Body.String())
-	assert.Equal(t, "Ghost in the moon", s)
+	assert.Equal(t, "/search?q=mistress+weatherwax", m["self"])
 }
 
 // ****************************************************************************
