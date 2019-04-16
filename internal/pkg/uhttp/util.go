@@ -33,9 +33,9 @@ func CheckNotEmpty(res *http.ResponseWriter, req *http.Request, name string, m s
 	return true
 }
 
-// PrepResponseData returns the response data after wrapping it up and adding
-// meta information but only if the client has requested it be so. Else the
-// input data is returned unchanged
+// PrepResponseData prepares the response data read writing to the client. If
+// the client has specified, the data is wrapped and meta information added else
+// the input data is returned.
 func PrepResponseData(req *http.Request, data interface{}, msg string) interface{} {
 	if req.URL.Query()["wrap"] != nil {
 		return w.WrappedReply{
@@ -48,16 +48,14 @@ func PrepResponseData(req *http.Request, data interface{}, msg string) interface
 	}
 }
 
-// AppendCORSHeaders appends the CORS response headers for requests to
-// ResponseWriters
+// AppendCORSHeaders appends the standard CORS response headers.
 func AppendCORSHeaders(res *http.ResponseWriter, httpMethods string) {
 	(*res).Header().Set("Access-Control-Allow-Origin", "*")
 	(*res).Header().Set("Access-Control-Allow-Methods", httpMethods)
 	(*res).Header().Set("Access-Control-Allow-Headers", "*")
 }
 
-// AppendJSONHeader appends the response headers for JSON requests to
-// ResponseWriters
+// AppendJSONHeader appends the response headers for JSON requests.
 func AppendJSONHeader(res *http.ResponseWriter, extensionType string) {
 	var ct string
 	if extensionType != "" {

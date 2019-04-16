@@ -25,7 +25,7 @@ func TestRelURL_1(t *testing.T) {
 }
 
 // ****************************************************************************
-// CheckReplyMessage()
+// CheckNotEmpty()
 // ****************************************************************************
 
 func TestCheckNotEmpty_1(t *testing.T) {
@@ -45,26 +45,26 @@ func TestCheckNotEmpty_2(t *testing.T) {
 // PrepResponseData()
 // ****************************************************************************
 
-func TestPrepResponseData___1(t *testing.T) {
+func TestPrepResponseData_1(t *testing.T) {
 	req, err := http.NewRequest("GET", "http://example.com/", nil)
 	require.Nil(t, err)
 
-	act := PrepResponseData(req, nil, "ignored")
+	act := PrepResponseData(req, nil, "")
 	assert.Nil(t, act)
 }
 
-func TestPrepResponseData___2(t *testing.T) {
+func TestPrepResponseData_2(t *testing.T) {
 	req, err := http.NewRequest("GET", "http://example.com/", nil)
 	require.Nil(t, err)
 	data := make(map[string]interface{})
 	data["album"] = "As Daylight Dies"
 
-	act := PrepResponseData(req, data, "ignored")
+	act := PrepResponseData(req, data, "")
 	require.NotNil(t, act)
 	assert.Equal(t, data, act)
 }
 
-func TestPrepResponseData___3(t *testing.T) {
+func TestPrepResponseData_3(t *testing.T) {
 	req, err := http.NewRequest("GET", "http://example.com/?wrap", nil)
 	require.Nil(t, err)
 
@@ -86,7 +86,7 @@ func TestPrepResponseData___3(t *testing.T) {
 // AppendCORSHeaders()
 // ****************************************************************************
 
-func TestAppendCORSHeaders___1(t *testing.T) {
+func TestAppendCORSHeaders_1(t *testing.T) {
 	rec := httptest.NewRecorder()
 	var res http.ResponseWriter = rec
 	AppendCORSHeaders(&res, "*")
@@ -97,11 +97,22 @@ func TestAppendCORSHeaders___1(t *testing.T) {
 	})
 }
 
+func TestAppendCORSHeaders_2(t *testing.T) {
+	rec := httptest.NewRecorder()
+	var res http.ResponseWriter = rec
+	AppendCORSHeaders(&res, "GET, POST, PUT")
+	a.AssertHeadersContains(t, (*rec).Header(), map[string][]string{
+		"Access-Control-Allow-Methods": []string{
+			"GET, POST, PUT",
+		},
+	})
+}
+
 // ****************************************************************************
 // AppendJSONHeader()
 // ****************************************************************************
 
-func TestAppendJSONHeaders___1(t *testing.T) {
+func TestAppendJSONHeaders_1(t *testing.T) {
 	rec := httptest.NewRecorder()
 	var res http.ResponseWriter = rec
 	AppendJSONHeader(&res, "")
