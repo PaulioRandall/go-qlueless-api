@@ -16,7 +16,7 @@ import (
 // RelURL()
 // ****************************************************************************
 
-func TestRelURL(t *testing.T) {
+func TestRelURL_1(t *testing.T) {
 	req, err := http.NewRequest("GET", "http://example.com/character?q=Nobby", nil)
 	require.Nil(t, err)
 

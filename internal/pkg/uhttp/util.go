@@ -8,12 +8,12 @@ import (
 	w "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/wrapped"
 )
 
-// LogRequest logs the details of a request such as the URL
+// LogRequest logs the details of a request such as the URL.
 func LogRequest(req *http.Request) {
 	log.Printf("(%s) %s\n", req.Method, req.URL.String())
 }
 
-// RelURL creates the absolute relative URL of the request without any fragment
+// RelURL creates the absolute path of a requests URL without any fragment.
 func RelURL(req *http.Request) string {
 	r := req.URL.Path
 	if req.URL.RawQuery != "" {
