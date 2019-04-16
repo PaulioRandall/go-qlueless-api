@@ -28,45 +28,15 @@ func TestRelURL_1(t *testing.T) {
 // CheckReplyMessage()
 // ****************************************************************************
 
-func TestCheckNotEmpty___1(t *testing.T) {
+func TestCheckNotEmpty_1(t *testing.T) {
 	req, res, _ := SetupRequest("/")
 	act := CheckNotEmpty(res, req, "message", "message")
 	assert.True(t, act)
 }
 
-func TestCheckReplyMessage___2(t *testing.T) {
+func TestCheckNotEmpty_2(t *testing.T) {
 	req, res, rec := SetupRequest("/")
 	act := CheckNotEmpty(res, req, "message", "")
-	require.False(t, act)
-	assert.Equal(t, 500, rec.Code)
-}
-
-// ****************************************************************************
-// CheckStatusBetween()
-// ****************************************************************************
-
-func TestCheckStatusBetween___1(t *testing.T) {
-	req, res, _ := SetupRequest("/")
-	act := CheckStatusBetween(res, req, 404, 400, 499)
-	assert.True(t, act)
-}
-
-func TestCheckStatusBetween___2(t *testing.T) {
-	req, res, _ := SetupRequest("/")
-	act := CheckStatusBetween(res, req, 400, 400, 499)
-	assert.True(t, act)
-	act = CheckStatusBetween(res, req, 499, 400, 499)
-	assert.True(t, act)
-}
-
-func TestCheckStatusBetween___3(t *testing.T) {
-	req, res, rec := SetupRequest("/")
-	act := CheckStatusBetween(res, req, 300, 400, 499)
-	require.False(t, act)
-	assert.Equal(t, 500, rec.Code)
-
-	req, res, rec = SetupRequest("/")
-	act = CheckStatusBetween(res, req, 500, 400, 499)
 	require.False(t, act)
 	assert.Equal(t, 500, rec.Code)
 }

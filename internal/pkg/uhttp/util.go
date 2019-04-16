@@ -22,20 +22,11 @@ func RelURL(req *http.Request) string {
 	return r
 }
 
-// CheckStatusBetween validates that the status code is between the max an min
-func CheckStatusBetween(res *http.ResponseWriter, req *http.Request, status int, minInc int, maxInc int) bool {
-	if status < minInc || status > maxInc {
-		log.Printf("[BUG] Status code must be between %d and %d\n", minInc, maxInc)
-		WriteServerError(res, req)
-		return false
-	}
-	return true
-}
-
-// CheckNotEmpty validates that a require string is not empty
+// CheckNotEmpty validates that a required string is not empty writing a generic
+// 500 response if it is.
 func CheckNotEmpty(res *http.ResponseWriter, req *http.Request, name string, m string) bool {
 	if m == "" {
-		log.Println("[BUG] error missing '" + name + "'")
+		log.Println("[BUG] Error missing '" + name + "'")
 		WriteServerError(res, req)
 		return false
 	}
