@@ -11,8 +11,8 @@ import (
 	v "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/ventures"
 )
 
-// findVentures finds the Ventures with the IDs specified.
-func findVentures(ids string, res *http.ResponseWriter, req *http.Request) ([]v.Venture, bool) {
+// find finds the Ventures with the specified IDs.
+func find(ids string, res *http.ResponseWriter, req *http.Request) ([]v.Venture, bool) {
 	idSlice := strings.Split(ids, ",")
 	s := make([]interface{}, len(idSlice))
 
@@ -30,8 +30,8 @@ func findVentures(ids string, res *http.ResponseWriter, req *http.Request) ([]v.
 	return vens, true
 }
 
-// decodeNewVenture decodes a NewVenture from a Request.Body.
-func decodeNewVenture(res *http.ResponseWriter, req *http.Request) (v.NewVenture, bool) {
+// decodeNew decodes a NewVenture from a Request.Body.
+func decodeNew(res *http.ResponseWriter, req *http.Request) (v.NewVenture, bool) {
 	ven, err := v.DecodeNewVenture(req.Body)
 	if err != nil {
 		h.WriteBadRequest(res, req, "Unable to decode request body into a Venture")
@@ -40,8 +40,8 @@ func decodeNewVenture(res *http.ResponseWriter, req *http.Request) (v.NewVenture
 	return ven, true
 }
 
-// validateNewVenture validates a NewVenture that has yet to be assigned an ID.
-func validateNewVenture(ven *v.NewVenture, res *http.ResponseWriter, req *http.Request) bool {
+// validateNew validates a NewVenture that has yet to be assigned an ID.
+func validateNew(ven *v.NewVenture, res *http.ResponseWriter, req *http.Request) bool {
 	errMsgs := ven.Validate()
 	if len(errMsgs) != 0 {
 		h.WriteBadRequest(res, req, strings.Join(errMsgs, " "))
@@ -50,8 +50,8 @@ func validateNewVenture(ven *v.NewVenture, res *http.ResponseWriter, req *http.R
 	return true
 }
 
-// insertNewVenture inserts a new Venture into the database
-func insertNewVenture(new *v.NewVenture, res *http.ResponseWriter, req *http.Request) (*v.Venture, bool) {
+// insertNew inserts a new Venture into the database.
+func insertNew(new *v.NewVenture, res *http.ResponseWriter, req *http.Request) (*v.Venture, bool) {
 	ven, ok := new.Insert(q.Sev.DB)
 	if !ok {
 		h.WriteServerError(res, req)
@@ -59,8 +59,8 @@ func insertNewVenture(new *v.NewVenture, res *http.ResponseWriter, req *http.Req
 	return ven, ok
 }
 
-// decodeModVentures decodes modifications to Ventures from a Request.Body.
-func decodeModVentures(res *http.ResponseWriter, req *http.Request) (*v.ModVenture, bool) {
+// decodeMod decodes modifications to Ventures from a Request.Body.
+func decodeMod(res *http.ResponseWriter, req *http.Request) (*v.ModVenture, bool) {
 	mv, err := v.DecodeModVenture(req.Body)
 	if err != nil {
 		h.WriteBadRequest(res, req,
@@ -70,8 +70,8 @@ func decodeModVentures(res *http.ResponseWriter, req *http.Request) (*v.ModVentu
 	return &mv, true
 }
 
-// validateModVentures validates a Venture update.
-func validateModVentures(mv *v.ModVenture, res *http.ResponseWriter, req *http.Request) bool {
+// validateMod validates a Venture update.
+func validateMod(mv *v.ModVenture, res *http.ResponseWriter, req *http.Request) bool {
 	errMsgs := mv.Validate()
 	if len(errMsgs) != 0 {
 		h.WriteBadRequest(res, req, strings.Join(errMsgs, " "))
@@ -80,8 +80,8 @@ func validateModVentures(mv *v.ModVenture, res *http.ResponseWriter, req *http.R
 	return true
 }
 
-// ventureIdCsvToSlice validates then parses a CSV string of IDs into a slice.
-func ventureIdCsvToSlice(idCsv string, res *http.ResponseWriter, req *http.Request) ([]string, bool) {
+// idCsvToSlice validates then parses a CSV string of IDs into a slice.
+func idCsvToSlice(idCsv string, res *http.ResponseWriter, req *http.Request) ([]string, bool) {
 	idCsv = u.StripWhitespace(idCsv)
 
 	if idCsv == "" {
@@ -99,9 +99,8 @@ func ventureIdCsvToSlice(idCsv string, res *http.ResponseWriter, req *http.Reque
 	return ids, true
 }
 
-// ventureIDsToCSV returns a CSV string of all Venture IDs within the given
-// slice.
-func ventureIDsToCSV(vens []v.Venture) string {
+// idsToCSV returns a CSV string of all Venture IDs within the given slice.
+func idsToCSV(vens []v.Venture) string {
 	ids := ""
 	for i, ven := range vens {
 		switch i {
@@ -114,8 +113,9 @@ func ventureIDsToCSV(vens []v.Venture) string {
 	return ids
 }
 
-// pushModifiedVentures performs the specified update operation.
-func pushModifiedVentures(mv *v.ModVenture, res *http.ResponseWriter, req *http.Request) ([]v.Venture, bool) {
+// pushMod performs the specified modification operation and pushes the result
+// to the database.
+func pushMod(mv *v.ModVenture, res *http.ResponseWriter, req *http.Request) ([]v.Venture, bool) {
 	vens, ok := mv.Update(q.Sev.DB)
 	if !ok {
 		h.WriteServerError(res, req)

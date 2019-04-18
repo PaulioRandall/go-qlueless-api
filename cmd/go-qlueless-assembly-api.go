@@ -38,5 +38,5 @@ func _routes() {
 	http.HandleFunc("/", h.HomeHandler)
 	http.HandleFunc("/changelog", c.ChangelogHandler)
 	http.HandleFunc("/openapi", o.OpenAPIHandler)
-	http.HandleFunc("/ventures", v.VenturesHandler)
+	http.HandleFunc("/ventures", v.Handler)
 }

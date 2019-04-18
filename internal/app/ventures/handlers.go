@@ -11,19 +11,18 @@ import (
 	v "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/ventures"
 )
 
-// VenturesHandler handles requests to do with collections of, or individual,
-// Ventures.
-func VenturesHandler(res http.ResponseWriter, req *http.Request) {
+// Handler handles requests to do with collections of, or individual, Ventures.
+func Handler(res http.ResponseWriter, req *http.Request) {
 	h.LogRequest(req)
 	h.AppendCORSHeaders(&res, "GET, POST, PUT, OPTIONS")
 
 	switch {
 	case req.Method == "GET":
-		_GET_Ventures(&res, req)
+		_GET(&res, req)
 	case req.Method == "POST":
-		_POST_NewVenture(&res, req)
+		_POST(&res, req)
 	case req.Method == "PUT":
-		_PUT_ModifiedVentures(&res, req)
+		_PUT(&res, req)
 	case req.Method == "OPTIONS":
 		res.WriteHeader(http.StatusOK)
 	default:
@@ -31,8 +30,8 @@ func VenturesHandler(res http.ResponseWriter, req *http.Request) {
 	}
 }
 
-// _GET_Ventures handles client requests for any amount of living Ventures.
-func _GET_Ventures(res *http.ResponseWriter, req *http.Request) {
+// _GET handles client requests for any amount of living Ventures.
+func _GET(res *http.ResponseWriter, req *http.Request) {
 
 	ids := req.FormValue("ids")
 	ids = u.StripWhitespace(ids)
@@ -48,7 +47,7 @@ func _GET_Ventures(res *http.ResponseWriter, req *http.Request) {
 		}
 	default:
 		var ok bool
-		vens, ok = findVentures(ids, res, req)
+		vens, ok = find(ids, res, req)
 		if !ok {
 			return
 		}
@@ -58,20 +57,20 @@ func _GET_Ventures(res *http.ResponseWriter, req *http.Request) {
 	h.WriteSuccessReply(res, req, http.StatusOK, vens, m)
 }
 
-// _POST_NewVenture handles client requests for creating new Ventures.
-func _POST_NewVenture(res *http.ResponseWriter, req *http.Request) {
-	new, ok := decodeNewVenture(res, req)
+// _POST handles client requests for creating new Ventures.
+func _POST(res *http.ResponseWriter, req *http.Request) {
+	new, ok := decodeNew(res, req)
 	if !ok {
 		return
 	}
 
 	new.Clean()
-	ok = validateNewVenture(&new, res, req)
+	ok = validateNew(&new, res, req)
 	if !ok {
 		return
 	}
 
-	ven, ok := insertNewVenture(&new, res, req)
+	ven, ok := insertNew(&new, res, req)
 	if !ok {
 		return
 	}
@@ -81,25 +80,25 @@ func _POST_NewVenture(res *http.ResponseWriter, req *http.Request) {
 	h.WriteSuccessReply(res, req, http.StatusCreated, ven, m)
 }
 
-// _PUT_ModifiedVentures handles client requests for updating Ventures.
-func _PUT_ModifiedVentures(res *http.ResponseWriter, req *http.Request) {
-	mv, ok := decodeModVentures(res, req)
+// _PUT handles client requests for updating Ventures.
+func _PUT(res *http.ResponseWriter, req *http.Request) {
+	mv, ok := decodeMod(res, req)
 	if !ok {
 		return
 	}
 
 	mv.Clean()
-	ok = validateModVentures(mv, res, req)
+	ok = validateMod(mv, res, req)
 	if !ok {
 		return
 	}
 
-	vens, ok := pushModifiedVentures(mv, res, req)
+	vens, ok := pushMod(mv, res, req)
 	if !ok {
 		return
 	}
 
-	ids := ventureIDsToCSV(vens)
+	ids := idsToCSV(vens)
 	m := fmt.Sprintf("Updated Ventures with the following IDs '%s'", ids)
 	log.Println(m)
 	h.WriteSuccessReply(res, req, http.StatusOK, vens, m)
