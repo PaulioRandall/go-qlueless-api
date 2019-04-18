@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"log"
 
-	d "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/database"
+	_ "github.com/mattn/go-sqlite3"
 )
 
 var Sev QServer = QServer{}
@@ -17,7 +17,7 @@ type QServer struct {
 // Init initialises the server resources.
 func (s *QServer) Init() {
 	var err error
-	s.DB, err = d.OpenSQLiteDatabase("./qlueless.db")
+	s.DB, err = OpenSQLiteDatabase("./qlueless.db")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -29,4 +29,20 @@ func (s *QServer) Close() {
 		log.Fatal(s.DB.Close())
 		s.DB = nil
 	}
+}
+
+// OpenSQLiteDatabase opens a SQLite database, creating it if it doesn't already
+// exist.
+func OpenSQLiteDatabase(path string) (*sql.DB, error) {
+	db, err := sql.Open("sqlite3", path)
+
+	if err != nil {
+		if db != nil {
+			db.Close()
+		}
+
+		return nil, err
+	}
+
+	return db, nil
 }

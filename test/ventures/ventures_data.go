@@ -6,7 +6,7 @@ import (
 	"log"
 	"os"
 
-	d "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/database"
+	q "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/qserver"
 	v "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/ventures"
 	test "github.com/PaulioRandall/go-qlueless-assembly-api/test"
 )
@@ -48,7 +48,7 @@ func venDBReset() {
 	_deleteIfExists(dbPath)
 
 	var err error
-	venDB, err = d.OpenSQLiteDatabase(dbPath)
+	venDB, err = q.OpenSQLiteDatabase(dbPath)
 	if err != nil {
 		panic(err)
 	}
