@@ -8,27 +8,7 @@
       "$ref": "#/components/x-hidden/self"
     },
     "data": {
-      "$ref": "#/components/x-hidden/ventures_array"
-    }
-  }
-},
-"ventures_array": {
-  "type": "array",
-  "items": {
-    "$ref": "#/components/schemas/venture"
-  }
-},
-"venture_wrapped": {
-  "type": "object",
-  "properties": {
-    "message": {
-      "$ref": "#/components/x-hidden/message"
-    },
-    "self": {
-      "$ref": "#/components/x-hidden/self"
-    },
-    "data": {
-      "$ref": "#/components/schemas/venture"
+      "$ref": "#/components/schemas/ventures"
     }
   }
 }

@@ -1,7 +1,7 @@
 "/ventures": {
   "get": {
-    "tags": ["venture"],
-    "description": "Returns all Ventures.",
+    "tags": ["ventures"],
+    "description": "Returns all or a subset of the Venture set.",
     "parameters": [
       {
         "$ref": "#/components/parameters/wrap"
@@ -20,19 +20,19 @@
     }
   },
   "post": {
-    "tags": ["venture"],
-    "description": "Creates a new Venture.",
+    "tags": ["ventures"],
+    "description": "Adds new Ventures to the Venture set.",
     "parameters": [
       {
         "$ref": "#/components/parameters/wrap"
       }
     ],
     "requestBody": {
-      "$ref": "#/components/requestBodies/venture_create"
+      "$ref": "#/components/requestBodies/ventures_create"
     },
     "responses": {
       "201": {
-        "$ref": "#/components/responses/venture_200"
+        "$ref": "#/components/responses/ventures_200"
       },
       "default": {
         "$ref": "#/components/responses/error"
@@ -40,15 +40,15 @@
     }
   },
   "put": {
-    "tags": ["venture"],
-    "description": "Updates Ventures.",
+    "tags": ["ventures"],
+    "description": "Modifies Ventures within the Venture set.",
     "parameters": [
       {
         "$ref": "#/components/parameters/wrap"
       }
     ],
     "requestBody": {
-      "$ref": "#/components/requestBodies/venture_update"
+      "$ref": "#/components/requestBodies/ventures_modify"
     },
     "responses": {
       "200": {
@@ -60,7 +60,7 @@
     }
   },
   "options": {
-    "tags": ["venture"],
+    "tags": ["ventures"],
     "description": "Returns the endpoint options.",
     "responses": {
       "200": {

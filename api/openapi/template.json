@@ -7,23 +7,23 @@
   "tags": [
     {
       "name": "openapi",
-      "description": "All available OpenAPI specific operations."
+      "description": "OpenAPI operations."
     },
     {
       "name": "changelog",
-      "description": "All available changelog specific operations."
+      "description": "Changelog operations."
     },
     {
-      "name": "venture",
-      "description": "All available Venture specific operations."
+      "name": "ventures",
+      "description": "Operations applicable to the Venture set."
     },
     {
-      "name": "order",
-      "description": "All available Order specific operations."
+      "name": "orders",
+      "description": "Operations applicable to the Order set."
     },
     {
-      "name": "batch",
-      "description": "All available Batch specific operations."
+      "name": "batches",
+      "description": "Operations applicable to the Batch set."
     }
   ],
 	"paths": {

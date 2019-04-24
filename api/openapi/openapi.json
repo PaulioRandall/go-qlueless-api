@@ -7,23 +7,23 @@
   "tags": [
     {
       "name": "openapi",
-      "description": "All available OpenAPI specific operations."
+      "description": "OpenAPI operations."
     },
     {
       "name": "changelog",
-      "description": "All available changelog specific operations."
+      "description": "Changelog operations."
     },
     {
-      "name": "venture",
-      "description": "All available Venture specific operations."
+      "name": "ventures",
+      "description": "Operations applicable to the Venture set."
     },
     {
-      "name": "order",
-      "description": "All available Order specific operations."
+      "name": "orders",
+      "description": "Operations applicable to the Order set."
     },
     {
-      "name": "batch",
-      "description": "All available Batch specific operations."
+      "name": "batches",
+      "description": "Operations applicable to the Batch set."
     }
   ],
 	"paths": {
@@ -127,8 +127,8 @@
 		},
 		"/ventures": {
 		  "get": {
-		    "tags": ["venture"],
-		    "description": "Returns all Ventures.",
+		    "tags": ["ventures"],
+		    "description": "Returns all or a subset of the Venture set.",
 		    "parameters": [
 		      {
 		        "$ref": "#/components/parameters/wrap"
@@ -147,19 +147,19 @@
 		    }
 		  },
 		  "post": {
-		    "tags": ["venture"],
-		    "description": "Creates a new Venture.",
+		    "tags": ["ventures"],
+		    "description": "Adds new Ventures to the Venture set.",
 		    "parameters": [
 		      {
 		        "$ref": "#/components/parameters/wrap"
 		      }
 		    ],
 		    "requestBody": {
-		      "$ref": "#/components/requestBodies/venture_create"
+		      "$ref": "#/components/requestBodies/ventures_create"
 		    },
 		    "responses": {
 		      "201": {
-		        "$ref": "#/components/responses/venture_200"
+		        "$ref": "#/components/responses/ventures_200"
 		      },
 		      "default": {
 		        "$ref": "#/components/responses/error"
@@ -167,15 +167,15 @@
 		    }
 		  },
 		  "put": {
-		    "tags": ["venture"],
-		    "description": "Updates Ventures.",
+		    "tags": ["ventures"],
+		    "description": "Modifies Ventures within the Venture set.",
 		    "parameters": [
 		      {
 		        "$ref": "#/components/parameters/wrap"
 		      }
 		    ],
 		    "requestBody": {
-		      "$ref": "#/components/requestBodies/venture_update"
+		      "$ref": "#/components/requestBodies/ventures_modify"
 		    },
 		    "responses": {
 		      "200": {
@@ -187,7 +187,7 @@
 		    }
 		  },
 		  "options": {
-		    "tags": ["venture"],
+		    "tags": ["ventures"],
 		    "description": "Returns the endpoint options.",
 		    "responses": {
 		      "200": {
@@ -233,19 +233,10 @@
 			}
     },
     "parameters": {
-			"venture_id": {
-			  "name": "id",
-			  "in": "query",
-			  "description": "Unique identifier of a Venture.",
-			  "required": false,
-			  "schema": {
-			    "$ref": "#/components/x-hidden/venture_id"
-			  }
-			},
 			"venture_id_csv": {
 			  "name": "ids",
 			  "in": "query",
-			  "description": "CSV of Venture unique identifiers.",
+			  "description": "CSV of Venture ID's.",
 			  "required": true,
 			  "schema": {
 			    "$ref": "#/components/x-hidden/venture_id_csv"
@@ -254,7 +245,7 @@
 			"wrap": {
 			  "name": "wrap",
 			  "in": "query",
-			  "description": "If present wraps the response and adds meta information.",
+			  "description": "If present, wraps the response and adds meta information.",
 			  "required": false,
 			  "schema": {
 			    "type": "string"
@@ -262,62 +253,28 @@
 			}
     },
     "requestBodies": {
-			"venture_create": {
+			"ventures_create": {
 			  "content": {
 			    "application/json": {
 			      "schema": {
-			        "$ref": "#/components/schemas/venture_create"
+			        "$ref": "#/components/schemas/ventures_create"
 			      }
 			    }
 			  }
 			},
-			"venture_update": {
+			"ventures_modify": {
 			  "content": {
 			    "application/json": {
 			      "schema": {
-			        "$ref": "#/components/schemas/venture_update"
+			        "$ref": "#/components/schemas/ventures_modify"
 			      }
 			    }
 			  }
 			}
     },
     "responses": {
-			"ventures_or_venture_200": {
-			  "description": "List of Ventures or a single Venture.",
-			  "content": {
-			    "application/json": {
-			      "schema": {
-			        "oneOf": [
-			          {
-			            "$ref": "#/components/x-hidden/ventures_wrapped"
-			          },
-			          {
-			            "$ref": "#/components/x-hidden/ventures_array"
-			          },
-			          {
-			            "$ref": "#/components/x-hidden/venture_wrapped"
-			          },
-			          {
-			            "$ref": "#/components/schemas/venture"
-			          }
-			        ]
-			      }
-			    }
-			  },
-			  "headers": {
-			    "Access-Control-Allow-Origin": {
-			      "$ref": "#/components/headers/cors_origin"
-			    },
-			    "Access-Control-Allow-Headers": {
-			      "$ref": "#/components/headers/cors_headers"
-			    },
-			    "Access-Control-Allow-Methods": {
-			      "$ref": "#/components/headers/cors_methods"
-			    }
-			  }
-			},
 			"ventures_200": {
-			  "description": "List of Ventures.",
+			  "description": "Array of Ventures.",
 			  "content": {
 			    "application/json": {
 			      "schema": {
@@ -326,35 +283,7 @@
 			            "$ref": "#/components/x-hidden/ventures_wrapped"
 			          },
 			          {
-			            "$ref": "#/components/x-hidden/ventures_array"
-			          }
-			        ]
-			      }
-			    }
-			  },
-			  "headers": {
-			    "Access-Control-Allow-Origin": {
-			      "$ref": "#/components/headers/cors_origin"
-			    },
-			    "Access-Control-Allow-Headers": {
-			      "$ref": "#/components/headers/cors_headers"
-			    },
-			    "Access-Control-Allow-Methods": {
-			      "$ref": "#/components/headers/cors_methods"
-			    }
-			  }
-			},
-			"venture_200": {
-			  "description": "Single Venture.",
-			  "content": {
-			    "application/json": {
-			      "schema": {
-			        "oneOf": [
-			          {
-			            "$ref": "#/components/x-hidden/venture_wrapped"
-			          },
-			          {
-			            "$ref": "#/components/schemas/venture"
+			            "$ref": "#/components/schemas/ventures"
 			          }
 			        ]
 			      }
@@ -395,28 +324,31 @@
 			}
     },
 		"schemas": {
-			"venture_create": {
-			  "type": "object",
-			  "required": [
-			    "description",
-			    "state"
-			  ],
-			  "properties": {
-			    "description": {
-			      "$ref": "#/components/x-hidden/description"
-			    },
-			    "state": {
-			      "$ref": "#/components/x-hidden/state"
-			    },
-			    "order_ids": {
-			      "$ref": "#/components/x-hidden/order_id_csv"
-			    },
-			    "extra": {
-			      "$ref": "#/components/x-hidden/extra"
+			"ventures_create": {
+			  "type": "array",
+			  "items": {
+			    "type": "object",
+			    "required": [
+			      "description",
+			      "state"
+			    ],
+			    "properties": {
+			      "description": {
+			        "$ref": "#/components/x-hidden/description"
+			      },
+			      "state": {
+			        "$ref": "#/components/x-hidden/state"
+			      },
+			      "order_ids": {
+			        "$ref": "#/components/x-hidden/order_id_csv"
+			      },
+			      "extra": {
+			        "$ref": "#/components/x-hidden/extra"
+			      }
 			    }
 			  }
 			},
-			"venture_update": {
+			"ventures_modify": {
 			  "type": "object",
 			  "required": [
 			    "ids",
@@ -426,7 +358,7 @@
 			  "properties": {
 			    "ids": {
 			      "type": "string",
-			      "description": "CSV of IDs to update"
+			      "description": "CSV of ID's to the Ventures that will be modified"
 			    },
 			    "set": {
 			      "type": "string",
@@ -454,32 +386,35 @@
 			    }
 			  }
 			},
-			"venture": {
-			  "type": "object",
-			  "required": [
-			    "venture_id",
-			    "description",
-			    "state",
-			    "last_modified"
-			  ],
-			  "properties": {
-			    "venture_id": {
-			      "$ref": "#/components/x-hidden/venture_id"
-			    },
-			    "description": {
-			      "$ref": "#/components/x-hidden/description"
-			    },
-			    "state": {
-			      "$ref": "#/components/x-hidden/state"
-			    },
-			    "order_ids": {
-			      "$ref": "#/components/x-hidden/order_id_csv"
-			    },
-			    "last_modified": {
-			      "$ref": "#/components/x-hidden/last_modified"
-			    },
-			    "extra": {
-			      "$ref": "#/components/x-hidden/extra"
+			"ventures": {
+			  "type": "array",
+			  "items": {
+			    "type": "object",
+			    "required": [
+			      "venture_id",
+			      "description",
+			      "state",
+			      "last_modified"
+			    ],
+			    "properties": {
+			      "venture_id": {
+			        "$ref": "#/components/x-hidden/venture_id"
+			      },
+			      "description": {
+			        "$ref": "#/components/x-hidden/description"
+			      },
+			      "state": {
+			        "$ref": "#/components/x-hidden/state"
+			      },
+			      "order_ids": {
+			        "$ref": "#/components/x-hidden/order_id_csv"
+			      },
+			      "last_modified": {
+			        "$ref": "#/components/x-hidden/last_modified"
+			      },
+			      "extra": {
+			        "$ref": "#/components/x-hidden/extra"
+			      }
 			    }
 			  }
 			},
@@ -528,27 +463,7 @@
 			      "$ref": "#/components/x-hidden/self"
 			    },
 			    "data": {
-			      "$ref": "#/components/x-hidden/ventures_array"
-			    }
-			  }
-			},
-			"ventures_array": {
-			  "type": "array",
-			  "items": {
-			    "$ref": "#/components/schemas/venture"
-			  }
-			},
-			"venture_wrapped": {
-			  "type": "object",
-			  "properties": {
-			    "message": {
-			      "$ref": "#/components/x-hidden/message"
-			    },
-			    "self": {
-			      "$ref": "#/components/x-hidden/self"
-			    },
-			    "data": {
-			      "$ref": "#/components/schemas/venture"
+			      "$ref": "#/components/schemas/ventures"
 			    }
 			  }
 			},

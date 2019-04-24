@@ -1,25 +1,28 @@
-"venture_create": {
-  "type": "object",
-  "required": [
-    "description",
-    "state"
-  ],
-  "properties": {
-    "description": {
-      "$ref": "#/components/x-hidden/description"
-    },
-    "state": {
-      "$ref": "#/components/x-hidden/state"
-    },
-    "order_ids": {
-      "$ref": "#/components/x-hidden/order_id_csv"
-    },
-    "extra": {
-      "$ref": "#/components/x-hidden/extra"
+"ventures_create": {
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": [
+      "description",
+      "state"
+    ],
+    "properties": {
+      "description": {
+        "$ref": "#/components/x-hidden/description"
+      },
+      "state": {
+        "$ref": "#/components/x-hidden/state"
+      },
+      "order_ids": {
+        "$ref": "#/components/x-hidden/order_id_csv"
+      },
+      "extra": {
+        "$ref": "#/components/x-hidden/extra"
+      }
     }
   }
 },
-"venture_update": {
+"ventures_modify": {
   "type": "object",
   "required": [
     "ids",
@@ -29,7 +32,7 @@
   "properties": {
     "ids": {
       "type": "string",
-      "description": "CSV of IDs to update"
+      "description": "CSV of ID's to the Ventures that will be modified"
     },
     "set": {
       "type": "string",
@@ -57,32 +60,35 @@
     }
   }
 },
-"venture": {
-  "type": "object",
-  "required": [
-    "venture_id",
-    "description",
-    "state",
-    "last_modified"
-  ],
-  "properties": {
-    "venture_id": {
-      "$ref": "#/components/x-hidden/venture_id"
-    },
-    "description": {
-      "$ref": "#/components/x-hidden/description"
-    },
-    "state": {
-      "$ref": "#/components/x-hidden/state"
-    },
-    "order_ids": {
-      "$ref": "#/components/x-hidden/order_id_csv"
-    },
-    "last_modified": {
-      "$ref": "#/components/x-hidden/last_modified"
-    },
-    "extra": {
-      "$ref": "#/components/x-hidden/extra"
+"ventures": {
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": [
+      "venture_id",
+      "description",
+      "state",
+      "last_modified"
+    ],
+    "properties": {
+      "venture_id": {
+        "$ref": "#/components/x-hidden/venture_id"
+      },
+      "description": {
+        "$ref": "#/components/x-hidden/description"
+      },
+      "state": {
+        "$ref": "#/components/x-hidden/state"
+      },
+      "order_ids": {
+        "$ref": "#/components/x-hidden/order_id_csv"
+      },
+      "last_modified": {
+        "$ref": "#/components/x-hidden/last_modified"
+      },
+      "extra": {
+        "$ref": "#/components/x-hidden/extra"
+      }
     }
   }
 }
