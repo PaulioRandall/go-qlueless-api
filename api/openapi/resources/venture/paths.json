@@ -21,7 +21,7 @@
   },
   "post": {
     "tags": ["ventures"],
-    "description": "Creates, modifies, or deletes Ventures from the Venture set; operations are ordered respectivily.",
+    "description": "Creates, modifies, or deletes Ventures from the Venture set; operations are ordered respectively.",
     "parameters": [
       {
         "$ref": "#/components/parameters/wrap"
@@ -33,6 +33,18 @@
     "responses": {
       "200": {
         "$ref": "#/components/responses/ventures_operation_200"
+      },
+      "default": {
+        "$ref": "#/components/responses/error"
+      }
+    }
+  },
+  "delete": {
+    "tags": ["ventures"],
+    "description": "Deletes a Venture from the Venture set.",
+    "responses": {
+      "200": {
+        "$ref": "#/components/responses/ventures_delete_200"
       },
       "default": {
         "$ref": "#/components/responses/error"

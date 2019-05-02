@@ -148,7 +148,7 @@
 		  },
 		  "post": {
 		    "tags": ["ventures"],
-		    "description": "Creates, modifies, or deletes Ventures from the Venture set; operations are ordered respectivily.",
+		    "description": "Creates, modifies, or deletes Ventures from the Venture set; operations are ordered respectively.",
 		    "parameters": [
 		      {
 		        "$ref": "#/components/parameters/wrap"
@@ -160,6 +160,18 @@
 		    "responses": {
 		      "200": {
 		        "$ref": "#/components/responses/ventures_operation_200"
+		      },
+		      "default": {
+		        "$ref": "#/components/responses/error"
+		      }
+		    }
+		  },
+		  "delete": {
+		    "tags": ["ventures"],
+		    "description": "Deletes a Venture from the Venture set.",
+		    "responses": {
+		      "200": {
+		        "$ref": "#/components/responses/ventures_delete_200"
 		      },
 		      "default": {
 		        "$ref": "#/components/responses/error"
@@ -282,6 +294,27 @@
 			            "$ref": "#/components/schemas/ventures"
 			          }
 			        ]
+			      }
+			    }
+			  },
+			  "headers": {
+			    "Access-Control-Allow-Origin": {
+			      "$ref": "#/components/headers/cors_origin"
+			    },
+			    "Access-Control-Allow-Headers": {
+			      "$ref": "#/components/headers/cors_headers"
+			    },
+			    "Access-Control-Allow-Methods": {
+			      "$ref": "#/components/headers/cors_methods"
+			    }
+			  }
+			},
+			"ventures_delete_200": {
+			  "description": "Deletes a Venture from the Venture set.",
+			  "content": {
+			    "application/json": {
+			      "schema": {
+			        "$ref": "#/components/schemas/wrapped_response"
 			      }
 			    }
 			  },
