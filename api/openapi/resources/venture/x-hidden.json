@@ -8,7 +8,7 @@
       "$ref": "#/components/x-hidden/self"
     },
     "data": {
-      "$ref": "#/components/schemas/ventures"
+      "$ref": "#/components/schemas/ventures_get"
     }
   }
 },

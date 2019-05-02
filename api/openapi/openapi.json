@@ -166,12 +166,27 @@
 		      }
 		    }
 		  },
+		  "put": {
+		    "tags": ["ventures"],
+		    "description": "Modifies a Venture from the Venture set.",
+		    "requestBody": {
+		      "$ref": "#/components/requestBodies/venture_modify"
+		    },
+		    "responses": {
+		      "200": {
+		        "$ref": "#/components/responses/venture_modify_200"
+		      },
+		      "default": {
+		        "$ref": "#/components/responses/error"
+		      }
+		    }
+		  },
 		  "delete": {
 		    "tags": ["ventures"],
 		    "description": "Deletes a Venture from the Venture set.",
 		    "responses": {
 		      "200": {
-		        "$ref": "#/components/responses/ventures_delete_200"
+		        "$ref": "#/components/responses/venture_delete_200"
 		      },
 		      "default": {
 		        "$ref": "#/components/responses/error"
@@ -278,6 +293,16 @@
 			      }
 			    }
 			  }
+			},
+			"venture_modify": {
+			  "description": "Specifies the new content of a Venture.",
+			  "content": {
+			    "application/json": {
+			      "schema": {
+			        "$ref": "#/components/schemas/venture_put"
+			      }
+			    }
+			  }
 			}
     },
     "responses": {
@@ -291,7 +316,7 @@
 			            "$ref": "#/components/x-hidden/ventures_wrapped"
 			          },
 			          {
-			            "$ref": "#/components/schemas/ventures"
+			            "$ref": "#/components/schemas/ventures_get"
 			          }
 			        ]
 			      }
@@ -309,7 +334,28 @@
 			    }
 			  }
 			},
-			"ventures_delete_200": {
+			"venture_modify_200": {
+			  "description": "Modifies a Venture from the Venture set.",
+			  "content": {
+			    "application/json": {
+			      "schema": {
+			        "$ref": "#/components/schemas/wrapped_response"
+			      }
+			    }
+			  },
+			  "headers": {
+			    "Access-Control-Allow-Origin": {
+			      "$ref": "#/components/headers/cors_origin"
+			    },
+			    "Access-Control-Allow-Headers": {
+			      "$ref": "#/components/headers/cors_headers"
+			    },
+			    "Access-Control-Allow-Methods": {
+			      "$ref": "#/components/headers/cors_methods"
+			    }
+			  }
+			},
+			"venture_delete_200": {
 			  "description": "Deletes a Venture from the Venture set.",
 			  "content": {
 			    "application/json": {
@@ -374,35 +420,66 @@
 			}
     },
 		"schemas": {
-			"ventures": {
+			"ventures_get": {
 			  "type": "array",
 			  "items": {
-			    "type": "object",
-			    "required": [
-			      "venture_id",
-			      "description",
-			      "state",
-			      "last_modified"
-			    ],
-			    "properties": {
-			      "venture_id": {
-			        "$ref": "#/components/x-hidden/venture_id"
-			      },
-			      "description": {
-			        "$ref": "#/components/x-hidden/description"
-			      },
-			      "state": {
-			        "$ref": "#/components/x-hidden/state"
-			      },
-			      "order_ids": {
-			        "$ref": "#/components/x-hidden/order_id_csv"
-			      },
-			      "last_modified": {
-			        "$ref": "#/components/x-hidden/last_modified"
-			      },
-			      "extra": {
-			        "$ref": "#/components/x-hidden/extra"
-			      }
+			    "$ref": "#/components/schemas/venture_get"
+			  }
+			},
+			"venture_get": {
+			  "type": "object",
+			  "required": [
+			    "venture_id",
+			    "description",
+			    "state",
+			    "last_modified"
+			  ],
+			  "properties": {
+			    "venture_id": {
+			      "$ref": "#/components/x-hidden/venture_id"
+			    },
+			    "description": {
+			      "$ref": "#/components/x-hidden/description"
+			    },
+			    "state": {
+			      "$ref": "#/components/x-hidden/state"
+			    },
+			    "order_ids": {
+			      "$ref": "#/components/x-hidden/order_id_csv"
+			    },
+			    "last_modified": {
+			      "$ref": "#/components/x-hidden/last_modified"
+			    },
+			    "extra": {
+			      "$ref": "#/components/x-hidden/extra"
+			    }
+			  }
+			},
+			"venture_put": {
+			  "type": "object",
+			  "required": [
+			    "venture_id",
+			    "description",
+			    "state"
+			  ],
+			  "properties": {
+			    "venture_id": {
+			      "$ref": "#/components/x-hidden/venture_id"
+			    },
+			    "description": {
+			      "$ref": "#/components/x-hidden/description"
+			    },
+			    "state": {
+			      "$ref": "#/components/x-hidden/state"
+			    },
+			    "order_ids": {
+			      "$ref": "#/components/x-hidden/order_id_csv"
+			    },
+			    "extra": {
+			      "$ref": "#/components/x-hidden/extra"
+			    },
+			    "dead": {
+			      "$ref": "#/components/x-hidden/dead"
 			    }
 			  }
 			},
@@ -471,7 +548,7 @@
 			      "$ref": "#/components/x-hidden/self"
 			    },
 			    "data": {
-			      "$ref": "#/components/schemas/ventures"
+			      "$ref": "#/components/schemas/ventures_get"
 			    }
 			  }
 			},

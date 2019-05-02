@@ -31,4 +31,14 @@
       }
     }
   }
+},
+"venture_modify": {
+  "description": "Specifies the new content of a Venture.",
+  "content": {
+    "application/json": {
+      "schema": {
+        "$ref": "#/components/schemas/venture_put"
+      }
+    }
+  }
 }

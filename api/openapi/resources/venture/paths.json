@@ -39,12 +39,27 @@
       }
     }
   },
+  "put": {
+    "tags": ["ventures"],
+    "description": "Modifies a Venture from the Venture set.",
+    "requestBody": {
+      "$ref": "#/components/requestBodies/venture_modify"
+    },
+    "responses": {
+      "200": {
+        "$ref": "#/components/responses/venture_modify_200"
+      },
+      "default": {
+        "$ref": "#/components/responses/error"
+      }
+    }
+  },
   "delete": {
     "tags": ["ventures"],
     "description": "Deletes a Venture from the Venture set.",
     "responses": {
       "200": {
-        "$ref": "#/components/responses/ventures_delete_200"
+        "$ref": "#/components/responses/venture_delete_200"
       },
       "default": {
         "$ref": "#/components/responses/error"
