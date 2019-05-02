@@ -139,7 +139,7 @@
 		    ],
 		    "responses": {
 		      "200": {
-		        "$ref": "#/components/responses/ventures_200"
+		        "$ref": "#/components/responses/ventures_get_200"
 		      },
 		      "default": {
 		        "$ref": "#/components/responses/error"
@@ -148,18 +148,18 @@
 		  },
 		  "post": {
 		    "tags": ["ventures"],
-		    "description": "Creates, modifies, or deletes Ventures from the Venture set; operations are ordered respectively.",
+		    "description": "Creates a new Venture within the Venture set.",
 		    "parameters": [
 		      {
 		        "$ref": "#/components/parameters/wrap"
 		      }
 		    ],
 		    "requestBody": {
-		      "$ref": "#/components/requestBodies/ventures_operation"
+		      "$ref": "#/components/requestBodies/venture_create"
 		    },
 		    "responses": {
 		      "200": {
-		        "$ref": "#/components/responses/ventures_operation_200"
+		        "$ref": "#/components/responses/venture_create_200"
 		      },
 		      "default": {
 		        "$ref": "#/components/responses/error"
@@ -260,36 +260,12 @@
 			}
     },
     "requestBodies": {
-			"ventures_operation": {
-			  "description": "TODO",
+			"venture_create": {
+			  "description": "Specifies the new Venture.",
 			  "content": {
 			    "application/json": {
 			      "schema": {
-			        "type": "object",
-			        "properties": {
-			          "action": {
-			            "type": "string",
-			            "description": "The action to perform",
-			            "enum": [
-			              "create",
-			              "modify",
-			              "delete"
-			            ]
-			          },
-			          "operation": {
-			            "oneOf": [
-			              {
-			                "$ref": "#/components/x-hidden/order_id_csv"
-			              },
-			              {
-			                "$ref": "#/components/x-hidden/ventures_create"
-			              },
-			              {
-			                "$ref": "#/components/x-hidden/ventures_modify"
-			              }
-			            ]
-			          }
-			        }
+			        "$ref": "#/components/schemas/venture_post"
 			      }
 			    }
 			  }
@@ -306,8 +282,36 @@
 			}
     },
     "responses": {
-			"ventures_200": {
+			"ventures_get_200": {
 			  "description": "Array of Ventures.",
+			  "content": {
+			    "application/json": {
+			      "schema": {
+			        "oneOf": [
+			          {
+			            "$ref": "#/components/x-hidden/ventures_wrapped"
+			          },
+			          {
+			            "$ref": "#/components/schemas/ventures_get"
+			          }
+			        ]
+			      }
+			    }
+			  },
+			  "headers": {
+			    "Access-Control-Allow-Origin": {
+			      "$ref": "#/components/headers/cors_origin"
+			    },
+			    "Access-Control-Allow-Headers": {
+			      "$ref": "#/components/headers/cors_headers"
+			    },
+			    "Access-Control-Allow-Methods": {
+			      "$ref": "#/components/headers/cors_methods"
+			    }
+			  }
+			},
+			"venture_create_200": {
+			  "description": "Create a new Venture within the Venture set.",
 			  "content": {
 			    "application/json": {
 			      "schema": {
@@ -361,27 +365,6 @@
 			    "application/json": {
 			      "schema": {
 			        "$ref": "#/components/schemas/wrapped_response"
-			      }
-			    }
-			  },
-			  "headers": {
-			    "Access-Control-Allow-Origin": {
-			      "$ref": "#/components/headers/cors_origin"
-			    },
-			    "Access-Control-Allow-Headers": {
-			      "$ref": "#/components/headers/cors_headers"
-			    },
-			    "Access-Control-Allow-Methods": {
-			      "$ref": "#/components/headers/cors_methods"
-			    }
-			  }
-			},
-			"ventures_operation_200": {
-			  "description": "Operations that failed.",
-			  "content": {
-			    "application/json": {
-			      "schema": {
-			        "$ref": "#/components/schemas/ventures_failed_operations"
 			      }
 			    }
 			  },
@@ -455,6 +438,27 @@
 			    }
 			  }
 			},
+			"venture_post": {
+			  "type": "object",
+			  "required": [
+			    "description",
+			    "state"
+			  ],
+			  "properties": {
+			    "description": {
+			      "$ref": "#/components/x-hidden/description"
+			    },
+			    "state": {
+			      "$ref": "#/components/x-hidden/state"
+			    },
+			    "order_ids": {
+			      "$ref": "#/components/x-hidden/order_id_csv"
+			    },
+			    "extra": {
+			      "$ref": "#/components/x-hidden/extra"
+			    }
+			  }
+			},
 			"venture_put": {
 			  "type": "object",
 			  "required": [
@@ -480,25 +484,6 @@
 			    },
 			    "dead": {
 			      "$ref": "#/components/x-hidden/dead"
-			    }
-			  }
-			},
-			"ventures_failed_operations": {
-			  "type": "array",
-			  "items": {
-			  "type": "object",
-			    "required": [
-			      "id",
-			      "reason"
-			    ],
-			    "properties": {
-			      "id": {
-			        "$ref": "#/components/x-hidden/venture_id"
-			      },
-			      "reason": {
-			        "type": "string",
-			        "description": "Reason for the failure"
-			      }
 			    }
 			  }
 			}

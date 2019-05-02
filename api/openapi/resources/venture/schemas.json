@@ -33,6 +33,27 @@
     }
   }
 },
+"venture_post": {
+  "type": "object",
+  "required": [
+    "description",
+    "state"
+  ],
+  "properties": {
+    "description": {
+      "$ref": "#/components/x-hidden/description"
+    },
+    "state": {
+      "$ref": "#/components/x-hidden/state"
+    },
+    "order_ids": {
+      "$ref": "#/components/x-hidden/order_id_csv"
+    },
+    "extra": {
+      "$ref": "#/components/x-hidden/extra"
+    }
+  }
+},
 "venture_put": {
   "type": "object",
   "required": [
@@ -58,25 +79,6 @@
     },
     "dead": {
       "$ref": "#/components/x-hidden/dead"
-    }
-  }
-},
-"ventures_failed_operations": {
-  "type": "array",
-  "items": {
-  "type": "object",
-    "required": [
-      "id",
-      "reason"
-    ],
-    "properties": {
-      "id": {
-        "$ref": "#/components/x-hidden/venture_id"
-      },
-      "reason": {
-        "type": "string",
-        "description": "Reason for the failure"
-      }
     }
   }
 }

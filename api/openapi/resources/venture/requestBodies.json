@@ -1,33 +1,9 @@
-"ventures_operation": {
-  "description": "TODO",
+"venture_create": {
+  "description": "Specifies the new Venture.",
   "content": {
     "application/json": {
       "schema": {
-        "type": "object",
-        "properties": {
-          "action": {
-            "type": "string",
-            "description": "The action to perform",
-            "enum": [
-              "create",
-              "modify",
-              "delete"
-            ]
-          },
-          "operation": {
-            "oneOf": [
-              {
-                "$ref": "#/components/x-hidden/order_id_csv"
-              },
-              {
-                "$ref": "#/components/x-hidden/ventures_create"
-              },
-              {
-                "$ref": "#/components/x-hidden/ventures_modify"
-              }
-            ]
-          }
-        }
+        "$ref": "#/components/schemas/venture_post"
       }
     }
   }

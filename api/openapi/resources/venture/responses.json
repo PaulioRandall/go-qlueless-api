@@ -1,5 +1,33 @@
-"ventures_200": {
+"ventures_get_200": {
   "description": "Array of Ventures.",
+  "content": {
+    "application/json": {
+      "schema": {
+        "oneOf": [
+          {
+            "$ref": "#/components/x-hidden/ventures_wrapped"
+          },
+          {
+            "$ref": "#/components/schemas/ventures_get"
+          }
+        ]
+      }
+    }
+  },
+  "headers": {
+    "Access-Control-Allow-Origin": {
+      "$ref": "#/components/headers/cors_origin"
+    },
+    "Access-Control-Allow-Headers": {
+      "$ref": "#/components/headers/cors_headers"
+    },
+    "Access-Control-Allow-Methods": {
+      "$ref": "#/components/headers/cors_methods"
+    }
+  }
+},
+"venture_create_200": {
+  "description": "Create a new Venture within the Venture set.",
   "content": {
     "application/json": {
       "schema": {
@@ -53,27 +81,6 @@
     "application/json": {
       "schema": {
         "$ref": "#/components/schemas/wrapped_response"
-      }
-    }
-  },
-  "headers": {
-    "Access-Control-Allow-Origin": {
-      "$ref": "#/components/headers/cors_origin"
-    },
-    "Access-Control-Allow-Headers": {
-      "$ref": "#/components/headers/cors_headers"
-    },
-    "Access-Control-Allow-Methods": {
-      "$ref": "#/components/headers/cors_methods"
-    }
-  }
-},
-"ventures_operation_200": {
-  "description": "Operations that failed.",
-  "content": {
-    "application/json": {
-      "schema": {
-        "$ref": "#/components/schemas/ventures_failed_operations"
       }
     }
   },
