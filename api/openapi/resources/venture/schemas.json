@@ -1,65 +1,3 @@
-"ventures_create": {
-  "type": "array",
-  "items": {
-    "type": "object",
-    "required": [
-      "description",
-      "state"
-    ],
-    "properties": {
-      "description": {
-        "$ref": "#/components/x-hidden/description"
-      },
-      "state": {
-        "$ref": "#/components/x-hidden/state"
-      },
-      "order_ids": {
-        "$ref": "#/components/x-hidden/order_id_csv"
-      },
-      "extra": {
-        "$ref": "#/components/x-hidden/extra"
-      }
-    }
-  }
-},
-"ventures_modify": {
-  "type": "object",
-  "required": [
-    "ids",
-    "set",
-    "values"
-  ],
-  "properties": {
-    "ids": {
-      "type": "string",
-      "description": "CSV of ID's to the Ventures that will be modified"
-    },
-    "set": {
-      "type": "string",
-      "description": "CSV of properties to update; pick one or many of 'description', 'state', 'is_alive', 'order_ids', and 'extra'"
-    },
-    "values": {
-      "type": "object",
-      "properties": {
-        "description": {
-          "$ref": "#/components/x-hidden/description"
-        },
-        "state": {
-          "$ref": "#/components/x-hidden/state"
-        },
-        "order_ids": {
-          "$ref": "#/components/x-hidden/order_id_csv"
-        },
-        "dead": {
-          "$ref": "#/components/x-hidden/dead"
-        },
-        "extra": {
-          "$ref": "#/components/x-hidden/extra"
-        }
-      }
-    }
-  }
-},
 "ventures": {
   "type": "array",
   "items": {
@@ -88,6 +26,25 @@
       },
       "extra": {
         "$ref": "#/components/x-hidden/extra"
+      }
+    }
+  }
+},
+"ventures_failed_operations": {
+  "type": "array",
+  "items": {
+  "type": "object",
+    "required": [
+      "id",
+      "reason"
+    ],
+    "properties": {
+      "id": {
+        "$ref": "#/components/x-hidden/venture_id"
+      },
+      "reason": {
+        "type": "string",
+        "description": "Reason for the failure"
       }
     }
   }

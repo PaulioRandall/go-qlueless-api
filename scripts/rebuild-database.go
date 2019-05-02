@@ -5,10 +5,10 @@ package main
 import (
 	"fmt"
 	"log"
+	"os"
 	"strings"
 
-	d "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/database"
-	u "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/utils"
+	q "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/qserver"
 	v "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/ventures"
 )
 
@@ -30,8 +30,8 @@ var input []v.NewVenture = []v.NewVenture{
 func main() {
 	path := "../bin/qlueless.db"
 
-	u.DeleteIfExists(path)
-	db, err := d.OpenSQLiteDatabase(path)
+	_deleteIfExists(path)
+	db, err := q.OpenSQLiteDatabase(path)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -82,4 +82,14 @@ func main() {
 	}
 
 	fmt.Printf("UPDATED: %v\n", ven)
+}
+
+// _deleteIfExists deletes the file at the path specified if it exist.
+func _deleteIfExists(path string) {
+	err := os.Remove(path)
+	switch {
+	case err == nil, os.IsNotExist(err):
+	default:
+		log.Fatal(err)
+	}
 }

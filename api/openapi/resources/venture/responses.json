@@ -25,4 +25,25 @@
       "$ref": "#/components/headers/cors_methods"
     }
   }
+},
+"ventures_operation_200": {
+  "description": "Operations that failed.",
+  "content": {
+    "application/json": {
+      "schema": {
+        "$ref": "#/components/schemas/ventures_failed_operations"
+      }
+    }
+  },
+  "headers": {
+    "Access-Control-Allow-Origin": {
+      "$ref": "#/components/headers/cors_origin"
+    },
+    "Access-Control-Allow-Headers": {
+      "$ref": "#/components/headers/cors_headers"
+    },
+    "Access-Control-Allow-Methods": {
+      "$ref": "#/components/headers/cors_methods"
+    }
+  }
 }

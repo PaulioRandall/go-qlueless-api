@@ -21,38 +21,18 @@
   },
   "post": {
     "tags": ["ventures"],
-    "description": "Adds new Ventures to the Venture set.",
+    "description": "Creates, modifies, or deletes Ventures from the Venture set; operations are ordered respectivily.",
     "parameters": [
       {
         "$ref": "#/components/parameters/wrap"
       }
     ],
     "requestBody": {
-      "$ref": "#/components/requestBodies/ventures_create"
-    },
-    "responses": {
-      "201": {
-        "$ref": "#/components/responses/ventures_200"
-      },
-      "default": {
-        "$ref": "#/components/responses/error"
-      }
-    }
-  },
-  "put": {
-    "tags": ["ventures"],
-    "description": "Modifies Ventures within the Venture set.",
-    "parameters": [
-      {
-        "$ref": "#/components/parameters/wrap"
-      }
-    ],
-    "requestBody": {
-      "$ref": "#/components/requestBodies/ventures_modify"
+      "$ref": "#/components/requestBodies/ventures_operation"
     },
     "responses": {
       "200": {
-        "$ref": "#/components/responses/ventures_200"
+        "$ref": "#/components/responses/ventures_operation_200"
       },
       "default": {
         "$ref": "#/components/responses/error"

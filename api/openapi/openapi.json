@@ -148,38 +148,18 @@
 		  },
 		  "post": {
 		    "tags": ["ventures"],
-		    "description": "Adds new Ventures to the Venture set.",
+		    "description": "Creates, modifies, or deletes Ventures from the Venture set; operations are ordered respectivily.",
 		    "parameters": [
 		      {
 		        "$ref": "#/components/parameters/wrap"
 		      }
 		    ],
 		    "requestBody": {
-		      "$ref": "#/components/requestBodies/ventures_create"
-		    },
-		    "responses": {
-		      "201": {
-		        "$ref": "#/components/responses/ventures_200"
-		      },
-		      "default": {
-		        "$ref": "#/components/responses/error"
-		      }
-		    }
-		  },
-		  "put": {
-		    "tags": ["ventures"],
-		    "description": "Modifies Ventures within the Venture set.",
-		    "parameters": [
-		      {
-		        "$ref": "#/components/parameters/wrap"
-		      }
-		    ],
-		    "requestBody": {
-		      "$ref": "#/components/requestBodies/ventures_modify"
+		      "$ref": "#/components/requestBodies/ventures_operation"
 		    },
 		    "responses": {
 		      "200": {
-		        "$ref": "#/components/responses/ventures_200"
+		        "$ref": "#/components/responses/ventures_operation_200"
 		      },
 		      "default": {
 		        "$ref": "#/components/responses/error"
@@ -253,20 +233,36 @@
 			}
     },
     "requestBodies": {
-			"ventures_create": {
+			"ventures_operation": {
+			  "description": "TODO",
 			  "content": {
 			    "application/json": {
 			      "schema": {
-			        "$ref": "#/components/schemas/ventures_create"
-			      }
-			    }
-			  }
-			},
-			"ventures_modify": {
-			  "content": {
-			    "application/json": {
-			      "schema": {
-			        "$ref": "#/components/schemas/ventures_modify"
+			        "type": "object",
+			        "properties": {
+			          "action": {
+			            "type": "string",
+			            "description": "The action to perform",
+			            "enum": [
+			              "create",
+			              "modify",
+			              "delete"
+			            ]
+			          },
+			          "operation": {
+			            "oneOf": [
+			              {
+			                "$ref": "#/components/x-hidden/order_id_csv"
+			              },
+			              {
+			                "$ref": "#/components/x-hidden/ventures_create"
+			              },
+			              {
+			                "$ref": "#/components/x-hidden/ventures_modify"
+			              }
+			            ]
+			          }
+			        }
 			      }
 			    }
 			  }
@@ -286,6 +282,27 @@
 			            "$ref": "#/components/schemas/ventures"
 			          }
 			        ]
+			      }
+			    }
+			  },
+			  "headers": {
+			    "Access-Control-Allow-Origin": {
+			      "$ref": "#/components/headers/cors_origin"
+			    },
+			    "Access-Control-Allow-Headers": {
+			      "$ref": "#/components/headers/cors_headers"
+			    },
+			    "Access-Control-Allow-Methods": {
+			      "$ref": "#/components/headers/cors_methods"
+			    }
+			  }
+			},
+			"ventures_operation_200": {
+			  "description": "Operations that failed.",
+			  "content": {
+			    "application/json": {
+			      "schema": {
+			        "$ref": "#/components/schemas/ventures_failed_operations"
 			      }
 			    }
 			  },
@@ -324,6 +341,107 @@
 			}
     },
 		"schemas": {
+			"ventures": {
+			  "type": "array",
+			  "items": {
+			    "type": "object",
+			    "required": [
+			      "venture_id",
+			      "description",
+			      "state",
+			      "last_modified"
+			    ],
+			    "properties": {
+			      "venture_id": {
+			        "$ref": "#/components/x-hidden/venture_id"
+			      },
+			      "description": {
+			        "$ref": "#/components/x-hidden/description"
+			      },
+			      "state": {
+			        "$ref": "#/components/x-hidden/state"
+			      },
+			      "order_ids": {
+			        "$ref": "#/components/x-hidden/order_id_csv"
+			      },
+			      "last_modified": {
+			        "$ref": "#/components/x-hidden/last_modified"
+			      },
+			      "extra": {
+			        "$ref": "#/components/x-hidden/extra"
+			      }
+			    }
+			  }
+			},
+			"ventures_failed_operations": {
+			  "type": "array",
+			  "items": {
+			  "type": "object",
+			    "required": [
+			      "id",
+			      "reason"
+			    ],
+			    "properties": {
+			      "id": {
+			        "$ref": "#/components/x-hidden/venture_id"
+			      },
+			      "reason": {
+			        "type": "string",
+			        "description": "Reason for the failure"
+			      }
+			    }
+			  }
+			}
+			,
+			"error": {
+			  "type": "object",
+			  "required": [
+			    "message",
+			    "self"
+			  ],
+			  "properties": {
+			    "message": {
+			      "$ref": "#/components/x-hidden/message"
+			    },
+			    "self": {
+			      "$ref": "#/components/x-hidden/self"
+			    }
+			  }
+			},
+			"wrapped_response": {
+			  "type": "object",
+			  "required": [
+			    "message",
+			    "self"
+			  ],
+			  "properties": {
+			    "message": {
+			      "$ref": "#/components/x-hidden/message"
+			    },
+			    "self": {
+			      "$ref": "#/components/x-hidden/self"
+			    },
+			    "data": {
+			      "description": "The wrapped response data; should be identical to the response returned by the same request without the `wrap` parameter"
+			    }
+			  }
+			}
+    },
+    "x-hidden": {
+			"ventures_wrapped": {
+			  "type": "object",
+			  "properties": {
+			    "message": {
+			      "$ref": "#/components/x-hidden/message"
+			    },
+			    "self": {
+			      "$ref": "#/components/x-hidden/self"
+			    },
+			    "data": {
+			      "$ref": "#/components/schemas/ventures"
+			    }
+			  }
+			},
 			"ventures_create": {
 			  "type": "array",
 			  "items": {
@@ -386,84 +504,22 @@
 			    }
 			  }
 			},
-			"ventures": {
+			"ventures_failed_operation": {
 			  "type": "array",
 			  "items": {
-			    "type": "object",
+			  "type": "object",
 			    "required": [
-			      "venture_id",
-			      "description",
-			      "state",
-			      "last_modified"
+			      "id",
+			      "reason"
 			    ],
 			    "properties": {
-			      "venture_id": {
+			      "id": {
 			        "$ref": "#/components/x-hidden/venture_id"
 			      },
-			      "description": {
-			        "$ref": "#/components/x-hidden/description"
-			      },
-			      "state": {
-			        "$ref": "#/components/x-hidden/state"
-			      },
-			      "order_ids": {
-			        "$ref": "#/components/x-hidden/order_id_csv"
-			      },
-			      "last_modified": {
-			        "$ref": "#/components/x-hidden/last_modified"
-			      },
-			      "extra": {
-			        "$ref": "#/components/x-hidden/extra"
+			      "reason": {
+			        "type": "string",
+			        "description": "Reason for the failure"
 			      }
-			    }
-			  }
-			},
-			"error": {
-			  "type": "object",
-			  "required": [
-			    "message",
-			    "self"
-			  ],
-			  "properties": {
-			    "message": {
-			      "$ref": "#/components/x-hidden/message"
-			    },
-			    "self": {
-			      "$ref": "#/components/x-hidden/self"
-			    }
-			  }
-			},
-			"wrapped_response": {
-			  "type": "object",
-			  "required": [
-			    "message",
-			    "self"
-			  ],
-			  "properties": {
-			    "message": {
-			      "$ref": "#/components/x-hidden/message"
-			    },
-			    "self": {
-			      "$ref": "#/components/x-hidden/self"
-			    },
-			    "data": {
-			      "description": "The wrapped response data; should be identical to the response returned by the same request without the `wrap` parameter"
-			    }
-			  }
-			}
-    },
-    "x-hidden": {
-			"ventures_wrapped": {
-			  "type": "object",
-			  "properties": {
-			    "message": {
-			      "$ref": "#/components/x-hidden/message"
-			    },
-			    "self": {
-			      "$ref": "#/components/x-hidden/self"
-			    },
-			    "data": {
-			      "$ref": "#/components/schemas/ventures"
 			    }
 			  }
 			},

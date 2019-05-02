@@ -1,17 +1,33 @@
-"ventures_create": {
+"ventures_operation": {
+  "description": "TODO",
   "content": {
     "application/json": {
       "schema": {
-        "$ref": "#/components/schemas/ventures_create"
-      }
-    }
-  }
-},
-"ventures_modify": {
-  "content": {
-    "application/json": {
-      "schema": {
-        "$ref": "#/components/schemas/ventures_modify"
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string",
+            "description": "The action to perform",
+            "enum": [
+              "create",
+              "modify",
+              "delete"
+            ]
+          },
+          "operation": {
+            "oneOf": [
+              {
+                "$ref": "#/components/x-hidden/order_id_csv"
+              },
+              {
+                "$ref": "#/components/x-hidden/ventures_create"
+              },
+              {
+                "$ref": "#/components/x-hidden/ventures_modify"
+              }
+            ]
+          }
+        }
       }
     }
   }
