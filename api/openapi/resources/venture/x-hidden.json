@@ -1,3 +1,9 @@
+"ventures_get": {
+  "type": "array",
+  "items": {
+    "$ref": "#/components/schemas/venture_get"
+  }
+},
 "ventures_wrapped": {
   "type": "object",
   "properties": {
@@ -8,7 +14,7 @@
       "$ref": "#/components/x-hidden/self"
     },
     "data": {
-      "$ref": "#/components/schemas/ventures_get"
+      "$ref": "#/components/x-hidden/ventures_get"
     }
   }
 },

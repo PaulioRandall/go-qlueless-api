@@ -183,7 +183,12 @@
 		  },
 		  "delete": {
 		    "tags": ["ventures"],
-		    "description": "Deletes a Venture from the Venture set.",
+		    "description": "Deletes Ventures from the Venture set.",
+		    "parameters": [
+		      {
+		        "$ref": "#/components/parameters/venture_id_csv"
+		      }
+		    ],
 		    "responses": {
 		      "200": {
 		        "$ref": "#/components/responses/venture_delete_200"
@@ -283,7 +288,7 @@
     },
     "responses": {
 			"ventures_get_200": {
-			  "description": "Array of Ventures.",
+			  "description": "Returns an array of Ventures.",
 			  "content": {
 			    "application/json": {
 			      "schema": {
@@ -292,7 +297,7 @@
 			            "$ref": "#/components/x-hidden/ventures_wrapped"
 			          },
 			          {
-			            "$ref": "#/components/schemas/ventures_get"
+			            "$ref": "#/components/x-hidden/ventures_get"
 			          }
 			        ]
 			      }
@@ -311,7 +316,7 @@
 			  }
 			},
 			"venture_create_200": {
-			  "description": "Create a new Venture within the Venture set.",
+			  "description": "Returns the newly created Venture within an array.",
 			  "content": {
 			    "application/json": {
 			      "schema": {
@@ -320,7 +325,7 @@
 			            "$ref": "#/components/x-hidden/ventures_wrapped"
 			          },
 			          {
-			            "$ref": "#/components/schemas/ventures_get"
+			            "$ref": "#/components/x-hidden/ventures_get"
 			          }
 			        ]
 			      }
@@ -339,11 +344,11 @@
 			  }
 			},
 			"venture_modify_200": {
-			  "description": "Modifies a Venture from the Venture set.",
+			  "description": "Returns a confirmation of the modifcation.",
 			  "content": {
 			    "application/json": {
 			      "schema": {
-			        "$ref": "#/components/schemas/wrapped_response"
+			        "$ref": "#/components/schemas/confirmation"
 			      }
 			    }
 			  },
@@ -360,11 +365,11 @@
 			  }
 			},
 			"venture_delete_200": {
-			  "description": "Deletes a Venture from the Venture set.",
+			  "description": "Returns a confirmation of the deletion.",
 			  "content": {
 			    "application/json": {
 			      "schema": {
-			        "$ref": "#/components/schemas/wrapped_response"
+			        "$ref": "#/components/schemas/confirmation"
 			      }
 			    }
 			  },
@@ -403,22 +408,16 @@
 			}
     },
 		"schemas": {
-			"ventures_get": {
-			  "type": "array",
-			  "items": {
-			    "$ref": "#/components/schemas/venture_get"
-			  }
-			},
 			"venture_get": {
 			  "type": "object",
 			  "required": [
-			    "venture_id",
+			    "id",
 			    "description",
 			    "state",
 			    "last_modified"
 			  ],
 			  "properties": {
-			    "venture_id": {
+			    "id": {
 			      "$ref": "#/components/x-hidden/venture_id"
 			    },
 			    "description": {
@@ -427,7 +426,7 @@
 			    "state": {
 			      "$ref": "#/components/x-hidden/state"
 			    },
-			    "order_ids": {
+			    "orders": {
 			      "$ref": "#/components/x-hidden/order_id_csv"
 			    },
 			    "last_modified": {
@@ -451,7 +450,7 @@
 			    "state": {
 			      "$ref": "#/components/x-hidden/state"
 			    },
-			    "order_ids": {
+			    "orders": {
 			      "$ref": "#/components/x-hidden/order_id_csv"
 			    },
 			    "extra": {
@@ -462,12 +461,12 @@
 			"venture_put": {
 			  "type": "object",
 			  "required": [
-			    "venture_id",
+			    "id",
 			    "description",
 			    "state"
 			  ],
 			  "properties": {
-			    "venture_id": {
+			    "id": {
 			      "$ref": "#/components/x-hidden/venture_id"
 			    },
 			    "description": {
@@ -476,7 +475,7 @@
 			    "state": {
 			      "$ref": "#/components/x-hidden/state"
 			    },
-			    "order_ids": {
+			    "orders": {
 			      "$ref": "#/components/x-hidden/order_id_csv"
 			    },
 			    "extra": {
@@ -503,7 +502,22 @@
 			    }
 			  }
 			},
-			"wrapped_response": {
+			"confirmation": {
+			  "type": "object",
+			  "required": [
+			    "message",
+			    "self"
+			  ],
+			  "properties": {
+			    "message": {
+			      "$ref": "#/components/x-hidden/message"
+			    },
+			    "self": {
+			      "$ref": "#/components/x-hidden/self"
+			    }
+			  }
+			},
+			"wrapped_data": {
 			  "type": "object",
 			  "required": [
 			    "message",
@@ -523,6 +537,12 @@
 			}
     },
     "x-hidden": {
+			"ventures_get": {
+			  "type": "array",
+			  "items": {
+			    "$ref": "#/components/schemas/venture_get"
+			  }
+			},
 			"ventures_wrapped": {
 			  "type": "object",
 			  "properties": {
@@ -533,7 +553,7 @@
 			      "$ref": "#/components/x-hidden/self"
 			    },
 			    "data": {
-			      "$ref": "#/components/schemas/ventures_get"
+			      "$ref": "#/components/x-hidden/ventures_get"
 			    }
 			  }
 			},

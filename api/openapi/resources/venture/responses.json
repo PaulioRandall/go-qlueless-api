@@ -1,5 +1,5 @@
 "ventures_get_200": {
-  "description": "Array of Ventures.",
+  "description": "Returns an array of Ventures.",
   "content": {
     "application/json": {
       "schema": {
@@ -8,7 +8,7 @@
             "$ref": "#/components/x-hidden/ventures_wrapped"
           },
           {
-            "$ref": "#/components/schemas/ventures_get"
+            "$ref": "#/components/x-hidden/ventures_get"
           }
         ]
       }
@@ -27,7 +27,7 @@
   }
 },
 "venture_create_200": {
-  "description": "Create a new Venture within the Venture set.",
+  "description": "Returns the newly created Venture within an array.",
   "content": {
     "application/json": {
       "schema": {
@@ -36,7 +36,7 @@
             "$ref": "#/components/x-hidden/ventures_wrapped"
           },
           {
-            "$ref": "#/components/schemas/ventures_get"
+            "$ref": "#/components/x-hidden/ventures_get"
           }
         ]
       }
@@ -55,11 +55,11 @@
   }
 },
 "venture_modify_200": {
-  "description": "Modifies a Venture from the Venture set.",
+  "description": "Returns a confirmation of the modifcation.",
   "content": {
     "application/json": {
       "schema": {
-        "$ref": "#/components/schemas/wrapped_response"
+        "$ref": "#/components/schemas/confirmation"
       }
     }
   },
@@ -76,11 +76,11 @@
   }
 },
 "venture_delete_200": {
-  "description": "Deletes a Venture from the Venture set.",
+  "description": "Returns a confirmation of the deletion.",
   "content": {
     "application/json": {
       "schema": {
-        "$ref": "#/components/schemas/wrapped_response"
+        "$ref": "#/components/schemas/confirmation"
       }
     }
   },

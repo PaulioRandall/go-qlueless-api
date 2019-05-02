@@ -13,7 +13,22 @@
     }
   }
 },
-"wrapped_response": {
+"confirmation": {
+  "type": "object",
+  "required": [
+    "message",
+    "self"
+  ],
+  "properties": {
+    "message": {
+      "$ref": "#/components/x-hidden/message"
+    },
+    "self": {
+      "$ref": "#/components/x-hidden/self"
+    }
+  }
+},
+"wrapped_data": {
   "type": "object",
   "required": [
     "message",

@@ -56,7 +56,12 @@
   },
   "delete": {
     "tags": ["ventures"],
-    "description": "Deletes a Venture from the Venture set.",
+    "description": "Deletes Ventures from the Venture set.",
+    "parameters": [
+      {
+        "$ref": "#/components/parameters/venture_id_csv"
+      }
+    ],
     "responses": {
       "200": {
         "$ref": "#/components/responses/venture_delete_200"
