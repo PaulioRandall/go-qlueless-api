@@ -62,8 +62,8 @@ func TestPUT_Ventures_1(t *testing.T) {
 	defer a.PrintResponse(t, res.Body)
 
 	require.Equal(t, 200, res.StatusCode)
-	test.AssertDefaultHeaders(t, res, "application/json", vtest.VenHttpMethods)
-	v.AssertGenericReplyFromReader(t, res.Body)
+	vtest.AssertHeaders(t, res.Header)
+	vtest.AssertGenericReply(t, res.Body)
 
 	after := vtest.DBQueryOne(id)
 	v.AssertEqualsModified(t, &after, input)

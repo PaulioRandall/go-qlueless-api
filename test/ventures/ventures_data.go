@@ -3,15 +3,23 @@ package ventures
 import (
 	"database/sql"
 	"fmt"
+	"io"
 	"log"
+	"net/http"
 	"os"
+	"testing"
 
+	a "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/asserts"
 	q "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/qserver"
 	v "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/ventures"
+	w "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/wrapped"
 	test "github.com/PaulioRandall/go-qlueless-assembly-api/test"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 var VenHttpMethods = []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}
+var _httpMethods = "GET, POST, PUT, DELETE, OPTIONS"
 var dbPath string = ""
 var venDB *sql.DB = nil
 
@@ -224,4 +232,24 @@ func _mapRow(rows *sql.Rows) *v.Venture {
 		panic(err)
 	}
 	return &ven
+}
+
+// AssertHeaders asserts that the expected headers have been supplied.
+func AssertHeaders(t *testing.T, h http.Header) {
+	a.AssertHeadersEquals(t, h, map[string]string{
+		"Access-Control-Allow-Origin":  "*",
+		"Access-Control-Allow-Headers": "*",
+		"Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+		"Content-Type":                 "application/json; charset=utf-8",
+	})
+}
+
+// AssertGenericReply asserts that reading from an io.Reader produces a generic
+// reply with the expected values present.
+func AssertGenericReply(t *testing.T, r io.Reader) {
+	gr, err := w.DecodeFromReader(r)
+	require.Nil(t, err)
+	assert.NotEmpty(t, gr.Message)
+	assert.NotEmpty(t, gr.Self)
+	assert.Empty(t, gr.Data)
 }
