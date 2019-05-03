@@ -120,7 +120,7 @@ func venDBInjectDead() {
 	mod := v.ModVenture{
 		Props: "is_dead",
 		Values: v.Venture{
-			IsDead: true,
+			Dead: true,
 		},
 	}
 
@@ -198,7 +198,7 @@ func _mapRow(rows *sql.Rows) *v.Venture {
 	err := rows.Scan(&ven.ID,
 		&ven.LastModified,
 		&ven.Description,
-		&ven.OrderIDs,
+		&ven.Orders,
 		&ven.State,
 		&ven.Extra)
 

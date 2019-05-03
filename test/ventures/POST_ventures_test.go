@@ -36,7 +36,7 @@ func TestPOST_Venture_1(t *testing.T) {
 	input := v.Venture{
 		Description: "A new Venture",
 		State:       "Not started",
-		OrderIDs:    "1,2,3",
+		Orders:      "1,2,3",
 		Extra:       "Extra, extra",
 	}
 	buf := new(bytes.Buffer)
@@ -83,7 +83,7 @@ func TestPOST_Venture_2(t *testing.T) {
 	input := v.Venture{
 		Description: "",
 		State:       "",
-		OrderIDs:    "invalid",
+		Orders:      "invalid",
 	}
 	buf := new(bytes.Buffer)
 	json.NewEncoder(buf).Encode(&input)
@@ -128,7 +128,7 @@ func TestPOST_Venture_3(t *testing.T) {
 	input := v.Venture{
 		Description: "A new Venture",
 		State:       "Not started",
-		OrderIDs:    "1,2,3",
+		Orders:      "1,2,3",
 	}
 	buf := new(bytes.Buffer)
 	json.NewEncoder(buf).Encode(&input)

@@ -28,8 +28,8 @@ func AssertGenericVenture(t *testing.T, v Venture) {
 	assert.NotEmpty(t, v.Description, "Venture.Description")
 	assert.NotEmpty(t, v.State, "Venture.State")
 	assert.True(t, v.LastModified > 0, "Venture.LastModified")
-	if v.OrderIDs != "" {
-		ts.AssertGenericIntCSV(t, v.OrderIDs)
+	if v.Orders != "" {
+		ts.AssertGenericIntCSV(t, v.Orders)
 	}
 }
 
@@ -38,9 +38,9 @@ func AssertGenericVenture(t *testing.T, v Venture) {
 func AssertVentureModEquals(t *testing.T, exp Venture, act Venture) {
 	assert.Equal(t, exp.ID, act.ID, "Venture.ID")
 	assert.Equal(t, exp.Description, act.Description, "Venture.Description")
-	assert.Equal(t, exp.OrderIDs, act.OrderIDs, "Venture.OrderIDs")
+	assert.Equal(t, exp.Orders, act.Orders, "Venture.Orders")
 	assert.Equal(t, exp.State, act.State, "Venture.State")
-	assert.Equal(t, exp.IsDead, act.IsDead, "Venture.IsDead")
+	assert.Equal(t, exp.Dead, act.Dead, "Venture.Dead")
 	assert.Equal(t, exp.Extra, act.Extra, "Venture.Extra")
 }
 

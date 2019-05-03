@@ -15,14 +15,14 @@ import (
 func TestDecodeNewVenture_1(t *testing.T) {
 	a := strings.NewReader(`{
 		"description": "description",
-		"order_ids": "2,3,4,999",
+		"orders": "2,3,4,999",
 		"state": "state",
 		"extra": "extra"
 	}`)
 
 	exp := NewVenture{
 		Description: "description",
-		OrderIDs:    "2,3,4,999",
+		Orders:    "2,3,4,999",
 		State:       "state",
 		Extra:       "extra",
 	}
@@ -54,7 +54,7 @@ func TestDecodeNewVenture_3(t *testing.T) {
 func TestNewVenture_Clean_1(t *testing.T) {
 	a := NewVenture{
 		Description: "\n\t\v description \r\f ",
-		OrderIDs:    "\n\t\v 2 \r\f , 3,4,\v 999 \f\t",
+		Orders:    "\n\t\v 2 \r\f , 3,4,\v 999 \f\t",
 		State:       "\n\t\v state \r\f ",
 		Extra:       "\n\t\v extra \r\f",
 	}
@@ -62,7 +62,7 @@ func TestNewVenture_Clean_1(t *testing.T) {
 	a.Clean()
 
 	assert.Equal(t, "description", a.Description)
-	assert.Equal(t, "2,3,4,999", a.OrderIDs)
+	assert.Equal(t, "2,3,4,999", a.Orders)
 	assert.Equal(t, "state", a.State)
 	assert.Equal(t, "\n\t\v extra \r\f", a.Extra)
 }
@@ -70,14 +70,14 @@ func TestNewVenture_Clean_1(t *testing.T) {
 func TestNewVenture_Clean_2(t *testing.T) {
 	a := NewVenture{
 		Description: "description",
-		OrderIDs:    "2,3,4,999",
+		Orders:    "2,3,4,999",
 		State:       "state",
 	}
 
 	a.Clean()
 
 	assert.Equal(t, "description", a.Description)
-	assert.Equal(t, "2,3,4,999", a.OrderIDs)
+	assert.Equal(t, "2,3,4,999", a.Orders)
 	assert.Equal(t, "state", a.State)
 }
 
@@ -95,7 +95,7 @@ func TestNewVenture_Clean_3(t *testing.T) {
 func TestNewVenture_Validate_1(t *testing.T) {
 	a := NewVenture{
 		Description: "description",
-		OrderIDs:    "2,3,4,999",
+		Orders:    "2,3,4,999",
 		State:       "state",
 		Extra:       "\n\t\v extra \r\f",
 	}
@@ -127,7 +127,7 @@ func TestNewVenture_Validate_3(t *testing.T) {
 func TestNewVenture_Validate_4(t *testing.T) {
 	a := NewVenture{
 		Description: "valid",
-		OrderIDs:    "3,invalid,4",
+		Orders: 					"3,invalid,4",
 		State:       "valid",
 	}
 
@@ -139,7 +139,7 @@ func TestNewVenture_Validate_5(t *testing.T) {
 	a := NewVenture{
 		Description: "",
 		State:       "",
-		OrderIDs:    "3,invalid,4",
+		Orders:    "3,invalid,4",
 	}
 
 	errMsgs := a.Validate()

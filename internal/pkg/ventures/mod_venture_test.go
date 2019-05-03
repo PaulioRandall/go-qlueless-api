@@ -14,25 +14,25 @@ import (
 
 func TestDecodeModVenture_1(t *testing.T) {
 	a := strings.NewReader(`{
-		"set": "description,state,order_ids,is_alive,extra",
+		"set": "description,state,orders,dead,extra",
 		"values": {
 			"description": "description",
-			"venture_id": "1",
-			"order_ids": "2,3,4,999",
+			"id": "1",
+			"orders": "2,3,4,999",
 			"state": "state",
-			"is_alive": true,
+			"dead": false,
 			"extra": "extra"
 		}
 	}`)
 
 	exp := ModVenture{
-		Props: "description,state,order_ids,is_alive,extra",
+		Props: "description,state,orders,dead,extra",
 		Values: Venture{
 			Description: "description",
 			ID:          "1",
-			OrderIDs:    "2,3,4,999",
+			Orders:    "2,3,4,999",
 			State:       "state",
-			IsDead:      false,
+			Dead:      false,
 			Extra:       "extra",
 		},
 	}
@@ -128,9 +128,9 @@ func TestModVenture_Clean_1(t *testing.T) {
 		Props: "\n\t\v   \r\f  state,extra,\v    is_alive \f\t",
 		Values: Venture{
 			Description: "\n\t\v description \r\f ",
-			OrderIDs:    "\n\t\v 2 \r\f ,    3,4,\v 999 \f\t",
+			Orders:    "\n\t\v 2 \r\f ,    3,4,\v 999 \f\t",
 			State:       "\n\t\v state \r\f ",
-			IsDead:      false,
+			Dead:      false,
 			Extra:       "\n\t\v extra \r\f",
 		},
 	}
@@ -140,9 +140,9 @@ func TestModVenture_Clean_1(t *testing.T) {
 	assert.Equal(t, "1,42,66", a.IDs)
 	assert.Equal(t, "state,extra,is_alive", a.Props)
 	assert.Equal(t, "description", a.Values.Description)
-	assert.Equal(t, "2,3,4,999", a.Values.OrderIDs)
+	assert.Equal(t, "2,3,4,999", a.Values.Orders)
 	assert.Equal(t, "state", a.Values.State)
-	assert.False(t, a.Values.IsDead)
+	assert.False(t, a.Values.Dead)
 	assert.Equal(t, "\n\t\v extra \r\f", a.Values.Extra)
 }
 
@@ -178,9 +178,9 @@ func TestModVenture_Validate_1(t *testing.T) {
 		Props: "description,state,extra",
 		Values: Venture{
 			Description: "updated description",
-			OrderIDs:    "66,101,202",
+			Orders:    "66,101,202",
 			State:       "updated state",
-			IsDead:      true,
+			Dead:      true,
 			Extra:       "updated extra",
 		},
 	}
@@ -249,9 +249,9 @@ func TestModVenture_Validate_6(t *testing.T) {
 func TestModVenture_Validate_7(t *testing.T) {
 	a := ModVenture{
 		IDs:   "1",
-		Props: "order_ids",
+		Props: "orders",
 		Values: Venture{
-			OrderIDs: "1,2,ILLEGAL,99,100",
+			Orders: "1,2,ILLEGAL,99,100",
 		},
 	}
 
@@ -263,9 +263,9 @@ func TestModVenture_Validate_8(t *testing.T) {
 	a := ModVenture{
 		Props: "description,,state,order_ids,INVALID,extra",
 		Values: Venture{
-			OrderIDs: "ILLEGAL,66,101,202",
+			Orders: "ILLEGAL,66,101,202",
 			State:    "updated state",
-			IsDead:   true,
+			Dead:   true,
 			Extra:    "updated extra",
 		},
 	}

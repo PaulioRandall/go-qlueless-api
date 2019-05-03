@@ -33,10 +33,10 @@ func TestPUT_Ventures_1(t *testing.T) {
 
 	input := v.ModVenture{
 		IDs:   "1",
-		Props: "description, order_ids, extra",
+		Props: "description, orders, extra",
 		Values: v.Venture{
 			Description: "Black blizzard",
-			OrderIDs:    "1,2,3",
+			Orders:      "1,2,3",
 			Extra:       "colour: black; power: 9000",
 		},
 	}
@@ -85,10 +85,10 @@ func TestPUT_Ventures_2(t *testing.T) {
 
 	input := v.ModVenture{
 		IDs:   "999999",
-		Props: "description, order_ids, extra",
+		Props: "description, orders, extra",
 		Values: v.Venture{
 			Description: "Black blizzard",
-			OrderIDs:    "1,2,3",
+			Orders:      "1,2,3",
 			Extra:       "colour: black; power: 9000",
 		},
 	}
@@ -127,10 +127,10 @@ func TestPUT_Ventures_3(t *testing.T) {
 	defer endVenTest()
 
 	input := v.ModVenture{
-		Props: "description, order_ids, extra",
+		Props: "description, orders, extra",
 		Values: v.Venture{
 			Description: "Black blizzard",
-			OrderIDs:    "1,2,3",
+			Orders:      "1,2,3",
 			Extra:       "colour: black; power: 9000",
 		},
 	}
@@ -168,7 +168,7 @@ func TestPUT_Ventures_4(t *testing.T) {
 
 	input := v.ModVenture{
 		IDs:    "1",
-		Props:  "description, order_ids, extra",
+		Props:  "description, orders, extra",
 		Values: v.Venture{},
 	}
 
@@ -206,9 +206,9 @@ func TestPUT_Ventures_5(t *testing.T) {
 
 	input := v.ModVenture{
 		IDs:   "4,5",
-		Props: "is_dead",
+		Props: "dead",
 		Values: v.Venture{
-			IsDead: true,
+			Dead: true,
 		},
 	}
 
@@ -284,7 +284,7 @@ func TestPUT_Ventures_6(t *testing.T) {
 	require.Len(t, out, 1)
 	v.AssertGenericVenture(t, out[0])
 
-	input.Values.OrderIDs = out[0].OrderIDs
+	input.Values.Orders = out[0].Orders
 	input.Values.ID = out[0].ID
 	input.Values.LastModified = out[0].LastModified
 	assert.Equal(t, input.Values, out[0])

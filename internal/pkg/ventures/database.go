@@ -158,7 +158,7 @@ func QueryFor(db *sql.DB, id string) (*Venture, error) {
 	WHERE id = ?`, id).Scan(&ven.ID,
 		&ven.LastModified,
 		&ven.Description,
-		&ven.OrderIDs,
+		&ven.Orders,
 		&ven.State,
 		&ven.Extra)
 
@@ -251,7 +251,7 @@ func _mapRow(rows *sql.Rows) (*Venture, error) {
 	err := rows.Scan(&ven.ID,
 		&ven.LastModified,
 		&ven.Description,
-		&ven.OrderIDs,
+		&ven.Orders,
 		&ven.State,
 		&ven.Extra)
 

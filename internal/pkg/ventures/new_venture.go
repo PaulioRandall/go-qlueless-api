@@ -13,7 +13,7 @@ import (
 // NewVenture represents a new Venture.
 type NewVenture struct {
 	Description string `json:"description"`
-	OrderIDs    string `json:"order_ids"`
+	Orders      string `json:"orders"`
 	State       string `json:"state"`
 	Extra       string `json:"extra"`
 }
@@ -30,7 +30,7 @@ func DecodeNewVenture(r io.Reader) (NewVenture, error) {
 // except where whitespace is allowable.
 func (nv *NewVenture) Clean() {
 	nv.Description = strings.TrimSpace(nv.Description)
-	nv.OrderIDs = u.StripWhitespace(nv.OrderIDs)
+	nv.Orders = u.StripWhitespace(nv.Orders)
 	nv.State = strings.TrimSpace(nv.State)
 }
 
@@ -44,8 +44,8 @@ func (nv *NewVenture) Validate() []string {
 	errMsgs = u.AppendIfEmpty(nv.Description, errMsgs,
 		"Ventures must have a description.")
 
-	if nv.OrderIDs != "" {
-		errMsgs = u.AppendIfNotPositiveIntCSV(nv.OrderIDs, errMsgs,
+	if nv.Orders != "" {
+		errMsgs = u.AppendIfNotPositiveIntCSV(nv.Orders, errMsgs,
 			"Child OrderIDs within a Venture must all be positive integers.")
 	}
 
@@ -119,14 +119,14 @@ func (nv *NewVenture) _execInsert(id string, stmt *sql.Stmt) (*Venture, error) {
 	ven := Venture{
 		ID:          id,
 		Description: nv.Description,
-		OrderIDs:    nv.OrderIDs,
+		Orders:      nv.Orders,
 		State:       nv.State,
 		Extra:       nv.Extra,
 	}
 
 	_, err := stmt.Exec(ven.ID,
 		ven.Description,
-		ven.OrderIDs,
+		ven.Orders,
 		ven.State,
 		ven.Extra)
 

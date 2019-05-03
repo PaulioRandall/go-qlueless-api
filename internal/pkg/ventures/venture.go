@@ -11,12 +11,12 @@ import (
 
 // Venture represents a Venture, aka, project.
 type Venture struct {
-	ID           string `json:"venture_id,omitempty"`
+	ID           string `json:"id,omitempty"`
 	LastModified int64  `json:"last_modified"`
 	Description  string `json:"description"`
-	OrderIDs     string `json:"order_ids,omitempty"`
+	Orders       string `json:"orders,omitempty"`
 	State        string `json:"state"`
-	IsDead       bool   `json:"is_dead,omitempty"`
+	Dead         bool   `json:"dead,omitempty"`
 	Extra        string `json:"extra,omitempty"`
 }
 
@@ -42,7 +42,7 @@ func DecodeVentureSlice(r io.Reader) ([]Venture, error) {
 func (ven *Venture) Clean() {
 	ven.Description = strings.TrimSpace(ven.Description)
 	ven.ID = strings.TrimSpace(ven.ID)
-	ven.OrderIDs = u.StripWhitespace(ven.OrderIDs)
+	ven.Orders = u.StripWhitespace(ven.Orders)
 	ven.State = strings.TrimSpace(ven.State)
 }
 
@@ -65,26 +65,26 @@ func (ven *Venture) Validate(isNew bool) []string {
 		}
 	}
 
-	if ven.OrderIDs != "" {
-		errMsgs = u.AppendIfNotPositiveIntCSV(ven.OrderIDs, errMsgs,
-			"Child OrderIDs within a Venture must all be positive integers.")
+	if ven.Orders != "" {
+		errMsgs = u.AppendIfNotPositiveIntCSV(ven.Orders, errMsgs,
+			"Child Orders within a Venture must all be positive integers.")
 	}
 
 	errMsgs = u.AppendIfEmpty(ven.State, errMsgs, "Ventures must have a state.")
 	return errMsgs
 }
 
-// SplitOrderIDs returns the IDs of the Orders as a slice.
-func (ven *Venture) SplitOrderIDs() []string {
-	if ven.OrderIDs == "" {
+// SplitOrders returns the IDs of the Orders as a slice.
+func (ven *Venture) SplitOrders() []string {
+	if ven.Orders == "" {
 		return []string{}
 	}
-	return strings.Split(ven.OrderIDs, ",")
+	return strings.Split(ven.Orders, ",")
 }
 
-// SetOrderIDs sets the OrderIDs CSV from a slice of Order IDs.
-func (ven *Venture) SetOrderIDs(ids []string) {
-	ven.OrderIDs = strings.Join(ids, ",")
+// SetOrders sets the Orders CSV from a slice of Order IDs.
+func (ven *Venture) SetOrders(ids []string) {
+	ven.Orders = strings.Join(ids, ",")
 }
 
 // Update updates the Venture within the database.
@@ -107,9 +107,9 @@ func (ven *Venture) Update(db *sql.DB) error {
 
 	_, err = stmt.Exec(ven.ID,
 		ven.Description,
-		ven.OrderIDs,
+		ven.Orders,
 		ven.State,
-		ven.IsDead,
+		ven.Dead,
 		ven.Extra)
 
 	return err

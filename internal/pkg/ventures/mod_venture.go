@@ -56,15 +56,15 @@ func (mv *ModVenture) Clean() {
 func (mv *ModVenture) _validateProps(errMsgs []string) []string {
 	for _, prop := range mv.SplitProps() {
 		switch prop {
-		case "is_dead", "extra":
+		case "dead", "extra":
 		case "description":
 			errMsgs = u.AppendIfEmpty(mv.Values.Description, errMsgs,
 				"Ventures must have a description.")
 		case "state":
 			errMsgs = u.AppendIfEmpty(mv.Values.State, errMsgs,
 				"Ventures must have a state.")
-		case "order_ids":
-			errMsgs = u.AppendIfNotPositiveIntCSV(mv.Values.OrderIDs, errMsgs,
+		case "orders":
+			errMsgs = u.AppendIfNotPositiveIntCSV(mv.Values.Orders, errMsgs,
 				"The list of Order IDs within a Venture must be an integer CSV")
 		default:
 			errMsgs = append(errMsgs,
@@ -103,12 +103,12 @@ func (mv *ModVenture) ApplyMod(ven *Venture) {
 		switch p {
 		case "description":
 			ven.Description = mod.Description
-		case "order_ids":
-			ven.OrderIDs = mod.OrderIDs
+		case "orders":
+			ven.Orders = mod.Orders
 		case "state":
 			ven.State = mod.State
-		case "is_dead":
-			ven.IsDead = mod.IsDead
+		case "dead":
+			ven.Dead = mod.Dead
 		case "extra":
 			ven.Extra = mod.Extra
 		}
@@ -169,9 +169,9 @@ func (mv *ModVenture) _execStmtForEach(stmt *sql.Stmt, vens []Venture) bool {
 
 		_, err := stmt.Exec(ven.ID,
 			ven.Description,
-			ven.OrderIDs,
+			ven.Orders,
 			ven.State,
-			ven.IsDead,
+			ven.Dead,
 			ven.Extra)
 
 		if u.LogIfErr(err) {
