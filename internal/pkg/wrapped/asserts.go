@@ -14,6 +14,14 @@ func AssertGenericError(t *testing.T, r WrappedReply) {
 	assert.Empty(t, r.Data)
 }
 
+// AssertGenericReply checks that an response body has the required fields
+// populated for a generic reply.
+func AssertGenericReply(t *testing.T, r WrappedReply) {
+	assert.NotEmpty(t, r.Message)
+	assert.NotEmpty(t, r.Self)
+	assert.Empty(t, r.Data)
+}
+
 // AssertWrappedReply checks that a wrapped response body has the required
 // fields populated
 func AssertWrappedReply(t *testing.T, r WrappedReply) {

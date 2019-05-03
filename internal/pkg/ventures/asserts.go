@@ -57,6 +57,14 @@ func AssertEqualsModified(t *testing.T, before *Venture, after *Venture) {
 	assert.True(t, before.LastModified < after.LastModified, "Venture.LastModified")
 }
 
+// AssertGenericReplyFromReader asserts that reading from an io.Reader produces
+// a generic reply.
+func AssertGenericReplyFromReader(t *testing.T, r io.Reader) {
+	wr, err := w.DecodeFromReader(r)
+	require.Nil(t, err)
+	w.AssertGenericReply(t, wr)
+}
+
 // AssertVentureSliceModEquals asserts that the two Venture slices are equal
 // with the exception of the last_modified fields
 func AssertVentureSliceModEquals(t *testing.T, exp map[string]Venture, act []Venture) {

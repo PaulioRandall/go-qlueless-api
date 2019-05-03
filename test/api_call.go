@@ -1,6 +1,8 @@
 package test
 
 import (
+	"bytes"
+	"encoding/json"
 	"io"
 	"log"
 	"net/http"
@@ -40,4 +42,18 @@ func (c *APICall) Fire() *http.Response {
 	req := c._newRequest()
 	res := c._invokeRequest(req)
 	return res
+}
+
+// CallWithJSON calls an API endpoint with the specified details.
+func CallWithJSON(method string, url string, data interface{}) *http.Response {
+	buf := new(bytes.Buffer)
+	json.NewEncoder(buf).Encode(&data)
+
+	req := APICall{
+		URL:    "http://localhost:8080/ventures",
+		Method: "PUT",
+		Body:   buf,
+	}
+
+	return req.Fire()
 }
