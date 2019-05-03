@@ -1,4 +1,4 @@
-package ventures
+package PUT
 
 import (
 	"bytes"
@@ -8,6 +8,7 @@ import (
 	a "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/asserts"
 	v "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/ventures"
 	test "github.com/PaulioRandall/go-qlueless-assembly-api/test"
+	vtest "github.com/PaulioRandall/go-qlueless-assembly-api/test/ventures"
 	assert "github.com/stretchr/testify/assert"
 	require "github.com/stretchr/testify/require"
 )
@@ -28,8 +29,8 @@ func TestPUT_Ventures_1(t *testing.T) {
 		And those Ventures will have new 'last_updated' datetimes
 		...`)
 
-	beginVenTest()
-	defer endVenTest()
+	vtest.BeginTest("../../../bin")
+	defer vtest.EndTest()
 
 	input := v.ModVenture{
 		IDs:   "1",
@@ -54,7 +55,7 @@ func TestPUT_Ventures_1(t *testing.T) {
 	defer a.PrintResponse(t, res.Body)
 
 	require.Equal(t, 200, res.StatusCode)
-	test.AssertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
+	test.AssertDefaultHeaders(t, res, "application/json", vtest.VenHttpMethods)
 
 	out := v.AssertVentureSliceFromReader(t, res.Body)
 	require.Len(t, out, 1)
@@ -63,7 +64,7 @@ func TestPUT_Ventures_1(t *testing.T) {
 	input.Values.State = out[0].State
 	input.Values.ID = out[0].ID
 	input.Values.LastModified = out[0].LastModified
-	fromDB := venDBQueryOne(out[0].ID)
+	fromDB := vtest.DBQueryOne(out[0].ID)
 
 	assert.Equal(t, input.Values, out[0])
 	v.AssertVentureModEquals(t, fromDB, out[0])
@@ -80,8 +81,8 @@ func TestPUT_Ventures_2(t *testing.T) {
 		And the body is an empty JSON array
 		...`)
 
-	beginVenTest()
-	defer endVenTest()
+	vtest.BeginTest("../../../bin")
+	defer vtest.EndTest()
 
 	input := v.ModVenture{
 		IDs:   "999999",
@@ -106,7 +107,7 @@ func TestPUT_Ventures_2(t *testing.T) {
 	defer a.PrintResponse(t, res.Body)
 
 	require.Equal(t, 200, res.StatusCode)
-	test.AssertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
+	test.AssertDefaultHeaders(t, res, "application/json", vtest.VenHttpMethods)
 
 	out := v.AssertVentureSliceFromReader(t, res.Body)
 	require.Empty(t, out)
@@ -123,8 +124,8 @@ func TestPUT_Ventures_3(t *testing.T) {
 		And the body is a JSON object representing an error response
 		...`)
 
-	beginVenTest()
-	defer endVenTest()
+	vtest.BeginTest("../../../bin")
+	defer vtest.EndTest()
 
 	input := v.ModVenture{
 		Props: "description, orders, extra",
@@ -148,7 +149,7 @@ func TestPUT_Ventures_3(t *testing.T) {
 	defer a.PrintResponse(t, res.Body)
 
 	require.Equal(t, 400, res.StatusCode)
-	test.AssertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
+	test.AssertDefaultHeaders(t, res, "application/json", vtest.VenHttpMethods)
 	test.AssertWrappedErrorBody(t, res.Body)
 }
 
@@ -163,8 +164,8 @@ func TestPUT_Ventures_4(t *testing.T) {
 		And the body is a JSON object representing an error response
 		...`)
 
-	beginVenTest()
-	defer endVenTest()
+	vtest.BeginTest("../../../bin")
+	defer vtest.EndTest()
 
 	input := v.ModVenture{
 		IDs:    "1",
@@ -185,7 +186,7 @@ func TestPUT_Ventures_4(t *testing.T) {
 	defer a.PrintResponse(t, res.Body)
 
 	require.Equal(t, 400, res.StatusCode)
-	test.AssertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
+	test.AssertDefaultHeaders(t, res, "application/json", vtest.VenHttpMethods)
 	test.AssertWrappedErrorBody(t, res.Body)
 }
 
@@ -201,8 +202,8 @@ func TestPUT_Ventures_5(t *testing.T) {
 		And those Ventures will have new 'last_updated' datetimes
 		...`)
 
-	beginVenTest()
-	defer endVenTest()
+	vtest.BeginTest("../../../bin")
+	defer vtest.EndTest()
 
 	input := v.ModVenture{
 		IDs:   "4,5",
@@ -225,12 +226,12 @@ func TestPUT_Ventures_5(t *testing.T) {
 	defer a.PrintResponse(t, res.Body)
 
 	require.Equal(t, 200, res.StatusCode)
-	test.AssertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
+	test.AssertDefaultHeaders(t, res, "application/json", vtest.VenHttpMethods)
 
 	out := v.AssertVentureSliceFromReader(t, res.Body)
 	require.Len(t, out, 2)
 
-	fromDB := venDBQueryMany("4,5")
+	fromDB := vtest.DBQueryMany("4,5")
 	assert.Empty(t, fromDB)
 }
 
@@ -252,8 +253,8 @@ func TestPUT_Ventures_6(t *testing.T) {
 		And those Ventures will have new 'last_updated' datetimes
 		...`)
 
-	beginVenTest()
-	defer endVenTest()
+	vtest.BeginTest("../../../bin")
+	defer vtest.EndTest()
 
 	input := v.ModVenture{
 		IDs:   "1",
@@ -278,7 +279,7 @@ func TestPUT_Ventures_6(t *testing.T) {
 	defer a.PrintResponse(t, res.Body)
 
 	require.Equal(t, 200, res.StatusCode)
-	test.AssertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
+	test.AssertDefaultHeaders(t, res, "application/json", vtest.VenHttpMethods)
 
 	_, out := v.AssertWrappedVentureSliceFromReader(t, res.Body)
 	require.Len(t, out, 1)
@@ -289,6 +290,6 @@ func TestPUT_Ventures_6(t *testing.T) {
 	input.Values.LastModified = out[0].LastModified
 	assert.Equal(t, input.Values, out[0])
 
-	fromDB := venDBQueryOne(out[0].ID)
+	fromDB := vtest.DBQueryOne(out[0].ID)
 	v.AssertVentureModEquals(t, fromDB, out[0])
 }

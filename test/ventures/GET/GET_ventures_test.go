@@ -1,4 +1,4 @@
-package ventures
+package GET
 
 import (
 	"testing"
@@ -6,6 +6,7 @@ import (
 	a "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/asserts"
 	v "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/ventures"
 	test "github.com/PaulioRandall/go-qlueless-assembly-api/test"
+	vtest "github.com/PaulioRandall/go-qlueless-assembly-api/test/ventures"
 	require "github.com/stretchr/testify/require"
 )
 
@@ -25,8 +26,8 @@ func TestGET_Ventures_1(t *testing.T) {
 		And the body is a JSON array containing all living Ventures
 		...`)
 
-	beginVenTest()
-	defer endVenTest()
+	vtest.BeginTest("../../../bin")
+	defer vtest.EndTest()
 
 	req := test.APICall{
 		URL:    "http://localhost:8080/ventures",
@@ -37,10 +38,10 @@ func TestGET_Ventures_1(t *testing.T) {
 	defer a.PrintResponse(t, res.Body)
 
 	require.Equal(t, 200, res.StatusCode)
-	test.AssertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
+	test.AssertDefaultHeaders(t, res, "application/json", vtest.VenHttpMethods)
 
 	out := v.AssertVentureSliceFromReader(t, res.Body)
-	exp := venDBQueryAll()
+	exp := vtest.DBQueryAll()
 	v.AssertOrderlessSlicesEqual(t, exp, out)
 }
 
@@ -63,8 +64,8 @@ func TestGET_Ventures_2(t *testing.T) {
 		And the wrapped data is a JSON array containing all living Ventures
 		...`)
 
-	beginVenTest()
-	defer endVenTest()
+	vtest.BeginTest("../../../bin")
+	defer vtest.EndTest()
 
 	req := test.APICall{
 		URL:    "http://localhost:8080/ventures?wrap",
@@ -75,10 +76,10 @@ func TestGET_Ventures_2(t *testing.T) {
 	defer a.PrintResponse(t, res.Body)
 
 	require.Equal(t, 200, res.StatusCode)
-	test.AssertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
+	test.AssertDefaultHeaders(t, res, "application/json", vtest.VenHttpMethods)
 
 	_, out := v.AssertWrappedVentureSliceFromReader(t, res.Body)
-	exp := venDBQueryAll()
+	exp := vtest.DBQueryAll()
 	v.AssertOrderlessSlicesEqual(t, exp, out)
 }
 
@@ -98,8 +99,8 @@ func TestGET_Ventures_3(t *testing.T) {
 		And the body is a JSON array containing only the living Venture requested
 		...`)
 
-	beginVenTest()
-	defer endVenTest()
+	vtest.BeginTest("../../../bin")
+	defer vtest.EndTest()
 
 	req := test.APICall{
 		URL:    "http://localhost:8080/ventures?ids=1",
@@ -110,12 +111,12 @@ func TestGET_Ventures_3(t *testing.T) {
 	defer a.PrintResponse(t, res.Body)
 
 	require.Equal(t, 200, res.StatusCode)
-	test.AssertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
+	test.AssertDefaultHeaders(t, res, "application/json", vtest.VenHttpMethods)
 
 	out := v.AssertVentureSliceFromReader(t, res.Body)
 	require.Len(t, out, 1)
 
-	exp := venDBQueryMany("1")
+	exp := vtest.DBQueryMany("1")
 	v.AssertOrderlessSlicesEqual(t, exp, out)
 }
 
@@ -131,8 +132,8 @@ func TestGET_Ventures_4(t *testing.T) {
 		And the body is a JSON array containing only the living Ventures requested
 		...`)
 
-	beginVenTest()
-	defer endVenTest()
+	vtest.BeginTest("../../../bin")
+	defer vtest.EndTest()
 
 	req := test.APICall{
 		URL:    "http://localhost:8080/ventures?ids=1,2,3",
@@ -143,12 +144,12 @@ func TestGET_Ventures_4(t *testing.T) {
 	defer a.PrintResponse(t, res.Body)
 
 	require.Equal(t, 200, res.StatusCode)
-	test.AssertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
+	test.AssertDefaultHeaders(t, res, "application/json", vtest.VenHttpMethods)
 
 	out := v.AssertVentureSliceFromReader(t, res.Body)
 	require.Len(t, out, 3)
 
-	exp := venDBQueryMany("1,2,3")
+	exp := vtest.DBQueryMany("1,2,3")
 	v.AssertOrderlessSlicesEqual(t, exp, out)
 }
 
@@ -164,8 +165,8 @@ func TestGET_Ventures_5(t *testing.T) {
 		And the body is an empty JSON array of Ventures
 		...`)
 
-	beginVenTest()
-	defer endVenTest()
+	vtest.BeginTest("../../../bin")
+	defer vtest.EndTest()
 
 	req := test.APICall{
 		URL:    "http://localhost:8080/ventures?ids=888888,999999",
@@ -176,7 +177,7 @@ func TestGET_Ventures_5(t *testing.T) {
 	defer a.PrintResponse(t, res.Body)
 
 	require.Equal(t, 200, res.StatusCode)
-	test.AssertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
+	test.AssertDefaultHeaders(t, res, "application/json", vtest.VenHttpMethods)
 
 	out := v.AssertVentureSliceFromReader(t, res.Body)
 	require.Empty(t, out)
@@ -194,8 +195,8 @@ func TestGET_Ventures_6(t *testing.T) {
 	And the body is a JSON array containing only the living Ventures requested
 	...`)
 
-	beginVenTest()
-	defer endVenTest()
+	vtest.BeginTest("../../../bin")
+	defer vtest.EndTest()
 
 	req := test.APICall{
 		URL:    "http://localhost:8080/ventures?ids=1,88888,2,99999",
@@ -206,12 +207,12 @@ func TestGET_Ventures_6(t *testing.T) {
 	defer a.PrintResponse(t, res.Body)
 
 	require.Equal(t, 200, res.StatusCode)
-	test.AssertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
+	test.AssertDefaultHeaders(t, res, "application/json", vtest.VenHttpMethods)
 
 	out := v.AssertVentureSliceFromReader(t, res.Body)
 	require.Len(t, out, 2)
 
-	exp := venDBQueryMany("1,2")
+	exp := vtest.DBQueryMany("1,2")
 	v.AssertOrderlessSlicesEqual(t, exp, out)
 }
 
@@ -234,8 +235,8 @@ func TestGET_Ventures_7(t *testing.T) {
 		And the body is a JSON array containing only the living Ventures requested
 		...`)
 
-	beginVenTest()
-	defer endVenTest()
+	vtest.BeginTest("../../../bin")
+	defer vtest.EndTest()
 
 	req := test.APICall{
 		URL:    "http://localhost:8080/ventures?wrap&ids=1,4,5",
@@ -246,11 +247,11 @@ func TestGET_Ventures_7(t *testing.T) {
 	defer a.PrintResponse(t, res.Body)
 
 	require.Equal(t, 200, res.StatusCode)
-	test.AssertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
+	test.AssertDefaultHeaders(t, res, "application/json", vtest.VenHttpMethods)
 
 	_, out := v.AssertWrappedVentureSliceFromReader(t, res.Body)
 	require.Len(t, out, 3)
 
-	exp := venDBQueryMany("1,4,5")
+	exp := vtest.DBQueryMany("1,4,5")
 	v.AssertOrderlessSlicesEqual(t, exp, out)
 }

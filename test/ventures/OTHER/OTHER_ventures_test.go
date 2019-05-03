@@ -1,10 +1,11 @@
-package ventures
+package OTHER
 
 import (
 	"testing"
 
 	a "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/asserts"
 	test "github.com/PaulioRandall/go-qlueless-assembly-api/test"
+	vtest "github.com/PaulioRandall/go-qlueless-assembly-api/test/ventures"
 	require "github.com/stretchr/testify/require"
 )
 
@@ -23,8 +24,8 @@ func TestOPTIONS_Ventures(t *testing.T) {
 		And there is NO response body
 		...`)
 
-	beginVenTest()
-	defer endVenTest()
+	vtest.BeginTest("../../../bin")
+	defer vtest.EndTest()
 
 	req := test.APICall{
 		URL:    "http://localhost:8080/ventures",
@@ -35,7 +36,7 @@ func TestOPTIONS_Ventures(t *testing.T) {
 	defer a.PrintResponse(t, res.Body)
 
 	require.Equal(t, 200, res.StatusCode)
-	test.AssertNoContentHeaders(t, res, ventureHttpMethods)
+	test.AssertNoContentHeaders(t, res, vtest.VenHttpMethods)
 	test.AssertEmptyBody(t, res.Body)
 }
 
@@ -54,8 +55,8 @@ func TestINVALID_Ventures(t *testing.T) {
 		And there is NO response body
 		...`)
 
-	beginVenTest()
-	defer endVenTest()
+	vtest.BeginTest("../../../bin")
+	defer vtest.EndTest()
 
-	test.VerifyNotAllowedMethods(t, "http://localhost:8080/ventures", ventureHttpMethods)
+	test.VerifyNotAllowedMethods(t, "http://localhost:8080/ventures", vtest.VenHttpMethods)
 }

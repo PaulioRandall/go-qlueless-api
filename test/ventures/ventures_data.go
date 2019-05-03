@@ -11,24 +11,25 @@ import (
 	test "github.com/PaulioRandall/go-qlueless-assembly-api/test"
 )
 
-var ventureHttpMethods = []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}
-var dbPath string = "../../bin/qlueless.db"
+var VenHttpMethods = []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}
+var dbPath string = ""
 var venDB *sql.DB = nil
 
-// beginVenTest is run at the start of every test to setup the server and
+// BeginTest is run at the start of every test to setup the server and
 // inject the test data.
-func beginVenTest() {
-	venDBReset()
-	venDBInjectLiving()
-	venDBInjectDead()
-	test.StartServer("../../bin")
+func BeginTest(relServerPath string) {
+	dbPath = relServerPath + "/qlueless.db"
+	DBReset()
+	DBInjectLiving()
+	DBInjectDead()
+	test.StartServer(relServerPath)
 }
 
-// endVenTest should be deferred straight after _beginVenTest() is run to
+// EndTest should be deferred straight after BeginTest() is run to
 // close resources at the end of every test.
-func endVenTest() {
+func EndTest() {
 	test.StopServer()
-	venDBClose()
+	DBClose()
 }
 
 // _deleteIfExists deletes the file at the path specified if it exist.
@@ -41,10 +42,10 @@ func _deleteIfExists(path string) {
 	}
 }
 
-// venDBReset will reset the database by closing and deleting it then
+// DBReset will reset the database by closing and deleting it then
 // creating a new one.
-func venDBReset() {
-	venDBClose()
+func DBReset() {
+	DBClose()
 	_deleteIfExists(dbPath)
 
 	var err error
@@ -59,8 +60,8 @@ func venDBReset() {
 	}
 }
 
-// venDBClose closes the test database.
-func venDBClose() {
+// DBClose closes the test database.
+func DBClose() {
 	if venDB != nil {
 		err := venDB.Close()
 		if err != nil {
@@ -70,8 +71,8 @@ func venDBClose() {
 	venDB = nil
 }
 
-// venDBInject injects a Venture into the database.
-func venDBInject(new v.NewVenture) *v.Venture {
+// DBInject injects a Venture into the database.
+func DBInject(new v.NewVenture) *v.Venture {
 	ven, ok := new.Insert(venDB)
 	if !ok {
 		panic("Already printed above!")
@@ -79,39 +80,39 @@ func venDBInject(new v.NewVenture) *v.Venture {
 	return ven
 }
 
-// venDBInjectLiving injects a default set of living Ventures into the database
-func venDBInjectLiving() {
-	venDBInject(v.NewVenture{
+// DBInjectLiving injects a default set of living Ventures into the database
+func DBInjectLiving() {
+	DBInject(v.NewVenture{
 		Description: "White wizard",
 		State:       "Not started",
 		Extra:       "colour: white; power: 9000",
 	})
-	venDBInject(v.NewVenture{
+	DBInject(v.NewVenture{
 		Description: "Green lizard",
 		State:       "In progress",
 	})
-	venDBInject(v.NewVenture{
+	DBInject(v.NewVenture{
 		Description: "Pink gizzard",
 		State:       "Finished",
 	})
-	venDBInject(v.NewVenture{
+	DBInject(v.NewVenture{
 		Description: "Eddie Izzard",
 		State:       "In Progress",
 	})
-	venDBInject(v.NewVenture{
+	DBInject(v.NewVenture{
 		Description: "The Count of Tuscany",
 		State:       "In Progress",
 	})
 }
 
-// venDBInjectDead injects a default set of dead Ventures into the database
-func venDBInjectDead() {
+// DBInjectDead injects a default set of dead Ventures into the database
+func DBInjectDead() {
 	s := []v.Venture{
-		*venDBInject(v.NewVenture{
+		*DBInject(v.NewVenture{
 			Description: "Rose",
 			State:       "Finised",
 		}),
-		*venDBInject(v.NewVenture{
+		*DBInject(v.NewVenture{
 			Description: "Lily",
 			State:       "Closed",
 		}),
@@ -133,8 +134,8 @@ func venDBInjectDead() {
 	}
 }
 
-// venDBQueryAll queries the database for all living ventures
-func venDBQueryAll() []v.Venture {
+// DBQueryAll queries the database for all living ventures
+func DBQueryAll() []v.Venture {
 	rows, err := venDB.Query(`
 		SELECT id, last_modified, description, order_ids, state, extra
 		FROM ql_venture
@@ -151,8 +152,8 @@ func venDBQueryAll() []v.Venture {
 	return _mapRows(rows)
 }
 
-// venDBQueryMany queries the database for Ventures with the specified IDs
-func venDBQueryMany(ids string) []v.Venture {
+// DBQueryMany queries the database for Ventures with the specified IDs
+func DBQueryMany(ids string) []v.Venture {
 	rows, err := venDB.Query(fmt.Sprintf(`
 		SELECT id, last_modified, description, order_ids, state, extra
 		FROM ql_venture
@@ -170,9 +171,9 @@ func venDBQueryMany(ids string) []v.Venture {
 	return _mapRows(rows)
 }
 
-// venDBQueryOne queries the database for a specific Venture
-func venDBQueryOne(id string) v.Venture {
-	vens := venDBQueryMany(id)
+// DBQueryOne queries the database for a specific Venture
+func DBQueryOne(id string) v.Venture {
+	vens := DBQueryMany(id)
 	if len(vens) != 1 {
 		panic("Expected a single venture from query")
 	}

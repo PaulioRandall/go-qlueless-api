@@ -1,4 +1,4 @@
-package ventures
+package POST
 
 import (
 	"bytes"
@@ -8,6 +8,7 @@ import (
 	a "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/asserts"
 	v "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/ventures"
 	test "github.com/PaulioRandall/go-qlueless-assembly-api/test"
+	vtest "github.com/PaulioRandall/go-qlueless-assembly-api/test/ventures"
 	assert "github.com/stretchr/testify/assert"
 	require "github.com/stretchr/testify/require"
 )
@@ -30,8 +31,8 @@ func TestPOST_Venture_1(t *testing.T) {
 		And that Venture will have a new 'last_updated' datetime
 		...`)
 
-	beginVenTest()
-	defer endVenTest()
+	vtest.BeginTest("../../../bin")
+	defer vtest.EndTest()
 
 	input := v.Venture{
 		Description: "A new Venture",
@@ -52,14 +53,14 @@ func TestPOST_Venture_1(t *testing.T) {
 	defer a.PrintResponse(t, res.Body)
 
 	require.Equal(t, 201, res.StatusCode)
-	test.AssertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
+	test.AssertDefaultHeaders(t, res, "application/json", vtest.VenHttpMethods)
 
 	output := v.AssertVentureFromReader(t, res.Body)
 	v.AssertGenericVenture(t, output)
 
 	input.ID = output.ID
 	input.LastModified = output.LastModified
-	fromDB := venDBQueryOne(output.ID)
+	fromDB := vtest.DBQueryOne(output.ID)
 
 	assert.Equal(t, input, output)
 	assert.Equal(t, fromDB, output)
@@ -77,8 +78,8 @@ func TestPOST_Venture_2(t *testing.T) {
 		And the body is a JSON object representing an error response
 		...`)
 
-	beginVenTest()
-	defer endVenTest()
+	vtest.BeginTest("../../../bin")
+	defer vtest.EndTest()
 
 	input := v.Venture{
 		Description: "",
@@ -98,7 +99,7 @@ func TestPOST_Venture_2(t *testing.T) {
 	defer a.PrintResponse(t, res.Body)
 
 	require.Equal(t, 400, res.StatusCode)
-	test.AssertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
+	test.AssertDefaultHeaders(t, res, "application/json", vtest.VenHttpMethods)
 	test.AssertWrappedErrorBody(t, res.Body)
 }
 
@@ -122,8 +123,8 @@ func TestPOST_Venture_3(t *testing.T) {
 		And that Venture will have a new 'last_updated' datetime
 		...`)
 
-	beginVenTest()
-	defer endVenTest()
+	vtest.BeginTest("../../../bin")
+	defer vtest.EndTest()
 
 	input := v.Venture{
 		Description: "A new Venture",
@@ -143,14 +144,14 @@ func TestPOST_Venture_3(t *testing.T) {
 	defer a.PrintResponse(t, res.Body)
 
 	require.Equal(t, 201, res.StatusCode)
-	test.AssertDefaultHeaders(t, res, "application/json", ventureHttpMethods)
+	test.AssertDefaultHeaders(t, res, "application/json", vtest.VenHttpMethods)
 
 	_, output := v.AssertWrappedVentureFromReader(t, res.Body)
 	v.AssertGenericVenture(t, output)
 
 	input.ID = output.ID
 	input.LastModified = output.LastModified
-	fromDB := venDBQueryOne(output.ID)
+	fromDB := vtest.DBQueryOne(output.ID)
 
 	assert.Equal(t, input, output)
 	assert.Equal(t, fromDB, output)
