@@ -12,17 +12,11 @@ import (
 	require "github.com/stretchr/testify/require"
 )
 
-const FEATURE_OFF = true
-
 // ****************************************************************************
 // (POST) /ventures
 // ****************************************************************************
 
-func TestPOST_Venture_1(t *testing.T) {
-	if FEATURE_OFF {
-		return
-	}
-
+func TestPOST_Venture_1_OLD(t *testing.T) {
 	t.Log(`Given some Ventures already exist on the server
 		When a new valid Venture is POSTed
 		Then ensure the response code is 201
@@ -70,11 +64,7 @@ func TestPOST_Venture_1(t *testing.T) {
 	assert.Equal(t, fromDB, output)
 }
 
-func TestPOST_Venture_2(t *testing.T) {
-	if FEATURE_OFF {
-		return
-	}
-
+func TestPOST_Venture_2_OLD(t *testing.T) {
 	t.Log(`Given some Ventures already exist on the server
 		When a new but invalid Venture is POSTed
 		Then ensure the response code is 400
@@ -114,11 +104,7 @@ func TestPOST_Venture_2(t *testing.T) {
 // (POST) /ventures?wrap
 // ****************************************************************************
 
-func TestPOST_Venture_3(t *testing.T) {
-	if FEATURE_OFF {
-		return
-	}
-
+func TestPOST_Venture_3_OLD(t *testing.T) {
 	t.Log(`Given some Ventures already exist on the server
 		When a new valid Venture is POSTed
 		And the 'wrap' query parameter has been specified
