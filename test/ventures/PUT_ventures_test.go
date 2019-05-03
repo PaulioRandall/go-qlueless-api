@@ -23,7 +23,7 @@ func TestPUT_Ventures_1(t *testing.T) {
 		And the 'Content-Type' header contains 'application/json'
 		And 'Access-Control-Allow-Origin' is '*'
 		And 'Access-Control-Allow-Headers' is '*'
-		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, and OPTIONS
+		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE and OPTIONS
 		And the body is a JSON array containing all updated Ventures
 		And those Ventures will have new 'last_updated' datetimes
 		...`)
@@ -76,7 +76,7 @@ func TestPUT_Ventures_2(t *testing.T) {
 		And the 'Content-Type' header contains 'application/json'
 		And 'Access-Control-Allow-Origin' is '*'
 		And 'Access-Control-Allow-Headers' is '*'
-		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, and OPTIONS
+		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE and OPTIONS
 		And the body is an empty JSON array
 		...`)
 
@@ -119,7 +119,7 @@ func TestPUT_Ventures_3(t *testing.T) {
 		And the 'Content-Type' header contains 'application/json'
 		And 'Access-Control-Allow-Origin' is '*'
 		And 'Access-Control-Allow-Headers' is '*'
-		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, and OPTIONS
+		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE and OPTIONS
 		And the body is a JSON object representing an error response
 		...`)
 
@@ -159,7 +159,7 @@ func TestPUT_Ventures_4(t *testing.T) {
 		And the 'Content-Type' header contains 'application/json'
 		And 'Access-Control-Allow-Origin' is '*'
 		And 'Access-Control-Allow-Headers' is '*'
-		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, and OPTIONS
+		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE and OPTIONS
 		And the body is a JSON object representing an error response
 		...`)
 
@@ -196,7 +196,7 @@ func TestPUT_Ventures_5(t *testing.T) {
 		And the 'Content-Type' header contains 'application/json'
 		And 'Access-Control-Allow-Origin' is '*'
 		And 'Access-Control-Allow-Headers' is '*'
-		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, and OPTIONS
+		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE and OPTIONS
 		And the body is a JSON array containing all updated Ventures
 		And those Ventures will have new 'last_updated' datetimes
 		...`)
@@ -246,7 +246,7 @@ func TestPUT_Ventures_6(t *testing.T) {
 		And the 'Content-Type' header contains 'application/json'
 		And 'Access-Control-Allow-Origin' is '*'
 		And 'Access-Control-Allow-Headers' is '*'
-		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, and OPTIONS
+		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE and OPTIONS
 		And the body is a JSON object representing a WrappedReply
 		And the wrapped data is a JSON array containing all updated Ventures
 		And those Ventures will have new 'last_updated' datetimes

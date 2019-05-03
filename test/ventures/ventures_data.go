@@ -11,7 +11,7 @@ import (
 	test "github.com/PaulioRandall/go-qlueless-assembly-api/test"
 )
 
-var ventureHttpMethods = []string{"GET", "POST", "PUT", "OPTIONS"}
+var ventureHttpMethods = []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}
 var dbPath string = "../../bin/qlueless.db"
 var venDB *sql.DB = nil
 

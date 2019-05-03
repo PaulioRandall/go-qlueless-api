@@ -21,7 +21,7 @@ func TestGET_Ventures_1(t *testing.T) {
 		And the 'Content-Type' header contains 'application/json'
 		And 'Access-Control-Allow-Origin' is '*'
 		And 'Access-Control-Allow-Headers' is '*'
-		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, and OPTIONS
+		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE and OPTIONS
 		And the body is a JSON array containing all living Ventures
 		...`)
 
@@ -57,7 +57,7 @@ func TestGET_Ventures_2(t *testing.T) {
 		And the 'Content-Type' header contains 'application/json'
 		And 'Access-Control-Allow-Origin' is '*'
 		And 'Access-Control-Allow-Headers' is '*'
-		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, and OPTIONS
+		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE and OPTIONS
 		And the body is a JSON object wrapping the with meta information
 		And the wrapped meta information contains a message and self link
 		And the wrapped data is a JSON array containing all living Ventures
@@ -94,7 +94,7 @@ func TestGET_Ventures_3(t *testing.T) {
 		And the 'Content-Type' header contains 'application/json'
 		And 'Access-Control-Allow-Origin' is '*'
 		And 'Access-Control-Allow-Headers' is '*'
-		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, and OPTIONS
+		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE and OPTIONS
 		And the body is a JSON array containing only the living Venture requested
 		...`)
 
@@ -127,7 +127,7 @@ func TestGET_Ventures_4(t *testing.T) {
 		And the 'Content-Type' header contains 'application/json'
 		And 'Access-Control-Allow-Origin' is '*'
 		And 'Access-Control-Allow-Headers' is '*'
-		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, and OPTIONS
+		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE and OPTIONS
 		And the body is a JSON array containing only the living Ventures requested
 		...`)
 
@@ -160,7 +160,7 @@ func TestGET_Ventures_5(t *testing.T) {
 		And the 'Content-Type' header contains 'application/json'
 		And 'Access-Control-Allow-Origin' is '*'
 		And 'Access-Control-Allow-Headers' is '*'
-		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, and OPTIONS
+		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE and OPTIONS
 		And the body is an empty JSON array of Ventures
 		...`)
 
@@ -190,7 +190,7 @@ func TestGET_Ventures_6(t *testing.T) {
 	And the 'Content-Type' header contains 'application/json'
 	And 'Access-Control-Allow-Origin' is '*'
 	And 'Access-Control-Allow-Headers' is '*'
-	And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, and OPTIONS
+	And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE and OPTIONS
 	And the body is a JSON array containing only the living Ventures requested
 	...`)
 
@@ -228,7 +228,7 @@ func TestGET_Ventures_7(t *testing.T) {
 		And the 'Content-Type' header contains 'application/json'
 		And 'Access-Control-Allow-Origin' is '*'
 		And 'Access-Control-Allow-Headers' is '*'
-		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, and OPTIONS
+		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE and OPTIONS
 		And the body is a JSON object wrapping the with meta information
 		And the wrapped meta information contains a message and self link
 		And the body is a JSON array containing only the living Ventures requested

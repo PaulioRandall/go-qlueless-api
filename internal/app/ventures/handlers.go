@@ -14,7 +14,7 @@ import (
 // Handler handles requests to do with collections of, or individual, Ventures.
 func Handler(res http.ResponseWriter, req *http.Request) {
 	h.LogRequest(req)
-	h.AppendCORSHeaders(&res, "GET, POST, PUT, OPTIONS")
+	h.AppendCORSHeaders(&res, "GET, POST, PUT, DELETE, OPTIONS")
 
 	switch {
 	case req.Method == "GET":
