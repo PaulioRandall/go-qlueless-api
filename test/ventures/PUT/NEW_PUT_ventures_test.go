@@ -13,11 +13,17 @@ import (
 	require "github.com/stretchr/testify/require"
 )
 
+const FEATURE_OFF = true
+
 // ****************************************************************************
 // (PUT) /ventures
 // ****************************************************************************
 
-func TestPUT_Ventures_1_OLD(t *testing.T) {
+func TestPUT_Ventures_1(t *testing.T) {
+	if FEATURE_OFF {
+		return
+	}
+
 	t.Log(`Given some Ventures already exist on the server
 		When an existing Venture is modified and PUT to the server
 		Then ensure the response code is 200
@@ -70,7 +76,11 @@ func TestPUT_Ventures_1_OLD(t *testing.T) {
 	v.AssertVentureModEquals(t, fromDB, out[0])
 }
 
-func TestPUT_Ventures_2_OLD(t *testing.T) {
+func TestPUT_Ventures_2(t *testing.T) {
+	if FEATURE_OFF {
+		return
+	}
+
 	t.Log(`Given some Ventures already exist on the server
 		When an non-existent Venture is PUT to the server
 		Then ensure the response code is 200
@@ -113,7 +123,11 @@ func TestPUT_Ventures_2_OLD(t *testing.T) {
 	require.Empty(t, out)
 }
 
-func TestPUT_Ventures_3_OLD(t *testing.T) {
+func TestPUT_Ventures_3(t *testing.T) {
+	if FEATURE_OFF {
+		return
+	}
+
 	t.Log(`Given some Ventures already exist on the server
 		When a venture modification without IDs is PUT to the server
 		Then ensure the response code is 400
@@ -153,7 +167,11 @@ func TestPUT_Ventures_3_OLD(t *testing.T) {
 	test.AssertWrappedErrorBody(t, res.Body)
 }
 
-func TestPUT_Ventures_4_OLD(t *testing.T) {
+func TestPUT_Ventures_4(t *testing.T) {
+	if FEATURE_OFF {
+		return
+	}
+
 	t.Log(`Given some Ventures already exist on the server
 		When ventures updates are PUT to the server with invalid modifications
 		Then ensure the response code is 400
@@ -190,7 +208,11 @@ func TestPUT_Ventures_4_OLD(t *testing.T) {
 	test.AssertWrappedErrorBody(t, res.Body)
 }
 
-func TestPUT_Ventures_5_OLD(t *testing.T) {
+func TestPUT_Ventures_5(t *testing.T) {
+	if FEATURE_OFF {
+		return
+	}
+
 	t.Log(`Given some Ventures already exist on the server
 		When multiple existing Ventures are modified as dead and PUT to the server
 		Then ensure the response code is 200
@@ -239,7 +261,11 @@ func TestPUT_Ventures_5_OLD(t *testing.T) {
 // (PUT) /ventures?wrap
 // ****************************************************************************
 
-func TestPUT_Ventures_6_OLD(t *testing.T) {
+func TestPUT_Ventures_6(t *testing.T) {
+	if FEATURE_OFF {
+		return
+	}
+
 	t.Log(`Given some Ventures already exist on the server
 		When an existing Venture is modified and PUT to the server
 		Then ensure the response code is 200
