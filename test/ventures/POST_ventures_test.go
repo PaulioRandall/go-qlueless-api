@@ -12,16 +12,11 @@ import (
 	require "github.com/stretchr/testify/require"
 )
 
-const FEATURE_OFF = true
-
 // ****************************************************************************
 // (POST) /ventures
 // ****************************************************************************
 
 func TestPOST_Venture_1(t *testing.T) {
-	if FEATURE_OFF {
-		return
-	}
 
 	t.Log(`Given some Ventures already exist on the server
 		When a new valid Venture is POSTed
@@ -71,9 +66,6 @@ func TestPOST_Venture_1(t *testing.T) {
 }
 
 func TestPOST_Venture_2(t *testing.T) {
-	if FEATURE_OFF {
-		return
-	}
 
 	t.Log(`Given some Ventures already exist on the server
 		When a new but invalid Venture is POSTed
@@ -115,9 +107,6 @@ func TestPOST_Venture_2(t *testing.T) {
 // ****************************************************************************
 
 func TestPOST_Venture_3(t *testing.T) {
-	if FEATURE_OFF {
-		return
-	}
 
 	t.Log(`Given some Ventures already exist on the server
 		When a new valid Venture is POSTed

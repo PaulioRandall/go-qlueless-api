@@ -31,8 +31,8 @@
       "$ref": "#/components/requestBodies/venture_create"
     },
     "responses": {
-      "200": {
-        "$ref": "#/components/responses/venture_create_200"
+      "201": {
+        "$ref": "#/components/responses/venture_create_201"
       },
       "default": {
         "$ref": "#/components/responses/error"
