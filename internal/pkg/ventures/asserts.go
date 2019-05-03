@@ -44,6 +44,19 @@ func AssertVentureModEquals(t *testing.T, exp Venture, act Venture) {
 	assert.Equal(t, exp.Extra, act.Extra, "Venture.Extra")
 }
 
+// AssertEqualsModified asserts that the before Venture equals the after
+// Venture except for the 'LastModified' field which must be greater then the
+// after Venture.
+func AssertEqualsModified(t *testing.T, before *Venture, after *Venture) {
+	assert.Equal(t, before.ID, after.ID, "Venture.ID")
+	assert.Equal(t, before.Description, after.Description, "Venture.Description")
+	assert.Equal(t, before.Orders, after.Orders, "Venture.Orders")
+	assert.Equal(t, before.State, after.State, "Venture.State")
+	assert.Equal(t, before.Dead, after.Dead, "Venture.Dead")
+	assert.Equal(t, before.Extra, after.Extra, "Venture.Extra")
+	assert.True(t, before.LastModified < after.LastModified, "Venture.LastModified")
+}
+
 // AssertVentureSliceModEquals asserts that the two Venture slices are equal
 // with the exception of the last_modified fields
 func AssertVentureSliceModEquals(t *testing.T, exp map[string]Venture, act []Venture) {

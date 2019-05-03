@@ -15,6 +15,14 @@ var VenHttpMethods = []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}
 var dbPath string = ""
 var venDB *sql.DB = nil
 
+// BeginEmptyTest is run at the start of a test to setup the server but does
+// not inject any test data.
+func BeginEmptyTest(relServerPath string) {
+	dbPath = relServerPath + "/qlueless.db"
+	DBReset()
+	test.StartServer(relServerPath)
+}
+
 // BeginTest is run at the start of every test to setup the server and
 // inject the test data.
 func BeginTest(relServerPath string) {
@@ -178,6 +186,15 @@ func DBQueryOne(id string) v.Venture {
 		panic("Expected a single venture from query")
 	}
 	return vens[0]
+}
+
+// DBQueryFirst queries the database for the first Venture encountered
+func DBQueryFirst() *v.Venture {
+	vens := DBQueryAll()
+	if len(vens) > 0 {
+		return &vens[0]
+	}
+	return nil
 }
 
 // _mapRows is a file private function that maps rows from a database query into

@@ -24,32 +24,48 @@ func TestPUT_Ventures_1(t *testing.T) {
 		return
 	}
 
-	t.Log(`Given some Ventures already exist on the server
-		When an existing Venture is modified and PUT to the server
+	t.Log(`Given a Venture already exists on the server
+		When the Venture is modified and PUT to the server
 		Then ensure the response code is 200
 		And the 'Content-Type' header contains 'application/json'
 		And 'Access-Control-Allow-Origin' is '*'
 		And 'Access-Control-Allow-Headers' is '*'
 		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE and OPTIONS
-		And the body is a JSON array containing all updated Ventures
-		And those Ventures will have new 'last_updated' datetimes
+		And the body is a JSON object containing a 'message' and 'self' URL
+		And the updated Venture has an appropriate 'last_modified' value
 		...`)
 
-	vtest.BeginTest("../../../bin")
+	var before *v.Venture
+	var input *v.Venture
+	var results []v.Venture
+	var result v.Venture
+	var after v.Venture
+
+	vtest.BeginEmptyTest("../../../bin")
 	defer vtest.EndTest()
 
-	input := v.ModVenture{
-		IDs:   "1",
-		Props: "description, orders, extra",
-		Values: v.Venture{
-			Description: "Black blizzard",
-			Orders:      "1,2,3",
-			Extra:       "colour: black; power: 9000",
-		},
+	vtest.DBInject(v.NewVenture{
+		Description: "Black blizzard",
+		State:       "STARTED",
+		Orders:      "1,2,3",
+		Extra:       "colour: black",
+	})
+
+	before = vtest.DBQueryFirst()
+	require.NotNil(t, before)
+
+	id := before.ID
+
+	input = &v.Venture{
+		ID:          id,
+		Description: "White wizzard",
+		State:       "FINISHED",
+		Orders:      "4,5,6",
+		Extra:       "colour: white",
 	}
 
 	buf := new(bytes.Buffer)
-	json.NewEncoder(buf).Encode(&input)
+	json.NewEncoder(buf).Encode(input)
 
 	req := test.APICall{
 		URL:    "http://localhost:8080/ventures",
@@ -63,17 +79,17 @@ func TestPUT_Ventures_1(t *testing.T) {
 	require.Equal(t, 200, res.StatusCode)
 	test.AssertDefaultHeaders(t, res, "application/json", vtest.VenHttpMethods)
 
-	out := v.AssertVentureSliceFromReader(t, res.Body)
-	require.Len(t, out, 1)
-	v.AssertGenericVenture(t, out[0])
+	results = v.AssertVentureSliceFromReader(t, res.Body)
+	require.Len(t, results, 1)
 
-	input.Values.State = out[0].State
-	input.Values.ID = out[0].ID
-	input.Values.LastModified = out[0].LastModified
-	fromDB := vtest.DBQueryOne(out[0].ID)
+	result = results[0]
+	v.AssertGenericVenture(t, result)
 
-	assert.Equal(t, input.Values, out[0])
-	v.AssertVentureModEquals(t, fromDB, out[0])
+	input.LastModified = result.LastModified
+	assert.Equal(t, input, result)
+
+	after = vtest.DBQueryOne(id)
+	v.AssertEqualsModified(t, &after, &result)
 }
 
 func TestPUT_Ventures_2(t *testing.T) {
