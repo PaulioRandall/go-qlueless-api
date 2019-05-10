@@ -27,9 +27,9 @@ func TestDecodeVenture_1(t *testing.T) {
 		ID:           "1",
 		LastModified: 1554458321281,
 		Description:  "description",
-		Orders:     "2,3,4,999",
+		Orders:       "2,3,4,999",
 		State:        "state",
-		Dead:       false,
+		Dead:         false,
 		Extra:        "extra",
 	}
 
@@ -82,17 +82,17 @@ func TestDecodeVentureSlice_1(t *testing.T) {
 		Venture{
 			Description: "1",
 			ID:          "1",
-			Orders:    "2,3,4",
+			Orders:      "2,3,4",
 			State:       "1",
-			Dead:      false,
+			Dead:        false,
 			Extra:       "1",
 		},
 		Venture{
 			Description: "2",
 			ID:          "2",
-			Orders:    "5,6,7",
+			Orders:      "5,6,7",
 			State:       "2",
-			Dead:      true,
+			Dead:        true,
 			Extra:       "2",
 		},
 	}
@@ -124,9 +124,9 @@ func TestVenture_Clean_1(t *testing.T) {
 	a := Venture{
 		Description: "\n\t\v description \r\f ",
 		ID:          "\n\t\v 1 \r\f ",
-		Orders:    "\n\t\v 2 \r\f , 3,4,\v 999 \f\t",
+		Orders:      "\n\t\v 2 \r\f , 3,4,\v 999 \f\t",
 		State:       "\n\t\v state \r\f ",
-		Dead:      false,
+		Dead:        false,
 		Extra:       "\n\t\v extra \r\f",
 	}
 
@@ -144,7 +144,7 @@ func TestVenture_Clean_2(t *testing.T) {
 	a := Venture{
 		Description: "description",
 		ID:          "1",
-		Orders:    "2,3,4,999",
+		Orders:      "2,3,4,999",
 		State:       "state",
 	}
 
@@ -174,9 +174,9 @@ func TestVenture_Validate_1(t *testing.T) {
 		ID:           "1",
 		LastModified: 1554458321281,
 		Description:  "description",
-		Orders:     "2,3,4,999",
+		Orders:       "2,3,4,999",
 		State:        "state",
-		Dead:       false,
+		Dead:         false,
 		Extra:        "\n\t\v extra \r\f",
 	}
 
@@ -212,7 +212,7 @@ func TestVenture_Validate_4(t *testing.T) {
 	a := Venture{
 		Description:  "valid",
 		ID:           "invalid",
-		Orders:     "3,invalid,4",
+		Orders:       "3,invalid,4",
 		State:        "valid",
 		LastModified: 1554458321281,
 	}
@@ -235,7 +235,7 @@ func TestVenture_Validate_6(t *testing.T) {
 	a := Venture{
 		Description: "",
 		State:       "",
-		Orders:    "3,invalid,4",
+		Orders:      "3,invalid,4",
 	}
 
 	errMsgs := a.Validate(true)

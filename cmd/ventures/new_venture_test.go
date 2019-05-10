@@ -22,7 +22,7 @@ func TestDecodeNewVenture_1(t *testing.T) {
 
 	exp := NewVenture{
 		Description: "description",
-		Orders:    "2,3,4,999",
+		Orders:      "2,3,4,999",
 		State:       "state",
 		Extra:       "extra",
 	}
@@ -54,7 +54,7 @@ func TestDecodeNewVenture_3(t *testing.T) {
 func TestNewVenture_Clean_1(t *testing.T) {
 	a := NewVenture{
 		Description: "\n\t\v description \r\f ",
-		Orders:    "\n\t\v 2 \r\f , 3,4,\v 999 \f\t",
+		Orders:      "\n\t\v 2 \r\f , 3,4,\v 999 \f\t",
 		State:       "\n\t\v state \r\f ",
 		Extra:       "\n\t\v extra \r\f",
 	}
@@ -70,7 +70,7 @@ func TestNewVenture_Clean_1(t *testing.T) {
 func TestNewVenture_Clean_2(t *testing.T) {
 	a := NewVenture{
 		Description: "description",
-		Orders:    "2,3,4,999",
+		Orders:      "2,3,4,999",
 		State:       "state",
 	}
 
@@ -95,7 +95,7 @@ func TestNewVenture_Clean_3(t *testing.T) {
 func TestNewVenture_Validate_1(t *testing.T) {
 	a := NewVenture{
 		Description: "description",
-		Orders:    "2,3,4,999",
+		Orders:      "2,3,4,999",
 		State:       "state",
 		Extra:       "\n\t\v extra \r\f",
 	}
@@ -127,7 +127,7 @@ func TestNewVenture_Validate_3(t *testing.T) {
 func TestNewVenture_Validate_4(t *testing.T) {
 	a := NewVenture{
 		Description: "valid",
-		Orders: 					"3,invalid,4",
+		Orders:      "3,invalid,4",
 		State:       "valid",
 	}
 
@@ -139,7 +139,7 @@ func TestNewVenture_Validate_5(t *testing.T) {
 	a := NewVenture{
 		Description: "",
 		State:       "",
-		Orders:    "3,invalid,4",
+		Orders:      "3,invalid,4",
 	}
 
 	errMsgs := a.Validate()

@@ -30,9 +30,9 @@ func TestDecodeModVenture_1(t *testing.T) {
 		Values: Venture{
 			Description: "description",
 			ID:          "1",
-			Orders:    "2,3,4,999",
+			Orders:      "2,3,4,999",
 			State:       "state",
-			Dead:      false,
+			Dead:        false,
 			Extra:       "extra",
 		},
 	}
@@ -128,9 +128,9 @@ func TestModVenture_Clean_1(t *testing.T) {
 		Props: "\n\t\v   \r\f  state,extra,\v    is_alive \f\t",
 		Values: Venture{
 			Description: "\n\t\v description \r\f ",
-			Orders:    "\n\t\v 2 \r\f ,    3,4,\v 999 \f\t",
+			Orders:      "\n\t\v 2 \r\f ,    3,4,\v 999 \f\t",
 			State:       "\n\t\v state \r\f ",
-			Dead:      false,
+			Dead:        false,
 			Extra:       "\n\t\v extra \r\f",
 		},
 	}
@@ -178,9 +178,9 @@ func TestModVenture_Validate_1(t *testing.T) {
 		Props: "description,state,extra",
 		Values: Venture{
 			Description: "updated description",
-			Orders:    "66,101,202",
+			Orders:      "66,101,202",
 			State:       "updated state",
-			Dead:      true,
+			Dead:        true,
 			Extra:       "updated extra",
 		},
 	}
@@ -264,9 +264,9 @@ func TestModVenture_Validate_8(t *testing.T) {
 		Props: "description,,state,order_ids,INVALID,extra",
 		Values: Venture{
 			Orders: "ILLEGAL,66,101,202",
-			State:    "updated state",
+			State:  "updated state",
 			Dead:   true,
-			Extra:    "updated extra",
+			Extra:  "updated extra",
 		},
 	}
 

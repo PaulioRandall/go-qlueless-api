@@ -36,6 +36,8 @@ func makeBinDir(root string) {
 // findProjectRoot returns the absolute path to the projects root
 // directory
 func findProjectRoot() string {
+	fmt.Println("...finding project root...")
+
 	scripts, err := os.Getwd()
 	if err != nil {
 		panic(err)
@@ -43,10 +45,15 @@ func findProjectRoot() string {
 
 	scripts = strings.TrimSpace(scripts)
 	root := filepath.Clean(scripts + "/..")
-	fmt.Println("...found project root...")
 	fmt.Println("ok\t" + root)
 
 	return root
+}
+
+// goFmt formats all Go code
+func goFmt(root string) {
+	fmt.Println("...formatting Go code...")
+	goExe(".", []string{"fmt", root + "/..."})
 }
 
 // goOpenAPI builds the OpenAPI specification and places a copy of the
