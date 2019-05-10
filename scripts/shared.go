@@ -108,8 +108,26 @@ func goTestApi(root string) {
 	goExe(".", []string{"test", "-count=1", "-p=1", "-failfast", root + "/test/..."})
 }
 
-// goRunApp runs the compiled application from the /bin directory
-func goRunApp(root string) {
+// goInstall install the compiled application
+func goInstall(root string) {
+	fmt.Println("...installing application...")
+
+	cmd := root + "/cmd"
+	goFiles, err := filepath.Glob(cmd + "/*.go")
+	if err != nil {
+		panic(err)
+	}
+
+	output := root + "/bin/go-qlueless-api"
+	args := []string{"install"}
+	args = append(args, goFiles...)
+	goExe(cmd, args)
+
+	fmt.Println("ok\t" + output + "\t(installed)")
+}
+
+// goRun runs the compiled application from the /bin directory
+func goRun(root string) {
 	fmt.Println("...running application...")
 	cmd := exec.Command("./go-qlueless-api")
 	cmd.Dir = root + "/bin"

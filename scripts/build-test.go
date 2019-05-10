@@ -17,6 +17,7 @@ func main() {
 	goOpenAPI(root)
 	goBuild(root)
 	goTest(root)
+	goTestApi(root)
 
 	return
 }

@@ -1,4 +1,4 @@
-# Go Qlueless Assembly API
+# Go Qlueless API
 
 A Go implementation of a simple API to store and access Kanban related entities and events.
 
