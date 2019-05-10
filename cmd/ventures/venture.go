@@ -115,6 +115,7 @@ func (ven *Venture) Update(db *sql.DB) error {
 	return err
 }
 
+// ByVenID is a slice of Ventures
 type ByVenID []Venture
 
 // Len implements from sort.Interface

@@ -5,9 +5,9 @@ import (
 	"net/http"
 	"strings"
 
+	u "github.com/PaulioRandall/go-cookies/pkg"
 	q "github.com/PaulioRandall/go-qlueless-api/internal/qserver"
 	h "github.com/PaulioRandall/go-qlueless-api/internal/uhttp"
-	u "github.com/PaulioRandall/go-qlueless-api/internal/utils"
 )
 
 // find finds the Ventures with the specified IDs.
@@ -88,7 +88,7 @@ func idCsvToSlice(idCsv string, res *http.ResponseWriter, req *http.Request) ([]
 		return nil, false
 	}
 
-	if !u.IsPositiveIntCSV(idCsv) {
+	if !u.IsUintCSV(idCsv) {
 		h.WriteBadRequest(res, req, fmt.Sprintf("Could not parse query parameter"+
 			" 'ids=%s' into a list of Venture IDs", idCsv))
 		return nil, false

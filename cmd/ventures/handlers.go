@@ -5,9 +5,9 @@ import (
 	"log"
 	"net/http"
 
+	u "github.com/PaulioRandall/go-cookies/pkg"
 	q "github.com/PaulioRandall/go-qlueless-api/internal/qserver"
 	h "github.com/PaulioRandall/go-qlueless-api/internal/uhttp"
-	u "github.com/PaulioRandall/go-qlueless-api/internal/utils"
 )
 
 // Handler handles requests to do with collections of, or individual, Ventures.
@@ -17,11 +17,11 @@ func Handler(res http.ResponseWriter, req *http.Request) {
 
 	switch {
 	case req.Method == "GET":
-		_GET(&res, req)
+		get(&res, req)
 	case req.Method == "POST":
-		_POST(&res, req)
+		post(&res, req)
 	case req.Method == "PUT":
-		_PUT(&res, req)
+		put(&res, req)
 	case req.Method == "OPTIONS":
 		res.WriteHeader(http.StatusOK)
 	default:
@@ -29,8 +29,8 @@ func Handler(res http.ResponseWriter, req *http.Request) {
 	}
 }
 
-// _GET handles client requests for any amount of living Ventures.
-func _GET(res *http.ResponseWriter, req *http.Request) {
+// get handles client requests for any amount of living Ventures.
+func get(res *http.ResponseWriter, req *http.Request) {
 
 	ids := req.FormValue("ids")
 	ids = u.StripWhitespace(ids)
@@ -56,8 +56,8 @@ func _GET(res *http.ResponseWriter, req *http.Request) {
 	h.WriteSuccessReply(res, req, http.StatusOK, vens, m)
 }
 
-// _POST handles client requests for creating new Ventures.
-func _POST(res *http.ResponseWriter, req *http.Request) {
+// post handles client requests for creating new Ventures.
+func post(res *http.ResponseWriter, req *http.Request) {
 	new, ok := decodeNew(res, req)
 	if !ok {
 		return
@@ -79,8 +79,8 @@ func _POST(res *http.ResponseWriter, req *http.Request) {
 	h.WriteSuccessReply(res, req, http.StatusCreated, ven, m)
 }
 
-// _PUT handles client requests for updating Ventures.
-func _PUT(res *http.ResponseWriter, req *http.Request) {
+// put handles client requests for updating Ventures.
+func put(res *http.ResponseWriter, req *http.Request) {
 	mv, ok := decodeMod(res, req)
 	if !ok {
 		return

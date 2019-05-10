@@ -21,7 +21,7 @@ func AssertVentureFromReader(t *testing.T, r io.Reader) Venture {
 	return v
 }
 
-// AssertVentureFromReader asserts that a Venture has the required fields
+// AssertGenericVenture asserts that a Venture has the required fields
 // populated and in the correct format
 func AssertGenericVenture(t *testing.T, v Venture) {
 	assert.NotEmpty(t, v.ID, "Venture.ID")

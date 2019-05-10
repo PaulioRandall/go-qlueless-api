@@ -122,7 +122,7 @@ func (mv *ModVenture) Update(db *sql.DB) ([]Venture, bool) {
 
 	ids := mv.SplitIDs()
 	args := make([]interface{}, len(ids))
-	for i, _ := range ids {
+	for i := range ids {
 		args[i] = ids[i]
 	}
 
@@ -162,7 +162,7 @@ func (mv *ModVenture) _insertEach(db *sql.DB, vens []Venture) bool {
 // _execStmtForEach executes the insert statment provided for each Venture
 // provided.
 func (mv *ModVenture) _execStmtForEach(stmt *sql.Stmt, vens []Venture) bool {
-	for i, _ := range vens {
+	for i := range vens {
 
 		ven := &vens[i]
 		mv.ApplyMod(ven)

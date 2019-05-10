@@ -6,7 +6,7 @@ import (
 	"log"
 	"strings"
 
-	u "github.com/PaulioRandall/go-qlueless-api/internal/utils"
+	u "github.com/PaulioRandall/go-cookies/pkg"
 )
 
 // CreateTables creates all the Venture tables, views and triggers within the
@@ -14,32 +14,32 @@ import (
 //
 // @UNTESTED
 func CreateTables(db *sql.DB) error {
-	err := _create_venture_Table(db)
+	err := createVentureTable(db)
 	if err != nil {
 		return err
 	}
 
-	err = _create_ql_venture_Table(db)
+	err = createQlVentureTable(db)
 	if err != nil {
 		return err
 	}
 
-	err = _create_insert_on_living_venture_Trigger(db)
+	err = createInsertOnLivingVentureTrigger(db)
 	if err != nil {
 		return err
 	}
 
-	err = _create_insert_on_dead_venture_Trigger(db)
+	err = createInsertOnDeadVentureTrigger(db)
 	if err != nil {
 		return err
 	}
 
-	err = _create_update_on_venture_Trigger(db)
+	err = createUpdateOnVentureTrigger(db)
 	if err != nil {
 		return err
 	}
 
-	err = _create_delete_on_venture_Trigger(db)
+	err = createDeleteOnVentureTrigger(db)
 	if err != nil {
 		return err
 	}
@@ -47,8 +47,8 @@ func CreateTables(db *sql.DB) error {
 	return nil
 }
 
-// _create_venture_Table creates the Venture table within the supplied database.
-func _create_venture_Table(db *sql.DB) error {
+// createVentureTable creates the Venture table within the supplied database.
+func createVentureTable(db *sql.DB) error {
 	return _execStmt(db, `CREATE TABLE venture (
 		id INTEGER NOT NULL,
 		last_modified INTEGER NOT NULL DEFAULT(CAST(ROUND((julianday('now') - 2440587.5)*86400000) As INTEGER)),
@@ -61,9 +61,9 @@ func _create_venture_Table(db *sql.DB) error {
 	);`)
 }
 
-// _create_ql_venture_Table creates the query layer Venture table within the
+// createQlVentureTable creates the query layer Venture table within the
 // supplied database.
-func _create_ql_venture_Table(db *sql.DB) error {
+func createQlVentureTable(db *sql.DB) error {
 	return _execStmt(db, `CREATE TABLE ql_venture (
 		id INTEGER NOT NULL PRIMARY KEY,
 		last_modified INTEGER NOT NULL,
@@ -75,10 +75,10 @@ func _create_ql_venture_Table(db *sql.DB) error {
 	);`)
 }
 
-// _create_insert_on_living_venture_Trigger creates a trigger within the
+// createInsertOnLivingVentureTrigger creates a trigger within the
 // supplied database that updates the ql_venture table when ever a new, and
 // living, Venture is inserted into the venture table.
-func _create_insert_on_living_venture_Trigger(db *sql.DB) error {
+func createInsertOnLivingVentureTrigger(db *sql.DB) error {
 	return _execStmt(db, `CREATE TRIGGER insert_on_living_venture
 		AFTER INSERT ON venture
 		FOR EACH ROW
@@ -92,10 +92,10 @@ func _create_insert_on_living_venture_Trigger(db *sql.DB) error {
 		END;`)
 }
 
-// _create_insert_on_dead_venture_Trigger creates a trigger within the supplied
+// createInsertOnDeadVentureTrigger creates a trigger within the supplied
 // database that removes from the ql_venture table the dead Venture inserted
 // into the venture table.
-func _create_insert_on_dead_venture_Trigger(db *sql.DB) error {
+func createInsertOnDeadVentureTrigger(db *sql.DB) error {
 	return _execStmt(db, `CREATE TRIGGER insert_on_dead_venture
 		AFTER INSERT ON venture
 		FOR EACH ROW
@@ -106,9 +106,9 @@ func _create_insert_on_dead_venture_Trigger(db *sql.DB) error {
 		END;`)
 }
 
-// _create_update_on_venture_Trigger creates a trigger within the supplied
+// createUpdateOnVentureTrigger creates a trigger within the supplied
 // database that raises an error if an update is attempted.
-func _create_update_on_venture_Trigger(db *sql.DB) error {
+func createUpdateOnVentureTrigger(db *sql.DB) error {
 	return _execStmt(db, `CREATE TRIGGER update_on_venture
 		BEFORE UPDATE ON venture
 		BEGIN
@@ -116,9 +116,9 @@ func _create_update_on_venture_Trigger(db *sql.DB) error {
 		END;`)
 }
 
-// _create_delete_on_venture_Trigger creates a trigger within the supplied
+// createDeleteOnVentureTrigger creates a trigger within the supplied
 // database that raises an error if a delete is attempted.
-func _create_delete_on_venture_Trigger(db *sql.DB) error {
+func createDeleteOnVentureTrigger(db *sql.DB) error {
 	return _execStmt(db, `CREATE TRIGGER delete_on_venture
 		BEFORE DELETE ON venture
 		BEGIN
