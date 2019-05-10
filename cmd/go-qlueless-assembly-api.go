@@ -8,10 +8,10 @@ import (
 
 	_ "github.com/labstack/echo/v4"
 
-	c "github.com/PaulioRandall/go-qlueless-assembly-api/internal/app/changelog"
-	h "github.com/PaulioRandall/go-qlueless-assembly-api/internal/app/home"
-	o "github.com/PaulioRandall/go-qlueless-assembly-api/internal/app/openapi"
-	v "github.com/PaulioRandall/go-qlueless-assembly-api/internal/app/ventures"
+	c "github.com/PaulioRandall/go-qlueless-assembly-api/cmd/changelog"
+	h "github.com/PaulioRandall/go-qlueless-assembly-api/cmd/home"
+	o "github.com/PaulioRandall/go-qlueless-assembly-api/cmd/openapi"
+	v "github.com/PaulioRandall/go-qlueless-assembly-api/cmd/ventures"
 	q "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/qserver"
 )
 

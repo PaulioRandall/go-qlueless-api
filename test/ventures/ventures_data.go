@@ -9,9 +9,9 @@ import (
 	"os"
 	"testing"
 
+	v "github.com/PaulioRandall/go-qlueless-assembly-api/cmd/ventures"
 	a "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/asserts"
 	q "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/qserver"
-	v "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/ventures"
 	w "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/wrapped"
 	test "github.com/PaulioRandall/go-qlueless-assembly-api/test"
 	"github.com/stretchr/testify/assert"
@@ -19,7 +19,6 @@ import (
 )
 
 var VenHttpMethods = []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}
-var _httpMethods = "GET, POST, PUT, DELETE, OPTIONS"
 var dbPath string = ""
 var venDB *sql.DB = nil
 

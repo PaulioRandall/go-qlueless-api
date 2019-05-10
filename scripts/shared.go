@@ -97,14 +97,14 @@ func goBuild(root string) {
 
 // goTest runs the application unit tests
 func goTest(root string) {
-	fmt.Println("...fast code testing...")
+	fmt.Println("...internal code testing...")
 	goExe(".", []string{"test", root + "/cmd/..."})
 	goExe(".", []string{"test", root + "/internal/..."})
 }
 
 // goTestApi runs the application API tests
 func goTestApi(root string) {
-	fmt.Println("...slow API testing, this may take a few moments...")
+	fmt.Println("...web API testing, this may take a few moments...")
 	goExe(".", []string{"test", "-count=1", "-p=1", "-failfast", root + "/test/..."})
 }
 
