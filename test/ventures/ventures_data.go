@@ -10,9 +10,9 @@ import (
 	"testing"
 
 	v "github.com/PaulioRandall/go-qlueless-assembly-api/cmd/ventures"
-	a "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/asserts"
-	q "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/qserver"
-	w "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/wrapped"
+	a "github.com/PaulioRandall/go-qlueless-assembly-api/internal/asserts"
+	q "github.com/PaulioRandall/go-qlueless-assembly-api/internal/qserver"
+	w "github.com/PaulioRandall/go-qlueless-assembly-api/internal/wrapped"
 	test "github.com/PaulioRandall/go-qlueless-assembly-api/test"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"

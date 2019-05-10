@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	w "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/wrapped"
+	w "github.com/PaulioRandall/go-qlueless-assembly-api/internal/wrapped"
 )
 
 // WriteServerError writes the response for a generic 500 error to the client.

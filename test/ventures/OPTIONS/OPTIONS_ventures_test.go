@@ -3,7 +3,7 @@ package OPTIONS
 import (
 	"testing"
 
-	a "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/asserts"
+	a "github.com/PaulioRandall/go-qlueless-assembly-api/internal/asserts"
 	test "github.com/PaulioRandall/go-qlueless-assembly-api/test"
 	vtest "github.com/PaulioRandall/go-qlueless-assembly-api/test/ventures"
 	require "github.com/stretchr/testify/require"

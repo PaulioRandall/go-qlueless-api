@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	u "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/utils"
+	u "github.com/PaulioRandall/go-qlueless-assembly-api/internal/utils"
 )
 
 // ModVenture represents an update to a Venture.

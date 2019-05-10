@@ -5,9 +5,9 @@ import (
 	"net/http"
 	"strings"
 
-	q "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/qserver"
-	h "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/uhttp"
-	u "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/utils"
+	q "github.com/PaulioRandall/go-qlueless-assembly-api/internal/qserver"
+	h "github.com/PaulioRandall/go-qlueless-assembly-api/internal/uhttp"
+	u "github.com/PaulioRandall/go-qlueless-assembly-api/internal/utils"
 )
 
 // find finds the Ventures with the specified IDs.

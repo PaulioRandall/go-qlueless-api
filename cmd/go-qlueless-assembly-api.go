@@ -6,13 +6,11 @@ import (
 	"log"
 	"net/http"
 
-	_ "github.com/labstack/echo/v4"
-
 	c "github.com/PaulioRandall/go-qlueless-assembly-api/cmd/changelog"
 	h "github.com/PaulioRandall/go-qlueless-assembly-api/cmd/home"
 	o "github.com/PaulioRandall/go-qlueless-assembly-api/cmd/openapi"
 	v "github.com/PaulioRandall/go-qlueless-assembly-api/cmd/ventures"
-	q "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/qserver"
+	q "github.com/PaulioRandall/go-qlueless-assembly-api/internal/qserver"
 )
 
 // Main is the entry point for the web server

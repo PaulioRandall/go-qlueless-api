@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	v "github.com/PaulioRandall/go-qlueless-assembly-api/cmd/ventures"
-	a "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/asserts"
+	a "github.com/PaulioRandall/go-qlueless-assembly-api/internal/asserts"
 	test "github.com/PaulioRandall/go-qlueless-assembly-api/test"
 	vtest "github.com/PaulioRandall/go-qlueless-assembly-api/test/ventures"
 	require "github.com/stretchr/testify/require"

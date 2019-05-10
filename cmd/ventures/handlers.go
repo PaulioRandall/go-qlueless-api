@@ -5,9 +5,9 @@ import (
 	"log"
 	"net/http"
 
-	q "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/qserver"
-	h "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/uhttp"
-	u "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/utils"
+	q "github.com/PaulioRandall/go-qlueless-assembly-api/internal/qserver"
+	h "github.com/PaulioRandall/go-qlueless-assembly-api/internal/uhttp"
+	u "github.com/PaulioRandall/go-qlueless-assembly-api/internal/utils"
 )
 
 // Handler handles requests to do with collections of, or individual, Ventures.

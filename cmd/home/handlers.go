@@ -3,8 +3,8 @@ package home
 import (
 	"net/http"
 
-	h "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/uhttp"
-	w "github.com/PaulioRandall/go-qlueless-assembly-api/internal/pkg/wrapped"
+	h "github.com/PaulioRandall/go-qlueless-assembly-api/internal/uhttp"
+	w "github.com/PaulioRandall/go-qlueless-assembly-api/internal/wrapped"
 )
 
 // HomeHandler handles requests to the root path and requests to nothing (404s)
