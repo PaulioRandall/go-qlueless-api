@@ -5,8 +5,8 @@ import (
 	"sort"
 	"testing"
 
-	ts "github.com/PaulioRandall/go-qlueless-assembly-api/internal/asserts"
-	w "github.com/PaulioRandall/go-qlueless-assembly-api/internal/wrapped"
+	ts "github.com/PaulioRandall/go-qlueless-api/internal/asserts"
+	w "github.com/PaulioRandall/go-qlueless-api/internal/wrapped"
 	ms "github.com/mitchellh/mapstructure"
 	assert "github.com/stretchr/testify/assert"
 	require "github.com/stretchr/testify/require"

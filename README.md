@@ -26,8 +26,8 @@ I apologise, it's a poor play on words attempting to combine:
 Navigate to a suitable directory, open a terminal, and copy+paste the following:
 
 ```
-git clone https://github.com/PaulioRandall/go-qlueless-assembly-api.git
-cd go-qlueless-assembly-api/scripts
+git clone https://github.com/PaulioRandall/go-qlueless-api.git
+cd go-qlueless-api/scripts
 ./build-test-api-run.go
 ```
 
@@ -76,7 +76,7 @@ cd /scripts
 
 ## Versioning
 
-This projects API [CHANGELOG](https://github.com/PaulioRandall/go-qlueless-assembly-api/blob/master/api/CHANGELOG.md) format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and the API adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+This projects API [CHANGELOG](https://github.com/PaulioRandall/go-qlueless-api/blob/master/api/CHANGELOG.md) format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and the API adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Authors
 
@@ -84,7 +84,7 @@ This projects API [CHANGELOG](https://github.com/PaulioRandall/go-qlueless-assem
 
 ## License
 
-This project is licensed under the [MIT License](https://github.com/PaulioRandall/go-qlueless-assembly-api/blob/master/LICENSE).
+This project is licensed under the [MIT License](https://github.com/PaulioRandall/go-qlueless-api/blob/master/LICENSE).
 
 ## Acknowledgments
 

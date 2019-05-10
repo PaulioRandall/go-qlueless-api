@@ -33,7 +33,7 @@ func StartServer(binPath string) {
 	}
 
 	cmd = &exec.Cmd{
-		Path:   "./go-qlueless-assembly-api",
+		Path:   "./go-qlueless-api",
 		Dir:    binPath,
 		Stdout: os.Stdout,
 		Stderr: os.Stderr,

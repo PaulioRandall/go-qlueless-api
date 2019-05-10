@@ -3,10 +3,10 @@ package GET
 import (
 	"testing"
 
-	v "github.com/PaulioRandall/go-qlueless-assembly-api/cmd/ventures"
-	a "github.com/PaulioRandall/go-qlueless-assembly-api/internal/asserts"
-	test "github.com/PaulioRandall/go-qlueless-assembly-api/test"
-	vtest "github.com/PaulioRandall/go-qlueless-assembly-api/test/ventures"
+	v "github.com/PaulioRandall/go-qlueless-api/cmd/ventures"
+	a "github.com/PaulioRandall/go-qlueless-api/internal/asserts"
+	test "github.com/PaulioRandall/go-qlueless-api/test"
+	vtest "github.com/PaulioRandall/go-qlueless-api/test/ventures"
 	require "github.com/stretchr/testify/require"
 )
 

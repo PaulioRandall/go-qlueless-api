@@ -6,7 +6,7 @@ import (
 
 	require "github.com/stretchr/testify/require"
 
-	a "github.com/PaulioRandall/go-qlueless-assembly-api/internal/asserts"
+	a "github.com/PaulioRandall/go-qlueless-api/internal/asserts"
 )
 
 const openapiMediaType = "application/vnd.oai.openapi+json"

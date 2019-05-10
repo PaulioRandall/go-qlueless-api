@@ -1,4 +1,4 @@
-module github.com/PaulioRandall/go-qlueless-assembly-api
+module github.com/PaulioRandall/go-qlueless-api
 
 go 1.12
 

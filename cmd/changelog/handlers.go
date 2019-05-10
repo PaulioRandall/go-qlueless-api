@@ -5,8 +5,8 @@ import (
 	"log"
 	"net/http"
 
-	h "github.com/PaulioRandall/go-qlueless-assembly-api/internal/uhttp"
-	u "github.com/PaulioRandall/go-qlueless-assembly-api/internal/utils"
+	h "github.com/PaulioRandall/go-qlueless-api/internal/uhttp"
+	u "github.com/PaulioRandall/go-qlueless-api/internal/utils"
 )
 
 const mime_md = "text/markdown; charset=utf-8"

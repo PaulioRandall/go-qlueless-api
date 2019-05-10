@@ -87,7 +87,7 @@ func goBuild(root string) {
 		panic(err)
 	}
 
-	output := root + "/bin/go-qlueless-assembly-api"
+	output := root + "/bin/go-qlueless-api"
 	args := []string{"build", "-o", output}
 	args = append(args, goFiles...)
 	goExe(cmd, args)
@@ -111,7 +111,7 @@ func goTestApi(root string) {
 // goRunApp runs the compiled application from the /bin directory
 func goRunApp(root string) {
 	fmt.Println("...running application...")
-	cmd := exec.Command("./go-qlueless-assembly-api")
+	cmd := exec.Command("./go-qlueless-api")
 	cmd.Dir = root + "/bin"
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr

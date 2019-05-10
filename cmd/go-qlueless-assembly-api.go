@@ -6,11 +6,11 @@ import (
 	"log"
 	"net/http"
 
-	c "github.com/PaulioRandall/go-qlueless-assembly-api/cmd/changelog"
-	h "github.com/PaulioRandall/go-qlueless-assembly-api/cmd/home"
-	o "github.com/PaulioRandall/go-qlueless-assembly-api/cmd/openapi"
-	v "github.com/PaulioRandall/go-qlueless-assembly-api/cmd/ventures"
-	q "github.com/PaulioRandall/go-qlueless-assembly-api/internal/qserver"
+	c "github.com/PaulioRandall/go-qlueless-api/cmd/changelog"
+	h "github.com/PaulioRandall/go-qlueless-api/cmd/home"
+	o "github.com/PaulioRandall/go-qlueless-api/cmd/openapi"
+	v "github.com/PaulioRandall/go-qlueless-api/cmd/ventures"
+	q "github.com/PaulioRandall/go-qlueless-api/internal/qserver"
 )
 
 // Main is the entry point for the web server

@@ -9,11 +9,11 @@ import (
 	"os"
 	"testing"
 
-	v "github.com/PaulioRandall/go-qlueless-assembly-api/cmd/ventures"
-	a "github.com/PaulioRandall/go-qlueless-assembly-api/internal/asserts"
-	q "github.com/PaulioRandall/go-qlueless-assembly-api/internal/qserver"
-	w "github.com/PaulioRandall/go-qlueless-assembly-api/internal/wrapped"
-	test "github.com/PaulioRandall/go-qlueless-assembly-api/test"
+	v "github.com/PaulioRandall/go-qlueless-api/cmd/ventures"
+	a "github.com/PaulioRandall/go-qlueless-api/internal/asserts"
+	q "github.com/PaulioRandall/go-qlueless-api/internal/qserver"
+	w "github.com/PaulioRandall/go-qlueless-api/internal/wrapped"
+	test "github.com/PaulioRandall/go-qlueless-api/test"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

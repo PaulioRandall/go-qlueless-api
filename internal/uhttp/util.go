@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 
-	w "github.com/PaulioRandall/go-qlueless-assembly-api/internal/wrapped"
+	w "github.com/PaulioRandall/go-qlueless-api/internal/wrapped"
 )
 
 // LogRequest logs the details of a request such as the URL.
