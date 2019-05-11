@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"strings"
 
-	u "github.com/PaulioRandall/go-qlueless-api/internal/utils"
+	u "github.com/PaulioRandall/go-cookies/pkg"
 )
 
 // NewVenture represents a new Venture.
@@ -45,7 +45,7 @@ func (nv *NewVenture) Validate() []string {
 		"Ventures must have a description.")
 
 	if nv.Orders != "" {
-		errMsgs = u.AppendIfNotPositiveIntCSV(nv.Orders, errMsgs,
+		errMsgs = u.AppendIfNotUintCSV(nv.Orders, errMsgs,
 			"Child OrderIDs within a Venture must all be positive integers.")
 	}
 

@@ -6,7 +6,7 @@ import (
 	"io"
 	"strings"
 
-	u "github.com/PaulioRandall/go-qlueless-api/internal/utils"
+	u "github.com/PaulioRandall/go-cookies/pkg"
 )
 
 // Venture represents a Venture, aka, project.
@@ -57,16 +57,17 @@ func (ven *Venture) Validate(isNew bool) []string {
 		"Ventures must have a description.")
 
 	if !isNew {
-		errMsgs = u.AppendIfNotPositiveInt(ven.ID, errMsgs,
+		errMsgs = u.AppendIfNotUint(ven.ID, errMsgs,
 			"Ventures must have a positive integer ID.")
 
 		if ven.LastModified < 1 {
-			errMsgs = append(errMsgs, "Ventures must have a last modified Unix date in milliseconds")
+			errMsgs = append(errMsgs,
+				"Ventures must have a last modified Unix date in milliseconds")
 		}
 	}
 
 	if ven.Orders != "" {
-		errMsgs = u.AppendIfNotPositiveIntCSV(ven.Orders, errMsgs,
+		errMsgs = u.AppendIfNotUintCSV(ven.Orders, errMsgs,
 			"Child Orders within a Venture must all be positive integers.")
 	}
 

@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	u "github.com/PaulioRandall/go-qlueless-api/internal/utils"
+	u "github.com/PaulioRandall/go-cookies/pkg"
 )
 
 // ModVenture represents an update to a Venture.
@@ -64,7 +64,7 @@ func (mv *ModVenture) _validateProps(errMsgs []string) []string {
 			errMsgs = u.AppendIfEmpty(mv.Values.State, errMsgs,
 				"Ventures must have a state.")
 		case "orders":
-			errMsgs = u.AppendIfNotPositiveIntCSV(mv.Values.Orders, errMsgs,
+			errMsgs = u.AppendIfNotUintCSV(mv.Values.Orders, errMsgs,
 				"The list of Order IDs within a Venture must be an integer CSV")
 		default:
 			errMsgs = append(errMsgs,
@@ -82,7 +82,7 @@ func (mv *ModVenture) _validateProps(errMsgs []string) []string {
 func (mv *ModVenture) Validate() []string {
 	errMsgs := []string{}
 
-	errMsgs = u.AppendIfNotPositiveIntCSV(mv.IDs, errMsgs,
+	errMsgs = u.AppendIfNotUintCSV(mv.IDs, errMsgs,
 		"'ids' must be supplied so the Ventures to update can be determined.")
 
 	errMsgs = u.AppendIfEmpty(mv.Props, errMsgs,
