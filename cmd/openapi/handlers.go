@@ -6,8 +6,8 @@ import (
 	"log"
 	"net/http"
 
+	u "github.com/PaulioRandall/go-cookies/pkg"
 	h "github.com/PaulioRandall/go-qlueless-api/internal/uhttp"
-	u "github.com/PaulioRandall/go-qlueless-api/internal/utils"
 )
 
 var spec map[string]interface{} = nil
@@ -19,7 +19,7 @@ func OpenAPIHandler(res http.ResponseWriter, req *http.Request) {
 
 	switch req.Method {
 	case "GET":
-		_GET_Spec(&res, req)
+		get(&res, req)
 	case "OPTIONS":
 		res.WriteHeader(http.StatusOK)
 	default:
@@ -27,8 +27,8 @@ func OpenAPIHandler(res http.ResponseWriter, req *http.Request) {
 	}
 }
 
-// _GET_Spec generates responses for obtaining the OpenAPI specification
-func _GET_Spec(res *http.ResponseWriter, req *http.Request) {
+// get generates responses for obtaining the OpenAPI specification
+func get(res *http.ResponseWriter, req *http.Request) {
 	if spec == nil {
 		log.Println("[BUG] OpenAPI specification not loaded")
 		h.WriteServerError(res, req)
