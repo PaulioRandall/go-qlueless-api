@@ -39,18 +39,22 @@ func (nv *NewVenture) Clean() {
 // empty slice if all is well. These messages are suitable for returning to
 // clients.
 func (nv *NewVenture) Validate() []string {
-	errMsgs := []string{}
+	r := u.MsgList{}
 
-	errMsgs = u.AppendIfEmpty(nv.Description, errMsgs,
-		"Ventures must have a description.")
+	r.AddIfEmpty(nv.Description, "Ventures must have a description.")
 
 	if nv.Orders != "" {
-		errMsgs = u.AppendIfNotUintCSV(nv.Orders, errMsgs,
+		r.AddIfNotUintCSV(nv.Orders,
 			"Child OrderIDs within a Venture must all be positive integers.")
 	}
 
-	errMsgs = u.AppendIfEmpty(nv.State, errMsgs, "Ventures must have a state.")
-	return errMsgs
+	r.AddIfEmpty(nv.State, "Ventures must have a state.")
+
+	s := []string{}
+	for v := r.Head; v != nil; v = v.Next {
+		s = append(s, v.Message)
+	}
+	return s
 }
 
 // Insert inserts the NewVenture into the database

@@ -261,7 +261,7 @@ func TestModVenture_Validate_7(t *testing.T) {
 
 func TestModVenture_Validate_8(t *testing.T) {
 	a := ModVenture{
-		Props: "description,,state,order_ids,INVALID,extra",
+		Props: "description,,state,orders,INVALID,extra",
 		Values: Venture{
 			Orders: "ILLEGAL,66,101,202",
 			State:  "updated state",

@@ -54,22 +54,25 @@ func (mv *ModVenture) Clean() {
 // input slice of human readable error messages with the violations found
 // appended to it. These messages are suitable for returning to clients.
 func (mv *ModVenture) _validateProps(errMsgs []string) []string {
+	r := u.MsgList{}
+
 	for _, prop := range mv.SplitProps() {
 		switch prop {
 		case "dead", "extra":
 		case "description":
-			errMsgs = u.AppendIfEmpty(mv.Values.Description, errMsgs,
-				"Ventures must have a description.")
+			r.AddIfEmpty(mv.Values.Description, "Ventures must have a description.")
 		case "state":
-			errMsgs = u.AppendIfEmpty(mv.Values.State, errMsgs,
-				"Ventures must have a state.")
+			r.AddIfEmpty(mv.Values.State, "Ventures must have a state.")
 		case "orders":
-			errMsgs = u.AppendIfNotUintCSV(mv.Values.Orders, errMsgs,
-				"The list of Order IDs within a Venture must be an integer CSV")
+			r.AddIfNotUintCSV(mv.Values.Orders,
+				"The list of Order IDs within a Venture must be an integer CSV.")
 		default:
-			errMsgs = append(errMsgs,
-				fmt.Sprintf("Can't update unknown or immutable property '%s'.", prop))
+			r.Add(fmt.Sprintf("Can't update unknown or immutable property '%s'.", prop))
 		}
+	}
+
+	for v := r.Head; v != nil; v = v.Next {
+		errMsgs = append(errMsgs, v.Message)
 	}
 
 	return errMsgs
@@ -80,16 +83,26 @@ func (mv *ModVenture) _validateProps(errMsgs []string) []string {
 // empty slice if all is well. These messages are suitable for returning to
 // clients.
 func (mv *ModVenture) Validate() []string {
-	errMsgs := []string{}
+	r := u.MsgList{}
 
-	errMsgs = u.AppendIfNotUintCSV(mv.IDs, errMsgs,
-		"'ids' must be supplied so the Ventures to update can be determined.")
+	if mv.IDs == "" {
+		r.Add("'ids' must be supplied so the Ventures to update can be determined.")
+	} else {
+		r.AddIfNotUintCSV(mv.IDs,
+			"'ids' must be a CSV of positive integers.")
+	}
 
-	errMsgs = u.AppendIfEmpty(mv.Props, errMsgs,
-		"Some properties must be 'set' for any updating to take place.")
+	if mv.Props == "" {
+		r.Add("Some properties must be 'set' for any updating to take place.")
+	}
 
-	errMsgs = mv._validateProps(errMsgs)
-	return errMsgs
+	s := []string{}
+	for v := r.Head; v != nil; v = v.Next {
+		s = append(s, v.Message)
+	}
+
+	s = mv._validateProps(s)
+	return s
 }
 
 // ApplyMod applies the modifications to the supplied Venture only touching

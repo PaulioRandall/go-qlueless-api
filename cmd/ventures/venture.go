@@ -51,28 +51,31 @@ func (ven *Venture) Clean() {
 // empty slice if all is well. These messages are suitable for returning to
 // clients.
 func (ven *Venture) Validate(isNew bool) []string {
-	errMsgs := []string{}
+	r := u.MsgList{}
 
-	errMsgs = u.AppendIfEmpty(ven.Description, errMsgs,
-		"Ventures must have a description.")
+	r.AddIfEmpty(ven.Description, "Ventures must have a description.")
 
 	if !isNew {
-		errMsgs = u.AppendIfNotUint(ven.ID, errMsgs,
-			"Ventures must have a positive integer ID.")
+		r.AddIfNotUint(ven.ID, "Ventures must have a positive integer ID.")
 
 		if ven.LastModified < 1 {
-			errMsgs = append(errMsgs,
-				"Ventures must have a last modified Unix date in milliseconds")
+			r.Add("Ventures must have a last modified Unix date in milliseconds")
 		}
 	}
 
 	if ven.Orders != "" {
-		errMsgs = u.AppendIfNotUintCSV(ven.Orders, errMsgs,
+		r.AddIfNotUintCSV(ven.Orders,
 			"Child Orders within a Venture must all be positive integers.")
 	}
 
-	errMsgs = u.AppendIfEmpty(ven.State, errMsgs, "Ventures must have a state.")
-	return errMsgs
+	r.AddIfEmpty(ven.State, "Ventures must have a state.")
+
+	s := []string{}
+	for v := r.Head; v != nil; v = v.Next {
+		s = append(s, v.Message)
+	}
+
+	return s
 }
 
 // SplitOrders returns the IDs of the Orders as a slice.
