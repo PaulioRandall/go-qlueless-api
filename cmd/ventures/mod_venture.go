@@ -49,33 +49,30 @@ func (mv *ModVenture) Clean() {
 	mv.Values.Clean()
 }
 
-// _validateProps is a private function that checks the properties declared for
-// change are valid and the property value for each is valid. Returned is the
-// input slice of human readable error messages with the violations found
-// appended to it. These messages are suitable for returning to clients.
-func (mv *ModVenture) _validateProps(errMsgs []string) []string {
-	r := u.MsgList{}
-
+// validateProps checks the properties declared for change are valid and the
+// property value for each is valid. Returned is the input slice of human
+// readable error messages with the violations found appended to it. These
+// messages are suitable for returning to clients.
+func (mv *ModVenture) validateProps(r *u.MsgList) {
 	for _, prop := range mv.SplitProps() {
 		switch prop {
 		case "dead", "extra":
 		case "description":
-			r.AddIfEmpty(mv.Values.Description, "Ventures must have a description.")
+			if mv.Values.Description == "" {
+				r.Add("Ventures must have a description.")
+			}
 		case "state":
-			r.AddIfEmpty(mv.Values.State, "Ventures must have a state.")
+			if mv.Values.State == "" {
+				r.Add("Ventures must have a state.")
+			}
 		case "orders":
-			r.AddIfNotUintCSV(mv.Values.Orders,
-				"The list of Order IDs within a Venture must be an integer CSV.")
+			if !u.IsUintCSV(mv.Values.Orders) {
+				r.Add("The list of Order IDs within a Venture must be an integer CSV.")
+			}
 		default:
 			r.Add(fmt.Sprintf("Can't update unknown or immutable property '%s'.", prop))
 		}
 	}
-
-	for v := r.Head; v != nil; v = v.Next {
-		errMsgs = append(errMsgs, v.Message)
-	}
-
-	return errMsgs
 }
 
 // Validate checks each field contains valid content returning a non-empty
@@ -85,24 +82,19 @@ func (mv *ModVenture) _validateProps(errMsgs []string) []string {
 func (mv *ModVenture) Validate() []string {
 	r := u.MsgList{}
 
-	if mv.IDs == "" {
+	switch {
+	case mv.IDs == "":
 		r.Add("'ids' must be supplied so the Ventures to update can be determined.")
-	} else {
-		r.AddIfNotUintCSV(mv.IDs,
-			"'ids' must be a CSV of positive integers.")
+	case !u.IsUintCSV(mv.IDs):
+		r.Add("'ids' must be a CSV of positive integers.")
 	}
 
 	if mv.Props == "" {
 		r.Add("Some properties must be 'set' for any updating to take place.")
 	}
 
-	s := []string{}
-	for v := r.Head; v != nil; v = v.Next {
-		s = append(s, v.Message)
-	}
-
-	s = mv._validateProps(s)
-	return s
+	mv.validateProps(&r)
+	return r.Slice()
 }
 
 // ApplyMod applies the modifications to the supplied Venture only touching

@@ -41,20 +41,19 @@ func (nv *NewVenture) Clean() {
 func (nv *NewVenture) Validate() []string {
 	r := u.MsgList{}
 
-	r.AddIfEmpty(nv.Description, "Ventures must have a description.")
-
-	if nv.Orders != "" {
-		r.AddIfNotUintCSV(nv.Orders,
-			"Child OrderIDs within a Venture must all be positive integers.")
+	if nv.Description == "" {
+		r.Add("Ventures must have a description.")
 	}
 
-	r.AddIfEmpty(nv.State, "Ventures must have a state.")
-
-	s := []string{}
-	for v := r.Head; v != nil; v = v.Next {
-		s = append(s, v.Message)
+	if nv.Orders != "" && !u.IsUintCSV(nv.Orders) {
+		r.Add("Child OrderIDs within a Venture must all be positive integers.")
 	}
-	return s
+
+	if nv.State == "" {
+		r.Add("Ventures must have a state.")
+	}
+
+	return r.Slice()
 }
 
 // Insert inserts the NewVenture into the database
