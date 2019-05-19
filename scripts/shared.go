@@ -8,6 +8,8 @@ import (
 	"path/filepath"
 	"runtime"
 	"strings"
+
+	comfiler "github.com/PaulioRandall/go-cookies/comfiler"
 )
 
 // clearTerminal clears the terminal
@@ -63,18 +65,18 @@ func goOpenAPI(root string) {
 
 	api := root + "/api"
 	oai := api + "/openapi"
+	spec := oai + "/openapi.json"
 
-	t := Template{
+	tmp := comfiler.Comfile{
 		Template:  oai + "/template.json",
 		Resources: oai + "/resources",
-		Output:    oai + "/openapi.json",
 	}
 
-	compileOpenAPI(t)
-	fmt.Println("ok\t" + t.Output + "\t(created)")
+	tmp.Compile(spec)
+	fmt.Println("ok\t" + spec + "\t(created)")
 
 	oaiBin := root + "/bin/openapi.json"
-	copyFile(t.Output, oaiBin)
+	copyFile(spec, oaiBin)
 	fmt.Println("ok\t" + oaiBin + "\t(copied)")
 
 	cl := api + "/CHANGELOG.md"

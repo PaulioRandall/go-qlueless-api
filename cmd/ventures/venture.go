@@ -6,7 +6,8 @@ import (
 	"io"
 	"strings"
 
-	u "github.com/PaulioRandall/go-cookies/pkg"
+	cookies "github.com/PaulioRandall/go-cookies/cookies"
+	strlist "github.com/PaulioRandall/go-cookies/strlist"
 )
 
 // Venture represents a Venture, aka, project.
@@ -42,7 +43,7 @@ func DecodeVentureSlice(r io.Reader) ([]Venture, error) {
 func (ven *Venture) Clean() {
 	ven.Description = strings.TrimSpace(ven.Description)
 	ven.ID = strings.TrimSpace(ven.ID)
-	ven.Orders = u.StripWhitespace(ven.Orders)
+	ven.Orders = cookies.StripWhitespace(ven.Orders)
 	ven.State = strings.TrimSpace(ven.State)
 }
 
@@ -51,14 +52,14 @@ func (ven *Venture) Clean() {
 // empty slice if all is well. These messages are suitable for returning to
 // clients.
 func (ven *Venture) Validate(isNew bool) []string {
-	r := u.MsgList{}
+	r := strlist.StrList{}
 
 	if ven.Description == "" {
 		r.Add("Ventures must have a description.")
 	}
 
 	if !isNew {
-		if !u.IsUint(ven.ID) {
+		if !cookies.IsUint(ven.ID) {
 			r.Add("Ventures must have a positive integer ID.")
 		}
 
@@ -68,7 +69,7 @@ func (ven *Venture) Validate(isNew bool) []string {
 	}
 
 	if ven.Orders != "" {
-		if !u.IsUintCSV(ven.Orders) {
+		if !cookies.IsUintCSV(ven.Orders) {
 			r.Add("Child Orders within a Venture must all be positive integers.")
 		}
 	}

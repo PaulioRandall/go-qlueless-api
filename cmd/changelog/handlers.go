@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 
-	u "github.com/PaulioRandall/go-cookies/pkg"
+	cookies "github.com/PaulioRandall/go-cookies/cookies"
 	h "github.com/PaulioRandall/go-qlueless-api/internal/uhttp"
 )
 
@@ -46,7 +46,7 @@ func LoadChangelog() {
 
 	path := "./CHANGELOG.md"
 	bytes, err := ioutil.ReadFile(path)
-	if u.LogIfErr(err) {
+	if cookies.LogIfErr(err) {
 		changelog = nil
 		return
 	}

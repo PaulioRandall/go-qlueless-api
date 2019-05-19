@@ -7,7 +7,8 @@ import (
 	"strconv"
 	"strings"
 
-	u "github.com/PaulioRandall/go-cookies/pkg"
+	cookies "github.com/PaulioRandall/go-cookies/cookies"
+	strlist "github.com/PaulioRandall/go-cookies/strlist"
 )
 
 // NewVenture represents a new Venture.
@@ -30,7 +31,7 @@ func DecodeNewVenture(r io.Reader) (NewVenture, error) {
 // except where whitespace is allowable.
 func (nv *NewVenture) Clean() {
 	nv.Description = strings.TrimSpace(nv.Description)
-	nv.Orders = u.StripWhitespace(nv.Orders)
+	nv.Orders = cookies.StripWhitespace(nv.Orders)
 	nv.State = strings.TrimSpace(nv.State)
 }
 
@@ -39,13 +40,13 @@ func (nv *NewVenture) Clean() {
 // empty slice if all is well. These messages are suitable for returning to
 // clients.
 func (nv *NewVenture) Validate() []string {
-	r := u.MsgList{}
+	r := strlist.StrList{}
 
 	if nv.Description == "" {
 		r.Add("Ventures must have a description.")
 	}
 
-	if nv.Orders != "" && !u.IsUintCSV(nv.Orders) {
+	if nv.Orders != "" && !cookies.IsUintCSV(nv.Orders) {
 		r.Add("Child OrderIDs within a Venture must all be positive integers.")
 	}
 
@@ -62,7 +63,7 @@ func (nv *NewVenture) Validate() []string {
 func (nv *NewVenture) Insert(db *sql.DB) (*Venture, bool) {
 
 	id, err := _findNextID(db)
-	if u.LogIfErr(err) {
+	if cookies.LogIfErr(err) {
 		return nil, false
 	}
 
@@ -76,17 +77,17 @@ func (nv *NewVenture) Insert(db *sql.DB) (*Venture, bool) {
 		defer stmt.Close()
 	}
 
-	if u.LogIfErr(err) {
+	if cookies.LogIfErr(err) {
 		return nil, false
 	}
 
 	_, err = nv._execInsert(id, stmt)
-	if u.LogIfErr(err) {
+	if cookies.LogIfErr(err) {
 		return nil, false
 	}
 
 	ven, err := QueryFor(db, id)
-	if u.LogIfErr(err) {
+	if cookies.LogIfErr(err) {
 		return nil, false
 	}
 

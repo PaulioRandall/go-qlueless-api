@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 
-	u "github.com/PaulioRandall/go-cookies/pkg"
+	cookies "github.com/PaulioRandall/go-cookies/cookies"
 	q "github.com/PaulioRandall/go-qlueless-api/internal/qserver"
 	h "github.com/PaulioRandall/go-qlueless-api/internal/uhttp"
 )
@@ -33,7 +33,7 @@ func Handler(res http.ResponseWriter, req *http.Request) {
 func get(res *http.ResponseWriter, req *http.Request) {
 
 	ids := req.FormValue("ids")
-	ids = u.StripWhitespace(ids)
+	ids = cookies.StripWhitespace(ids)
 	var vens []Venture
 
 	switch {

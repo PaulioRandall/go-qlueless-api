@@ -8,7 +8,8 @@ import (
 	"strings"
 	"time"
 
-	u "github.com/PaulioRandall/go-cookies/pkg"
+	cookies "github.com/PaulioRandall/go-cookies/cookies"
+	sl "github.com/PaulioRandall/go-cookies/strlist"
 )
 
 // ModVenture represents an update to a Venture.
@@ -44,8 +45,8 @@ func (mv *ModVenture) SplitProps() []string {
 
 // Clean cleans up the ModVenture by removing whitespace where applicable.
 func (mv *ModVenture) Clean() {
-	mv.IDs = u.StripWhitespace(mv.IDs)
-	mv.Props = u.StripWhitespace(mv.Props)
+	mv.IDs = cookies.StripWhitespace(mv.IDs)
+	mv.Props = cookies.StripWhitespace(mv.Props)
 	mv.Values.Clean()
 }
 
@@ -53,7 +54,7 @@ func (mv *ModVenture) Clean() {
 // property value for each is valid. Returned is the input slice of human
 // readable error messages with the violations found appended to it. These
 // messages are suitable for returning to clients.
-func (mv *ModVenture) validateProps(r *u.MsgList) {
+func (mv *ModVenture) validateProps(r *sl.StrList) {
 	for _, prop := range mv.SplitProps() {
 		switch prop {
 		case "dead", "extra":
@@ -66,7 +67,7 @@ func (mv *ModVenture) validateProps(r *u.MsgList) {
 				r.Add("Ventures must have a state.")
 			}
 		case "orders":
-			if !u.IsUintCSV(mv.Values.Orders) {
+			if !cookies.IsUintCSV(mv.Values.Orders) {
 				r.Add("The list of Order IDs within a Venture must be an integer CSV.")
 			}
 		default:
@@ -80,12 +81,12 @@ func (mv *ModVenture) validateProps(r *u.MsgList) {
 // empty slice if all is well. These messages are suitable for returning to
 // clients.
 func (mv *ModVenture) Validate() []string {
-	r := u.MsgList{}
+	r := sl.StrList{}
 
 	switch {
 	case mv.IDs == "":
 		r.Add("'ids' must be supplied so the Ventures to update can be determined.")
-	case !u.IsUintCSV(mv.IDs):
+	case !cookies.IsUintCSV(mv.IDs):
 		r.Add("'ids' must be a CSV of positive integers.")
 	}
 
@@ -104,7 +105,7 @@ func (mv *ModVenture) Validate() []string {
 func (mv *ModVenture) ApplyMod(ven *Venture) {
 	mod := mv.Values
 	for _, p := range mv.SplitProps() {
-		ven.LastModified = u.ToUnixMilli(time.Now())
+		ven.LastModified = cookies.ToUnixMilli(time.Now())
 		switch p {
 		case "description":
 			ven.Description = mod.Description
@@ -132,7 +133,7 @@ func (mv *ModVenture) Update(db *sql.DB) ([]Venture, bool) {
 	}
 
 	vens, err := QueryMany(db, args)
-	if u.LogIfErr(err) {
+	if cookies.LogIfErr(err) {
 		return nil, false
 	}
 
@@ -157,7 +158,7 @@ func (mv *ModVenture) _insertEach(db *sql.DB, vens []Venture) bool {
 		defer stmt.Close()
 	}
 
-	if u.LogIfErr(err) {
+	if cookies.LogIfErr(err) {
 		return false
 	}
 
@@ -179,7 +180,7 @@ func (mv *ModVenture) _execStmtForEach(stmt *sql.Stmt, vens []Venture) bool {
 			ven.Dead,
 			ven.Extra)
 
-		if u.LogIfErr(err) {
+		if cookies.LogIfErr(err) {
 			return false
 		}
 	}

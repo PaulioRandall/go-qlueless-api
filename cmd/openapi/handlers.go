@@ -6,7 +6,7 @@ import (
 	"log"
 	"net/http"
 
-	u "github.com/PaulioRandall/go-cookies/pkg"
+	cookies "github.com/PaulioRandall/go-cookies/cookies"
 	h "github.com/PaulioRandall/go-qlueless-api/internal/uhttp"
 )
 
@@ -45,13 +45,13 @@ func LoadSpec() {
 
 	path := "./openapi.json"
 	bytes, err := ioutil.ReadFile(path)
-	if u.LogIfErr(err) {
+	if cookies.LogIfErr(err) {
 		spec = nil
 		return
 	}
 
 	err = json.Unmarshal(bytes, &spec)
-	if u.LogIfErr(err) {
+	if cookies.LogIfErr(err) {
 		spec = nil
 	}
 }

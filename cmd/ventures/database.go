@@ -3,10 +3,9 @@ package ventures
 import (
 	"database/sql"
 	"fmt"
-	"log"
 	"strings"
 
-	u "github.com/PaulioRandall/go-cookies/pkg"
+	cookies "github.com/PaulioRandall/go-cookies/cookies"
 )
 
 // CreateTables creates all the Venture tables, views and triggers within the
@@ -165,8 +164,7 @@ func QueryFor(db *sql.DB, id string) (*Venture, error) {
 	switch {
 	case err == sql.ErrNoRows:
 		return nil, nil
-	case err != nil:
-		log.Println(err)
+	case cookies.LogIfErr(err):
 		return nil, err
 	}
 
@@ -196,8 +194,7 @@ func QueryMany(db *sql.DB, ids []interface{}) ([]Venture, error) {
 		defer rows.Close()
 	}
 
-	if err != nil {
-		log.Println(err)
+	if cookies.LogIfErr(err) {
 		return nil, err
 	}
 
@@ -221,7 +218,7 @@ func QueryAll(db *sql.DB) ([]Venture, error) {
 		defer rows.Close()
 	}
 
-	if u.LogIfErr(err) {
+	if cookies.LogIfErr(err) {
 		return nil, err
 	}
 
