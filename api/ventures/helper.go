@@ -7,7 +7,7 @@ import (
 
 	cookies "github.com/PaulioRandall/go-cookies/cookies"
 	qserver "github.com/PaulioRandall/go-qlueless-api/shared/qserver"
-	uhttp "github.com/PaulioRandall/go-qlueless-api/shared/uhttp"
+	writers "github.com/PaulioRandall/go-qlueless-api/shared/writers"
 )
 
 // find finds the Ventures with the specified IDs.
@@ -22,7 +22,7 @@ func find(ids string, res *http.ResponseWriter, req *http.Request) ([]Venture, b
 	vens, err := QueryMany(qserver.Sev.DB, s)
 
 	if err != nil {
-		uhttp.WriteServerError(res, req)
+		writers.WriteServerError(res, req)
 		return nil, false
 	}
 
@@ -33,7 +33,7 @@ func find(ids string, res *http.ResponseWriter, req *http.Request) ([]Venture, b
 func decodeNew(res *http.ResponseWriter, req *http.Request) (NewVenture, bool) {
 	ven, err := DecodeNewVenture(req.Body)
 	if err != nil {
-		uhttp.WriteBadRequest(res, req, "Unable to decode request body into a Venture")
+		writers.WriteBadRequest(res, req, "Unable to decode request body into a Venture")
 		return NewVenture{}, false
 	}
 	return ven, true
@@ -43,7 +43,7 @@ func decodeNew(res *http.ResponseWriter, req *http.Request) (NewVenture, bool) {
 func validateNew(ven *NewVenture, res *http.ResponseWriter, req *http.Request) bool {
 	errMsgs := ven.Validate()
 	if len(errMsgs) != 0 {
-		uhttp.WriteBadRequest(res, req, strings.Join(errMsgs, " "))
+		writers.WriteBadRequest(res, req, strings.Join(errMsgs, " "))
 		return false
 	}
 	return true
@@ -53,7 +53,7 @@ func validateNew(ven *NewVenture, res *http.ResponseWriter, req *http.Request) b
 func insertNew(new *NewVenture, res *http.ResponseWriter, req *http.Request) (*Venture, bool) {
 	ven, ok := new.Insert(qserver.Sev.DB)
 	if !ok {
-		uhttp.WriteServerError(res, req)
+		writers.WriteServerError(res, req)
 	}
 	return ven, ok
 }
@@ -62,7 +62,7 @@ func insertNew(new *NewVenture, res *http.ResponseWriter, req *http.Request) (*V
 func decodeMod(res *http.ResponseWriter, req *http.Request) (*ModVenture, bool) {
 	mv, err := DecodeModVenture(req.Body)
 	if err != nil {
-		uhttp.WriteBadRequest(res, req,
+		writers.WriteBadRequest(res, req,
 			"Unable to decode request body into a Venture update")
 		return nil, false
 	}
@@ -73,7 +73,7 @@ func decodeMod(res *http.ResponseWriter, req *http.Request) (*ModVenture, bool) 
 func validateMod(mv *ModVenture, res *http.ResponseWriter, req *http.Request) bool {
 	errMsgs := mv.Validate()
 	if len(errMsgs) != 0 {
-		uhttp.WriteBadRequest(res, req, strings.Join(errMsgs, " "))
+		writers.WriteBadRequest(res, req, strings.Join(errMsgs, " "))
 		return false
 	}
 	return true
@@ -84,12 +84,12 @@ func idCsvToSlice(idCsv string, res *http.ResponseWriter, req *http.Request) ([]
 	idCsv = cookies.StripWhitespace(idCsv)
 
 	if idCsv == "" {
-		uhttp.WriteBadRequest(res, req, "Query parameter 'ids' is missing or empty")
+		writers.WriteBadRequest(res, req, "Query parameter 'ids' is missing or empty")
 		return nil, false
 	}
 
 	if !cookies.IsUintCSV(idCsv) {
-		uhttp.WriteBadRequest(res, req, fmt.Sprintf("Could not parse query parameter"+
+		writers.WriteBadRequest(res, req, fmt.Sprintf("Could not parse query parameter"+
 			" 'ids=%s' into a list of Venture IDs", idCsv))
 		return nil, false
 	}
@@ -117,7 +117,7 @@ func idsToCSV(vens []Venture) string {
 func pushMod(mv *ModVenture, res *http.ResponseWriter, req *http.Request) ([]Venture, bool) {
 	vens, ok := mv.Update(qserver.Sev.DB)
 	if !ok {
-		uhttp.WriteServerError(res, req)
+		writers.WriteServerError(res, req)
 		return nil, false
 	}
 	return vens, true

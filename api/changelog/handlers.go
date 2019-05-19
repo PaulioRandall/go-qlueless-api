@@ -6,17 +6,23 @@ import (
 	"net/http"
 
 	cookies "github.com/PaulioRandall/go-cookies/cookies"
-	uhttp "github.com/PaulioRandall/go-qlueless-api/shared/uhttp"
+	uhttp "github.com/PaulioRandall/go-cookies/uhttp"
+	writers "github.com/PaulioRandall/go-qlueless-api/shared/writers"
 )
 
 const mime_md = "text/markdown; charset=utf-8"
 
 var changelog *[]byte = nil
+var cors uhttp.CorsHeaders = uhttp.CorsHeaders{
+	Origin:  "*",
+	Headers: "*",
+	Methods: "GET, OPTIONS",
+}
 
 // ChangelogHandler handles requests for the APIs changelog
 func ChangelogHandler(res http.ResponseWriter, req *http.Request) {
 	uhttp.LogRequest(req)
-	uhttp.AppendCORSHeaders(&res, "GET, OPTIONS")
+	uhttp.UseCors(&res, &cors)
 
 	switch req.Method {
 	case "GET":
@@ -32,7 +38,7 @@ func ChangelogHandler(res http.ResponseWriter, req *http.Request) {
 func get(res *http.ResponseWriter, req *http.Request) {
 	if changelog == nil {
 		log.Println("[BUG] CHANGELOG not loaded")
-		uhttp.WriteServerError(res, req)
+		writers.WriteServerError(res, req)
 		return
 	}
 

@@ -7,15 +7,21 @@ import (
 	"net/http"
 
 	cookies "github.com/PaulioRandall/go-cookies/cookies"
-	uhttp "github.com/PaulioRandall/go-qlueless-api/shared/uhttp"
+	uhttp "github.com/PaulioRandall/go-cookies/uhttp"
+	writers "github.com/PaulioRandall/go-qlueless-api/shared/writers"
 )
 
 var spec map[string]interface{} = nil
+var cors uhttp.CorsHeaders = uhttp.CorsHeaders{
+	Origin:  "*",
+	Headers: "*",
+	Methods: "GET, OPTIONS",
+}
 
 // OpenAPIHandler handles requests for the services OpenAPI specification
 func OpenAPIHandler(res http.ResponseWriter, req *http.Request) {
 	uhttp.LogRequest(req)
-	uhttp.AppendCORSHeaders(&res, "GET, OPTIONS")
+	uhttp.UseCors(&res, &cors)
 
 	switch req.Method {
 	case "GET":
@@ -31,11 +37,11 @@ func OpenAPIHandler(res http.ResponseWriter, req *http.Request) {
 func get(res *http.ResponseWriter, req *http.Request) {
 	if spec == nil {
 		log.Println("[BUG] OpenAPI specification not loaded")
-		uhttp.WriteServerError(res, req)
+		writers.WriteServerError(res, req)
 		return
 	}
 
-	uhttp.AppendJSONHeader(res, "vnd.oai.openapi")
+	uhttp.UseUTF8Json(res, "vnd.oai.openapi")
 	(*res).WriteHeader(http.StatusOK)
 	json.NewEncoder(*res).Encode(spec)
 }

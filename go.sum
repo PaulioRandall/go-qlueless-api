@@ -4,6 +4,9 @@ github.com/PaulioRandall/go-cookies v0.0.0-20190513235104-2d67e68e36c9 h1:cJxAdE
 github.com/PaulioRandall/go-cookies v0.0.0-20190513235104-2d67e68e36c9/go.mod h1:81mrpdCA0yhpSw/s0WooO/4aYQbSFA+s2XvxvD/9oDA=
 github.com/PaulioRandall/go-cookies v0.0.0-20190518111920-106dd47ccd11 h1:AEEKpIJgS7Eqhlvv5Ns+MGkL0O48MZjewVqIvy0SKig=
 github.com/PaulioRandall/go-cookies v0.0.0-20190518111920-106dd47ccd11/go.mod h1:81mrpdCA0yhpSw/s0WooO/4aYQbSFA+s2XvxvD/9oDA=
+github.com/PaulioRandall/go-cookies v0.0.0-20190519134624-07de878c9e48 h1:obtlY87dtFoNuLCp2hHxBELqcshUYIW+EzWdHl/0/I0=
+github.com/PaulioRandall/go-cookies v0.0.0-20190519134624-07de878c9e48/go.mod h1:fjwCy4yShZplVcBZGh2RU9zGGmbbcDwQC5+mCbtHJI8=
+github.com/PaulioRandall/go-qlueless-api v0.0.0-20190519123021-e9f908d0bc56/go.mod h1:bfwxREzeil0CFIL4t5ZlfSQhnatnlOHZRoOxftMeKOQ=
 github.com/davecgh/go-spew v1.1.0 h1:ZDRjVQ15GmhC3fiQ8ni8+OwkZQO4DARzQgrnXU1Liz8=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/mattn/go-sqlite3 v1.10.0 h1:jbhqpg7tQe4SupckyijYiy0mJJ/pRyHvXf7JdWK860o=
