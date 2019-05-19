@@ -1,0 +1,58 @@
+{
+	"openapi": "3.0.2",
+	"info": {
+		"title": "Go Qlueless Assembly API",
+		"version": "0.0.1"
+  },
+  "tags": [
+    {
+      "name": "openapi",
+      "description": "OpenAPI operations."
+    },
+    {
+      "name": "changelog",
+      "description": "Changelog operations."
+    },
+    {
+      "name": "ventures",
+      "description": "Operations applicable to the Venture set."
+    },
+    {
+      "name": "orders",
+      "description": "Operations applicable to the Order set."
+    },
+    {
+      "name": "batches",
+      "description": "Operations applicable to the Batch set."
+    }
+  ],
+	"paths": {
+    {{- "\n"}}{{ .Inject "/openapi/oai-paths.json" 2}},
+    {{- "\n"}}{{ .Inject "/changelog/oai-paths.json" 2}},
+    {{- "\n"}}{{ .Inject "/ventures/oai-paths.json" 2}}
+  },
+	"components": {
+    "headers": {
+      {{- "\n"}}{{ .Inject "/shared/oai-headers.json" 3}}
+    },
+    "parameters": {
+      {{- "\n"}}{{ .Inject "/ventures/oai-parameters.json" 3}},
+      {{- "\n"}}{{ .Inject "/shared/oai-parameters.json" 3}}
+    },
+    "requestBodies": {
+      {{- "\n"}}{{ .Inject "/ventures/oai-requestBodies.json" 3}}
+    },
+    "responses": {
+      {{- "\n"}}{{ .Inject "/ventures/oai-responses.json" 3}},
+      {{- "\n"}}{{ .Inject "/shared/oai-responses.json" 3}}
+    },
+		"schemas": {
+      {{- "\n"}}{{ .Inject "/ventures/oai-schemas.json" 3}},
+			{{- "\n"}}{{ .Inject "/shared/oai-schemas.json" 3}}
+    },
+    "x-hidden": {
+      {{- "\n"}}{{ .Inject "/ventures/oai-x-hidden.json" 3}},
+      {{- "\n"}}{{ .Inject "/shared/oai-x-hidden.json" 3}}
+    }
+	}
+}

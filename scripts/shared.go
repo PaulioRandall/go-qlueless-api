@@ -63,23 +63,22 @@ func goFmt(root string) {
 func goOpenAPI(root string) {
 	fmt.Println("...compiling OpenAPI specification...")
 
-	api := root + "/api"
-	oai := api + "/openapi"
-	spec := oai + "/openapi.json"
+	cmd := root + "/cmd"
+	spec := root + "/bin/openapi.json"
 
 	tmp := comfiler.Comfile{
-		Template:  oai + "/template.json",
-		Resources: oai + "/resources",
+		Template:  cmd + "/oai-template.json",
+		Resources: cmd,
 	}
 
-	tmp.Compile(spec)
+	err := tmp.Compile(spec)
+	if err != nil {
+		panic(err)
+	}
+
 	fmt.Println("ok\t" + spec + "\t(created)")
 
-	oaiBin := root + "/bin/openapi.json"
-	copyFile(spec, oaiBin)
-	fmt.Println("ok\t" + oaiBin + "\t(copied)")
-
-	cl := api + "/CHANGELOG.md"
+	cl := root + "/CHANGELOG.md"
 	clBin := root + "/bin/CHANGELOG.md"
 	copyFile(cl, clBin)
 	fmt.Println("ok\t" + clBin + "\t(copied)")

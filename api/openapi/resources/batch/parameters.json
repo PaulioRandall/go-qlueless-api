@@ -1,9 +1,0 @@
-"batch_id": {
-  "name": "batch_id",
-  "in": "query",
-  "description": "Unique identifier of a Batch.",
-  "required": false,
-  "schema": {
-    "$ref": "#/components/x-hidden/batch_id"
-  }
-}
