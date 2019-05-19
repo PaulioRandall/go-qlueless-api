@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"testing"
 
-	a "github.com/PaulioRandall/go-qlueless-api/shared/asserts"
+	toastify "github.com/PaulioRandall/go-cookies/toastify"
 	wrapped "github.com/PaulioRandall/go-qlueless-api/shared/wrapped"
 
 	assert "github.com/stretchr/testify/assert"
@@ -31,94 +31,82 @@ var ALL_STD_HTTP_METHODS = []string{
 	"CUSTOM",
 }
 
-// AssertNoContentHeaders asserts that the services default headers were applied
-// except the 'Content-Type' which should have been omitted
-func AssertNoContentHeaders(t *testing.T, res *http.Response, allowedMethods []string) {
-	a.AssertHeadersEquals(t, res.Header, map[string]string{
+// PrintResponse prints the 'body' of a response to the test logs.
+func PrintResponse(t *testing.T, body io.Reader) {
+	b, err := ioutil.ReadAll(body)
+	if err != nil {
+		panic(err)
+	}
+	if len(b) > 0 {
+		t.Log("\n" + string(b))
+	}
+}
+
+// AssertCorsHeaders asserts that the response 'res' contains the expect CORS
+// headers and values; including the endpoint dependent 'methods'.
+func AssertCorsHeaders(t *testing.T, res *http.Response, methods string) {
+	toastify.AssertHeadersEqual(t, res.Header, map[string]string{
 		"Access-Control-Allow-Origin":  "*",
 		"Access-Control-Allow-Headers": "*",
-	})
-	a.AssertHeadersContains(t, res.Header, map[string][]string{
-		"Access-Control-Allow-Methods": allowedMethods,
-	})
-	a.AssertHeadersMatches(t, res.Header, map[string]string{
-		"Access-Control-Allow-Methods": CORS_METHODS_PATTERN,
+		"Access-Control-Allow-Methods": methods,
 	})
 }
 
-// AssertDefaultHeaders asserts that the services default headers were applied
-func AssertDefaultHeaders(t *testing.T, res *http.Response, contentType string, allowedMethods []string) {
-	AssertNoContentHeaders(t, res, allowedMethods)
-	a.AssertHeadersEquals(t, res.Header, map[string]string{
-		"Content-Type": contentType + "; charset=utf-8",
-	})
+// AssertDefaultHeaders asserts that the response 'res' default headers exist.
+// This includes the value of dynamic headers 'contentType' and CORS 'methods'
+func AssertDefaultHeaders(t *testing.T, res *http.Response, contentType, methods string) {
+	AssertCorsHeaders(t, res, methods)
+	toastify.AssertHeaderEqual(t, "Content-Type", res.Header, contentType+"; charset=utf-8")
 }
 
-// AssertEmptyBody asserts that a response body is empty
-func AssertEmptyBody(t *testing.T, r io.Reader) {
-	body, err := ioutil.ReadAll(r)
+// AssertEmptyBody asserts that a response 'body' is empty.
+func AssertEmptyBody(t *testing.T, body io.Reader) {
+	b, err := ioutil.ReadAll(body)
 	require.Nil(t, err)
-	assert.Empty(t, body)
+	assert.Empty(t, b)
 }
 
-// AssertNotEmptyBody asserts that a response body is NOT empty
-func AssertNotEmptyBody(t *testing.T, r io.Reader) []byte {
-	body, err := ioutil.ReadAll(r)
+// AssertNotEmptyBody asserts that a response 'body' is NOT empty. The body is
+// returned.
+func AssertNotEmptyBody(t *testing.T, body io.Reader) []byte {
+	b, err := ioutil.ReadAll(body)
 	require.Nil(t, err)
-	assert.NotEmpty(t, body)
-	return body
+	assert.NotEmpty(t, b)
+	return b
 }
 
-// AssertWrappedErrorBody assert that a response body is a generic error
-func AssertWrappedErrorBody(t *testing.T, r io.Reader) wrapped.WrappedReply {
+// AssertErrorBody assert that a response 'body' is a generic response error.
+// Returns the parsed response error.
+func AssertErrorBody(t *testing.T, body io.Reader) wrapped.WrappedReply {
 	var reply wrapped.WrappedReply
-	err := json.NewDecoder(r).Decode(&reply)
+	err := json.NewDecoder(body).Decode(&reply)
 	require.Nil(t, err)
 	wrapped.AssertGenericError(t, reply)
 	return reply
 }
 
-// VerifyNotAllowedMethods asserts that the supplied methods are not allowed
-// for provided endpoint
-func VerifyNotAllowedMethods(t *testing.T, url string, allowedMethods []string) {
+// VerifyBadMethods asserts that for a specific 'url', the 'corsMethods' are as
+// expected and an error response is returned when each value of 'badMethods'
+// is used in an API call.
+func VerifyBadMethods(t *testing.T, url string, corsMethods string, badMethods []string) {
 
-	isAllowed := func(m string) bool {
-		for _, allowed := range allowedMethods {
-			if m == allowed {
-				return true
-			}
-		}
-		return false
-	}
-
-	for _, m := range ALL_STD_HTTP_METHODS {
-		if isAllowed(m) {
-			continue
-		}
+	for _, m := range badMethods {
 
 		req := APICall{
 			URL:    url,
 			Method: m,
 		}
 		res := req.Fire()
-		defer res.Body.Close()
-		defer a.PrintResponse(t, res.Body)
 
-		ok := assert.Equal(t, 405, res.StatusCode, "Expected method not allowed: ("+m+")")
+		defer res.Body.Close()
+		defer PrintResponse(t, res.Body)
+
+		ok := assert.Equal(t, 405, res.StatusCode, "Expected 405 response code for method '"+m+"'")
 		if !ok {
 			continue
 		}
-		AssertNoContentHeaders(t, res, allowedMethods)
+
+		AssertCorsHeaders(t, res, corsMethods)
 		AssertEmptyBody(t, res.Body)
 	}
-}
-
-// VerifyDefaultHeaders asserts that the default headers were provided
-func VerifyDefaultHeaders(t *testing.T, c APICall, expCode int, allowedMethods []string) {
-	res := c.Fire()
-	defer res.Body.Close()
-	defer a.PrintResponse(t, res.Body)
-
-	require.Equal(t, expCode, res.StatusCode)
-	AssertDefaultHeaders(t, res, "application/json", allowedMethods)
 }

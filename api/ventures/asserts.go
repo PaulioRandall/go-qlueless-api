@@ -5,7 +5,7 @@ import (
 	"sort"
 	"testing"
 
-	ts "github.com/PaulioRandall/go-qlueless-api/shared/asserts"
+	cookies "github.com/PaulioRandall/go-cookies/cookies"
 	wrapped "github.com/PaulioRandall/go-qlueless-api/shared/wrapped"
 	ms "github.com/mitchellh/mapstructure"
 	assert "github.com/stretchr/testify/assert"
@@ -29,7 +29,7 @@ func AssertGenericVenture(t *testing.T, v Venture) {
 	assert.NotEmpty(t, v.State, "Venture.State")
 	assert.True(t, v.LastModified > 0, "Venture.LastModified")
 	if v.Orders != "" {
-		ts.AssertGenericIntCSV(t, v.Orders)
+		assert.True(t, cookies.IsUintCSV(v.Orders), "Venture.Orders")
 	}
 }
 

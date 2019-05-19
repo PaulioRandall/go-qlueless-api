@@ -9,8 +9,8 @@ import (
 	"os"
 	"testing"
 
+	toastify "github.com/PaulioRandall/go-cookies/toastify"
 	ventures "github.com/PaulioRandall/go-qlueless-api/api/ventures"
-	a "github.com/PaulioRandall/go-qlueless-api/shared/asserts"
 	qserver "github.com/PaulioRandall/go-qlueless-api/shared/qserver"
 	wrapped "github.com/PaulioRandall/go-qlueless-api/shared/wrapped"
 	test "github.com/PaulioRandall/go-qlueless-api/test"
@@ -18,7 +18,6 @@ import (
 	require "github.com/stretchr/testify/require"
 )
 
-var VenHttpMethods = []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}
 var dbPath string = ""
 var venDB *sql.DB = nil
 
@@ -233,9 +232,9 @@ func _mapRow(rows *sql.Rows) *ventures.Venture {
 	return &ven
 }
 
-// AssertHeaders asserts that the expected headers have been supplied.
+// AssertHeaders asserts that the expected headers in 'h' have been supplied.
 func AssertHeaders(t *testing.T, h http.Header) {
-	a.AssertHeadersEquals(t, h, map[string]string{
+	toastify.AssertHeadersEqual(t, h, map[string]string{
 		"Access-Control-Allow-Origin":  "*",
 		"Access-Control-Allow-Headers": "*",
 		"Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
@@ -243,10 +242,9 @@ func AssertHeaders(t *testing.T, h http.Header) {
 	})
 }
 
-// AssertGenericReply asserts that reading from an io.Reader produces a generic
-// reply with the expected values present.
-func AssertGenericReply(t *testing.T, r io.Reader) {
-	gr, err := wrapped.DecodeFromReader(r)
+// AssertGenericReply asserts that the response 'body' contains a generic reply.
+func AssertGenericReply(t *testing.T, body io.Reader) {
+	gr, err := wrapped.DecodeFromReader(body)
 	require.Nil(t, err)
 	assert.NotEmpty(t, gr.Message)
 	assert.NotEmpty(t, gr.Self)

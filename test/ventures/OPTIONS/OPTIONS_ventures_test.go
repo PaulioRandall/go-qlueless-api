@@ -3,7 +3,6 @@ package OPTIONS
 import (
 	"testing"
 
-	a "github.com/PaulioRandall/go-qlueless-api/shared/asserts"
 	test "github.com/PaulioRandall/go-qlueless-api/test"
 	vtest "github.com/PaulioRandall/go-qlueless-api/test/ventures"
 	require "github.com/stretchr/testify/require"
@@ -20,7 +19,7 @@ func TestOPTIONS_Ventures(t *testing.T) {
 		And the 'Content-Type' header contains 'application/json'
 		And 'Access-Control-Allow-Origin' is '*'
 		And 'Access-Control-Allow-Headers' is '*'
-		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE and OPTIONS
+		And 'Access-Control-Allow-Methods' is 'GET, POST, PUT, DELETE, OPTIONS'
 		And there is NO response body
 		...`)
 
@@ -32,11 +31,12 @@ func TestOPTIONS_Ventures(t *testing.T) {
 		Method: "OPTIONS",
 	}
 	res := req.Fire()
+
 	defer res.Body.Close()
-	defer a.PrintResponse(t, res.Body)
+	defer test.PrintResponse(t, res.Body)
 
 	require.Equal(t, 200, res.StatusCode)
-	test.AssertNoContentHeaders(t, res, vtest.VenHttpMethods)
+	test.AssertCorsHeaders(t, res, "GET, POST, PUT, DELETE, OPTIONS")
 	test.AssertEmptyBody(t, res.Body)
 }
 
@@ -51,12 +51,19 @@ func TestINVALID_Ventures(t *testing.T) {
 		And the 'Content-Type' header contains 'application/json'
 		And 'Access-Control-Allow-Origin' is '*'
 		And 'Access-Control-Allow-Headers' is '*'
-		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE and OPTIONS
+		And 'Access-Control-Allow-Methods' is 'GET, POST, PUT, DELETE, OPTIONS'
 		And there is NO response body
 		...`)
 
 	vtest.BeginTest("../../../bin")
 	defer vtest.EndTest()
 
-	test.VerifyNotAllowedMethods(t, "http://localhost:8080/ventures", vtest.VenHttpMethods)
+	goodMethods := "GET, POST, PUT, DELETE, OPTIONS"
+	test.VerifyBadMethods(t, "http://localhost:8080/ventures", goodMethods, []string{
+		"HEAD",
+		"CONNECT",
+		"TRACE",
+		"PATCH",
+		"CUSTOM",
+	})
 }

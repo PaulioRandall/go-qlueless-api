@@ -4,7 +4,6 @@ import (
 	"testing"
 
 	ventures "github.com/PaulioRandall/go-qlueless-api/api/ventures"
-	a "github.com/PaulioRandall/go-qlueless-api/shared/asserts"
 	test "github.com/PaulioRandall/go-qlueless-api/test"
 	vtest "github.com/PaulioRandall/go-qlueless-api/test/ventures"
 	require "github.com/stretchr/testify/require"
@@ -59,7 +58,7 @@ func TestPUT_Ventures_1(t *testing.T) {
 
 	res := test.CallWithJSON("PUT", "http://localhost:8080/ventures", input)
 	defer res.Body.Close()
-	defer a.PrintResponse(t, res.Body)
+	defer test.PrintResponse(t, res.Body)
 
 	require.Equal(t, 200, res.StatusCode)
 	vtest.AssertHeaders(t, res.Header)

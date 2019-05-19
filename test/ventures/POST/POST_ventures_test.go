@@ -6,7 +6,6 @@ import (
 	"testing"
 
 	ventures "github.com/PaulioRandall/go-qlueless-api/api/ventures"
-	a "github.com/PaulioRandall/go-qlueless-api/shared/asserts"
 	test "github.com/PaulioRandall/go-qlueless-api/test"
 	vtest "github.com/PaulioRandall/go-qlueless-api/test/ventures"
 	assert "github.com/stretchr/testify/assert"
@@ -25,7 +24,7 @@ func TestPOST_Venture_1(t *testing.T) {
 		And the 'Content-Type' header contains 'application/json'
 		And 'Access-Control-Allow-Origin' is '*'
 		And 'Access-Control-Allow-Headers' is '*'
-		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE and OPTIONS
+		And 'Access-Control-Allow-Methods' is 'GET, POST, PUT, DELETE, OPTIONS'
 		And the body is a JSON object representing the living input Venture
 		And that Venture will have a new, unused, ID
 		And that Venture will have a new 'last_updated' datetime
@@ -49,11 +48,12 @@ func TestPOST_Venture_1(t *testing.T) {
 		Body:   buf,
 	}
 	res := req.Fire()
+
 	defer res.Body.Close()
-	defer a.PrintResponse(t, res.Body)
+	defer test.PrintResponse(t, res.Body)
 
 	require.Equal(t, 201, res.StatusCode)
-	test.AssertDefaultHeaders(t, res, "application/json", vtest.VenHttpMethods)
+	test.AssertDefaultHeaders(t, res, "application/json", "GET, POST, PUT, DELETE, OPTIONS")
 
 	output := ventures.AssertVentureFromReader(t, res.Body)
 	ventures.AssertGenericVenture(t, output)
@@ -74,7 +74,7 @@ func TestPOST_Venture_2(t *testing.T) {
 		And the 'Content-Type' header contains 'application/json'
 		And 'Access-Control-Allow-Origin' is '*'
 		And 'Access-Control-Allow-Headers' is '*'
-		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE and OPTIONS
+		And 'Access-Control-Allow-Methods' is 'GET, POST, PUT, DELETE, OPTIONS'
 		And the body is a JSON object representing an error response
 		...`)
 
@@ -95,12 +95,13 @@ func TestPOST_Venture_2(t *testing.T) {
 		Body:   buf,
 	}
 	res := req.Fire()
+
 	defer res.Body.Close()
-	defer a.PrintResponse(t, res.Body)
+	defer test.PrintResponse(t, res.Body)
 
 	require.Equal(t, 400, res.StatusCode)
-	test.AssertDefaultHeaders(t, res, "application/json", vtest.VenHttpMethods)
-	test.AssertWrappedErrorBody(t, res.Body)
+	test.AssertDefaultHeaders(t, res, "application/json", "GET, POST, PUT, DELETE, OPTIONS")
+	test.AssertErrorBody(t, res.Body)
 }
 
 // ****************************************************************************
@@ -116,7 +117,7 @@ func TestPOST_Venture_3(t *testing.T) {
 		And the 'Content-Type' header contains 'application/json'
 		And 'Access-Control-Allow-Origin' is '*'
 		And 'Access-Control-Allow-Headers' is '*'
-		And 'Access-Control-Allow-Methods' only contains GET, POST, PUT, DELETE and OPTIONS
+		And 'Access-Control-Allow-Methods' is 'GET, POST, PUT, DELETE, OPTIONS'
 		And the body is a JSON object representing a WrappedReply
 		And the wrapped data is a JSON object representing the living input Venture
 		And that Venture will have a new, unused, ID
@@ -140,11 +141,12 @@ func TestPOST_Venture_3(t *testing.T) {
 		Body:   buf,
 	}
 	res := req.Fire()
+
 	defer res.Body.Close()
-	defer a.PrintResponse(t, res.Body)
+	defer test.PrintResponse(t, res.Body)
 
 	require.Equal(t, 201, res.StatusCode)
-	test.AssertDefaultHeaders(t, res, "application/json", vtest.VenHttpMethods)
+	test.AssertDefaultHeaders(t, res, "application/json", "GET, POST, PUT, DELETE, OPTIONS")
 
 	_, output := ventures.AssertWrappedVentureFromReader(t, res.Body)
 	ventures.AssertGenericVenture(t, output)
