@@ -6,10 +6,10 @@ import (
 	"log"
 	"net/http"
 
-	changelog "github.com/PaulioRandall/go-qlueless-api/cmd/changelog"
-	home "github.com/PaulioRandall/go-qlueless-api/cmd/home"
-	openapi "github.com/PaulioRandall/go-qlueless-api/cmd/openapi"
-	ventures "github.com/PaulioRandall/go-qlueless-api/cmd/ventures"
+	changelog "github.com/PaulioRandall/go-qlueless-api/api/changelog"
+	home "github.com/PaulioRandall/go-qlueless-api/api/home"
+	openapi "github.com/PaulioRandall/go-qlueless-api/api/openapi"
+	ventures "github.com/PaulioRandall/go-qlueless-api/api/ventures"
 	qserver "github.com/PaulioRandall/go-qlueless-api/shared/qserver"
 )
 

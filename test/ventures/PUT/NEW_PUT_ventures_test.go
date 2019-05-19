@@ -3,7 +3,7 @@ package PUT
 import (
 	"testing"
 
-	ventures "github.com/PaulioRandall/go-qlueless-api/cmd/ventures"
+	ventures "github.com/PaulioRandall/go-qlueless-api/api/ventures"
 	a "github.com/PaulioRandall/go-qlueless-api/shared/asserts"
 	test "github.com/PaulioRandall/go-qlueless-api/test"
 	vtest "github.com/PaulioRandall/go-qlueless-api/test/ventures"

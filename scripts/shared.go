@@ -63,12 +63,12 @@ func goFmt(root string) {
 func goOpenAPI(root string) {
 	fmt.Println("...compiling OpenAPI specification...")
 
-	cmd := root + "/cmd"
+	api := root + "/api"
 	spec := root + "/bin/openapi.json"
 
 	tmp := comfiler.Comfile{
-		Template:  cmd + "/oai-template.json",
-		Resources: cmd,
+		Template:  api + "/oai-template.json",
+		Resources: api,
 	}
 
 	err := tmp.Compile(spec)
@@ -89,8 +89,8 @@ func goOpenAPI(root string) {
 func goBuild(root string) {
 	fmt.Println("...building application...")
 
-	cmd := root + "/cmd"
-	goFiles, err := filepath.Glob(cmd + "/*.go")
+	api := root + "/api"
+	goFiles, err := filepath.Glob(api + "/*.go")
 	if err != nil {
 		panic(err)
 	}
@@ -98,7 +98,7 @@ func goBuild(root string) {
 	output := root + "/bin/go-qlueless-api"
 	args := []string{"build", "-o", output}
 	args = append(args, goFiles...)
-	goExe(cmd, args)
+	goExe(api, args)
 
 	fmt.Println("ok\t" + output + "\t(created)")
 }
@@ -106,7 +106,7 @@ func goBuild(root string) {
 // goTest runs the application unit tests
 func goTest(root string) {
 	fmt.Println("...shared code testing...")
-	goExe(".", []string{"test", root + "/cmd/..."})
+	goExe(".", []string{"test", root + "/api/..."})
 	goExe(".", []string{"test", root + "/shared/..."})
 }
 
@@ -120,8 +120,8 @@ func goTestApi(root string) {
 func goInstall(root string) {
 	fmt.Println("...installing application...")
 
-	cmd := root + "/cmd"
-	goFiles, err := filepath.Glob(cmd + "/*.go")
+	api := root + "/api"
+	goFiles, err := filepath.Glob(api + "/*.go")
 	if err != nil {
 		panic(err)
 	}
@@ -129,7 +129,7 @@ func goInstall(root string) {
 	output := root + "/bin/go-qlueless-api"
 	args := []string{"install"}
 	args = append(args, goFiles...)
-	goExe(cmd, args)
+	goExe(api, args)
 
 	fmt.Println("ok\t" + output + "\t(installed)")
 }

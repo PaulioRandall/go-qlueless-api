@@ -9,7 +9,7 @@ import (
 	"os"
 	"testing"
 
-	ventures "github.com/PaulioRandall/go-qlueless-api/cmd/ventures"
+	ventures "github.com/PaulioRandall/go-qlueless-api/api/ventures"
 	a "github.com/PaulioRandall/go-qlueless-api/shared/asserts"
 	qserver "github.com/PaulioRandall/go-qlueless-api/shared/qserver"
 	wrapped "github.com/PaulioRandall/go-qlueless-api/shared/wrapped"
