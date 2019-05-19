@@ -9,7 +9,7 @@ import (
 	"time"
 
 	cookies "github.com/PaulioRandall/go-cookies/cookies"
-	sl "github.com/PaulioRandall/go-cookies/strlist"
+	strlist "github.com/PaulioRandall/go-cookies/strlist"
 )
 
 // ModVenture represents an update to a Venture.
@@ -54,7 +54,7 @@ func (mv *ModVenture) Clean() {
 // property value for each is valid. Returned is the input slice of human
 // readable error messages with the violations found appended to it. These
 // messages are suitable for returning to clients.
-func (mv *ModVenture) validateProps(r *sl.StrList) {
+func (mv *ModVenture) validateProps(r *strlist.StrList) {
 	for _, prop := range mv.SplitProps() {
 		switch prop {
 		case "dead", "extra":
@@ -81,7 +81,7 @@ func (mv *ModVenture) validateProps(r *sl.StrList) {
 // empty slice if all is well. These messages are suitable for returning to
 // clients.
 func (mv *ModVenture) Validate() []string {
-	r := sl.StrList{}
+	r := strlist.StrList{}
 
 	switch {
 	case mv.IDs == "":

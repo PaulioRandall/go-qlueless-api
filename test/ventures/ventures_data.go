@@ -9,13 +9,13 @@ import (
 	"os"
 	"testing"
 
-	v "github.com/PaulioRandall/go-qlueless-api/cmd/ventures"
-	a "github.com/PaulioRandall/go-qlueless-api/internal/asserts"
-	q "github.com/PaulioRandall/go-qlueless-api/internal/qserver"
-	w "github.com/PaulioRandall/go-qlueless-api/internal/wrapped"
+	ventures "github.com/PaulioRandall/go-qlueless-api/cmd/ventures"
+	a "github.com/PaulioRandall/go-qlueless-api/shared/asserts"
+	qserver "github.com/PaulioRandall/go-qlueless-api/shared/qserver"
+	wrapped "github.com/PaulioRandall/go-qlueless-api/shared/wrapped"
 	test "github.com/PaulioRandall/go-qlueless-api/test"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
+	assert "github.com/stretchr/testify/assert"
+	require "github.com/stretchr/testify/require"
 )
 
 var VenHttpMethods = []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}
@@ -64,12 +64,12 @@ func DBReset() {
 	_deleteIfExists(dbPath)
 
 	var err error
-	venDB, err = q.OpenSQLiteDatabase(dbPath)
+	venDB, err = qserver.OpenSQLiteDatabase(dbPath)
 	if err != nil {
 		panic(err)
 	}
 
-	err = v.CreateTables(venDB)
+	err = ventures.CreateTables(venDB)
 	if err != nil {
 		panic(err)
 	}
@@ -87,7 +87,7 @@ func DBClose() {
 }
 
 // DBInject injects a Venture into the database.
-func DBInject(new v.NewVenture) *v.Venture {
+func DBInject(new ventures.NewVenture) *ventures.Venture {
 	ven, ok := new.Insert(venDB)
 	if !ok {
 		panic("Already printed above!")
@@ -97,24 +97,24 @@ func DBInject(new v.NewVenture) *v.Venture {
 
 // DBInjectLiving injects a default set of living Ventures into the database
 func DBInjectLiving() {
-	DBInject(v.NewVenture{
+	DBInject(ventures.NewVenture{
 		Description: "White wizard",
 		State:       "Not started",
 		Extra:       "colour: white; power: 9000",
 	})
-	DBInject(v.NewVenture{
+	DBInject(ventures.NewVenture{
 		Description: "Green lizard",
 		State:       "In progress",
 	})
-	DBInject(v.NewVenture{
+	DBInject(ventures.NewVenture{
 		Description: "Pink gizzard",
 		State:       "Finished",
 	})
-	DBInject(v.NewVenture{
+	DBInject(ventures.NewVenture{
 		Description: "Eddie Izzard",
 		State:       "In Progress",
 	})
-	DBInject(v.NewVenture{
+	DBInject(ventures.NewVenture{
 		Description: "The Count of Tuscany",
 		State:       "In Progress",
 	})
@@ -122,20 +122,20 @@ func DBInjectLiving() {
 
 // DBInjectDead injects a default set of dead Ventures into the database
 func DBInjectDead() {
-	s := []v.Venture{
-		*DBInject(v.NewVenture{
+	s := []ventures.Venture{
+		*DBInject(ventures.NewVenture{
 			Description: "Rose",
 			State:       "Finised",
 		}),
-		*DBInject(v.NewVenture{
+		*DBInject(ventures.NewVenture{
 			Description: "Lily",
 			State:       "Closed",
 		}),
 	}
 
-	mod := v.ModVenture{
+	mod := ventures.ModVenture{
 		Props: "is_dead",
-		Values: v.Venture{
+		Values: ventures.Venture{
 			Dead: true,
 		},
 	}
@@ -150,7 +150,7 @@ func DBInjectDead() {
 }
 
 // DBQueryAll queries the database for all living ventures
-func DBQueryAll() []v.Venture {
+func DBQueryAll() []ventures.Venture {
 	rows, err := venDB.Query(`
 		SELECT id, last_modified, description, order_ids, state, extra
 		FROM ql_venture
@@ -168,7 +168,7 @@ func DBQueryAll() []v.Venture {
 }
 
 // DBQueryMany queries the database for Ventures with the specified IDs
-func DBQueryMany(ids string) []v.Venture {
+func DBQueryMany(ids string) []ventures.Venture {
 	rows, err := venDB.Query(fmt.Sprintf(`
 		SELECT id, last_modified, description, order_ids, state, extra
 		FROM ql_venture
@@ -187,7 +187,7 @@ func DBQueryMany(ids string) []v.Venture {
 }
 
 // DBQueryOne queries the database for a specific Venture
-func DBQueryOne(id string) v.Venture {
+func DBQueryOne(id string) ventures.Venture {
 	vens := DBQueryMany(id)
 	if len(vens) != 1 {
 		panic("Expected a single venture from query")
@@ -196,7 +196,7 @@ func DBQueryOne(id string) v.Venture {
 }
 
 // DBQueryFirst queries the database for the first Venture encountered
-func DBQueryFirst() *v.Venture {
+func DBQueryFirst() *ventures.Venture {
 	vens := DBQueryAll()
 	if len(vens) > 0 {
 		return &vens[0]
@@ -206,8 +206,8 @@ func DBQueryFirst() *v.Venture {
 
 // _mapRows is a file private function that maps rows from a database query into
 // a slice of Ventures.
-func _mapRows(rows *sql.Rows) []v.Venture {
-	vens := []v.Venture{}
+func _mapRows(rows *sql.Rows) []ventures.Venture {
+	vens := []ventures.Venture{}
 
 	for rows.Next() {
 		vens = append(vens, *_mapRow(rows))
@@ -218,8 +218,8 @@ func _mapRows(rows *sql.Rows) []v.Venture {
 
 // _mapRow is a file private function that maps a single row from a database
 // query into a Venture.
-func _mapRow(rows *sql.Rows) *v.Venture {
-	ven := v.Venture{}
+func _mapRow(rows *sql.Rows) *ventures.Venture {
+	ven := ventures.Venture{}
 	err := rows.Scan(&ven.ID,
 		&ven.LastModified,
 		&ven.Description,
@@ -246,7 +246,7 @@ func AssertHeaders(t *testing.T, h http.Header) {
 // AssertGenericReply asserts that reading from an io.Reader produces a generic
 // reply with the expected values present.
 func AssertGenericReply(t *testing.T, r io.Reader) {
-	gr, err := w.DecodeFromReader(r)
+	gr, err := wrapped.DecodeFromReader(r)
 	require.Nil(t, err)
 	assert.NotEmpty(t, gr.Message)
 	assert.NotEmpty(t, gr.Self)

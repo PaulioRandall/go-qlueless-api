@@ -3,8 +3,8 @@ package PUT
 import (
 	"testing"
 
-	v "github.com/PaulioRandall/go-qlueless-api/cmd/ventures"
-	a "github.com/PaulioRandall/go-qlueless-api/internal/asserts"
+	ventures "github.com/PaulioRandall/go-qlueless-api/cmd/ventures"
+	a "github.com/PaulioRandall/go-qlueless-api/shared/asserts"
 	test "github.com/PaulioRandall/go-qlueless-api/test"
 	vtest "github.com/PaulioRandall/go-qlueless-api/test/ventures"
 	require "github.com/stretchr/testify/require"
@@ -37,7 +37,7 @@ func TestPUT_Ventures_1(t *testing.T) {
 	vtest.BeginEmptyTest("../../../bin")
 	defer vtest.EndTest()
 
-	vtest.DBInject(v.NewVenture{
+	vtest.DBInject(ventures.NewVenture{
 		Description: "Black blizzard",
 		State:       "STARTED",
 		Orders:      "1,2,3",
@@ -49,7 +49,7 @@ func TestPUT_Ventures_1(t *testing.T) {
 
 	id := before.ID
 
-	input := &v.Venture{
+	input := &ventures.Venture{
 		ID:          id,
 		Description: "White wizzard",
 		State:       "FINISHED",
@@ -66,7 +66,7 @@ func TestPUT_Ventures_1(t *testing.T) {
 	vtest.AssertGenericReply(t, res.Body)
 
 	after := vtest.DBQueryOne(id)
-	v.AssertEqualsModified(t, &after, input)
+	ventures.AssertEqualsModified(t, &after, input)
 }
 
 func TestPUT_Ventures_2(t *testing.T) {

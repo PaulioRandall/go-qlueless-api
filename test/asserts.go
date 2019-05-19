@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"testing"
 
-	a "github.com/PaulioRandall/go-qlueless-api/internal/asserts"
-	w "github.com/PaulioRandall/go-qlueless-api/internal/wrapped"
+	a "github.com/PaulioRandall/go-qlueless-api/shared/asserts"
+	wrapped "github.com/PaulioRandall/go-qlueless-api/shared/wrapped"
 
 	assert "github.com/stretchr/testify/assert"
 	require "github.com/stretchr/testify/require"
@@ -70,11 +70,11 @@ func AssertNotEmptyBody(t *testing.T, r io.Reader) []byte {
 }
 
 // AssertWrappedErrorBody assert that a response body is a generic error
-func AssertWrappedErrorBody(t *testing.T, r io.Reader) w.WrappedReply {
-	var reply w.WrappedReply
+func AssertWrappedErrorBody(t *testing.T, r io.Reader) wrapped.WrappedReply {
+	var reply wrapped.WrappedReply
 	err := json.NewDecoder(r).Decode(&reply)
 	require.Nil(t, err)
-	w.AssertGenericError(t, reply)
+	wrapped.AssertGenericError(t, reply)
 	return reply
 }
 

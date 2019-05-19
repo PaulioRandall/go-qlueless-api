@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 
-	w "github.com/PaulioRandall/go-qlueless-api/internal/wrapped"
+	wrapped "github.com/PaulioRandall/go-qlueless-api/shared/wrapped"
 )
 
 // LogRequest logs the details of a request such as the URL.
@@ -38,7 +38,7 @@ func CheckNotEmpty(res *http.ResponseWriter, req *http.Request, name string, m s
 // the input data is returned.
 func PrepResponseData(req *http.Request, data interface{}, msg string) interface{} {
 	if req.URL.Query()["wrap"] != nil {
-		return w.WrappedReply{
+		return wrapped.WrappedReply{
 			Message: msg,
 			Self:    RelURL(req),
 			Data:    data,

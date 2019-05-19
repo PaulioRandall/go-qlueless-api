@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"testing"
 
-	v "github.com/PaulioRandall/go-qlueless-api/cmd/ventures"
-	a "github.com/PaulioRandall/go-qlueless-api/internal/asserts"
+	ventures "github.com/PaulioRandall/go-qlueless-api/cmd/ventures"
+	a "github.com/PaulioRandall/go-qlueless-api/shared/asserts"
 	test "github.com/PaulioRandall/go-qlueless-api/test"
 	vtest "github.com/PaulioRandall/go-qlueless-api/test/ventures"
 	assert "github.com/stretchr/testify/assert"
@@ -32,10 +32,10 @@ func TestPUT_Ventures_1_OLD(t *testing.T) {
 	vtest.BeginTest("../../../bin")
 	defer vtest.EndTest()
 
-	input := v.ModVenture{
+	input := ventures.ModVenture{
 		IDs:   "1",
 		Props: "description, orders, extra",
-		Values: v.Venture{
+		Values: ventures.Venture{
 			Description: "Black blizzard",
 			Orders:      "1,2,3",
 			Extra:       "colour: black; power: 9000",
@@ -57,9 +57,9 @@ func TestPUT_Ventures_1_OLD(t *testing.T) {
 	require.Equal(t, 200, res.StatusCode)
 	test.AssertDefaultHeaders(t, res, "application/json", vtest.VenHttpMethods)
 
-	out := v.AssertVentureSliceFromReader(t, res.Body)
+	out := ventures.AssertVentureSliceFromReader(t, res.Body)
 	require.Len(t, out, 1)
-	v.AssertGenericVenture(t, out[0])
+	ventures.AssertGenericVenture(t, out[0])
 
 	input.Values.State = out[0].State
 	input.Values.ID = out[0].ID
@@ -67,7 +67,7 @@ func TestPUT_Ventures_1_OLD(t *testing.T) {
 	fromDB := vtest.DBQueryOne(out[0].ID)
 
 	assert.Equal(t, input.Values, out[0])
-	v.AssertVentureModEquals(t, fromDB, out[0])
+	ventures.AssertVentureModEquals(t, fromDB, out[0])
 }
 
 func TestPUT_Ventures_2_OLD(t *testing.T) {
@@ -84,10 +84,10 @@ func TestPUT_Ventures_2_OLD(t *testing.T) {
 	vtest.BeginTest("../../../bin")
 	defer vtest.EndTest()
 
-	input := v.ModVenture{
+	input := ventures.ModVenture{
 		IDs:   "999999",
 		Props: "description, orders, extra",
-		Values: v.Venture{
+		Values: ventures.Venture{
 			Description: "Black blizzard",
 			Orders:      "1,2,3",
 			Extra:       "colour: black; power: 9000",
@@ -109,7 +109,7 @@ func TestPUT_Ventures_2_OLD(t *testing.T) {
 	require.Equal(t, 200, res.StatusCode)
 	test.AssertDefaultHeaders(t, res, "application/json", vtest.VenHttpMethods)
 
-	out := v.AssertVentureSliceFromReader(t, res.Body)
+	out := ventures.AssertVentureSliceFromReader(t, res.Body)
 	require.Empty(t, out)
 }
 
@@ -127,9 +127,9 @@ func TestPUT_Ventures_3_OLD(t *testing.T) {
 	vtest.BeginTest("../../../bin")
 	defer vtest.EndTest()
 
-	input := v.ModVenture{
+	input := ventures.ModVenture{
 		Props: "description, orders, extra",
-		Values: v.Venture{
+		Values: ventures.Venture{
 			Description: "Black blizzard",
 			Orders:      "1,2,3",
 			Extra:       "colour: black; power: 9000",
@@ -167,10 +167,10 @@ func TestPUT_Ventures_4_OLD(t *testing.T) {
 	vtest.BeginTest("../../../bin")
 	defer vtest.EndTest()
 
-	input := v.ModVenture{
+	input := ventures.ModVenture{
 		IDs:    "1",
 		Props:  "description, orders, extra",
-		Values: v.Venture{},
+		Values: ventures.Venture{},
 	}
 
 	buf := new(bytes.Buffer)
@@ -205,10 +205,10 @@ func TestPUT_Ventures_5_OLD(t *testing.T) {
 	vtest.BeginTest("../../../bin")
 	defer vtest.EndTest()
 
-	input := v.ModVenture{
+	input := ventures.ModVenture{
 		IDs:   "4,5",
 		Props: "dead",
-		Values: v.Venture{
+		Values: ventures.Venture{
 			Dead: true,
 		},
 	}
@@ -228,7 +228,7 @@ func TestPUT_Ventures_5_OLD(t *testing.T) {
 	require.Equal(t, 200, res.StatusCode)
 	test.AssertDefaultHeaders(t, res, "application/json", vtest.VenHttpMethods)
 
-	out := v.AssertVentureSliceFromReader(t, res.Body)
+	out := ventures.AssertVentureSliceFromReader(t, res.Body)
 	require.Len(t, out, 2)
 
 	fromDB := vtest.DBQueryMany("4,5")
@@ -256,10 +256,10 @@ func TestPUT_Ventures_6_OLD(t *testing.T) {
 	vtest.BeginTest("../../../bin")
 	defer vtest.EndTest()
 
-	input := v.ModVenture{
+	input := ventures.ModVenture{
 		IDs:   "1",
 		Props: "description, state, extra",
-		Values: v.Venture{
+		Values: ventures.Venture{
 			Description: "Black blizzard",
 			State:       "In progress",
 			Extra:       "colour: black; power: 9000",
@@ -281,9 +281,9 @@ func TestPUT_Ventures_6_OLD(t *testing.T) {
 	require.Equal(t, 200, res.StatusCode)
 	test.AssertDefaultHeaders(t, res, "application/json", vtest.VenHttpMethods)
 
-	_, out := v.AssertWrappedVentureSliceFromReader(t, res.Body)
+	_, out := ventures.AssertWrappedVentureSliceFromReader(t, res.Body)
 	require.Len(t, out, 1)
-	v.AssertGenericVenture(t, out[0])
+	ventures.AssertGenericVenture(t, out[0])
 
 	input.Values.Orders = out[0].Orders
 	input.Values.ID = out[0].ID
@@ -291,5 +291,5 @@ func TestPUT_Ventures_6_OLD(t *testing.T) {
 	assert.Equal(t, input.Values, out[0])
 
 	fromDB := vtest.DBQueryOne(out[0].ID)
-	v.AssertVentureModEquals(t, fromDB, out[0])
+	ventures.AssertVentureModEquals(t, fromDB, out[0])
 }

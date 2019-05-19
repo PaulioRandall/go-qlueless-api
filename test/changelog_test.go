@@ -3,7 +3,7 @@ package test
 import (
 	"testing"
 
-	a "github.com/PaulioRandall/go-qlueless-api/internal/asserts"
+	a "github.com/PaulioRandall/go-qlueless-api/shared/asserts"
 
 	require "github.com/stretchr/testify/require"
 )

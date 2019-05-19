@@ -6,14 +6,14 @@ import (
 	"net/http"
 
 	cookies "github.com/PaulioRandall/go-cookies/cookies"
-	q "github.com/PaulioRandall/go-qlueless-api/internal/qserver"
-	h "github.com/PaulioRandall/go-qlueless-api/internal/uhttp"
+	qserver "github.com/PaulioRandall/go-qlueless-api/shared/qserver"
+	uhttp "github.com/PaulioRandall/go-qlueless-api/shared/uhttp"
 )
 
 // Handler handles requests to do with collections of, or individual, Ventures.
 func Handler(res http.ResponseWriter, req *http.Request) {
-	h.LogRequest(req)
-	h.AppendCORSHeaders(&res, "GET, POST, PUT, DELETE, OPTIONS")
+	uhttp.LogRequest(req)
+	uhttp.AppendCORSHeaders(&res, "GET, POST, PUT, DELETE, OPTIONS")
 
 	switch {
 	case req.Method == "GET":
@@ -39,9 +39,9 @@ func get(res *http.ResponseWriter, req *http.Request) {
 	switch {
 	case ids == "":
 		var err error
-		vens, err = QueryAll(q.Sev.DB)
+		vens, err = QueryAll(qserver.Sev.DB)
 		if err != nil {
-			h.WriteServerError(res, req)
+			uhttp.WriteServerError(res, req)
 			return
 		}
 	default:
@@ -53,7 +53,7 @@ func get(res *http.ResponseWriter, req *http.Request) {
 	}
 
 	m := fmt.Sprintf("Found %d Ventures", len(vens))
-	h.WriteSuccessReply(res, req, http.StatusOK, vens, m)
+	uhttp.WriteSuccessReply(res, req, http.StatusOK, vens, m)
 }
 
 // post handles client requests for creating new Ventures.
@@ -76,7 +76,7 @@ func post(res *http.ResponseWriter, req *http.Request) {
 
 	m := fmt.Sprintf("New Venture with ID '%s' created", ven.ID)
 	log.Println(m)
-	h.WriteSuccessReply(res, req, http.StatusCreated, ven, m)
+	uhttp.WriteSuccessReply(res, req, http.StatusCreated, ven, m)
 }
 
 // put handles client requests for updating Ventures.
@@ -100,5 +100,5 @@ func put(res *http.ResponseWriter, req *http.Request) {
 	ids := idsToCSV(vens)
 	m := fmt.Sprintf("Updated Ventures with the following IDs '%s'", ids)
 	log.Println(m)
-	h.WriteSuccessReply(res, req, http.StatusOK, vens, m)
+	uhttp.WriteSuccessReply(res, req, http.StatusOK, vens, m)
 }

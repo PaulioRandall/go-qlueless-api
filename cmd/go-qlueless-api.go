@@ -6,11 +6,11 @@ import (
 	"log"
 	"net/http"
 
-	c "github.com/PaulioRandall/go-qlueless-api/cmd/changelog"
-	h "github.com/PaulioRandall/go-qlueless-api/cmd/home"
-	o "github.com/PaulioRandall/go-qlueless-api/cmd/openapi"
-	v "github.com/PaulioRandall/go-qlueless-api/cmd/ventures"
-	q "github.com/PaulioRandall/go-qlueless-api/internal/qserver"
+	changelog "github.com/PaulioRandall/go-qlueless-api/cmd/changelog"
+	home "github.com/PaulioRandall/go-qlueless-api/cmd/home"
+	openapi "github.com/PaulioRandall/go-qlueless-api/cmd/openapi"
+	ventures "github.com/PaulioRandall/go-qlueless-api/cmd/ventures"
+	qserver "github.com/PaulioRandall/go-qlueless-api/shared/qserver"
 )
 
 // Main is the entry point for the web server
@@ -18,8 +18,8 @@ func main() {
 	log.Println("[Go Qlueless Assembly API]: Starting application")
 
 	_preload()
-	q.Sev.Init()
-	defer q.Sev.Close()
+	qserver.Sev.Init()
+	defer qserver.Sev.Close()
 	_routes()
 
 	log.Println("[Go Qlueless Assembly API]: Starting server")
@@ -29,14 +29,14 @@ func main() {
 // _preload performs any loading of configurations or preloading of static
 // values
 func _preload() {
-	c.LoadChangelog()
-	o.LoadSpec()
+	changelog.LoadChangelog()
+	openapi.LoadSpec()
 }
 
 // _routes attaches the service routes to the servers router
 func _routes() {
-	http.HandleFunc("/", h.HomeHandler)
-	http.HandleFunc("/changelog", c.ChangelogHandler)
-	http.HandleFunc("/openapi", o.OpenAPIHandler)
-	http.HandleFunc("/ventures", v.Handler)
+	http.HandleFunc("/", home.HomeHandler)
+	http.HandleFunc("/changelog", changelog.ChangelogHandler)
+	http.HandleFunc("/openapi", openapi.OpenAPIHandler)
+	http.HandleFunc("/ventures", ventures.Handler)
 }

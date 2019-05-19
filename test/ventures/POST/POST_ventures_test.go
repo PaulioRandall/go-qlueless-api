@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"testing"
 
-	v "github.com/PaulioRandall/go-qlueless-api/cmd/ventures"
-	a "github.com/PaulioRandall/go-qlueless-api/internal/asserts"
+	ventures "github.com/PaulioRandall/go-qlueless-api/cmd/ventures"
+	a "github.com/PaulioRandall/go-qlueless-api/shared/asserts"
 	test "github.com/PaulioRandall/go-qlueless-api/test"
 	vtest "github.com/PaulioRandall/go-qlueless-api/test/ventures"
 	assert "github.com/stretchr/testify/assert"
@@ -34,7 +34,7 @@ func TestPOST_Venture_1(t *testing.T) {
 	vtest.BeginTest("../../../bin")
 	defer vtest.EndTest()
 
-	input := v.Venture{
+	input := ventures.Venture{
 		Description: "A new Venture",
 		State:       "Not started",
 		Orders:      "1,2,3",
@@ -55,8 +55,8 @@ func TestPOST_Venture_1(t *testing.T) {
 	require.Equal(t, 201, res.StatusCode)
 	test.AssertDefaultHeaders(t, res, "application/json", vtest.VenHttpMethods)
 
-	output := v.AssertVentureFromReader(t, res.Body)
-	v.AssertGenericVenture(t, output)
+	output := ventures.AssertVentureFromReader(t, res.Body)
+	ventures.AssertGenericVenture(t, output)
 
 	input.ID = output.ID
 	input.LastModified = output.LastModified
@@ -81,7 +81,7 @@ func TestPOST_Venture_2(t *testing.T) {
 	vtest.BeginTest("../../../bin")
 	defer vtest.EndTest()
 
-	input := v.Venture{
+	input := ventures.Venture{
 		Description: "",
 		State:       "",
 		Orders:      "invalid",
@@ -126,7 +126,7 @@ func TestPOST_Venture_3(t *testing.T) {
 	vtest.BeginTest("../../../bin")
 	defer vtest.EndTest()
 
-	input := v.Venture{
+	input := ventures.Venture{
 		Description: "A new Venture",
 		State:       "Not started",
 		Orders:      "1,2,3",
@@ -146,8 +146,8 @@ func TestPOST_Venture_3(t *testing.T) {
 	require.Equal(t, 201, res.StatusCode)
 	test.AssertDefaultHeaders(t, res, "application/json", vtest.VenHttpMethods)
 
-	_, output := v.AssertWrappedVentureFromReader(t, res.Body)
-	v.AssertGenericVenture(t, output)
+	_, output := ventures.AssertWrappedVentureFromReader(t, res.Body)
+	ventures.AssertGenericVenture(t, output)
 
 	input.ID = output.ID
 	input.LastModified = output.LastModified

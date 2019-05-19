@@ -105,9 +105,9 @@ func goBuild(root string) {
 
 // goTest runs the application unit tests
 func goTest(root string) {
-	fmt.Println("...internal code testing...")
+	fmt.Println("...shared code testing...")
 	goExe(".", []string{"test", root + "/cmd/..."})
-	goExe(".", []string{"test", root + "/internal/..."})
+	goExe(".", []string{"test", root + "/shared/..."})
 }
 
 // goTestApi runs the application API tests

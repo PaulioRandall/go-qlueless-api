@@ -5,8 +5,8 @@ import (
 	"sort"
 	"testing"
 
-	ts "github.com/PaulioRandall/go-qlueless-api/internal/asserts"
-	w "github.com/PaulioRandall/go-qlueless-api/internal/wrapped"
+	ts "github.com/PaulioRandall/go-qlueless-api/shared/asserts"
+	wrapped "github.com/PaulioRandall/go-qlueless-api/shared/wrapped"
 	ms "github.com/mitchellh/mapstructure"
 	assert "github.com/stretchr/testify/assert"
 	require "github.com/stretchr/testify/require"
@@ -60,9 +60,9 @@ func AssertEqualsModified(t *testing.T, before *Venture, after *Venture) {
 // AssertGenericReplyFromReader asserts that reading from an io.Reader produces
 // a generic reply.
 func AssertGenericReplyFromReader(t *testing.T, r io.Reader) {
-	wr, err := w.DecodeFromReader(r)
+	wr, err := wrapped.DecodeFromReader(r)
 	require.Nil(t, err)
-	w.AssertGenericReply(t, wr)
+	wrapped.AssertGenericReply(t, wr)
 }
 
 // AssertVentureSliceModEquals asserts that the two Venture slices are equal
@@ -94,10 +94,10 @@ func AssertGenericVentureSlice(t *testing.T, vens []Venture) {
 // AssertWrappedVentureSliceFromReader asserts that a Venture slice wrapped
 // within a WrappedReply and decoded from an io.Reader has the required fields
 // populated and in the correct format
-func AssertWrappedVentureSliceFromReader(t *testing.T, r io.Reader) (w.WrappedReply, []Venture) {
-	wr, err := w.DecodeFromReader(r)
+func AssertWrappedVentureSliceFromReader(t *testing.T, r io.Reader) (wrapped.WrappedReply, []Venture) {
+	wr, err := wrapped.DecodeFromReader(r)
 	require.Nil(t, err)
-	w.AssertWrappedReply(t, wr)
+	wrapped.AssertWrappedReply(t, wr)
 
 	var v []Venture
 	config := ms.DecoderConfig{
@@ -118,10 +118,10 @@ func AssertWrappedVentureSliceFromReader(t *testing.T, r io.Reader) (w.WrappedRe
 // AssertWrappedVentureFromReader asserts that a Venture wrapped within a
 // WrappedReply and decoded from an io.Reader has the required fields populated
 // and in the correct format
-func AssertWrappedVentureFromReader(t *testing.T, r io.Reader) (w.WrappedReply, Venture) {
-	wr, err := w.DecodeFromReader(r)
+func AssertWrappedVentureFromReader(t *testing.T, r io.Reader) (wrapped.WrappedReply, Venture) {
+	wr, err := wrapped.DecodeFromReader(r)
 	require.Nil(t, err)
-	w.AssertWrappedReply(t, wr)
+	wrapped.AssertWrappedReply(t, wr)
 
 	assert.NotEmpty(t, wr.Message)
 	assert.NotEmpty(t, wr.Self)
