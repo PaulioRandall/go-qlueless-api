@@ -33,26 +33,26 @@
   },
 	"components": {
     "headers": {
-      {{- "\n"}}{{ .Inject "/shared/oai-headers.json" 3}}
+      {{- "\n"}}{{ .Inject "/std/oai-headers.json" 3}}
     },
     "parameters": {
       {{- "\n"}}{{ .Inject "/ventures/oai-parameters.json" 3}},
-      {{- "\n"}}{{ .Inject "/shared/oai-parameters.json" 3}}
+      {{- "\n"}}{{ .Inject "/std/oai-parameters.json" 3}}
     },
     "requestBodies": {
       {{- "\n"}}{{ .Inject "/ventures/oai-requestBodies.json" 3}}
     },
     "responses": {
       {{- "\n"}}{{ .Inject "/ventures/oai-responses.json" 3}},
-      {{- "\n"}}{{ .Inject "/shared/oai-responses.json" 3}}
+      {{- "\n"}}{{ .Inject "/std/oai-responses.json" 3}}
     },
 		"schemas": {
       {{- "\n"}}{{ .Inject "/ventures/oai-schemas.json" 3}},
-			{{- "\n"}}{{ .Inject "/shared/oai-schemas.json" 3}}
+			{{- "\n"}}{{ .Inject "/std/oai-schemas.json" 3}}
     },
     "x-hidden": {
       {{- "\n"}}{{ .Inject "/ventures/oai-x-hidden.json" 3}},
-      {{- "\n"}}{{ .Inject "/shared/oai-x-hidden.json" 3}}
+      {{- "\n"}}{{ .Inject "/std/oai-x-hidden.json" 3}}
     }
 	}
 }

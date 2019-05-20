@@ -1,4 +1,4 @@
-package uhttp
+package writers
 
 import (
 	"encoding/json"

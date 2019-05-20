@@ -1,4 +1,4 @@
-package qserver
+package std
 
 import (
 	"database/sql"

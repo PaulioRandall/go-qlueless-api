@@ -7,7 +7,7 @@ import (
 
 	cookies "github.com/PaulioRandall/go-cookies/cookies"
 	uhttp "github.com/PaulioRandall/go-cookies/uhttp"
-	qserver "github.com/PaulioRandall/go-qlueless-api/shared/qserver"
+	std "github.com/PaulioRandall/go-qlueless-api/api/std"
 	writers "github.com/PaulioRandall/go-qlueless-api/shared/writers"
 )
 
@@ -46,7 +46,7 @@ func get(res *http.ResponseWriter, req *http.Request) {
 	switch {
 	case ids == "":
 		var err error
-		vens, err = QueryAll(qserver.Sev.DB)
+		vens, err = QueryAll(std.Sev.DB)
 		if err != nil {
 			writers.WriteServerError(res, req)
 			return

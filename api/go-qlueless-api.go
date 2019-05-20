@@ -9,8 +9,8 @@ import (
 	changelog "github.com/PaulioRandall/go-qlueless-api/api/changelog"
 	home "github.com/PaulioRandall/go-qlueless-api/api/home"
 	openapi "github.com/PaulioRandall/go-qlueless-api/api/openapi"
+	std "github.com/PaulioRandall/go-qlueless-api/api/std"
 	ventures "github.com/PaulioRandall/go-qlueless-api/api/ventures"
-	qserver "github.com/PaulioRandall/go-qlueless-api/shared/qserver"
 )
 
 // Main is the entry point for the web server
@@ -18,8 +18,8 @@ func main() {
 	log.Println("[Go Qlueless Assembly API]: Starting application")
 
 	_preload()
-	qserver.Sev.Init()
-	defer qserver.Sev.Close()
+	std.Sev.Init()
+	defer std.Sev.Close()
 	_routes()
 
 	log.Println("[Go Qlueless Assembly API]: Starting server")

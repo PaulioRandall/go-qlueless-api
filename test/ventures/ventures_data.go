@@ -10,8 +10,8 @@ import (
 	"testing"
 
 	toastify "github.com/PaulioRandall/go-cookies/toastify"
+	std "github.com/PaulioRandall/go-qlueless-api/api/std"
 	ventures "github.com/PaulioRandall/go-qlueless-api/api/ventures"
-	qserver "github.com/PaulioRandall/go-qlueless-api/shared/qserver"
 	wrapped "github.com/PaulioRandall/go-qlueless-api/shared/wrapped"
 	test "github.com/PaulioRandall/go-qlueless-api/test"
 	assert "github.com/stretchr/testify/assert"
@@ -63,7 +63,7 @@ func DBReset() {
 	_deleteIfExists(dbPath)
 
 	var err error
-	venDB, err = qserver.OpenSQLiteDatabase(dbPath)
+	venDB, err = std.OpenSQLiteDatabase(dbPath)
 	if err != nil {
 		panic(err)
 	}
