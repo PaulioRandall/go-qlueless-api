@@ -14,9 +14,8 @@ import (
 	comfiler "github.com/PaulioRandall/go-cookies/comfiler"
 )
 
-// main is the entry point for this script. Use this script to perform the
-// standard Go format, build, test, run, and install operations without
-// needing to know each operations arguments.
+// main is the entry point for this script. It wraps the standard Go format,
+// build, test, run, and install operations specifically for this project.
 func main() {
 	clearTerminal()
 
@@ -209,7 +208,9 @@ func goRun(root string) {
 	cmd.Stderr = os.Stderr
 
 	err := cmd.Run()
-	if err != nil {
+	if _, ok := err.(*exec.ExitError); ok {
+		panic(err.Error())
+	} else if err != nil {
 		panic(err)
 	}
 }
@@ -222,7 +223,9 @@ func goExe(dir string, args []string) {
 	cmd.Stderr = os.Stderr
 
 	err := cmd.Run()
-	if err != nil {
+	if _, ok := err.(*exec.ExitError); ok {
+		panic(err.Error())
+	} else if err != nil {
 		panic(err)
 	}
 }
