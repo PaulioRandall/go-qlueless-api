@@ -1,4 +1,5 @@
 #!/bin/bash
 
+xdg-open "http://localhost:8080/" &
 xdg-open "http://petstore.swagger.io/?url=http://localhost:8080/openapi" &
 xdg-open "http://localhost:8080/changelog" &

@@ -1,3 +1,5 @@
+//usr/bin/env go run "$0" "$@"; exit "$?"
+
 package main
 
 import (
@@ -11,6 +13,69 @@ import (
 
 	comfiler "github.com/PaulioRandall/go-cookies/comfiler"
 )
+
+// main is the entry point for this script. Use this script to perform the
+// standard Go format, build, test, run, and install operations without
+// needing to know each operations arguments.
+func main() {
+	clearTerminal()
+
+	root := findProjectRoot()
+	makeBinDir(root)
+
+	args := os.Args[1:]
+	if len(args) != 1 {
+		badSyntax()
+	}
+
+	// Don't abstract the build processes! They are more readable and extendable
+	// this way.
+	switch args[0] {
+	case "build":
+		fmt.Println("[GOFMT -> BUILD -> TEST]")
+
+		goFmt(root)
+		goOpenAPI(root)
+		goBuild(root)
+		goTest(root)
+		goTestApi(root)
+
+	case "run":
+		fmt.Println("[GOFMT -> BUILD -> TEST -> RUN]")
+
+		goFmt(root)
+		goOpenAPI(root)
+		goBuild(root)
+		goTest(root)
+		goTestApi(root)
+		goRun(root)
+
+	case "install":
+		fmt.Println("[GOFMT -> BUILD -> TEST -> INSTALL]")
+
+		goFmt(root)
+		goOpenAPI(root)
+		goBuild(root)
+		goTest(root)
+		goTestApi(root)
+		goInstall(root)
+
+	default:
+		badSyntax()
+	}
+}
+
+// badSyntax prints the scripts syntax to console then exits the application
+// with code 1.
+func badSyntax() {
+	syntax := `syntax options:
+1) ./godo.go build  		Builds and tests
+2) ./godo.go run    		Builds, tests, and runs
+3) ./godo.go install		Builds, tests, and installs`
+
+	fmt.Println(syntax + "\n")
+	os.Exit(1)
+}
 
 // clearTerminal clears the terminal
 func clearTerminal() {
@@ -29,37 +94,39 @@ func clearTerminal() {
 	}
 }
 
-// makeBinDir makes a bin directory in the project root directory if it isn't
-// already there
-func makeBinDir(root string) {
-	os.MkdirAll(root+"/bin", os.ModePerm)
-}
-
-// findProjectRoot returns the absolute path to the projects root
-// directory
+// findProjectRoot returns the absolute path to the projects root directory.
 func findProjectRoot() string {
 	fmt.Println("...finding project root...")
 
-	scripts, err := os.Getwd()
+	root, err := os.Getwd()
 	if err != nil {
 		panic(err)
 	}
 
-	scripts = strings.TrimSpace(scripts)
-	root := filepath.Clean(scripts + "/..")
-	fmt.Println("ok\t" + root)
+	root = strings.TrimSpace(root)
+	root = filepath.Clean(root)
 
+	fmt.Println("ok\t" + root)
 	return root
 }
 
-// goFmt formats all Go code
+// makeBinDir creates a /bin directory in the 'root' directory if it doesn't
+// already exist.
+func makeBinDir(root string) {
+	err := os.Mkdir(root+"/bin", os.ModePerm)
+	if err != nil && !os.IsExist(err) {
+		panic(err)
+	}
+}
+
+// goFmt recursively formats all Go code within the 'root' directory.
 func goFmt(root string) {
 	fmt.Println("...formatting Go code...")
-	goExe(".", []string{"fmt", root + "/..."})
+	goExe(root, []string{"fmt", root + "/..."})
 }
 
 // goOpenAPI builds the OpenAPI specification and places a copy of the
-// resultant file in '{project-root}/bin'
+// resultant file in 'root/bin'.
 func goOpenAPI(root string) {
 	fmt.Println("...compiling OpenAPI specification...")
 
@@ -84,8 +151,7 @@ func goOpenAPI(root string) {
 	fmt.Println("ok\t" + clBin + "\t(copied)")
 }
 
-// goBuild builds the application and places the result binary in
-// '{project-root}/bin'
+// goBuild builds the application and places the result binary in 'root/bin'.
 func goBuild(root string) {
 	fmt.Println("...building application...")
 
@@ -103,20 +169,20 @@ func goBuild(root string) {
 	fmt.Println("ok\t" + output + "\t(created)")
 }
 
-// goTest runs the application unit tests
+// goTest runs the applications internal tests (unit).
 func goTest(root string) {
 	fmt.Println("...internal code testing...")
-	goExe(".", []string{"test", root + "/api/..."})
-	goExe(".", []string{"test", root + "/shared/..."})
+	goExe(root, []string{"test", root + "/api/..."})
+	goExe(root, []string{"test", root + "/shared/..."})
 }
 
-// goTestApi runs the application API tests
+// goTestApi runs the applications API tests.
 func goTestApi(root string) {
 	fmt.Println("...web API testing, this may take a few moments...")
-	goExe(".", []string{"test", "-count=1", "-p=1", "-failfast", root + "/test/..."})
+	goExe(root, []string{"test", "-count=1", "-p=1", "-failfast", root + "/test/..."})
 }
 
-// goInstall install the compiled application
+// goInstall installs the compiled application.
 func goInstall(root string) {
 	fmt.Println("...installing application...")
 
@@ -134,7 +200,7 @@ func goInstall(root string) {
 	fmt.Println("ok\t" + output + "\t(installed)")
 }
 
-// goRun runs the compiled application from the /bin directory
+// goRun runs the compiled application from the /bin directory.
 func goRun(root string) {
 	fmt.Println("...running application...")
 	cmd := exec.Command("./go-qlueless-api")
@@ -161,7 +227,7 @@ func goExe(dir string, args []string) {
 	}
 }
 
-// copyFile copies a file from one location to another
+// copyFile copies a file from 'src' to 'dst'.
 func copyFile(src string, dst string) {
 	in, err := ioutil.ReadFile(src)
 	if err != nil {
