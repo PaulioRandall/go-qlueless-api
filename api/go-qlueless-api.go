@@ -17,20 +17,12 @@ import (
 func main() {
 	log.Println("[Go Qlueless Assembly API]: Starting application")
 
-	_preload()
 	std.Sev.Init()
 	defer std.Sev.Close()
 	_routes()
 
 	log.Println("[Go Qlueless Assembly API]: Starting server")
 	log.Fatal(http.ListenAndServe(":8080", nil))
-}
-
-// _preload performs any loading of configurations or preloading of static
-// values
-func _preload() {
-	changelog.LoadChangelog()
-	openapi.LoadSpec()
 }
 
 // _routes attaches the service routes to the servers router

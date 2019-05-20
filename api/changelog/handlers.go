@@ -4,6 +4,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"sync"
 
 	cookies "github.com/PaulioRandall/go-cookies/cookies"
 	uhttp "github.com/PaulioRandall/go-cookies/uhttp"
@@ -13,6 +14,8 @@ import (
 const mime_md = "text/markdown; charset=utf-8"
 
 var changelog *[]byte = nil
+var once sync.Once
+
 var cors uhttp.CorsHeaders = uhttp.CorsHeaders{
 	Origin:  "*",
 	Headers: "*",
@@ -36,6 +39,8 @@ func ChangelogHandler(res http.ResponseWriter, req *http.Request) {
 
 // get generates responses for obtaining the CHANGELOG
 func get(res *http.ResponseWriter, req *http.Request) {
+	once.Do(load)
+
 	if changelog == nil {
 		log.Println("[BUG] CHANGELOG not loaded")
 		writers.WriteServerError(res, req)
@@ -47,11 +52,11 @@ func get(res *http.ResponseWriter, req *http.Request) {
 	(*res).Write(*changelog)
 }
 
-// LoadChangelog loads the changelog from a file
-func LoadChangelog() {
-
+// load loads the changelog from a file
+func load() {
 	path := "./CHANGELOG.md"
 	bytes, err := ioutil.ReadFile(path)
+
 	if cookies.LogIfErr(err) {
 		changelog = nil
 		return

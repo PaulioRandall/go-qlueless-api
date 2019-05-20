@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"sync"
 
 	cookies "github.com/PaulioRandall/go-cookies/cookies"
 	uhttp "github.com/PaulioRandall/go-cookies/uhttp"
@@ -12,6 +13,8 @@ import (
 )
 
 var spec map[string]interface{} = nil
+var once sync.Once
+
 var cors uhttp.CorsHeaders = uhttp.CorsHeaders{
 	Origin:  "*",
 	Headers: "*",
@@ -35,6 +38,8 @@ func OpenAPIHandler(res http.ResponseWriter, req *http.Request) {
 
 // get generates responses for obtaining the OpenAPI specification
 func get(res *http.ResponseWriter, req *http.Request) {
+	once.Do(load)
+
 	if spec == nil {
 		log.Println("[BUG] OpenAPI specification not loaded")
 		writers.WriteServerError(res, req)
@@ -46,11 +51,11 @@ func get(res *http.ResponseWriter, req *http.Request) {
 	json.NewEncoder(*res).Encode(spec)
 }
 
-// LoadJson loads the OpenAPI specification from a file
-func LoadSpec() {
-
+// load loads the OpenAPI specification from a file
+func load() {
 	path := "./openapi.json"
 	bytes, err := ioutil.ReadFile(path)
+
 	if cookies.LogIfErr(err) {
 		spec = nil
 		return
