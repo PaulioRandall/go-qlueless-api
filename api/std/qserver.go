@@ -3,10 +3,14 @@ package std
 import (
 	"database/sql"
 	"log"
+	"net/http"
 
 	_ "github.com/mattn/go-sqlite3"
 )
 
+//
+// TODO: Refactor file as shared 'database' functionality
+//
 var Sev QServer = QServer{}
 
 // QServer represents the server resources.
@@ -14,20 +18,25 @@ type QServer struct {
 	DB *sql.DB
 }
 
-// Init initialises the server resources.
-func (s *QServer) Init() {
+// Start initialises the server resources.
+func (q *QServer) Start() {
+	log.Println("[Go Qlueless API]: Starting application")
+
 	var err error
-	s.DB, err = OpenSQLiteDatabase("./qlueless.db")
+	q.DB, err = OpenSQLiteDatabase("./qlueless.db")
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	log.Println("[Go Qlueless API]: Starting server")
+	log.Fatal(http.ListenAndServe(":8080", nil))
 }
 
 // Close closes resources used by the server.
-func (s *QServer) Close() {
-	if s.DB != nil {
-		log.Fatal(s.DB.Close())
-		s.DB = nil
+func (q *QServer) Close() {
+	if q.DB != nil {
+		log.Fatal(q.DB.Close())
+		q.DB = nil
 	}
 }
 
