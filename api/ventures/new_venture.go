@@ -9,6 +9,7 @@ import (
 
 	cookies "github.com/PaulioRandall/go-cookies/cookies"
 	strlist "github.com/PaulioRandall/go-cookies/strlist"
+	std "github.com/PaulioRandall/go-qlueless-api/api/std"
 )
 
 // NewVenture represents a new Venture.
@@ -60,14 +61,14 @@ func (nv *NewVenture) Validate() []string {
 // Insert inserts the NewVenture into the database
 //
 // @UNTESTED
-func (nv *NewVenture) Insert(db *sql.DB) (*Venture, bool) {
+func (nv *NewVenture) Insert(db *std.Database) (*Venture, bool) {
 
-	id, err := _findNextID(db)
+	id, err := _findNextID(db.SQL)
 	if cookies.LogIfErr(err) {
 		return nil, false
 	}
 
-	stmt, err := db.Prepare(`INSERT INTO venture (
+	stmt, err := db.SQL.Prepare(`INSERT INTO venture (
 		id, description, order_ids, state, extra
 	) VALUES (
 		?, ?, ?, ?, ?

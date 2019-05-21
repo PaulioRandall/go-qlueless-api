@@ -33,8 +33,8 @@ func TestPUT_Ventures_1(t *testing.T) {
 		And that Ventures' 'last_modified' field has been updated appropriately
 		...`)
 
-	vtest.BeginEmptyTest("../../../bin")
-	defer vtest.EndTest()
+	vtest.SetupEmptyTest()
+	defer vtest.TearDown()
 
 	vtest.DBInject(ventures.NewVenture{
 		Description: "Black blizzard",

@@ -3,9 +3,14 @@ package changelog
 import (
 	"testing"
 
+	server "github.com/PaulioRandall/go-qlueless-api/api/server"
 	test "github.com/PaulioRandall/go-qlueless-api/test"
 	require "github.com/stretchr/testify/require"
 )
+
+func init() {
+	test.SetWorkingDir("../../bin")
+}
 
 // ****************************************************************************
 // (GET) /changelog
@@ -23,8 +28,8 @@ func TestGET_Changelog(t *testing.T) {
 		And the body contains some data
 		...`)
 
-	test.StartServer("../../bin")
-	defer test.StopServer()
+	server.StartUp(true)
+	defer server.Shutdown()
 
 	req := test.APICall{
 		URL:    "http://localhost:8080/changelog",
@@ -53,8 +58,8 @@ func TestOPTIONS_Changelog(t *testing.T) {
 		And there is NO response body
 		...`)
 
-	test.StartServer("../../bin")
-	defer test.StopServer()
+	server.StartUp(true)
+	defer server.Shutdown()
 
 	req := test.APICall{
 		URL:    "http://localhost:8080/changelog",
@@ -83,8 +88,8 @@ func TestINVALID_Changelog(t *testing.T) {
 		And there is NO response body
 		...`)
 
-	test.StartServer("../../bin")
-	defer test.StopServer()
+	server.StartUp(true)
+	defer server.Shutdown()
 
 	test.VerifyBadMethods(t, "http://localhost:8080/changelog", "GET, OPTIONS", []string{
 		"POST",

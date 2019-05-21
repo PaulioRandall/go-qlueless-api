@@ -10,6 +10,7 @@ import (
 
 	cookies "github.com/PaulioRandall/go-cookies/cookies"
 	strlist "github.com/PaulioRandall/go-cookies/strlist"
+	std "github.com/PaulioRandall/go-qlueless-api/api/std"
 )
 
 // ModVenture represents an update to a Venture.
@@ -124,7 +125,7 @@ func (mv *ModVenture) ApplyMod(ven *Venture) {
 // Update pushes the modification of changes to the database.
 //
 // @UNTESTED
-func (mv *ModVenture) Update(db *sql.DB) ([]Venture, bool) {
+func (mv *ModVenture) Update(db *std.Database) ([]Venture, bool) {
 
 	ids := mv.SplitIDs()
 	args := make([]interface{}, len(ids))
@@ -137,7 +138,7 @@ func (mv *ModVenture) Update(db *sql.DB) ([]Venture, bool) {
 		return nil, false
 	}
 
-	ok := mv._insertEach(db, vens)
+	ok := mv._insertEach(db.SQL, vens)
 	if !ok {
 		return nil, false
 	}

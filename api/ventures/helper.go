@@ -19,7 +19,7 @@ func find(ids string, res *http.ResponseWriter, req *http.Request) ([]Venture, b
 		s[i] = id
 	}
 
-	vens, err := QueryMany(std.Sev.DB, s)
+	vens, err := QueryMany(std.DB, s)
 
 	if err != nil {
 		writers.WriteServerError(res, req)
@@ -51,7 +51,7 @@ func validateNew(ven *NewVenture, res *http.ResponseWriter, req *http.Request) b
 
 // insertNew inserts a new Venture into the database.
 func insertNew(new *NewVenture, res *http.ResponseWriter, req *http.Request) (*Venture, bool) {
-	ven, ok := new.Insert(std.Sev.DB)
+	ven, ok := new.Insert(std.DB)
 	if !ok {
 		writers.WriteServerError(res, req)
 	}
@@ -115,7 +115,7 @@ func idsToCSV(vens []Venture) string {
 // pushMod performs the specified modification operation and pushes the result
 // to the database.
 func pushMod(mv *ModVenture, res *http.ResponseWriter, req *http.Request) ([]Venture, bool) {
-	vens, ok := mv.Update(std.Sev.DB)
+	vens, ok := mv.Update(std.DB)
 	if !ok {
 		writers.WriteServerError(res, req)
 		return nil, false

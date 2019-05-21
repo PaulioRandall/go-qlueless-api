@@ -54,13 +54,12 @@ func get(res *http.ResponseWriter, req *http.Request) {
 
 // load loads the changelog from a file
 func load() {
-	path := "./CHANGELOG.md"
-	bytes, err := ioutil.ReadFile(path)
-
+	bytes, err := ioutil.ReadFile("./CHANGELOG.md")
 	if cookies.LogIfErr(err) {
 		changelog = nil
 		return
 	}
 
 	changelog = &bytes
+	return
 }

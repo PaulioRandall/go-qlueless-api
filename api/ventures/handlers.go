@@ -46,7 +46,7 @@ func get(res *http.ResponseWriter, req *http.Request) {
 	switch {
 	case ids == "":
 		var err error
-		vens, err = QueryAll(std.Sev.DB)
+		vens, err = QueryAll(std.DB)
 		if err != nil {
 			writers.WriteServerError(res, req)
 			return

@@ -4,9 +4,14 @@ import (
 	"encoding/json"
 	"testing"
 
+	server "github.com/PaulioRandall/go-qlueless-api/api/server"
 	test "github.com/PaulioRandall/go-qlueless-api/test"
 	require "github.com/stretchr/testify/require"
 )
+
+func init() {
+	test.SetWorkingDir("../../bin")
+}
 
 // ****************************************************************************
 // (GET) /openapi
@@ -24,8 +29,8 @@ func TestGET_OpenAPI(t *testing.T) {
 		And the body is a valid JSON object
 		...`)
 
-	test.StartServer("../../bin")
-	defer test.StopServer()
+	server.StartUp(true)
+	defer server.Shutdown()
 
 	req := test.APICall{
 		URL:    "http://localhost:8080/openapi",
@@ -58,8 +63,8 @@ func TestOPTIONS_OpenAPI(t *testing.T) {
 		And there is NO response body
 		...`)
 
-	test.StartServer("../../bin")
-	defer test.StopServer()
+	server.StartUp(true)
+	defer server.Shutdown()
 
 	req := test.APICall{
 		URL:    "http://localhost:8080/openapi",
@@ -89,8 +94,8 @@ func TestINVALID_OpenAPI(t *testing.T) {
 		And there is NO response body
 		...`)
 
-	test.StartServer("../../bin")
-	defer test.StopServer()
+	server.StartUp(true)
+	defer server.Shutdown()
 
 	test.VerifyBadMethods(t, "http://localhost:8080/openapi", "GET, OPTIONS", []string{
 		"POST",

@@ -6,13 +6,14 @@ import (
 	"strings"
 
 	cookies "github.com/PaulioRandall/go-cookies/cookies"
+	std "github.com/PaulioRandall/go-qlueless-api/api/std"
 )
 
 // CreateTables creates all the Venture tables, views and triggers within the
 // supplied database.
 //
 // @UNTESTED
-func CreateTables(db *sql.DB) error {
+func CreateTables(db *std.Database) error {
 	err := createVentureTable(db)
 	if err != nil {
 		return err
@@ -47,7 +48,7 @@ func CreateTables(db *sql.DB) error {
 }
 
 // createVentureTable creates the Venture table within the supplied database.
-func createVentureTable(db *sql.DB) error {
+func createVentureTable(db *std.Database) error {
 	return _execStmt(db, `CREATE TABLE venture (
 		id INTEGER NOT NULL,
 		last_modified INTEGER NOT NULL DEFAULT(CAST(ROUND((julianday('now') - 2440587.5)*86400000) As INTEGER)),
@@ -62,7 +63,7 @@ func createVentureTable(db *sql.DB) error {
 
 // createQlVentureTable creates the query layer Venture table within the
 // supplied database.
-func createQlVentureTable(db *sql.DB) error {
+func createQlVentureTable(db *std.Database) error {
 	return _execStmt(db, `CREATE TABLE ql_venture (
 		id INTEGER NOT NULL PRIMARY KEY,
 		last_modified INTEGER NOT NULL,
@@ -77,7 +78,7 @@ func createQlVentureTable(db *sql.DB) error {
 // createInsertOnLivingVentureTrigger creates a trigger within the
 // supplied database that updates the ql_venture table when ever a new, and
 // living, Venture is inserted into the venture table.
-func createInsertOnLivingVentureTrigger(db *sql.DB) error {
+func createInsertOnLivingVentureTrigger(db *std.Database) error {
 	return _execStmt(db, `CREATE TRIGGER insert_on_living_venture
 		AFTER INSERT ON venture
 		FOR EACH ROW
@@ -94,7 +95,7 @@ func createInsertOnLivingVentureTrigger(db *sql.DB) error {
 // createInsertOnDeadVentureTrigger creates a trigger within the supplied
 // database that removes from the ql_venture table the dead Venture inserted
 // into the venture table.
-func createInsertOnDeadVentureTrigger(db *sql.DB) error {
+func createInsertOnDeadVentureTrigger(db *std.Database) error {
 	return _execStmt(db, `CREATE TRIGGER insert_on_dead_venture
 		AFTER INSERT ON venture
 		FOR EACH ROW
@@ -107,7 +108,7 @@ func createInsertOnDeadVentureTrigger(db *sql.DB) error {
 
 // createUpdateOnVentureTrigger creates a trigger within the supplied
 // database that raises an error if an update is attempted.
-func createUpdateOnVentureTrigger(db *sql.DB) error {
+func createUpdateOnVentureTrigger(db *std.Database) error {
 	return _execStmt(db, `CREATE TRIGGER update_on_venture
 		BEFORE UPDATE ON venture
 		BEGIN
@@ -117,7 +118,7 @@ func createUpdateOnVentureTrigger(db *sql.DB) error {
 
 // createDeleteOnVentureTrigger creates a trigger within the supplied
 // database that raises an error if a delete is attempted.
-func createDeleteOnVentureTrigger(db *sql.DB) error {
+func createDeleteOnVentureTrigger(db *std.Database) error {
 	return _execStmt(db, `CREATE TRIGGER delete_on_venture
 		BEFORE DELETE ON venture
 		BEGIN
@@ -126,8 +127,8 @@ func createDeleteOnVentureTrigger(db *sql.DB) error {
 }
 
 // _execStmt executes a SQL statment ensuring it is closed afterwards
-func _execStmt(db *sql.DB, sql string) error {
-	stmt, err := db.Prepare(sql)
+func _execStmt(db *std.Database, sql string) error {
+	stmt, err := db.SQL.Prepare(sql)
 
 	if stmt != nil {
 		defer stmt.Close()
@@ -144,9 +145,9 @@ func _execStmt(db *sql.DB, sql string) error {
 // QueryFor queries the database for a single Venture.
 //
 // @UNTESTED
-func QueryFor(db *sql.DB, id string) (*Venture, error) {
+func QueryFor(db *std.Database, id string) (*Venture, error) {
 	ven := Venture{}
-	err := db.QueryRow(`SELECT
+	err := db.SQL.QueryRow(`SELECT
 		id,
 		last_modified,
 		description,
@@ -174,7 +175,7 @@ func QueryFor(db *sql.DB, id string) (*Venture, error) {
 // QueryMany queries the database for all specified Ventures.
 //
 // @UNTESTED
-func QueryMany(db *sql.DB, ids []interface{}) ([]Venture, error) {
+func QueryMany(db *std.Database, ids []interface{}) ([]Venture, error) {
 
 	posParams := strings.Repeat(",?", len(ids))[1:]
 
@@ -188,7 +189,7 @@ func QueryMany(db *sql.DB, ids []interface{}) ([]Venture, error) {
 		FROM ql_venture
 		WHERE id IN (%s)`, posParams)
 
-	rows, err := db.Query(sql, ids...)
+	rows, err := db.SQL.Query(sql, ids...)
 
 	if rows != nil {
 		defer rows.Close()
@@ -204,8 +205,8 @@ func QueryMany(db *sql.DB, ids []interface{}) ([]Venture, error) {
 // QueryAll queries the database for all Ventures.
 //
 // @UNTESTED
-func QueryAll(db *sql.DB) ([]Venture, error) {
-	rows, err := db.Query(`SELECT
+func QueryAll(db *std.Database) ([]Venture, error) {
+	rows, err := db.SQL.Query(`SELECT
 		id,
 		last_modified,
 		description,

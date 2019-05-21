@@ -12,6 +12,10 @@ import (
 	require "github.com/stretchr/testify/require"
 )
 
+func init() {
+	test.SetWorkingDir("../../../bin")
+}
+
 // ****************************************************************************
 // (PUT) /ventures
 // ****************************************************************************
@@ -28,8 +32,8 @@ func TestPUT_Ventures_1_OLD(t *testing.T) {
 		And those Ventures will have new 'last_updated' datetimes
 		...`)
 
-	vtest.BeginTest("../../../bin")
-	defer vtest.EndTest()
+	vtest.SetupTest()
+	defer vtest.TearDown()
 
 	input := ventures.ModVenture{
 		IDs:   "1",
@@ -81,8 +85,8 @@ func TestPUT_Ventures_2_OLD(t *testing.T) {
 		And the body is an empty JSON array
 		...`)
 
-	vtest.BeginTest("../../../bin")
-	defer vtest.EndTest()
+	vtest.SetupTest()
+	defer vtest.TearDown()
 
 	input := ventures.ModVenture{
 		IDs:   "999999",
@@ -125,8 +129,8 @@ func TestPUT_Ventures_3_OLD(t *testing.T) {
 		And the body is a JSON object representing an error response
 		...`)
 
-	vtest.BeginTest("../../../bin")
-	defer vtest.EndTest()
+	vtest.SetupTest()
+	defer vtest.TearDown()
 
 	input := ventures.ModVenture{
 		Props: "description, orders, extra",
@@ -166,8 +170,8 @@ func TestPUT_Ventures_4_OLD(t *testing.T) {
 		And the body is a JSON object representing an error response
 		...`)
 
-	vtest.BeginTest("../../../bin")
-	defer vtest.EndTest()
+	vtest.SetupTest()
+	defer vtest.TearDown()
 
 	input := ventures.ModVenture{
 		IDs:    "1",
@@ -205,8 +209,8 @@ func TestPUT_Ventures_5_OLD(t *testing.T) {
 		And those Ventures will have new 'last_updated' datetimes
 		...`)
 
-	vtest.BeginTest("../../../bin")
-	defer vtest.EndTest()
+	vtest.SetupTest()
+	defer vtest.TearDown()
 
 	input := ventures.ModVenture{
 		IDs:   "4,5",
@@ -257,8 +261,8 @@ func TestPUT_Ventures_6_OLD(t *testing.T) {
 		And those Ventures will have new 'last_updated' datetimes
 		...`)
 
-	vtest.BeginTest("../../../bin")
-	defer vtest.EndTest()
+	vtest.SetupTest()
+	defer vtest.TearDown()
 
 	input := ventures.ModVenture{
 		IDs:   "1",

@@ -9,6 +9,10 @@ import (
 	require "github.com/stretchr/testify/require"
 )
 
+func init() {
+	test.SetWorkingDir("../../../bin")
+}
+
 // ****************************************************************************
 // (GET) /ventures
 // ****************************************************************************
@@ -25,8 +29,8 @@ func TestGET_Ventures_1(t *testing.T) {
 		And the body is a JSON array containing all living Ventures
 		...`)
 
-	vtest.BeginTest("../../../bin")
-	defer vtest.EndTest()
+	vtest.SetupTest()
+	defer vtest.TearDown()
 
 	req := test.APICall{
 		URL:    "http://localhost:8080/ventures",
@@ -64,8 +68,8 @@ func TestGET_Ventures_2(t *testing.T) {
 		And the wrapped data is a JSON array containing all living Ventures
 		...`)
 
-	vtest.BeginTest("../../../bin")
-	defer vtest.EndTest()
+	vtest.SetupTest()
+	defer vtest.TearDown()
 
 	req := test.APICall{
 		URL:    "http://localhost:8080/ventures?wrap",
@@ -100,8 +104,8 @@ func TestGET_Ventures_3(t *testing.T) {
 		And the body is a JSON array containing only the living Venture requested
 		...`)
 
-	vtest.BeginTest("../../../bin")
-	defer vtest.EndTest()
+	vtest.SetupTest()
+	defer vtest.TearDown()
 
 	req := test.APICall{
 		URL:    "http://localhost:8080/ventures?ids=1",
@@ -134,8 +138,8 @@ func TestGET_Ventures_4(t *testing.T) {
 		And the body is a JSON array containing only the living Ventures requested
 		...`)
 
-	vtest.BeginTest("../../../bin")
-	defer vtest.EndTest()
+	vtest.SetupTest()
+	defer vtest.TearDown()
 
 	req := test.APICall{
 		URL:    "http://localhost:8080/ventures?ids=1,2,3",
@@ -168,8 +172,8 @@ func TestGET_Ventures_5(t *testing.T) {
 		And the body is an empty JSON array of Ventures
 		...`)
 
-	vtest.BeginTest("../../../bin")
-	defer vtest.EndTest()
+	vtest.SetupTest()
+	defer vtest.TearDown()
 
 	req := test.APICall{
 		URL:    "http://localhost:8080/ventures?ids=888888,999999",
@@ -199,8 +203,8 @@ func TestGET_Ventures_6(t *testing.T) {
 	And the body is a JSON array containing only the living Ventures requested
 	...`)
 
-	vtest.BeginTest("../../../bin")
-	defer vtest.EndTest()
+	vtest.SetupTest()
+	defer vtest.TearDown()
 
 	req := test.APICall{
 		URL:    "http://localhost:8080/ventures?ids=1,88888,2,99999",
@@ -240,8 +244,8 @@ func TestGET_Ventures_7(t *testing.T) {
 		And the body is a JSON array containing only the living Ventures requested
 		...`)
 
-	vtest.BeginTest("../../../bin")
-	defer vtest.EndTest()
+	vtest.SetupTest()
+	defer vtest.TearDown()
 
 	req := test.APICall{
 		URL:    "http://localhost:8080/ventures?wrap&ids=1,4,5",

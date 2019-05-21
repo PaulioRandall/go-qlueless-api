@@ -8,6 +8,10 @@ import (
 	require "github.com/stretchr/testify/require"
 )
 
+func init() {
+	test.SetWorkingDir("../../../bin")
+}
+
 // ****************************************************************************
 // (OPTIONS) /ventures
 // ****************************************************************************
@@ -23,8 +27,8 @@ func TestOPTIONS_Ventures(t *testing.T) {
 		And there is NO response body
 		...`)
 
-	vtest.BeginTest("../../../bin")
-	defer vtest.EndTest()
+	vtest.SetupTest()
+	defer vtest.TearDown()
 
 	req := test.APICall{
 		URL:    "http://localhost:8080/ventures",
@@ -55,8 +59,8 @@ func TestINVALID_Ventures(t *testing.T) {
 		And there is NO response body
 		...`)
 
-	vtest.BeginTest("../../../bin")
-	defer vtest.EndTest()
+	vtest.SetupTest()
+	defer vtest.TearDown()
 
 	goodMethods := "GET, POST, PUT, DELETE, OPTIONS"
 	test.VerifyBadMethods(t, "http://localhost:8080/ventures", goodMethods, []string{

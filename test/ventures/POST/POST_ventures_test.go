@@ -12,6 +12,10 @@ import (
 	require "github.com/stretchr/testify/require"
 )
 
+func init() {
+	test.SetWorkingDir("../../../bin")
+}
+
 // ****************************************************************************
 // (POST) /ventures
 // ****************************************************************************
@@ -30,8 +34,8 @@ func TestPOST_Venture_1(t *testing.T) {
 		And that Venture will have a new 'last_updated' datetime
 		...`)
 
-	vtest.BeginTest("../../../bin")
-	defer vtest.EndTest()
+	vtest.SetupTest()
+	defer vtest.TearDown()
 
 	input := ventures.Venture{
 		Description: "A new Venture",
@@ -78,8 +82,8 @@ func TestPOST_Venture_2(t *testing.T) {
 		And the body is a JSON object representing an error response
 		...`)
 
-	vtest.BeginTest("../../../bin")
-	defer vtest.EndTest()
+	vtest.SetupTest()
+	defer vtest.TearDown()
 
 	input := ventures.Venture{
 		Description: "",
@@ -124,8 +128,8 @@ func TestPOST_Venture_3(t *testing.T) {
 		And that Venture will have a new 'last_updated' datetime
 		...`)
 
-	vtest.BeginTest("../../../bin")
-	defer vtest.EndTest()
+	vtest.SetupTest()
+	defer vtest.TearDown()
 
 	input := ventures.Venture{
 		Description: "A new Venture",

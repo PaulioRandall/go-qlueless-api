@@ -4,71 +4,57 @@ import (
 	"database/sql"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 	"os"
 	"testing"
 
 	toastify "github.com/PaulioRandall/go-cookies/toastify"
+	server "github.com/PaulioRandall/go-qlueless-api/api/server"
 	std "github.com/PaulioRandall/go-qlueless-api/api/std"
 	ventures "github.com/PaulioRandall/go-qlueless-api/api/ventures"
 	wrapped "github.com/PaulioRandall/go-qlueless-api/shared/wrapped"
-	test "github.com/PaulioRandall/go-qlueless-api/test"
 	assert "github.com/stretchr/testify/assert"
 	require "github.com/stretchr/testify/require"
 )
 
 var dbPath string = ""
-var venDB *sql.DB = nil
+var venDB *std.Database = nil
 
-// BeginEmptyTest is run at the start of a test to setup the server but does
+// SetupEmptyTest is run at the start of a test to setup the server but does
 // not inject any test data.
-func BeginEmptyTest(relServerPath string) {
-	dbPath = relServerPath + "/qlueless.db"
+func SetupEmptyTest() {
+	dbPath = getDbPath()
 	DBReset()
-	test.StartServer(relServerPath)
+	server.StartUp(true)
 }
 
-// BeginTest is run at the start of every test to setup the server and
-// inject the test data.
-func BeginTest(relServerPath string) {
-	dbPath = relServerPath + "/qlueless.db"
+// SetupTest is run at the start of every test to setup the server and inject
+// the test data.
+func SetupTest() {
+	dbPath = getDbPath()
 	DBReset()
 	DBInjectLiving()
 	DBInjectDead()
-	test.StartServer(relServerPath)
+	server.StartUp(true)
 }
 
-// EndTest should be deferred straight after BeginTest() is run to
-// close resources at the end of every test.
-func EndTest() {
-	test.StopServer()
+// TearDown should be deferred straight after SetupTest() is run to close
+// resources at the end of every test.
+func TearDown() {
+	server.Shutdown()
 	DBClose()
-}
-
-// _deleteIfExists deletes the file at the path specified if it exist.
-func _deleteIfExists(path string) {
-	err := os.Remove(path)
-	switch {
-	case err == nil, os.IsNotExist(err):
-	default:
-		log.Fatal(err)
-	}
 }
 
 // DBReset will reset the database by closing and deleting it then
 // creating a new one.
 func DBReset() {
 	DBClose()
-	_deleteIfExists(dbPath)
+	deleteIfExists(dbPath)
 
-	var err error
-	venDB, err = std.OpenSQLiteDatabase(dbPath)
-	if err != nil {
-		panic(err)
-	}
+	venDB = &std.Database{}
+	venDB.Open()
 
-	err = ventures.CreateTables(venDB)
+	err := ventures.CreateTables(venDB)
 	if err != nil {
 		panic(err)
 	}
@@ -77,12 +63,9 @@ func DBReset() {
 // DBClose closes the test database.
 func DBClose() {
 	if venDB != nil {
-		err := venDB.Close()
-		if err != nil {
-			panic(err)
-		}
+		venDB.Close()
+		venDB = nil
 	}
-	venDB = nil
 }
 
 // DBInject injects a Venture into the database.
@@ -141,7 +124,7 @@ func DBInjectDead() {
 
 	for _, ven := range s {
 		mod.ApplyMod(&ven)
-		err := ven.Update(venDB)
+		err := ven.Update(venDB.SQL)
 		if err != nil {
 			panic(err)
 		}
@@ -150,7 +133,7 @@ func DBInjectDead() {
 
 // DBQueryAll queries the database for all living ventures
 func DBQueryAll() []ventures.Venture {
-	rows, err := venDB.Query(`
+	rows, err := venDB.SQL.Query(`
 		SELECT id, last_modified, description, order_ids, state, extra
 		FROM ql_venture
 	`)
@@ -163,12 +146,12 @@ func DBQueryAll() []ventures.Venture {
 		panic(err)
 	}
 
-	return _mapRows(rows)
+	return mapRows(rows)
 }
 
 // DBQueryMany queries the database for Ventures with the specified IDs
 func DBQueryMany(ids string) []ventures.Venture {
-	rows, err := venDB.Query(fmt.Sprintf(`
+	rows, err := venDB.SQL.Query(fmt.Sprintf(`
 		SELECT id, last_modified, description, order_ids, state, extra
 		FROM ql_venture
 		WHERE id IN (%s)
@@ -182,7 +165,7 @@ func DBQueryMany(ids string) []ventures.Venture {
 		panic(err)
 	}
 
-	return _mapRows(rows)
+	return mapRows(rows)
 }
 
 // DBQueryOne queries the database for a specific Venture
@@ -203,21 +186,38 @@ func DBQueryFirst() *ventures.Venture {
 	return nil
 }
 
-// _mapRows is a file private function that maps rows from a database query into
+// getDbPath gets the path to the database or panics if there is an error.
+func getDbPath() string {
+	wd, err := os.Getwd()
+	if err != nil {
+		panic(err)
+	}
+	return wd + "/qlueless.db"
+}
+
+// deleteIfExists deletes the file at the path specified if it exist.
+func deleteIfExists(path string) {
+	err := os.Remove(path)
+	if err != nil && os.IsExist(err) {
+		panic(err)
+	}
+}
+
+// mapRows is a file private function that maps rows from a database query into
 // a slice of Ventures.
-func _mapRows(rows *sql.Rows) []ventures.Venture {
+func mapRows(rows *sql.Rows) []ventures.Venture {
 	vens := []ventures.Venture{}
 
 	for rows.Next() {
-		vens = append(vens, *_mapRow(rows))
+		vens = append(vens, *mapRow(rows))
 	}
 
 	return vens
 }
 
-// _mapRow is a file private function that maps a single row from a database
+// mapRow is a file private function that maps a single row from a database
 // query into a Venture.
-func _mapRow(rows *sql.Rows) *ventures.Venture {
+func mapRow(rows *sql.Rows) *ventures.Venture {
 	ven := ventures.Venture{}
 	err := rows.Scan(&ven.ID,
 		&ven.LastModified,
