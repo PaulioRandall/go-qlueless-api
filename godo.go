@@ -9,6 +9,7 @@ import (
 	"os/exec"
 	"path/filepath"
 	"runtime"
+	"strings"
 	"time"
 
 	comfiler "github.com/PaulioRandall/go-cookies/comfiler"
@@ -23,6 +24,8 @@ func main() {
 
 	started := cookies.ToUnixMilli(time.Now().UTC())
 	root := getwd()
+	printOk(root)
+
 	makeBinDir(root)
 
 	// Don't abstract the build workflows! They are more readable and extendable
@@ -82,6 +85,17 @@ func printTime() {
 	fmt.Printf("Now\t%v\n", time.Now().UTC())
 }
 
+// printOk prints an OK message in the style of 'go test'.
+func printOk(url string, results ...string) {
+	if len(results) == 0 {
+		fmt.Printf("ok\t%s\n", url)
+		return
+	}
+
+	r := strings.Join(results, ", ")
+	fmt.Printf("ok\t%s\t(%s)\n", url, r)
+}
+
 // getwd returns the absolute path to the projects root directory.
 func getwd() string {
 	fmt.Println("...finding project root...")
@@ -91,7 +105,6 @@ func getwd() string {
 		panic(err)
 	}
 
-	fmt.Println("ok\t" + root)
 	return root
 }
 
@@ -158,11 +171,6 @@ func goOpenAPI(root string) {
 	clBin := filepath.Join(root, "bin", "CHANGELOG.md")
 	copyFile(cl, clBin)
 	printOk(clBin, "copied")
-}
-
-// printOk prints an OK message in the style of 'go test'.
-func printOk(url, result string) {
-	fmt.Printf("ok\t%s\t(%s)\n", url, result)
 }
 
 // goBuild builds the application and places the result binary in 'root/bin'.

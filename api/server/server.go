@@ -14,7 +14,7 @@ import (
 )
 
 var server *http.Server = nil
-var onShutdownComplete chan bool = make(chan bool)
+var onShutdownHandlerComplete chan bool = make(chan bool)
 
 // init attaches the endpoints to the default server.
 func init() {
@@ -48,7 +48,7 @@ func Shutdown() {
 		panic(err)
 	}
 
-	ok := <-onShutdownComplete
+	ok := <-onShutdownHandlerComplete
 	if !ok {
 		panic("Something went wrong while attempting to shutdown")
 	}
@@ -72,7 +72,7 @@ func registerShutdownHandler() {
 		var ok *bool = &assumeTheWorst
 
 		defer func() {
-			onShutdownComplete <- *ok
+			onShutdownHandlerComplete <- *ok
 		}()
 
 		log.Println("[Go Qlueless API]: Stopping server")
