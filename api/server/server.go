@@ -1,4 +1,4 @@
-package api
+package server
 
 import (
 	"context"
@@ -7,9 +7,9 @@ import (
 	"net/http"
 
 	"github.com/PaulioRandall/go-qlueless-api/api/changelog"
+	"github.com/PaulioRandall/go-qlueless-api/api/database"
 	"github.com/PaulioRandall/go-qlueless-api/api/home"
 	"github.com/PaulioRandall/go-qlueless-api/api/openapi"
-	"github.com/PaulioRandall/go-qlueless-api/api/std"
 	"github.com/PaulioRandall/go-qlueless-api/api/ventures"
 )
 
@@ -31,7 +31,7 @@ func StartUp(async bool) {
 	registerShutdownHandler()
 
 	log.Println("[Go Qlueless API]: Starting server")
-	std.DB.Open()
+	database.Open()
 	ln := listen()
 
 	if async {
@@ -76,7 +76,7 @@ func registerShutdownHandler() {
 		}()
 
 		log.Println("[Go Qlueless API]: Stopping server")
-		std.DB.Close()
+		database.Close()
 		server = nil
 		*ok = true
 	})

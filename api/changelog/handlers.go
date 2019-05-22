@@ -6,9 +6,9 @@ import (
 	"net/http"
 	"sync"
 
-	cookies "github.com/PaulioRandall/go-cookies/cookies"
-	uhttp "github.com/PaulioRandall/go-cookies/uhttp"
-	writers "github.com/PaulioRandall/go-qlueless-api/shared/writers"
+	"github.com/PaulioRandall/go-cookies/cookies"
+	"github.com/PaulioRandall/go-cookies/uhttp"
+	"github.com/PaulioRandall/go-qlueless-api/shared/writers"
 )
 
 const mime_md = "text/markdown; charset=utf-8"

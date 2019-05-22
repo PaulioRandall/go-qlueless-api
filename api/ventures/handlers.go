@@ -5,12 +5,12 @@ import (
 	"log"
 	"net/http"
 
-	cookies "github.com/PaulioRandall/go-cookies/cookies"
-	uhttp "github.com/PaulioRandall/go-cookies/uhttp"
-	std "github.com/PaulioRandall/go-qlueless-api/api/std"
-	writers "github.com/PaulioRandall/go-qlueless-api/shared/writers"
+	"github.com/PaulioRandall/go-cookies/cookies"
+	"github.com/PaulioRandall/go-cookies/uhttp"
+	"github.com/PaulioRandall/go-qlueless-api/shared/writers"
 )
 
+// cors contains the CORS headers for /Venture responses.
 var cors uhttp.CorsHeaders = uhttp.CorsHeaders{
 	Origin:  "*",
 	Headers: "*",
@@ -46,7 +46,7 @@ func get(res *http.ResponseWriter, req *http.Request) {
 	switch {
 	case ids == "":
 		var err error
-		vens, err = QueryAll(std.DB)
+		vens, err = QueryAll()
 		if err != nil {
 			writers.WriteServerError(res, req)
 			return

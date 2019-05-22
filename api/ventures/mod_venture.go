@@ -8,9 +8,9 @@ import (
 	"strings"
 	"time"
 
-	cookies "github.com/PaulioRandall/go-cookies/cookies"
-	strlist "github.com/PaulioRandall/go-cookies/strlist"
-	std "github.com/PaulioRandall/go-qlueless-api/api/std"
+	"github.com/PaulioRandall/go-cookies/cookies"
+	"github.com/PaulioRandall/go-cookies/strlist"
+	"github.com/PaulioRandall/go-qlueless-api/api/database"
 )
 
 // ModVenture represents an update to a Venture.
@@ -101,8 +101,6 @@ func (mv *ModVenture) Validate() []string {
 
 // ApplyMod applies the modifications to the supplied Venture only touching
 // those properties the user has specified
-//
-// @UNTESTED
 func (mv *ModVenture) ApplyMod(ven *Venture) {
 	mod := mv.Values
 	for _, p := range mv.SplitProps() {
@@ -123,9 +121,7 @@ func (mv *ModVenture) ApplyMod(ven *Venture) {
 }
 
 // Update pushes the modification of changes to the database.
-//
-// @UNTESTED
-func (mv *ModVenture) Update(db *std.Database) ([]Venture, bool) {
+func (mv *ModVenture) Update() ([]Venture, bool) {
 
 	ids := mv.SplitIDs()
 	args := make([]interface{}, len(ids))
@@ -133,12 +129,12 @@ func (mv *ModVenture) Update(db *std.Database) ([]Venture, bool) {
 		args[i] = ids[i]
 	}
 
-	vens, err := QueryMany(db, args)
+	vens, err := QueryMany(args)
 	if cookies.LogIfErr(err) {
 		return nil, false
 	}
 
-	ok := mv._insertEach(db.SQL, vens)
+	ok := mv.insertEach(vens)
 	if !ok {
 		return nil, false
 	}
@@ -146,11 +142,11 @@ func (mv *ModVenture) Update(db *std.Database) ([]Venture, bool) {
 	return vens, true
 }
 
-// _insertEach is a file private function that performs the actual SQL operation
+// insertEach is a file private function that performs the actual SQL operation
 // of pushing modifications to the database.
-func (mv *ModVenture) _insertEach(db *sql.DB, vens []Venture) bool {
+func (mv *ModVenture) insertEach(vens []Venture) bool {
 
-	stmt, err := db.Prepare(`INSERT INTO venture
+	stmt, err := database.Get().Prepare(`INSERT INTO venture
 			(id, description, order_ids, state, is_dead, extra)
 		VALUES
 			(?, ?, ?, ?, ?, ?);`)
@@ -163,12 +159,12 @@ func (mv *ModVenture) _insertEach(db *sql.DB, vens []Venture) bool {
 		return false
 	}
 
-	return mv._execStmtForEach(stmt, vens)
+	return mv.execStmtForEach(stmt, vens)
 }
 
-// _execStmtForEach executes the insert statment provided for each Venture
+// execStmtForEach executes the insert statment provided for each Venture
 // provided.
-func (mv *ModVenture) _execStmtForEach(stmt *sql.Stmt, vens []Venture) bool {
+func (mv *ModVenture) execStmtForEach(stmt *sql.Stmt, vens []Venture) bool {
 	for i := range vens {
 
 		ven := &vens[i]

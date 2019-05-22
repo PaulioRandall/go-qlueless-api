@@ -1,13 +1,13 @@
 package ventures
 
 import (
-	"database/sql"
 	"encoding/json"
 	"io"
 	"strings"
 
-	cookies "github.com/PaulioRandall/go-cookies/cookies"
-	strlist "github.com/PaulioRandall/go-cookies/strlist"
+	"github.com/PaulioRandall/go-cookies/cookies"
+	"github.com/PaulioRandall/go-cookies/strlist"
+	"github.com/PaulioRandall/go-qlueless-api/api/database"
 )
 
 // Venture represents a Venture, aka, project.
@@ -95,10 +95,8 @@ func (ven *Venture) SetOrders(ids []string) {
 }
 
 // Update updates the Venture within the database.
-//
-// @UNTESTED
-func (ven *Venture) Update(db *sql.DB) error {
-	stmt, err := db.Prepare(`INSERT INTO venture (
+func (ven *Venture) Update() error {
+	stmt, err := database.Get().Prepare(`INSERT INTO venture (
 		id, description, order_ids, state, is_dead, extra
 	) VALUES (
 		?, ?, ?, ?, ?, ?
@@ -126,22 +124,16 @@ func (ven *Venture) Update(db *sql.DB) error {
 type ByVenID []Venture
 
 // Len implements from sort.Interface
-//
-// @UNTESTED
 func (bv ByVenID) Len() int {
 	return len(bv)
 }
 
 // Swap implements from sort.Interface
-//
-// @UNTESTED
 func (bv ByVenID) Swap(i, j int) {
 	bv[i], bv[j] = bv[j], bv[i]
 }
 
 // Less implements from sort.Interface
-//
-// @UNTESTED
 func (bv ByVenID) Less(i, j int) bool {
 	return bv[i].ID < bv[j].ID
 }

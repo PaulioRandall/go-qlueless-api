@@ -8,17 +8,16 @@ import (
 	"os"
 	"testing"
 
-	toastify "github.com/PaulioRandall/go-cookies/toastify"
-	server "github.com/PaulioRandall/go-qlueless-api/api/server"
-	std "github.com/PaulioRandall/go-qlueless-api/api/std"
-	ventures "github.com/PaulioRandall/go-qlueless-api/api/ventures"
-	wrapped "github.com/PaulioRandall/go-qlueless-api/shared/wrapped"
-	assert "github.com/stretchr/testify/assert"
-	require "github.com/stretchr/testify/require"
+	"github.com/PaulioRandall/go-cookies/toastify"
+	"github.com/PaulioRandall/go-qlueless-api/api/database"
+	"github.com/PaulioRandall/go-qlueless-api/api/server"
+	"github.com/PaulioRandall/go-qlueless-api/api/ventures"
+	"github.com/PaulioRandall/go-qlueless-api/shared/wrapped"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 var dbPath string = ""
-var venDB *std.Database = nil
 
 // SetupEmptyTest is run at the start of a test to setup the server but does
 // not inject any test data.
@@ -51,10 +50,9 @@ func DBReset() {
 	DBClose()
 	deleteIfExists(dbPath)
 
-	venDB = &std.Database{}
-	venDB.Open()
+	database.Open()
 
-	err := ventures.CreateTables(venDB)
+	err := ventures.CreateTables()
 	if err != nil {
 		panic(err)
 	}
@@ -62,15 +60,12 @@ func DBReset() {
 
 // DBClose closes the test database.
 func DBClose() {
-	if venDB != nil {
-		venDB.Close()
-		venDB = nil
-	}
+	database.Close()
 }
 
 // DBInject injects a Venture into the database.
 func DBInject(new ventures.NewVenture) *ventures.Venture {
-	ven, ok := new.Insert(venDB)
+	ven, ok := new.Insert()
 	if !ok {
 		panic("Already printed above!")
 	}
@@ -124,7 +119,7 @@ func DBInjectDead() {
 
 	for _, ven := range s {
 		mod.ApplyMod(&ven)
-		err := ven.Update(venDB.SQL)
+		err := ven.Update()
 		if err != nil {
 			panic(err)
 		}
@@ -133,7 +128,7 @@ func DBInjectDead() {
 
 // DBQueryAll queries the database for all living ventures
 func DBQueryAll() []ventures.Venture {
-	rows, err := venDB.SQL.Query(`
+	rows, err := database.Get().Query(`
 		SELECT id, last_modified, description, order_ids, state, extra
 		FROM ql_venture
 	`)
@@ -151,11 +146,10 @@ func DBQueryAll() []ventures.Venture {
 
 // DBQueryMany queries the database for Ventures with the specified IDs
 func DBQueryMany(ids string) []ventures.Venture {
-	rows, err := venDB.SQL.Query(fmt.Sprintf(`
+	rows, err := database.Get().Query(fmt.Sprintf(`
 		SELECT id, last_modified, description, order_ids, state, extra
 		FROM ql_venture
-		WHERE id IN (%s)
-	`, ids))
+		WHERE id IN (%s)`, ids))
 
 	if rows != nil {
 		defer rows.Close()

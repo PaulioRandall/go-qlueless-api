@@ -5,11 +5,11 @@ import (
 	"sort"
 	"testing"
 
-	cookies "github.com/PaulioRandall/go-cookies/cookies"
-	wrapped "github.com/PaulioRandall/go-qlueless-api/shared/wrapped"
+	"github.com/PaulioRandall/go-cookies/cookies"
+	"github.com/PaulioRandall/go-qlueless-api/shared/wrapped"
 	ms "github.com/mitchellh/mapstructure"
-	assert "github.com/stretchr/testify/assert"
-	require "github.com/stretchr/testify/require"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 // AssertVentureFromReader asserts that a Venture decoded from an io.Reader

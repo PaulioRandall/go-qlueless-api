@@ -7,9 +7,9 @@ import (
 	"strconv"
 	"strings"
 
-	cookies "github.com/PaulioRandall/go-cookies/cookies"
-	strlist "github.com/PaulioRandall/go-cookies/strlist"
-	std "github.com/PaulioRandall/go-qlueless-api/api/std"
+	"github.com/PaulioRandall/go-cookies/cookies"
+	"github.com/PaulioRandall/go-cookies/strlist"
+	"github.com/PaulioRandall/go-qlueless-api/api/database"
 )
 
 // NewVenture represents a new Venture.
@@ -59,16 +59,15 @@ func (nv *NewVenture) Validate() []string {
 }
 
 // Insert inserts the NewVenture into the database
-//
-// @UNTESTED
-func (nv *NewVenture) Insert(db *std.Database) (*Venture, bool) {
+func (nv *NewVenture) Insert() (ven *Venture, ok bool) {
+	ok = false
 
-	id, err := _findNextID(db.SQL)
+	id, err := findNextID()
 	if cookies.LogIfErr(err) {
-		return nil, false
+		return
 	}
 
-	stmt, err := db.SQL.Prepare(`INSERT INTO venture (
+	stmt, err := database.Get().Prepare(`INSERT INTO venture (
 		id, description, order_ids, state, extra
 	) VALUES (
 		?, ?, ?, ?, ?
@@ -79,49 +78,51 @@ func (nv *NewVenture) Insert(db *std.Database) (*Venture, bool) {
 	}
 
 	if cookies.LogIfErr(err) {
-		return nil, false
+		return
 	}
 
-	_, err = nv._execInsert(id, stmt)
+	_, err = nv.execInsert(id, stmt)
 	if cookies.LogIfErr(err) {
-		return nil, false
+		return
 	}
 
-	ven, err := QueryFor(db, id)
+	ven, err = QueryFor(id)
 	if cookies.LogIfErr(err) {
-		return nil, false
+		return
 	}
 
-	return ven, true
+	ok = true
+	return
 }
 
-// _findNextID returns the next free Venture ID.
-func _findNextID(db *sql.DB) (string, error) {
-	stmt, err := db.Prepare(`SELECT COALESCE(MAX(id), 0) FROM venture;`)
+// findNextID returns the next free Venture ID.
+func findNextID() (result string, err error) {
+	result = ""
+	stmt, err := database.Get().Prepare(`SELECT COALESCE(MAX(id), 0) FROM venture;`)
 
 	if stmt != nil {
 		defer stmt.Close()
 	}
 
 	if err != nil {
-		return "", err
+		return
 	}
 
 	var id int64
 	err = stmt.QueryRow().Scan(&id)
 	if err != nil {
-		return "", err
+		return
 	}
 
 	id++
-	r := strconv.FormatInt(id, 10)
-	return r, nil
+	result = strconv.FormatInt(id, 10)
+	return
 }
 
-// _execInsert is a file private function that executes the supplied insert
+// execInsert is a file private function that executes the supplied insert
 // statement
-func (nv *NewVenture) _execInsert(id string, stmt *sql.Stmt) (*Venture, error) {
-	ven := Venture{
+func (nv *NewVenture) execInsert(id string, stmt *sql.Stmt) (ven *Venture, err error) {
+	ven = &Venture{
 		ID:          id,
 		Description: nv.Description,
 		Orders:      nv.Orders,
@@ -129,15 +130,15 @@ func (nv *NewVenture) _execInsert(id string, stmt *sql.Stmt) (*Venture, error) {
 		Extra:       nv.Extra,
 	}
 
-	_, err := stmt.Exec(ven.ID,
+	_, err = stmt.Exec(ven.ID,
 		ven.Description,
 		ven.Orders,
 		ven.State,
 		ven.Extra)
 
 	if err != nil {
-		return nil, err
+		ven = nil
 	}
 
-	return &ven, nil
+	return
 }

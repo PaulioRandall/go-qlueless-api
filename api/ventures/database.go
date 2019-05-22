@@ -5,51 +5,49 @@ import (
 	"fmt"
 	"strings"
 
-	cookies "github.com/PaulioRandall/go-cookies/cookies"
-	std "github.com/PaulioRandall/go-qlueless-api/api/std"
+	"github.com/PaulioRandall/go-cookies/cookies"
+	"github.com/PaulioRandall/go-qlueless-api/api/database"
 )
 
 // CreateTables creates all the Venture tables, views and triggers within the
 // supplied database.
-//
-// @UNTESTED
-func CreateTables(db *std.Database) error {
-	err := createVentureTable(db)
+func CreateTables() (err error) {
+	err = createVentureTable()
 	if err != nil {
-		return err
+		return
 	}
 
-	err = createQlVentureTable(db)
+	err = createQlVentureTable()
 	if err != nil {
-		return err
+		return
 	}
 
-	err = createInsertOnLivingVentureTrigger(db)
+	err = createInsertOnLivingVentureTrigger()
 	if err != nil {
-		return err
+		return
 	}
 
-	err = createInsertOnDeadVentureTrigger(db)
+	err = createInsertOnDeadVentureTrigger()
 	if err != nil {
-		return err
+		return
 	}
 
-	err = createUpdateOnVentureTrigger(db)
+	err = createUpdateOnVentureTrigger()
 	if err != nil {
-		return err
+		return
 	}
 
-	err = createDeleteOnVentureTrigger(db)
+	err = createDeleteOnVentureTrigger()
 	if err != nil {
-		return err
+		return
 	}
 
-	return nil
+	return
 }
 
 // createVentureTable creates the Venture table within the supplied database.
-func createVentureTable(db *std.Database) error {
-	return _execStmt(db, `CREATE TABLE venture (
+func createVentureTable() error {
+	return execStmt(`CREATE TABLE venture (
 		id INTEGER NOT NULL,
 		last_modified INTEGER NOT NULL DEFAULT(CAST(ROUND((julianday('now') - 2440587.5)*86400000) As INTEGER)),
 		description TEXT NOT NULL,
@@ -63,8 +61,8 @@ func createVentureTable(db *std.Database) error {
 
 // createQlVentureTable creates the query layer Venture table within the
 // supplied database.
-func createQlVentureTable(db *std.Database) error {
-	return _execStmt(db, `CREATE TABLE ql_venture (
+func createQlVentureTable() error {
+	return execStmt(`CREATE TABLE ql_venture (
 		id INTEGER NOT NULL PRIMARY KEY,
 		last_modified INTEGER NOT NULL,
 		description TEXT NOT NULL,
@@ -78,8 +76,8 @@ func createQlVentureTable(db *std.Database) error {
 // createInsertOnLivingVentureTrigger creates a trigger within the
 // supplied database that updates the ql_venture table when ever a new, and
 // living, Venture is inserted into the venture table.
-func createInsertOnLivingVentureTrigger(db *std.Database) error {
-	return _execStmt(db, `CREATE TRIGGER insert_on_living_venture
+func createInsertOnLivingVentureTrigger() error {
+	return execStmt(`CREATE TRIGGER insert_on_living_venture
 		AFTER INSERT ON venture
 		FOR EACH ROW
 		WHEN (NEW.is_dead = false)
@@ -95,8 +93,8 @@ func createInsertOnLivingVentureTrigger(db *std.Database) error {
 // createInsertOnDeadVentureTrigger creates a trigger within the supplied
 // database that removes from the ql_venture table the dead Venture inserted
 // into the venture table.
-func createInsertOnDeadVentureTrigger(db *std.Database) error {
-	return _execStmt(db, `CREATE TRIGGER insert_on_dead_venture
+func createInsertOnDeadVentureTrigger() error {
+	return execStmt(`CREATE TRIGGER insert_on_dead_venture
 		AFTER INSERT ON venture
 		FOR EACH ROW
 		WHEN (NEW.is_dead = true)
@@ -108,8 +106,8 @@ func createInsertOnDeadVentureTrigger(db *std.Database) error {
 
 // createUpdateOnVentureTrigger creates a trigger within the supplied
 // database that raises an error if an update is attempted.
-func createUpdateOnVentureTrigger(db *std.Database) error {
-	return _execStmt(db, `CREATE TRIGGER update_on_venture
+func createUpdateOnVentureTrigger() error {
+	return execStmt(`CREATE TRIGGER update_on_venture
 		BEFORE UPDATE ON venture
 		BEGIN
 			SELECT RAISE(FAIL, "Updates not allowed, insert with the same Venture ID!");
@@ -118,17 +116,17 @@ func createUpdateOnVentureTrigger(db *std.Database) error {
 
 // createDeleteOnVentureTrigger creates a trigger within the supplied
 // database that raises an error if a delete is attempted.
-func createDeleteOnVentureTrigger(db *std.Database) error {
-	return _execStmt(db, `CREATE TRIGGER delete_on_venture
+func createDeleteOnVentureTrigger() error {
+	return execStmt(`CREATE TRIGGER delete_on_venture
 		BEFORE DELETE ON venture
 		BEGIN
 			SELECT RAISE(FAIL, "Deletions not allowed!");
 		END;`)
 }
 
-// _execStmt executes a SQL statment ensuring it is closed afterwards
-func _execStmt(db *std.Database, sql string) error {
-	stmt, err := db.SQL.Prepare(sql)
+// execStmt executes a SQL statment ensuring it is closed afterwards
+func execStmt(sql string) error {
+	stmt, err := database.Get().Prepare(sql)
 
 	if stmt != nil {
 		defer stmt.Close()
@@ -143,11 +141,9 @@ func _execStmt(db *std.Database, sql string) error {
 }
 
 // QueryFor queries the database for a single Venture.
-//
-// @UNTESTED
-func QueryFor(db *std.Database, id string) (*Venture, error) {
+func QueryFor(id string) (*Venture, error) {
 	ven := Venture{}
-	err := db.SQL.QueryRow(`SELECT
+	err := database.Get().QueryRow(`SELECT
 		id,
 		last_modified,
 		description,
@@ -173,12 +169,8 @@ func QueryFor(db *std.Database, id string) (*Venture, error) {
 }
 
 // QueryMany queries the database for all specified Ventures.
-//
-// @UNTESTED
-func QueryMany(db *std.Database, ids []interface{}) ([]Venture, error) {
-
+func QueryMany(ids []interface{}) ([]Venture, error) {
 	posParams := strings.Repeat(",?", len(ids))[1:]
-
 	sql := fmt.Sprintf(`SELECT
 			id,
 			last_modified,
@@ -189,7 +181,7 @@ func QueryMany(db *std.Database, ids []interface{}) ([]Venture, error) {
 		FROM ql_venture
 		WHERE id IN (%s)`, posParams)
 
-	rows, err := db.SQL.Query(sql, ids...)
+	rows, err := database.Get().Query(sql, ids...)
 
 	if rows != nil {
 		defer rows.Close()
@@ -199,14 +191,12 @@ func QueryMany(db *std.Database, ids []interface{}) ([]Venture, error) {
 		return nil, err
 	}
 
-	return _mapRows(rows)
+	return mapRows(rows)
 }
 
 // QueryAll queries the database for all Ventures.
-//
-// @UNTESTED
-func QueryAll(db *std.Database) ([]Venture, error) {
-	rows, err := db.SQL.Query(`SELECT
+func QueryAll() ([]Venture, error) {
+	rows, err := database.Get().Query(`SELECT
 		id,
 		last_modified,
 		description,
@@ -223,16 +213,16 @@ func QueryAll(db *std.Database) ([]Venture, error) {
 		return nil, err
 	}
 
-	return _mapRows(rows)
+	return mapRows(rows)
 }
 
-// _mapRows is a file private function that maps rows from a database query into
+// mapRows is a file private function that maps rows from a database query into
 // a slice of Ventures.
-func _mapRows(rows *sql.Rows) ([]Venture, error) {
+func mapRows(rows *sql.Rows) ([]Venture, error) {
 	vens := []Venture{}
 
 	for rows.Next() {
-		ven, err := _mapRow(rows)
+		ven, err := mapRow(rows)
 		if err != nil {
 			return nil, err
 		}
@@ -242,9 +232,9 @@ func _mapRows(rows *sql.Rows) ([]Venture, error) {
 	return vens, nil
 }
 
-// _mapRow is a file private function that maps a single row from a database
+// mapRow is a file private function that maps a single row from a database
 // query into a Venture.
-func _mapRow(rows *sql.Rows) (*Venture, error) {
+func mapRow(rows *sql.Rows) (*Venture, error) {
 	ven := Venture{}
 	err := rows.Scan(&ven.ID,
 		&ven.LastModified,

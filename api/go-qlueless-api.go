@@ -3,7 +3,7 @@
 package main
 
 import (
-	server "github.com/PaulioRandall/go-qlueless-api/api/server"
+	"github.com/PaulioRandall/go-qlueless-api/api/server"
 )
 
 // Main is the primary entry point for the HTTP server.

@@ -24,8 +24,6 @@ func main() {
 
 	started := cookies.ToUnixMilli(time.Now().UTC())
 	root := getwd()
-	printOk(root)
-
 	makeBinDir(root)
 
 	// Don't abstract the build workflows! They are more readable and extendable
@@ -105,6 +103,7 @@ func getwd() string {
 		panic(err)
 	}
 
+	printOk(root)
 	return root
 }
 
