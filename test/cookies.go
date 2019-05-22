@@ -34,7 +34,7 @@ func (c *APICall) invokeRequest(req *http.Request) *http.Response {
 	}
 	res, err := client.Do(req)
 	if err != nil {
-		log.Panic("InvokeRequest(): ", err)
+		log.Panic("invokeRequest(): ", err)
 	}
 	return res
 }

@@ -9,30 +9,26 @@ import (
 	"os/exec"
 	"path/filepath"
 	"runtime"
-	"strings"
+	"time"
 
 	comfiler "github.com/PaulioRandall/go-cookies/comfiler"
+	cookies "github.com/PaulioRandall/go-cookies/cookies"
 )
 
 // main is the entry point for this script. It wraps the standard Go format,
 // build, test, run, and install operations specifically for this project.
 func main() {
 	clearTerminal()
+	printTime()
 
-	root := findProjectRoot()
+	started := cookies.ToUnixMilli(time.Now().UTC())
+	root := getwd()
 	makeBinDir(root)
 
-	args := os.Args[1:]
-	if len(args) != 1 {
-		badSyntax()
-	}
-
-	// Don't abstract the build processes! They are more readable and extendable
+	// Don't abstract the build workflows! They are more readable and extendable
 	// this way.
-	switch args[0] {
+	switch getArgument() {
 	case "build":
-		fmt.Println("[GOFMT -> BUILD -> TEST]")
-
 		goFmt(root)
 		goOpenAPI(root)
 		goBuild(root)
@@ -40,8 +36,6 @@ func main() {
 		goTestApi(root)
 
 	case "run":
-		fmt.Println("[GOFMT -> BUILD -> TEST -> RUN]")
-
 		goFmt(root)
 		goOpenAPI(root)
 		goBuild(root)
@@ -50,8 +44,6 @@ func main() {
 		goRun(root)
 
 	case "install":
-		fmt.Println("[GOFMT -> BUILD -> TEST -> INSTALL]")
-
 		goFmt(root)
 		goOpenAPI(root)
 		goBuild(root)
@@ -62,21 +54,13 @@ func main() {
 	default:
 		badSyntax()
 	}
+
+	finished := cookies.ToUnixMilli(time.Now())
+	printTime()
+	printRunTime(started, finished)
 }
 
-// badSyntax prints the scripts syntax to console then exits the application
-// with code 1.
-func badSyntax() {
-	syntax := `syntax options:
-1) ./godo.go build  		Builds and tests
-2) ./godo.go run    		Builds, tests, and runs
-3) ./godo.go install		Builds, tests, and installs`
-
-	fmt.Println(syntax + "\n")
-	os.Exit(1)
-}
-
-// clearTerminal clears the terminal
+// clearTerminal clears the terminal.
 func clearTerminal() {
 	p := runtime.GOOS
 	switch p {
@@ -93,17 +77,19 @@ func clearTerminal() {
 	}
 }
 
-// findProjectRoot returns the absolute path to the projects root directory.
-func findProjectRoot() string {
+// printTime prints the current time to terminal.
+func printTime() {
+	fmt.Printf("Now\t%v\n", time.Now().UTC())
+}
+
+// getwd returns the absolute path to the projects root directory.
+func getwd() string {
 	fmt.Println("...finding project root...")
 
 	root, err := os.Getwd()
 	if err != nil {
 		panic(err)
 	}
-
-	root = strings.TrimSpace(root)
-	root = filepath.Clean(root)
 
 	fmt.Println("ok\t" + root)
 	return root
@@ -112,16 +98,40 @@ func findProjectRoot() string {
 // makeBinDir creates a /bin directory in the 'root' directory if it doesn't
 // already exist.
 func makeBinDir(root string) {
-	err := os.Mkdir(root+"/bin", os.ModePerm)
+	bin := filepath.Join(root, "bin")
+	err := os.Mkdir(bin, os.ModePerm)
 	if err != nil && !os.IsExist(err) {
 		panic(err)
 	}
 }
 
+// getArgument returns the argument passed that represents the operation to
+// perform.
+func getArgument() string {
+	args := os.Args[1:]
+	if len(args) != 1 {
+		badSyntax()
+	}
+	return args[0]
+}
+
+// badSyntax prints the scripts syntax to console then exits the application
+// with code 1.
+func badSyntax() {
+	syntax := `syntax options:
+1) ./godo.go build  		Builds and tests
+2) ./godo.go run    		Builds, tests, and runs
+3) ./godo.go install		Builds, tests, and installs`
+
+	fmt.Println(syntax + "\n")
+	os.Exit(1)
+}
+
 // goFmt recursively formats all Go code within the 'root' directory.
 func goFmt(root string) {
 	fmt.Println("...formatting Go code...")
-	goExe(root, []string{"fmt", root + "/..."})
+	target := filepath.Join(root, "...")
+	goExe(root, "fmt", target)
 }
 
 // goOpenAPI builds the OpenAPI specification and places a copy of the
@@ -129,81 +139,99 @@ func goFmt(root string) {
 func goOpenAPI(root string) {
 	fmt.Println("...compiling OpenAPI specification...")
 
-	api := root + "/api"
-	spec := root + "/bin/openapi.json"
+	api := filepath.Join(root, "api")
+	template := filepath.Join(api, "oai-template.json")
+	output := filepath.Join(root, "bin", "openapi.json")
 
 	tmp := comfiler.Comfile{
-		Template:  api + "/oai-template.json",
+		Template:  template,
 		Resources: api,
 	}
 
-	err := tmp.Compile(spec)
+	err := tmp.Compile(output)
 	if err != nil {
 		panic(err)
 	}
+	printOk(output, "created")
 
-	fmt.Println("ok\t" + spec + "\t(created)")
-
-	cl := root + "/CHANGELOG.md"
-	clBin := root + "/bin/CHANGELOG.md"
+	cl := filepath.Join(root, "CHANGELOG.md")
+	clBin := filepath.Join(root, "bin", "CHANGELOG.md")
 	copyFile(cl, clBin)
-	fmt.Println("ok\t" + clBin + "\t(copied)")
+	printOk(clBin, "copied")
+}
+
+// printOk prints an OK message in the style of 'go test'.
+func printOk(url, result string) {
+	fmt.Printf("ok\t%s\t(%s)\n", url, result)
 }
 
 // goBuild builds the application and places the result binary in 'root/bin'.
 func goBuild(root string) {
 	fmt.Println("...building application...")
 
-	api := root + "/api"
-	goFiles, err := filepath.Glob(api + "/*.go")
+	api := filepath.Join(root, "api")
+	goFiles := globGoFiles(api)
+
+	output := filepath.Join(root, "bin", "go-qlueless-api")
+	args := []string{"build", "-o", output}
+	args = append(args, goFiles...)
+	goExe(api, args...)
+
+	printOk(output, "created")
+}
+
+// globGoFiles returns the names of all Go files in the API directory.
+func globGoFiles(apiDir string) []string {
+	glob := filepath.Join(apiDir, "*.go")
+	goFiles, err := filepath.Glob(glob)
 	if err != nil {
 		panic(err)
 	}
-
-	output := root + "/bin/go-qlueless-api"
-	args := []string{"build", "-o", output}
-	args = append(args, goFiles...)
-	goExe(api, args)
-
-	fmt.Println("ok\t" + output + "\t(created)")
+	return goFiles
 }
 
 // goTest runs the applications internal tests (unit).
 func goTest(root string) {
 	fmt.Println("...internal code testing...")
-	goExe(root, []string{"test", root + "/api/..."})
-	goExe(root, []string{"test", root + "/shared/..."})
+
+	api := filepath.Join(root, "api", "...")
+	goExe(root, "test", api)
+
+	shared := filepath.Join(root, "shared", "...")
+	goExe(root, "test", shared)
 }
 
 // goTestApi runs the applications API tests.
 func goTestApi(root string) {
 	fmt.Println("...web API testing, this may take a few moments...")
-	goExe(root, []string{"test", "-count=1", "-p=1", "-failfast", root + "/test/..."})
+	tests := filepath.Join(root, "test", "...")
+	goExe(root, "test", "-count=1", "-p=1", "-failfast", tests)
 }
 
 // goInstall installs the compiled application.
 func goInstall(root string) {
 	fmt.Println("...installing application...")
 
-	api := root + "/api"
-	goFiles, err := filepath.Glob(api + "/*.go")
-	if err != nil {
-		panic(err)
-	}
+	api := filepath.Join(root, "api")
+	goFiles := globGoFiles(api)
 
-	output := root + "/bin/go-qlueless-api"
-	args := []string{"install"}
-	args = append(args, goFiles...)
-	goExe(api, args)
+	output := filepath.Join(root, "bin", "go-qlueless-api")
+	args := append([]string{"install"}, goFiles...)
+	goExe(api, args...)
 
-	fmt.Println("ok\t" + output + "\t(installed)")
+	printOk(output, "installed")
 }
 
 // goRun runs the compiled application from the /bin directory.
 func goRun(root string) {
 	fmt.Println("...running application...")
-	cmd := exec.Command("./go-qlueless-api")
-	cmd.Dir = root + "/bin"
+	cmd := exec.Command("go-qlueless-api")
+	cmd.Dir = filepath.Join(root, "bin")
+	runCmd(cmd)
+}
+
+// runCmd runs a command and panics on error.
+func runCmd(cmd *exec.Cmd) {
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 
@@ -216,18 +244,10 @@ func goRun(root string) {
 }
 
 // goExe runs a Go command
-func goExe(dir string, args []string) {
+func goExe(dir string, args ...string) {
 	cmd := exec.Command("go", args...)
 	cmd.Dir = dir
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-
-	err := cmd.Run()
-	if _, ok := err.(*exec.ExitError); ok {
-		panic(err.Error())
-	} else if err != nil {
-		panic(err)
-	}
+	runCmd(cmd)
 }
 
 // copyFile copies a file from 'src' to 'dst'.
@@ -241,4 +261,12 @@ func copyFile(src string, dst string) {
 	if err != nil {
 		panic(err)
 	}
+}
+
+// printRunTime prints the time taken for specific godo command to fully run.
+func printRunTime(start, finish int64) {
+	ms := finish - start
+	ns := ms * int64(time.Millisecond)
+	secs := float64(ns) / float64(time.Second)
+	fmt.Printf("Stats\t%.2f seconds\n", secs)
 }
