@@ -8,7 +8,12 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"strings"
+	"testing"
 	"time"
+	"unicode"
+
+	"github.com/PaulioRandall/go-cookies/cookies"
 )
 
 // APICall represents a single call to an API
@@ -72,4 +77,36 @@ func SetWorkingDir(binDir string) {
 	if err != nil {
 		log.Panic(err)
 	}
+}
+
+// PrintTestDescription prints the test description to the test logs.
+func PrintTestDescription(t *testing.T, desc string) {
+
+	firstChar := func(s string) int {
+		firstChar := -1
+		for i, v := range s {
+			if !unicode.IsSpace(v) {
+				firstChar = i
+				break
+			}
+		}
+		return firstChar
+	}
+
+	desc = cookies.ForEachToken(desc, "\n", func(i int, s string) string {
+		spaces := firstChar(s)
+		if spaces > 0 {
+			spaces -= 2
+		}
+
+		s = cookies.TrimPrefixSpace(s)
+		if spaces > 0 {
+			spaces *= 2
+			s = strings.Repeat(" ", spaces) + s
+		}
+
+		return s
+	})
+
+	t.Log("\n" + desc + "\n")
 }

@@ -20,17 +20,17 @@ func init() {
 
 func TestGET_Ventures_1(t *testing.T) {
 
-	t.Log(`
-	Given some Ventures already exist on the server
-	When all Ventures are requested
-	Then ensure the response code is 200
-	And response headers include:
-		'Content-Type'									'application/json; charset=utf-8'
-		'Access-Control-Allow-Origin'		'*'
-		'Access-Control-Allow-Headers'	'*'
-		'Access-Control-Allow-Methods'	'GET, POST, PUT, DELETE, OPTIONS'
-	And the body is a JSON array containing all injected Ventures
-	...`)
+	test.PrintTestDescription(t, `
+		Given some Ventures already exist on the server
+		When all Ventures are requested
+		Ensure the response code is 200
+		And header includes:
+			Content-Type:                   'application/json; charset=utf-8'
+			Access-Control-Allow-Origin:    '*'
+			Access-Control-Allow-Headers:   '*'
+			Access-Control-Allow-Methods:   'GET, POST, PUT, DELETE, OPTIONS'
+		And the body is a JSON array containing all injected Ventures
+	`)
 
 	vtest.SetupEmptyTest()
 	defer vtest.TearDown()
