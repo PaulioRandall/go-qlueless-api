@@ -1,10 +1,13 @@
 package test
 
 import (
+	"bytes"
 	"encoding/json"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"net/http"
+	"strings"
 	"testing"
 
 	toastify "github.com/PaulioRandall/go-cookies/toastify"
@@ -14,22 +17,22 @@ import (
 	require "github.com/stretchr/testify/require"
 )
 
-const (
-	CORS_METHODS_PATTERN = "^((\\s*[A-Z]*\\s*,)+)*(\\s*[A-Z]*\\s*)$" // Example: 'GET,  POST, OPTIONS'
-)
-
-var ALL_STD_HTTP_METHODS = []string{
-	"GET",
-	"POST",
-	"PUT",
-	"DELETE",
-	"HEAD",
-	"OPTIONS",
-	"CONNECT",
-	"TRACE",
-	"PATCH",
-	"CUSTOM",
+// PrintBody parses the body of response 'res' and prints it to the test logs
+// returning a new reader for the data.
+func PrintBody(t *testing.T, res *http.Response) io.Reader {
+	b, err := ioutil.ReadAll(res.Body)
+	require.Nil(t, err, "Could not read response body")
+	if len(b) > 0 {
+		u := strings.Repeat("-", 14)
+		l := fmt.Sprintf("\nResponse body:\n%s\n%s\n%s\n", u, string(b), u)
+		t.Log(l)
+	}
+	return bytes.NewReader(b)
 }
+
+//
+// OLD
+//
 
 // PrintResponse prints the 'body' of a response to the test logs.
 func PrintResponse(t *testing.T, body io.Reader) {

@@ -36,7 +36,7 @@ func TestPUT_Ventures_1(t *testing.T) {
 	vtest.SetupEmptyTest()
 	defer vtest.TearDown()
 
-	vtest.DBInject(ventures.NewVenture{
+	vtest.Inject(ventures.NewVenture{
 		Description: "Black blizzard",
 		State:       "STARTED",
 		Orders:      "1,2,3",

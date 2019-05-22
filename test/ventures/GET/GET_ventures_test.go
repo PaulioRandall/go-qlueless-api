@@ -3,10 +3,11 @@ package GET
 import (
 	"testing"
 
-	ventures "github.com/PaulioRandall/go-qlueless-api/api/ventures"
-	test "github.com/PaulioRandall/go-qlueless-api/test"
+	"github.com/PaulioRandall/go-cookies/toastify"
+	"github.com/PaulioRandall/go-qlueless-api/api/ventures"
+	"github.com/PaulioRandall/go-qlueless-api/test"
 	vtest "github.com/PaulioRandall/go-qlueless-api/test/ventures"
-	require "github.com/stretchr/testify/require"
+	"github.com/stretchr/testify/require"
 )
 
 func init() {
@@ -19,34 +20,57 @@ func init() {
 
 func TestGET_Ventures_1(t *testing.T) {
 
-	t.Log(`Given some Ventures already exist on the server
-		When all Ventures are requested
-		Then ensure the response code is 200
-		And the 'Content-Type' header contains 'application/json'
-		And 'Access-Control-Allow-Origin' is '*'
-		And 'Access-Control-Allow-Headers' is '*'
-		And 'Access-Control-Allow-Methods' is 'GET, POST, PUT, DELETE, OPTIONS'
-		And the body is a JSON array containing all living Ventures
-		...`)
+	t.Log(`
+	Given some Ventures already exist on the server
+	When all Ventures are requested
+	Then ensure the response code is 200
+	And response headers include:
+		'Content-Type'									'application/json; charset=utf-8'
+		'Access-Control-Allow-Origin'		'*'
+		'Access-Control-Allow-Headers'	'*'
+		'Access-Control-Allow-Methods'	'GET, POST, PUT, DELETE, OPTIONS'
+	And the body is a JSON array containing all injected Ventures
+	...`)
 
-	vtest.SetupTest()
+	vtest.SetupEmptyTest()
 	defer vtest.TearDown()
+
+	injected := vtest.InjectAll([]ventures.NewVenture{
+		ventures.NewVenture{
+			Description: "White wizard",
+			State:       "Not started",
+		},
+		ventures.NewVenture{
+			Description: "Green lizard",
+			State:       "In progress",
+		},
+		ventures.NewVenture{
+			Description: "Pink gizzard",
+			State:       "Finished",
+		},
+	})
 
 	req := test.APICall{
 		URL:    "http://localhost:8080/ventures",
 		Method: "GET",
 	}
 	res := req.Fire()
-
 	defer res.Body.Close()
-	defer test.PrintResponse(t, res.Body)
 
 	require.Equal(t, 200, res.StatusCode)
-	test.AssertDefaultHeaders(t, res, "application/json", "GET, POST, PUT, DELETE, OPTIONS")
+	toastify.AssertHeaderEqual(t, "Content-Type", res.Header, "application/json; charset=utf-8")
+	toastify.AssertHeaderEqual(t, "Access-Control-Allow-Origin", res.Header, "*")
+	toastify.AssertHeaderEqual(t, "Access-Control-Allow-Headers", res.Header, "*")
+	toastify.AssertHeaderEqual(t, "Access-Control-Allow-Methods", res.Header, "GET, POST, PUT, DELETE, OPTIONS")
 
-	out := ventures.AssertVentureSliceFromReader(t, res.Body)
-	exp := vtest.DBQueryAll()
-	ventures.AssertOrderlessSlicesEqual(t, exp, out)
+	body := test.PrintBody(t, res)
+
+	result := ventures.RequireSliceOfVentures(t, body)
+	stored, err := ventures.QueryAll()
+	require.Nil(t, err)
+
+	ventures.AssertVenturesEqual(t, injected, result, true)
+	ventures.AssertVenturesEqual(t, stored, result, true)
 }
 
 // ****************************************************************************

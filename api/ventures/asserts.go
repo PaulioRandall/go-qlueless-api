@@ -12,6 +12,46 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+// RequireSliceOfVentures asserts that the value decoded from 'r' is a slice of
+// valid Ventures; the slice is returned.
+func RequireSliceOfVentures(t *testing.T, r io.Reader) []Venture {
+	v, err := DecodeVentureSlice(r)
+	require.Nil(t, err, "Error decoding slice of ventures from reader")
+	return v
+}
+
+// AssertVentureSlice asserts that all Ventures 'vens' have valid content.
+func AssertVentureSlice(t *testing.T, vens []Venture) {
+	for _, v := range vens {
+		AssertVenture(t, v)
+	}
+}
+
+// AssertVenture asserts that a Venture 'v' has valid content.
+func AssertVenture(t *testing.T, v Venture) {
+	assert.NotEmpty(t, v.ID, "Venture.ID")
+	assert.NotEmpty(t, v.Description, "Venture.Description")
+	assert.NotEmpty(t, v.State, "Venture.State")
+	assert.True(t, v.LastModified > 0, "Venture.LastModified")
+	if v.Orders != "" {
+		assert.True(t, cookies.IsUintCSV(v.Orders), "Venture.Orders")
+	}
+}
+
+// AssertVenturesEqual asserts that 'exp' and 'act' contain the same
+// Ventures. If 'orderless' is true then the slices are ordered by ID first.
+func AssertVenturesEqual(t *testing.T, exp []Venture, act []Venture, orderless bool) {
+	if orderless {
+		sort.Sort(ByVenID(exp))
+		sort.Sort(ByVenID(act))
+	}
+	assert.Equal(t, exp, act)
+}
+
+//
+// OLD
+//
+
 // AssertVentureFromReader asserts that a Venture decoded from an io.Reader
 // has the required fields populated and in the correct format
 func AssertVentureFromReader(t *testing.T, r io.Reader) Venture {

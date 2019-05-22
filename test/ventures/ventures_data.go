@@ -23,7 +23,7 @@ var dbPath string = ""
 // not inject any test data.
 func SetupEmptyTest() {
 	dbPath = getDbPath()
-	DBReset()
+	ResetDatabase()
 	server.StartUp(true)
 }
 
@@ -31,7 +31,7 @@ func SetupEmptyTest() {
 // the test data.
 func SetupTest() {
 	dbPath = getDbPath()
-	DBReset()
+	ResetDatabase()
 	DBInjectLiving()
 	DBInjectDead()
 	server.StartUp(true)
@@ -41,13 +41,13 @@ func SetupTest() {
 // resources at the end of every test.
 func TearDown() {
 	server.Shutdown()
-	DBClose()
+	CloseDatabase()
 }
 
-// DBReset will reset the database by closing and deleting it then
+// ResetDatabase will reset the database by closing and deleting it then
 // creating a new one.
-func DBReset() {
-	DBClose()
+func ResetDatabase() {
+	CloseDatabase()
 	deleteIfExists(dbPath)
 
 	database.Open()
@@ -58,13 +58,22 @@ func DBReset() {
 	}
 }
 
-// DBClose closes the test database.
-func DBClose() {
+// CloseDatabase closes the test database.
+func CloseDatabase() {
 	database.Close()
 }
 
-// DBInject injects a Venture into the database.
-func DBInject(new ventures.NewVenture) *ventures.Venture {
+// InjectAll injects a slice of Ventures into the database.
+func InjectAll(new []ventures.NewVenture) []ventures.Venture {
+	result := make([]ventures.Venture, len(new))
+	for i, v := range new {
+		result[i] = *Inject(v)
+	}
+	return result
+}
+
+// Inject injects a Venture into the database.
+func Inject(new ventures.NewVenture) *ventures.Venture {
 	ven, ok := new.Insert()
 	if !ok {
 		panic("Already printed above!")
@@ -74,24 +83,24 @@ func DBInject(new ventures.NewVenture) *ventures.Venture {
 
 // DBInjectLiving injects a default set of living Ventures into the database
 func DBInjectLiving() {
-	DBInject(ventures.NewVenture{
+	Inject(ventures.NewVenture{
 		Description: "White wizard",
 		State:       "Not started",
 		Extra:       "colour: white; power: 9000",
 	})
-	DBInject(ventures.NewVenture{
+	Inject(ventures.NewVenture{
 		Description: "Green lizard",
 		State:       "In progress",
 	})
-	DBInject(ventures.NewVenture{
+	Inject(ventures.NewVenture{
 		Description: "Pink gizzard",
 		State:       "Finished",
 	})
-	DBInject(ventures.NewVenture{
+	Inject(ventures.NewVenture{
 		Description: "Eddie Izzard",
 		State:       "In Progress",
 	})
-	DBInject(ventures.NewVenture{
+	Inject(ventures.NewVenture{
 		Description: "The Count of Tuscany",
 		State:       "In Progress",
 	})
@@ -100,11 +109,11 @@ func DBInjectLiving() {
 // DBInjectDead injects a default set of dead Ventures into the database
 func DBInjectDead() {
 	s := []ventures.Venture{
-		*DBInject(ventures.NewVenture{
+		*Inject(ventures.NewVenture{
 			Description: "Rose",
 			State:       "Finised",
 		}),
-		*DBInject(ventures.NewVenture{
+		*Inject(ventures.NewVenture{
 			Description: "Lily",
 			State:       "Closed",
 		}),

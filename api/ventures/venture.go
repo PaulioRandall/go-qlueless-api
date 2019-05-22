@@ -35,7 +35,10 @@ func DecodeVentureSlice(r io.Reader) ([]Venture, error) {
 	var v []Venture
 	d := json.NewDecoder(r)
 	err := d.Decode(&v)
-	return v, err
+	if err != nil {
+		return nil, err
+	}
+	return v, nil
 }
 
 // Clean removes redundent whitespace from property values within a Venture
