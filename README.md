@@ -1,5 +1,7 @@
 # Go Qlueless API
 
+\*\*\***Discontinued: archived for reference only.**\*\*\*
+
 A Go implementation of a simple API to store and access Kanban related entities and events.
 
 - This project is undertaken with the audible aid of [Avantasia](https://www.avantasia.net) and [Dream Theater](http://dreamtheater.net)
